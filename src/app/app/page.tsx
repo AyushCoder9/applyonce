@@ -1,9 +1,15 @@
 import Link from "next/link";
-import { currentUser } from "@clerk/nextjs/server";
+import { auth, currentUser } from "@clerk/nextjs/server";
 import { UserButton } from "@clerk/nextjs";
+import { redirect } from "next/navigation";
 import AuthenticatedWorkspace from "./AuthenticatedWorkspace";
 
 export default async function AppPage() {
+  const { userId } = await auth();
+  if (!userId) {
+    redirect("/sign-in");
+  }
+
   const user = await currentUser();
   const name = [user?.firstName, user?.lastName].filter(Boolean).join(" ") || "Citizen";
 

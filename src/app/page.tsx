@@ -36,7 +36,7 @@ export default function Home() {
           </div>
 
           <div className="nav-cta">
-            <a className="secondary-action" href="#why-now">For partners</a>
+            <Link className="secondary-action" href="/sign-in">Sign in</Link>
             <Link className="primary-action" href="/demo">Try the demo <ArrowRight className="inline-arrow" /></Link>
           </div>
         </nav>
