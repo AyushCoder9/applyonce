@@ -34,13 +34,13 @@ import { Button, Chip } from "@heroui/react";
 type DemoStep = "dashboard" | "review" | "form" | "receipt";
 
 const applicationFields = [
-  ["Full name", "Ayush Kumar Singh"],
+  ["Full name", "Aanya Mehta"],
   ["Date of birth", "14 August 2005"],
-  ["Parent / guardian", "Rajesh Kumar Singh"],
+  ["Parent / guardian", "Nikhil Mehta"],
   ["Category", "General"],
   ["Annual family income", "₹4,80,000"],
-  ["Mobile number", "+91 98••• 42819"],
-  ["Email address", "ayushkumar1699@gmail.com"],
+  ["Mobile number", "+91 98••• 48126"],
+  ["Email address", "aanya.mehta.demo@example.com"],
   ["Academic record", "Class XII · 91.4%"],
 ];
 
@@ -57,7 +57,7 @@ function Brand() {
 function DemoTopbar() {
   return <header className="demo-topbar">
     <div className="demo-topbar-left"><Brand /><span className="demo-divider" /><span className="demo-label">Citizen application wallet</span></div>
-    <div className="demo-topbar-right"><span className="demo-badge"><Sparkles /> Synthetic demo</span><button className="icon-button" aria-label="Notifications"><Bell /></button><span className="avatar">AK</span></div>
+    <div className="demo-topbar-right"><span className="demo-badge"><Sparkles /> Synthetic demo</span><button className="icon-button" aria-label="Notifications"><Bell /></button><span className="avatar">AM</span></div>
   </header>;
 }
 
@@ -70,13 +70,13 @@ function DemoSidebar({ step, onNavigate }: { step: DemoStep; onNavigate: (step: 
       <button className={`sidebar-link ${step === "review" ? "active" : ""}`} onClick={() => onNavigate("review")}><FileText /> Applications <span className="sidebar-count">1</span></button>
       <button className={`sidebar-link ${step === "receipt" ? "active" : ""}`} onClick={() => onNavigate("receipt")}><ShieldCheck /> Consent log</button>
     </nav>
-    <div className="sidebar-bottom"><div className="sidebar-user"><span className="avatar">AK</span><div><strong>Ayush Kumar</strong><span>Student profile</span></div><Settings2 /></div></div>
+    <div className="sidebar-bottom"><div className="sidebar-user"><span className="avatar">AM</span><div><strong>Aanya Mehta</strong><span>Student profile</span></div><Settings2 /></div></div>
   </aside>;
 }
 
 function Dashboard({ onStart }: { onStart: () => void }) {
   return <>
-    <div className="demo-welcome"><div><h1>Good evening, Ayush.</h1><p>Your profile is ready for the next application.</p></div><div className="status-line"><CheckCircle2 /> Profile verified · 14 Aug 2026</div></div>
+    <div className="demo-welcome"><div><h1>Good evening, Aanya.</h1><p>Your profile is ready for the next application.</p></div><div className="status-line"><CheckCircle2 /> Profile verified · 14 Aug 2026</div></div>
     <div className="dashboard-grid">
       <section className="dashboard-card">
         <div className="card-kicker">Next best action</div>
@@ -124,7 +124,7 @@ function FormStage({ issueResolved, onResolve, onSubmit, onBack }: { issueResolv
 }
 
 function ReceiptStage({ onRestart, onBack }: { onRestart: () => void; onBack: () => void }) {
-  return <><JourneyHeader step="receipt" onBack={onBack} /><div className="receipt-wrap"><section className="receipt-card"><div className="receipt-hero"><span className="success-orb"><Check /></span><h1>Application submitted.</h1><p>Your packet was accepted by National STEM Entrance 2026. Keep this receipt — your consent trail is attached.</p></div><div className="receipt-details"><div className="receipt-detail"><span>Submitted at</span><strong>29 Aug 2026 · 8:18 PM</strong></div><div className="receipt-detail"><span>Application ID</span><strong>NSE26-AK-004281</strong></div><div className="receipt-detail"><span>Next update</span><strong>Within 48 hours</strong></div></div><div className="receipt-footer"><span className="receipt-id">RECEIPT / NSE26-AK-004281</span><div className="receipt-actions"><button className="secondary-action"><Download className="inline-arrow" /> Save receipt</button><button className="secondary-action"><Copy className="inline-arrow" /> Copy ID</button></div></div></section><aside className="next-card"><div className="panel-kicker">Consent trail</div><h2>Clear after you apply.</h2><p>Here is the proof of what moved, why it moved, and what is still under your control.</p><div className="receipt-timeline"><div className="receipt-timeline-row"><CheckCircle2 /><span>3 sources verified against your profile</span></div><div className="receipt-timeline-row"><CheckCircle2 /><span>35 fields shared for one stated purpose</span></div><div className="receipt-timeline-row"><CheckCircle2 /><span>Receipt generated and saved to your wallet</span></div><div className="receipt-timeline-row"><LockKeyhole /><span>Connection can be revoked from Consent log</span></div></div><Button className="primary-action" variant="primary" onPress={onRestart} style={{ marginTop: 25, width: "100%" }}>Run it again <ArrowRight className="inline-arrow" /></Button></aside></div></>;
+  return <><JourneyHeader step="receipt" onBack={onBack} /><div className="receipt-wrap"><section className="receipt-card"><div className="receipt-hero"><span className="success-orb"><Check /></span><h1>Application submitted.</h1><p>Your packet was accepted by National STEM Entrance 2026. Keep this receipt — your consent trail is attached.</p></div><div className="receipt-details"><div className="receipt-detail"><span>Submitted at</span><strong>29 Aug 2026 · 8:18 PM</strong></div><div className="receipt-detail"><span>Application ID</span><strong>NSE26-AM-004281</strong></div><div className="receipt-detail"><span>Next update</span><strong>Within 48 hours</strong></div></div><div className="receipt-footer"><span className="receipt-id">RECEIPT / NSE26-AM-004281</span><div className="receipt-actions"><button className="secondary-action"><Download className="inline-arrow" /> Save receipt</button><button className="secondary-action"><Copy className="inline-arrow" /> Copy ID</button></div></div></section><aside className="next-card"><div className="panel-kicker">Consent trail</div><h2>Clear after you apply.</h2><p>Here is the proof of what moved, why it moved, and what is still under your control.</p><div className="receipt-timeline"><div className="receipt-timeline-row"><CheckCircle2 /><span>3 sources verified against your profile</span></div><div className="receipt-timeline-row"><CheckCircle2 /><span>35 fields shared for one stated purpose</span></div><div className="receipt-timeline-row"><CheckCircle2 /><span>Receipt generated and saved to your wallet</span></div><div className="receipt-timeline-row"><LockKeyhole /><span>Connection can be revoked from Consent log</span></div></div><Button className="primary-action" variant="primary" onPress={onRestart} style={{ marginTop: 25, width: "100%" }}>Run it again <ArrowRight className="inline-arrow" /></Button></aside></div></>;
 }
 
 export default function DemoPage() {

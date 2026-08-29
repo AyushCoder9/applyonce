@@ -59,8 +59,8 @@ export default function Home() {
             <div className="hero-visual">
               <div className="visual-topbar">
                 <div className="visual-profile">
-                  <span className="avatar">AK</span>
-                  <div><strong>Ayush Kumar</strong><span>Student profile · Ready to share</span></div>
+                  <span className="avatar">AM</span>
+                  <div><strong>Aanya Mehta</strong><span>Student profile · Ready to share</span></div>
                 </div>
                 <span className="live-chip">Demo mode</span>
               </div>
