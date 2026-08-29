@@ -41,12 +41,25 @@ export async function ensureActorProfile(actor: Actor) {
     .limit(1);
 
   if (existing[0]) {
+    // Clerk is the identity authority, but the profile phone can also be
+    // completed inside ApplyOnce. Never replace a citizen-entered value with
+    // a missing phone number from the auth provider on the next read.
+    const nextPhone = existing[0].phone ?? actor.phone;
+    const identityChanged =
+      existing[0].email !== actor.email ||
+      existing[0].fullName !== actor.fullName ||
+      existing[0].phone !== nextPhone;
+
+    if (!identityChanged) {
+      return existing[0];
+    }
+
     const [updated] = await db
       .update(profiles)
       .set({
         email: actor.email,
         fullName: actor.fullName,
-        phone: actor.phone,
+        phone: nextPhone,
         updatedAt: new Date(),
       })
       .where(eq(profiles.id, existing[0].id))

@@ -14,7 +14,8 @@ import {
   CircleAlert,
   ClipboardList,
   CloudUpload,
-  FileCheck2,
+  Copy,
+  Download,
   FileText,
   Fingerprint,
   GitBranch,
@@ -36,6 +37,7 @@ import {
 } from "lucide-react";
 import Link from "next/link";
 import { ApplyOnceLogo } from "@/components/brand/ApplyOnceLogo";
+import { SourceMark, type SourceProvider } from "@/components/brand/SourceMark";
 
 type View = "overview" | "profile" | "sources" | "documents" | "applications" | "consents" | "notifications" | "settings";
 
@@ -50,6 +52,7 @@ type Snapshot = {
     state: string | null;
     category?: string | null;
     annualIncomePaise?: number | null;
+    updatedAt?: string | null;
   };
   connections: Array<{ id?: string; provider: string; displayName: string; status: string; lastVerifiedAt?: string | null }>;
   claims: Array<{ claim: { key: string; label: string; valueText: string; confidence: number; verifiedAt?: string | null; expiresAt?: string | null }; sourceLabel?: string | null }>;
@@ -118,6 +121,40 @@ function formatStatus(value: string) {
   return value.replaceAll("_", " ").replace(/\b\w/g, (letter) => letter.toUpperCase());
 }
 
+function formatIncome(value: number | null | undefined) {
+  if (value === null || value === undefined) return "Not added";
+  return new Intl.NumberFormat("en-IN", { style: "currency", currency: "INR", maximumFractionDigits: 0 }).format(value / 100);
+}
+
+type ProfileForm = { phone: string; city: string; state: string; category: string; annualIncome: string };
+
+function profileFormFromSnapshot(profile: Snapshot["profile"]): ProfileForm {
+  return {
+    phone: profile.phone ?? "",
+    city: profile.city ?? "",
+    state: profile.state ?? "",
+    category: profile.category ?? "",
+    annualIncome: profile.annualIncomePaise === null || profile.annualIncomePaise === undefined ? "" : String(profile.annualIncomePaise / 100),
+  };
+}
+
+function triggerDownload(blob: Blob, filename: string) {
+  const url = URL.createObjectURL(blob);
+  const anchor = window.document.createElement("a");
+  anchor.href = url;
+  anchor.download = filename;
+  anchor.click();
+  window.setTimeout(() => URL.revokeObjectURL(url), 1000);
+}
+
+async function copyText(value: string) {
+  if (navigator.clipboard) {
+    await navigator.clipboard.writeText(value);
+    return true;
+  }
+  return false;
+}
+
 function AnimatedPanel({ children, className = "" }: { children: React.ReactNode; className?: string }) {
   const reducedMotion = useReducedMotion();
   return (
@@ -138,7 +175,8 @@ function EmptyState({ icon: Icon, title, body, action }: { icon: typeof FileText
 
 function StatusPill({ status }: { status: string }) {
   const tone = ["submitted", "accepted", "completed", "verified", "connected", "ready"].includes(status) ? "positive" : ["rejected", "expired", "revoked"].includes(status) ? "negative" : "attention";
-  return <span className={`ao-status-pill ao-status-pill--${tone}`}><span />{formatStatus(status)}</span>;
+  const resolvedTone = ["rejected", "expired", "revoked", "disconnected"].includes(status) ? "negative" : tone;
+  return <span className={`ao-status-pill ao-status-pill--${resolvedTone}`}><span />{formatStatus(status)}</span>;
 }
 
 function Overview({ snapshot, onNavigate, onCreate, creating }: { snapshot: Snapshot; onNavigate: (view: View) => void; onCreate: () => void; creating: boolean }) {
@@ -152,58 +190,185 @@ function Overview({ snapshot, onNavigate, onCreate, creating }: { snapshot: Snap
         <div className="ao-card-kicker">Next best action</div>
         <h2>{openApplication ? "Finish your application packet" : "Prepare your first application packet"}</h2>
         <p>{openApplication ? `Your ${openApplication.template.name} packet is ${openApplication.application.readinessScore}% ready. Review the last details before sharing.` : "Start with an education application. ApplyOnce will show what can be reused and what you still need to decide."}</p>
-        <div className="ao-inline-actions"><button className="ao-button ao-button--primary" onClick={openApplication ? () => onNavigate("applications") : onCreate} disabled={creating}>{creating ? "Preparing packet..." : openApplication ? "Review application" : "Prepare an application"}<ArrowRight /></button><button className="ao-button ao-button--quiet" onClick={() => onNavigate("profile")}>View my profile</button></div>
+        <div className="ao-inline-actions"><button className="ao-button ao-button--primary" type="button" onClick={openApplication ? () => onNavigate("applications") : onCreate} disabled={creating}>{creating ? "Preparing packet..." : openApplication ? "Review application" : "Prepare an application"}<ArrowRight /></button><button className="ao-button ao-button--quiet" type="button" onClick={() => onNavigate("profile")}>View my profile</button></div>
         <div className="ao-hero-caption"><LockKeyhole /> Nothing is shared until you approve it.</div>
       </section>
-      <section className="ao-readiness-card"><div className="ao-card-kicker">Profile readiness</div><div className="ao-readiness-main"><div className="ao-readiness-ring" style={{ "--ao-progress": `${profileReady}%` } as React.CSSProperties}><strong>{profileReady}%</strong></div><div><h3>Ready to reuse</h3><p>{snapshot.connections.length} connected sources and {snapshot.documents.length} documents are available to you.</p></div></div><button className="ao-text-link" onClick={() => onNavigate("sources")}>Manage sources <ChevronRight /></button></section>
+      <section className="ao-readiness-card"><div className="ao-card-kicker">Profile readiness</div><div className="ao-readiness-main"><div className="ao-readiness-ring" style={{ "--ao-progress": `${profileReady}%` } as React.CSSProperties}><strong>{profileReady}%</strong></div><div><h3>Ready to reuse</h3><p>{snapshot.connections.length} connected sources and {snapshot.documents.length} documents are available to you.</p></div></div><button className="ao-text-link" type="button" onClick={() => onNavigate("sources")}>Manage sources <ChevronRight /></button></section>
     </div>
     <div className="ao-section-grid ao-section-grid--two">
-      <section className="ao-product-card"><div className="ao-card-heading"><div><div className="ao-card-kicker">Applications</div><h2>Keep every outcome in one place</h2></div><button className="ao-text-link" onClick={() => onNavigate("applications")}>View all <ChevronRight /></button></div>{!hasApplications ? <EmptyState icon={ClipboardList} title="No applications yet" body="Your first packet will appear here with its status and receipt." action={<button className="ao-button ao-button--outline" onClick={onCreate}>Create an application <Plus /></button>} /> : <div className="ao-list">{snapshot.applications.slice(0, 2).map(({ application, template }) => <button className="ao-list-row ao-list-row--button" key={application.id} onClick={() => onNavigate("applications")}><span className="ao-list-icon ao-list-icon--indigo"><GraduationCap /></span><span className="ao-list-copy"><strong>{template.name}</strong><small>{template.category} · updated {formatDate(application.updatedAt)}</small></span><StatusPill status={application.status} /><ChevronRight className="ao-list-chevron" /></button>)}{snapshot.partnerApplications.slice(0, 2).map(({ submission, form, organization }) => <button className="ao-list-row ao-list-row--button" key={submission.id} onClick={() => onNavigate("applications")}><span className="ao-list-icon ao-list-icon--mint"><Link2 /></span><span className="ao-list-copy"><strong>{form.name}</strong><small>{organization.name} · updated {formatDate(submission.updatedAt)}</small></span><StatusPill status={submission.status} /><ChevronRight className="ao-list-chevron" /></button>)}</div>}</section>
-      <section className="ao-product-card"><div className="ao-card-heading"><div><div className="ao-card-kicker">Connected sources</div><h2>Trusted by you</h2></div><button className="ao-text-link" onClick={() => onNavigate("sources")}>Manage <ChevronRight /></button></div><div className="ao-list">{snapshot.connections.slice(0, 4).map((connection) => <button className="ao-list-row ao-list-row--button" key={connection.id ?? connection.provider} onClick={() => onNavigate("sources")}><span className="ao-list-icon ao-list-icon--mint"><Link2 /></span><span className="ao-list-copy"><strong>{connection.displayName}</strong><small>Verified {formatDate(connection.lastVerifiedAt)}</small></span><StatusPill status={connection.status} /></button>)}</div></section>
+      <section className="ao-product-card"><div className="ao-card-heading"><div><div className="ao-card-kicker">Applications</div><h2>Keep every outcome in one place</h2></div><button className="ao-text-link" type="button" onClick={() => onNavigate("applications")}>View all <ChevronRight /></button></div>{!hasApplications ? <EmptyState icon={ClipboardList} title="No applications yet" body="Your first packet will appear here with its status and receipt." action={<button className="ao-button ao-button--outline" type="button" onClick={onCreate}>Create an application <Plus /></button>} /> : <div className="ao-list">{snapshot.applications.slice(0, 2).map(({ application, template }) => <button className="ao-list-row ao-list-row--button" type="button" key={application.id} onClick={() => onNavigate("applications")}><span className="ao-list-icon ao-list-icon--indigo"><GraduationCap /></span><span className="ao-list-copy"><strong>{template.name}</strong><small>{template.category} · updated {formatDate(application.updatedAt)}</small></span><StatusPill status={application.status} /><ChevronRight className="ao-list-chevron" /></button>)}{snapshot.partnerApplications.slice(0, 2).map(({ submission, form, organization }) => <button className="ao-list-row ao-list-row--button" type="button" key={submission.id} onClick={() => onNavigate("applications")}><span className="ao-list-icon ao-list-icon--mint"><Link2 /></span><span className="ao-list-copy"><strong>{form.name}</strong><small>{organization.name} · updated {formatDate(submission.updatedAt)}</small></span><StatusPill status={submission.status} /><ChevronRight className="ao-list-chevron" /></button>)}</div>}</section>
+      <section className="ao-product-card"><div className="ao-card-heading"><div><div className="ao-card-kicker">Connected sources</div><h2>Trusted by you</h2></div><button className="ao-text-link" type="button" onClick={() => onNavigate("sources")}>Manage <ChevronRight /></button></div><div className="ao-list">{snapshot.connections.slice(0, 4).map((connection) => <button className="ao-list-row ao-list-row--button" type="button" key={connection.id ?? connection.provider} onClick={() => onNavigate("sources")}><span className="ao-list-icon ao-list-icon--mint"><Link2 /></span><span className="ao-list-copy"><strong>{connection.displayName}</strong><small>Verified {formatDate(connection.lastVerifiedAt)}</small></span><StatusPill status={connection.status} /></button>)}</div></section>
     </div>
-    <section className="ao-product-card"><div className="ao-card-heading"><div><div className="ao-card-kicker">Recent activity</div><h2>Nothing gets lost after you apply</h2></div><button className="ao-text-link" onClick={() => onNavigate("consents")}>See consent history <ChevronRight /></button></div><div className="ao-timeline">{snapshot.events.slice(0, 4).map((event) => <div className="ao-timeline-row" key={event.id}><span className="ao-timeline-dot"><Check /></span><div><strong>{event.title}</strong><span>{event.description}</span></div><time>{formatDate(event.occurredAt)}</time></div>)}{snapshot.events.length === 0 ? <EmptyState icon={Sparkles} title="Your timeline is quiet" body="Application and privacy events will appear here." /> : null}</div></section>
+    <section className="ao-product-card"><div className="ao-card-heading"><div><div className="ao-card-kicker">Recent activity</div><h2>Nothing gets lost after you apply</h2></div><button className="ao-text-link" type="button" onClick={() => onNavigate("consents")}>See consent history <ChevronRight /></button></div><div className="ao-timeline">{snapshot.events.slice(0, 4).map((event) => <div className="ao-timeline-row" key={event.id}><span className="ao-timeline-dot"><Check /></span><div><strong>{event.title}</strong><span>{event.description}</span></div><time>{formatDate(event.occurredAt)}</time></div>)}{snapshot.events.length === 0 ? <EmptyState icon={Sparkles} title="Your timeline is quiet" body="Application and privacy events will appear here." /> : null}</div></section>
   </AnimatedPanel>;
 }
 
 function ProfileView({ snapshot, onSaved }: { snapshot: Snapshot; onSaved: (message: string) => void }) {
   const [editing, setEditing] = useState(false);
-  const [form, setForm] = useState({ phone: snapshot.profile.phone ?? "", city: snapshot.profile.city ?? "", state: snapshot.profile.state ?? "", category: snapshot.profile.category ?? "", annualIncome: snapshot.profile.annualIncomePaise ? String(snapshot.profile.annualIncomePaise / 100) : "" });
+  const [form, setForm] = useState<ProfileForm>(() => profileFormFromSnapshot(snapshot.profile));
   const [saving, setSaving] = useState(false);
+  const [saveError, setSaveError] = useState("");
+  const [savedAt, setSavedAt] = useState<string | null>(null);
+
   async function save(event: FormEvent) {
-    event.preventDefault(); setSaving(true);
-    const response = await fetch("/api/profile", { method: "PATCH", headers: { "content-type": "application/json" }, body: JSON.stringify({ phone: form.phone || null, city: form.city || null, state: form.state || null, category: form.category || null, annualIncomePaise: form.annualIncome ? Math.round(Number(form.annualIncome) * 100) : null }) });
-    if (response.ok) { setEditing(false); onSaved("Profile details saved securely."); } else onSaved("We could not save your profile yet.");
-    setSaving(false);
+    event.preventDefault();
+    const annualIncome = form.annualIncome.trim() ? Number(form.annualIncome.replaceAll(",", "")) : null;
+    if (annualIncome !== null && (!Number.isFinite(annualIncome) || annualIncome < 0)) {
+      setSaveError("Enter a valid non-negative annual income.");
+      return;
+    }
+
+    setSaving(true);
+    setSaveError("");
+    try {
+      const response = await fetch("/api/profile", {
+        method: "PATCH",
+        headers: { "content-type": "application/json" },
+        body: JSON.stringify({
+          phone: form.phone.trim() || null,
+          city: form.city.trim() || null,
+          state: form.state.trim() || null,
+          category: form.category.trim() || null,
+          annualIncomePaise: annualIncome === null ? null : Math.round(annualIncome * 100),
+        }),
+      });
+      const body = (await response.json().catch(() => null)) as { error?: string } | null;
+      if (!response.ok) throw new Error(body?.error ?? "We could not save your profile yet.");
+      setEditing(false);
+      setSavedAt(new Date().toISOString());
+      onSaved("Profile details saved securely.");
+    } catch (error) {
+      setSaveError(error instanceof Error ? error.message : "We could not save your profile yet.");
+    } finally {
+      setSaving(false);
+    }
   }
-  const claimRows = snapshot.claims.slice(0, 8);
-  return <AnimatedPanel className="ao-view-stack"><div className="ao-view-heading"><div><span className="ao-eyebrow"><span className="ao-eyebrow-mark" /> Personal information</span><h1>Your reusable profile.</h1><p>Review the information you can carry into your next application.</p></div><button className="ao-button ao-button--outline" onClick={() => setEditing((value) => !value)}>{editing ? "Close editor" : "Edit details"}<Pencil /></button></div>{editing ? <form className="ao-product-card ao-form-card" onSubmit={(event) => void save(event)}><div className="ao-form-grid"><label>Mobile number<input value={form.phone} onChange={(event) => setForm({ ...form, phone: event.target.value })} placeholder="Add a mobile number" /></label><label>City<input value={form.city} onChange={(event) => setForm({ ...form, city: event.target.value })} placeholder="Pune" /></label><label>State<input value={form.state} onChange={(event) => setForm({ ...form, state: event.target.value })} placeholder="Maharashtra" /></label><label>Category<input value={form.category} onChange={(event) => setForm({ ...form, category: event.target.value })} placeholder="General" /></label><label>Annual family income (₹)<input inputMode="numeric" value={form.annualIncome} onChange={(event) => setForm({ ...form, annualIncome: event.target.value })} placeholder="480000" /></label></div><div className="ao-form-actions"><span className="ao-form-help"><LockKeyhole /> Only you can change these details.</span><button className="ao-button ao-button--primary" type="submit" disabled={saving}>{saving ? "Saving..." : "Save changes"}<Check /></button></div></form> : null}<section className="ao-product-card"><div className="ao-card-heading"><div><div className="ao-card-kicker">Profile wallet</div><h2>{snapshot.profile.fullName}</h2></div><span className="ao-verified-label"><BadgeCheck /> Identity boundary active</span></div><div className="ao-detail-grid"><div><span>Email address</span><strong>{snapshot.profile.email}</strong></div><div><span>Mobile number</span><strong>{snapshot.profile.phone ?? "Not added"}</strong></div><div><span>Date of birth</span><strong>{formatDate(snapshot.profile.dateOfBirth)}</strong></div><div><span>Location</span><strong>{[snapshot.profile.city, snapshot.profile.state].filter(Boolean).join(", ") || "Not added"}</strong></div></div></section><section className="ao-product-card"><div className="ao-card-heading"><div><div className="ao-card-kicker">Verified claims</div><h2>Every value has a source</h2></div><span className="ao-card-meta">{claimRows.length} available</span></div><div className="ao-claims-grid">{claimRows.map(({ claim, sourceLabel }) => <div className="ao-claim" key={claim.key}><div><span>{claim.label}</span><strong>{claim.valueText}</strong></div><div className="ao-claim-meta"><BadgeCheck /> {sourceLabel ?? "Profile details"}<small>{claim.confidence}% match</small></div></div>)}</div>{claimRows.length === 0 ? <EmptyState icon={Fingerprint} title="No claims yet" body="Connect a source to begin building your reusable profile." /> : null}</section></AnimatedPanel>;
+  const claimRows = snapshot.claims;
+  return (
+    <AnimatedPanel className="ao-view-stack">
+      <div className="ao-view-heading">
+        <div>
+          <span className="ao-eyebrow"><span className="ao-eyebrow-mark" /> Personal information</span>
+          <h1>Your reusable profile.</h1>
+          <p>Review the information you can carry into your next application.</p>
+        </div>
+        <button
+          className="ao-button ao-button--outline"
+          type="button"
+          onClick={() => {
+            if (editing) {
+              setForm(profileFormFromSnapshot(snapshot.profile));
+              setSaveError("");
+            }
+            setEditing((value) => !value);
+          }}
+        >
+          {editing ? "Cancel editing" : "Edit details"}{editing ? <X /> : <Pencil />}
+        </button>
+      </div>
+
+      {savedAt && !editing ? <div className="ao-inline-success" role="status"><CheckCircle2 /> Saved {formatDate(savedAt)}. Your profile is ready to reuse.</div> : null}
+
+      {editing ? (
+        <form className="ao-product-card ao-form-card" onSubmit={(event) => void save(event)} noValidate>
+          <div className="ao-card-heading"><div><div className="ao-card-kicker">Edit profile details</div><h2>Keep your reusable packet current.</h2></div><span className="ao-verified-label"><LockKeyhole /> Private to you</span></div>
+          <p className="ao-form-intro">These details stay in your ApplyOnce profile until you approve them for a specific application.</p>
+          <div className="ao-form-grid">
+            <label>Mobile number<input value={form.phone} onChange={(event) => { setForm({ ...form, phone: event.target.value }); setSaveError(""); }} placeholder="Add a mobile number" autoComplete="tel" /></label>
+            <label>City<input value={form.city} onChange={(event) => { setForm({ ...form, city: event.target.value }); setSaveError(""); }} placeholder="Pune" autoComplete="address-level2" /></label>
+            <label>State<input value={form.state} onChange={(event) => { setForm({ ...form, state: event.target.value }); setSaveError(""); }} placeholder="Maharashtra" autoComplete="address-level1" /></label>
+            <label>Category<input value={form.category} onChange={(event) => { setForm({ ...form, category: event.target.value }); setSaveError(""); }} placeholder="General" /></label>
+            <label>Annual family income (₹)<input inputMode="decimal" value={form.annualIncome} onChange={(event) => { setForm({ ...form, annualIncome: event.target.value }); setSaveError(""); }} placeholder="480000" /></label>
+          </div>
+          {saveError ? <div className="ao-inline-form-error" role="alert"><CircleAlert /> {saveError}</div> : null}
+          <div className="ao-form-actions">
+            <span className="ao-form-help"><LockKeyhole /> Only you can change these details.</span>
+            <div className="ao-inline-actions">
+              <button className="ao-button ao-button--quiet" type="button" onClick={() => { setForm(profileFormFromSnapshot(snapshot.profile)); setSaveError(""); setEditing(false); }}>Discard</button>
+              <button className="ao-button ao-button--primary" type="submit" disabled={saving}>{saving ? "Saving..." : "Save changes"}<Check /></button>
+            </div>
+          </div>
+        </form>
+      ) : null}
+
+      <section className="ao-product-card ao-profile-wallet-card">
+        <div className="ao-card-heading">
+          <div><div className="ao-card-kicker">Profile wallet</div><h2>{snapshot.profile.fullName}</h2></div>
+          <span className="ao-verified-label"><BadgeCheck /> Identity boundary active</span>
+        </div>
+        <p className="ao-profile-lede">Your identity stays anchored to your signed-in account. Reusable details remain visible, editable, and source-aware.</p>
+        <div className="ao-detail-grid">
+          <div><span>Email address</span><strong>{snapshot.profile.email}</strong></div>
+          <div><span>Mobile number</span><strong>{snapshot.profile.phone ?? "Not added"}</strong></div>
+          <div><span>Date of birth</span><strong>{formatDate(snapshot.profile.dateOfBirth)}</strong></div>
+          <div><span>Location</span><strong>{[snapshot.profile.city, snapshot.profile.state].filter(Boolean).join(", ") || "Not added"}</strong></div>
+          <div><span>Category</span><strong>{snapshot.profile.category ?? "Not added"}</strong></div>
+          <div><span>Annual family income</span><strong>{formatIncome(snapshot.profile.annualIncomePaise)}</strong></div>
+        </div>
+        <div className="ao-profile-updated"><CheckCircle2 /> Last saved {formatDate(snapshot.profile.updatedAt)} · Edit any non-verified detail before your next application.</div>
+      </section>
+
+      <section className="ao-product-card">
+        <div className="ao-card-heading"><div><div className="ao-card-kicker">Verified claims</div><h2>Every value has a source</h2></div><span className="ao-card-meta">{claimRows.length} available</span></div>
+        <div className="ao-claims-grid">{claimRows.map(({ claim, sourceLabel }) => <div className="ao-claim" key={claim.key}><div><span>{claim.label}</span><strong>{claim.valueText}</strong></div><div className="ao-claim-meta"><BadgeCheck /> {sourceLabel ?? "Profile details"}<small>{claim.confidence}% match</small></div></div>)}</div>
+        {claimRows.length === 0 ? <EmptyState icon={Fingerprint} title="No claims yet" body="Connect a source to begin building your reusable profile." /> : null}
+      </section>
+    </AnimatedPanel>
+  );
 }
 
-function SourcesView({ snapshot, onRefresh, onSaved }: { snapshot: Snapshot; onRefresh: () => Promise<void>; onSaved: (message: string) => void }) {
-  const providers = [
-    { id: "digilocker", name: "DigiLocker", detail: "Certificates and official documents", tone: "mint", icon: FileCheck2 },
-    { id: "meripehchaan", name: "MeriPehchaan", detail: "Identity and address claims", tone: "indigo", icon: Fingerprint },
-    { id: "apaar", name: "APAAR", detail: "Academic record and achievements", tone: "blue", icon: GraduationCap },
+function SourcesView({ snapshot, onRefresh, onSaved }: { snapshot: Snapshot; onRefresh: () => Promise<boolean>; onSaved: (message: string) => void }) {
+  const providers: Array<{ id: Exclude<SourceProvider, "profile">; name: string; detail: string }> = [
+    { id: "digilocker", name: "DigiLocker", detail: "Certificates and official documents" },
+    { id: "meripehchaan", name: "MeriPehchaan", detail: "Identity and address claims" },
+    { id: "apaar", name: "APAAR", detail: "Academic record and achievements" },
   ];
   const [connecting, setConnecting] = useState<string | null>(null);
   const [disconnecting, setDisconnecting] = useState<string | null>(null);
+  const [refreshing, setRefreshing] = useState(false);
   async function connect(provider: string) {
     setConnecting(provider);
-    const response = await fetch(`/api/sources/${provider}/connect`, { method: "POST" });
-    if (response.ok) { await onRefresh(); onSaved(`${provider === "digilocker" ? "DigiLocker" : provider === "meripehchaan" ? "MeriPehchaan" : "APAAR"} sandbox connection added. Official credentials are still required for live retrieval.`); } else onSaved("This source could not be connected yet.");
-    setConnecting(null);
+    try {
+      const response = await fetch(`/api/sources/${provider}/connect`, { method: "POST" });
+      if (response.ok) {
+        const refreshed = await onRefresh();
+        onSaved(refreshed ? `${provider === "digilocker" ? "DigiLocker" : provider === "meripehchaan" ? "MeriPehchaan" : "APAAR"} sandbox connection added. Official credentials are still required for live retrieval.` : "The source was connected, but the workspace could not refresh. Reload to see it.");
+      } else onSaved("This source could not be connected yet.");
+    } catch {
+      onSaved("This source could not be connected. Check your connection and try again.");
+    } finally {
+      setConnecting(null);
+    }
   }
   async function disconnect(provider: string, name: string) {
     setDisconnecting(provider);
-    const response = await fetch(`/api/sources/${provider}/disconnect`, { method: "DELETE" });
-    if (response.ok) { await onRefresh(); onSaved(`${name} was disconnected. Existing consent records remain visible.`); } else onSaved(`${name} could not be disconnected yet.`);
-    setDisconnecting(null);
+    try {
+      const response = await fetch(`/api/sources/${provider}/disconnect`, { method: "DELETE" });
+      if (response.ok) { const refreshed = await onRefresh(); onSaved(refreshed ? `${name} was disconnected. Existing consent records remain visible.` : "The source was disconnected, but the workspace could not refresh. Reload to see it."); } else onSaved(`${name} could not be disconnected yet.`);
+    } catch {
+      onSaved(`${name} could not be disconnected. Check your connection and try again.`);
+    } finally {
+      setDisconnecting(null);
+    }
   }
-  return <AnimatedPanel className="ao-view-stack"><div className="ao-view-heading"><div><span className="ao-eyebrow"><span className="ao-eyebrow-mark" /> Connected sources</span><h1>Your information, on your terms.</h1><p>Connect sources only when an application needs them. You can disconnect at any time.</p></div><button className="ao-button ao-button--outline" onClick={() => void onRefresh()}>Refresh status <Sparkles /></button></div><div className="ao-info-banner"><ShieldCheck /><div><strong>ApplyOnce never shares a source by default.</strong><span>Every application asks for a separate, purpose-bound consent before a value moves.</span></div></div><div className="ao-source-grid">{providers.map(({ id, name, detail, tone, icon: Icon }) => { const existing = snapshot.connections.find((connection) => connection.provider === id); return <section className="ao-source-card" key={id}><div className="ao-source-card-head"><span className={`ao-source-large-icon ao-source-large-icon--${tone}`}><Icon /></span><StatusPill status={existing?.status ?? "disconnected"} /></div><h2>{name}</h2><p>{detail}</p><div className="ao-source-card-footer"><span>{existing?.lastVerifiedAt ? `Last checked ${formatDate(existing.lastVerifiedAt)}` : "No connection yet"}</span>{existing && existing.status !== "disconnected" ? <button className="ao-button ao-button--quiet" onClick={() => void disconnect(id, name)} disabled={disconnecting === id}>{disconnecting === id ? "Disconnecting..." : "Disconnect source"}<X /></button> : <button className="ao-button ao-button--primary" onClick={() => void connect(id)} disabled={connecting === id}>{connecting === id ? "Connecting..." : "Connect sandbox"}<Link2 /></button>}</div><small className="ao-source-disclosure">Sandbox mode stores only a demo connection. Live retrieval needs official partner credentials.</small></section>; })}</div></AnimatedPanel>;
+  return <AnimatedPanel className="ao-view-stack"><div className="ao-view-heading"><div><span className="ao-eyebrow"><span className="ao-eyebrow-mark" /> Connected sources</span><h1>Your information, on your terms.</h1><p>Connect sources only when an application needs them. You can disconnect at any time.</p></div><button className="ao-button ao-button--outline" type="button" onClick={async () => { setRefreshing(true); try { await onRefresh(); onSaved("Source status refreshed."); } catch { onSaved("Source status could not be refreshed."); } finally { setRefreshing(false); } }} disabled={refreshing}>{refreshing ? "Refreshing..." : "Refresh status"} <Sparkles /></button></div><div className="ao-info-banner"><ShieldCheck /><div><strong>ApplyOnce never shares a source by default.</strong><span>Every application asks for a separate, purpose-bound consent before a value moves.</span></div></div><div className="ao-source-grid">{providers.map(({ id, name, detail }) => { const existing = snapshot.connections.find((connection) => connection.provider === id); return <section className="ao-source-card" key={id}><div className="ao-source-card-head"><SourceMark provider={id} size="md" /><StatusPill status={existing?.status ?? "disconnected"} /></div><h2>{name}</h2><p>{detail}</p><div className="ao-source-card-footer"><span>{existing?.lastVerifiedAt ? `Last checked ${formatDate(existing.lastVerifiedAt)}` : "No connection yet"}</span>{existing && existing.status !== "disconnected" ? <button className="ao-button ao-button--quiet" type="button" onClick={() => void disconnect(id, name)} disabled={disconnecting === id}>{disconnecting === id ? "Disconnecting..." : "Disconnect source"}<X /></button> : <button className="ao-button ao-button--primary" type="button" onClick={() => void connect(id)} disabled={connecting === id}>{connecting === id ? "Connecting..." : "Connect sandbox"}<Link2 /></button>}</div><small className="ao-source-disclosure">Sandbox mode stores only a demo connection. Live retrieval needs official partner credentials.</small></section>; })}</div></AnimatedPanel>;
 }
 
-function DocumentsView({ snapshot, onUpload, uploading }: { snapshot: Snapshot; onUpload: (event: ChangeEvent<HTMLInputElement>) => Promise<void>; uploading: boolean }) {
-  return <AnimatedPanel className="ao-view-stack"><div className="ao-view-heading"><div><span className="ao-eyebrow"><span className="ao-eyebrow-mark" /> Private documents</span><h1>Keep your proof close.</h1><p>Files are stored privately and only shared with an application you approve.</p></div><label className="ao-button ao-button--primary"><CloudUpload /> {uploading ? "Uploading..." : "Add document"}<input className="ao-hidden-input" type="file" accept="application/pdf,image/jpeg,image/png" onChange={(event) => void onUpload(event)} disabled={uploading} /></label></div><div className="ao-info-banner ao-info-banner--mint"><LockKeyhole /><div><strong>Private storage is active.</strong><span>PDF, JPG, and PNG files up to 10 MB are accepted. Your files do not appear in public demos.</span></div></div><section className="ao-product-card">{snapshot.documents.length === 0 ? <EmptyState icon={FileText} title="No documents yet" body="Add a marksheet, certificate, or identity document when you are ready." action={<label className="ao-button ao-button--outline">Upload a document <input className="ao-hidden-input" type="file" accept="application/pdf,image/jpeg,image/png" onChange={(event) => void onUpload(event)} disabled={uploading} /></label>} /> : <div className="ao-document-list">{snapshot.documents.map((document) => <div className="ao-document-row" key={document.id}><span className="ao-list-icon ao-list-icon--mint"><FileText /></span><div className="ao-list-copy"><strong>{document.title}</strong><small>{document.documentType.replaceAll("_", " ")} · updated {formatDate(document.updatedAt)}</small></div><StatusPill status={document.status} /><span className="ao-document-provider">{document.provider}</span></div>)}</div>}</section></AnimatedPanel>;
+function DocumentsView({ snapshot, onUpload, onDownload, onDelete, uploading }: { snapshot: Snapshot; onUpload: (event: ChangeEvent<HTMLInputElement>) => Promise<void>; onDownload: (document: Snapshot["documents"][number]) => Promise<void>; onDelete: (document: Snapshot["documents"][number]) => Promise<void>; uploading: boolean }) {
+  const [deleteCandidate, setDeleteCandidate] = useState<string | null>(null);
+  const [busyDocument, setBusyDocument] = useState<string | null>(null);
+
+  async function download(document: Snapshot["documents"][number]) {
+    setBusyDocument(document.id);
+    try { await onDownload(document); } catch { /* The parent reports the actionable error. */ } finally { setBusyDocument(null); }
+  }
+
+  async function remove(document: Snapshot["documents"][number]) {
+    setBusyDocument(document.id);
+    try { await onDelete(document); setDeleteCandidate(null); } catch { /* The parent reports the actionable error. */ } finally { setBusyDocument(null); }
+  }
+
+  return <AnimatedPanel className="ao-view-stack"><div className="ao-view-heading"><div><span className="ao-eyebrow"><span className="ao-eyebrow-mark" /> Private documents</span><h1>Keep your proof close.</h1><p>Files are stored privately and only shared with an application you approve.</p></div><label className="ao-button ao-button--primary"><CloudUpload /> {uploading ? "Uploading..." : "Add document"}<input className="ao-hidden-input" type="file" accept="application/pdf,image/jpeg,image/png" onChange={(event) => void onUpload(event)} disabled={uploading} /></label></div><div className="ao-info-banner ao-info-banner--mint"><LockKeyhole /><div><strong>Private storage is active.</strong><span>PDF, JPG, and PNG files up to 10 MB are accepted. Your files do not appear in public demos.</span></div></div><section className="ao-product-card">{snapshot.documents.length === 0 ? <EmptyState icon={FileText} title="No documents yet" body="Add a marksheet, certificate, or identity document when you are ready." action={<label className="ao-button ao-button--outline">Upload a document <input className="ao-hidden-input" type="file" accept="application/pdf,image/jpeg,image/png" onChange={(event) => void onUpload(event)} disabled={uploading} /></label>} /> : <div className="ao-document-list">{snapshot.documents.map((document) => <div className="ao-document-row" key={document.id}><span className="ao-list-icon ao-list-icon--mint"><FileText /></span><div className="ao-list-copy"><strong>{document.title}</strong><small>{document.documentType.replaceAll("_", " ")} · updated {formatDate(document.updatedAt)}</small></div><StatusPill status={document.status} /><span className="ao-document-provider">{document.provider}</span><div className="ao-document-actions">{deleteCandidate === document.id ? <><button className="ao-button ao-button--danger" type="button" onClick={() => void remove(document)} disabled={busyDocument === document.id}>{busyDocument === document.id ? "Removing..." : "Delete document"}</button><button className="ao-button ao-button--quiet" type="button" onClick={() => setDeleteCandidate(null)} disabled={busyDocument === document.id}>Keep it</button></> : <><button className="ao-button ao-button--quiet" type="button" onClick={() => void download(document)} disabled={busyDocument === document.id}>{busyDocument === document.id ? "Opening..." : "Download"}<Download /></button><button className="ao-button ao-button--quiet ao-document-delete" type="button" onClick={() => setDeleteCandidate(document.id)} disabled={busyDocument === document.id}>Delete</button></>}</div></div>)}</div>}</section></AnimatedPanel>;
 }
 
 function ApplicationsView({ snapshot, onCreate, creating, onOpen, onOpenPartner }: { snapshot: Snapshot; onCreate: () => void; creating: boolean; onOpen: (id: string) => void; onOpenPartner: (application: PartnerApplication) => void }) {
@@ -232,26 +397,73 @@ function ApplicationDetail({ detail, onBack, onRefresh, onSaved }: { detail: App
   const [confirming, setConfirming] = useState<string | null>(null);
   const [consent, setConsent] = useState(false);
   const [submitting, setSubmitting] = useState(false);
+  const [receiptCode, setReceiptCode] = useState<string | null>(detail.application.receiptCode);
+  const [submittedAt, setSubmittedAt] = useState<string | null>(detail.application.submittedAt ?? null);
+  const [receiptBusy, setReceiptBusy] = useState(false);
+  const [receiptCopied, setReceiptCopied] = useState(false);
   const unresolved = detail.fields.filter((field) => field.state === "missing" || field.state === "needs_confirmation");
+
   async function confirmField(field: ApplicationDetail["fields"][number]) {
     if (!field.valueText) return;
     setConfirming(field.requirementKey);
-    const response = await fetch(`/api/applications/${detail.application.id}`, { method: "PATCH", headers: { "content-type": "application/json" }, body: JSON.stringify({ requirementKey: field.requirementKey, valueText: field.valueText }) });
-    if (response.ok) { await onRefresh(); onSaved(`${field.label} confirmed for this application.`); } else onSaved("This field could not be confirmed.");
-    setConfirming(null);
+    try {
+      const response = await fetch(`/api/applications/${detail.application.id}`, { method: "PATCH", headers: { "content-type": "application/json" }, body: JSON.stringify({ requirementKey: field.requirementKey, valueText: field.valueText }) });
+      if (response.ok) { await onRefresh(); onSaved(`${field.label} confirmed for this application.`); } else onSaved("This field could not be confirmed.");
+    } catch {
+      onSaved("This field could not be confirmed. Check your connection and try again.");
+    } finally {
+      setConfirming(null);
+    }
   }
   async function submit() {
     setSubmitting(true);
-    const response = await fetch(`/api/applications/${detail.application.id}/submit`, { method: "POST", headers: { "content-type": "application/json" }, body: JSON.stringify({ purpose: `${detail.template.name} application`, scope: detail.fields.map((field) => field.requirementKey), method: "manual" }) });
-    if (response.ok) { await onRefresh(); onSaved("Application submitted and receipt generated."); } else { const body = await response.json().catch(() => null) as { error?: string } | null; onSaved(body?.error ?? "The application could not be submitted."); }
-    setSubmitting(false);
+    try {
+      const response = await fetch(`/api/applications/${detail.application.id}/submit`, { method: "POST", headers: { "content-type": "application/json" }, body: JSON.stringify({ purpose: `${detail.template.name} application`, scope: detail.fields.map((field) => field.requirementKey), method: "manual" }) });
+      const body = (await response.json().catch(() => null)) as { error?: string; application?: { application?: { receiptCode?: string | null; submittedAt?: string | null } } } | null;
+      if (!response.ok || !body?.application?.application) throw new Error(body?.error ?? "The application could not be submitted.");
+      setReceiptCode(body.application.application.receiptCode ?? null);
+      setSubmittedAt(body.application.application.submittedAt ?? new Date().toISOString());
+      onSaved("Application submitted. Your receipt is ready.");
+      await onRefresh();
+    } catch (error) {
+      onSaved(error instanceof Error ? error.message : "The application could not be submitted.");
+    } finally {
+      setSubmitting(false);
+    }
   }
-  return <AnimatedPanel className="ao-view-stack"><button className="ao-back-link" onClick={onBack}>← Back to applications</button><div className="ao-view-heading"><div><span className="ao-eyebrow"><span className="ao-eyebrow-mark" /> Application review</span><h1>{detail.template.name}</h1><p>{detail.template.description}</p></div><StatusPill status={detail.application.status} /></div><div className="ao-application-detail-grid"><section className="ao-product-card"><div className="ao-card-heading"><div><div className="ao-card-kicker">Review before sharing</div><h2>{detail.application.readinessScore}% ready to go</h2></div><span className="ao-verified-label"><BadgeCheck /> Source-aware</span></div><div className="ao-progress-track ao-progress-track--large"><span style={{ width: `${detail.application.readinessScore}%` }} /></div><div className="ao-field-list">{detail.fields.map((field) => <div className={`ao-field-row ao-field-row--${field.state}`} key={field.id}><div className="ao-field-main"><span className="ao-field-label">{field.label}</span><strong>{field.valueText ?? "Needs your input"}</strong><span className="ao-field-source">{field.sourceLabel ? <><BadgeCheck /> {field.sourceLabel}</> : <><CircleAlert /> Citizen input required</>}</span></div>{field.state === "needs_confirmation" ? <button className="ao-button ao-button--outline" onClick={() => void confirmField(field)} disabled={confirming === field.requirementKey}>{confirming === field.requirementKey ? "Saving..." : "Confirm"}<Check /></button> : field.state === "confirmed" || field.state === "prefilled" ? <span className="ao-field-confirmed"><CheckCircle2 /> Ready</span> : null}</div>)}</div></section><aside className="ao-product-card ao-consent-card"><div className="ao-card-kicker">Purpose-bound consent</div><h2>Only share what this form needs.</h2><p>{detail.template.externalPortalName} receives the fields listed on this page for this application only.</p><div className="ao-consent-summary"><div><span>Fields</span><strong>{detail.fields.length}</strong></div><div><span>Unresolved</span><strong>{unresolved.length}</strong></div><div><span>Sharing</span><strong>{detail.application.status === "submitted" ? "Complete" : "Not yet"}</strong></div></div>{detail.application.status !== "submitted" ? <><label className="ao-consent-check"><input type="checkbox" checked={consent} onChange={(event) => setConsent(event.target.checked)} /><span>I reviewed the fields and approve sharing this application packet.</span></label><button className="ao-button ao-button--primary ao-button--full" disabled={!consent || unresolved.length > 0 || submitting} onClick={() => void submit()}>{submitting ? "Submitting securely..." : "Share and submit"}<ArrowRight /></button></> : <div className="ao-success-note"><CheckCircle2 /><span>Submitted. Your receipt is {detail.application.receiptCode ?? "ready"}.</span></div>}<p className="ao-card-footnote"><LockKeyhole /> You can revoke future access from Consent history.</p></aside></div><section className="ao-product-card"><div className="ao-card-heading"><div><div className="ao-card-kicker">Application timeline</div><h2>What happened</h2></div>{detail.application.receiptCode ? <span className="ao-mono-label">{detail.application.receiptCode}</span> : null}</div><div className="ao-timeline">{detail.events.map((event) => <div className="ao-timeline-row" key={event.id}><span className="ao-timeline-dot"><Check /></span><div><strong>{event.title}</strong><span>{event.description}</span></div><time>{formatDate(event.occurredAt)}</time></div>)}</div></section></AnimatedPanel>;
+  async function downloadReceipt() {
+    setReceiptBusy(true);
+    try {
+      const response = await fetch(`/api/applications/${detail.application.id}/receipt`, { cache: "no-store" });
+      const body = (await response.json().catch(() => null)) as { receipt?: Record<string, unknown>; error?: string } | null;
+      if (!response.ok || !body?.receipt) throw new Error(body?.error ?? "The receipt could not be prepared.");
+      triggerDownload(new Blob([JSON.stringify(body.receipt, null, 2)], { type: "application/json" }), `${(body.receipt.receiptCode as string | undefined)?.toLowerCase() ?? "applyonce"}-receipt.json`);
+      onSaved("Receipt downloaded.");
+    } catch (error) {
+      onSaved(error instanceof Error ? error.message : "The receipt could not be downloaded.");
+    } finally {
+      setReceiptBusy(false);
+    }
+  }
+  async function copyReceipt() {
+    if (!receiptCode) return;
+    try {
+      if (!await copyText(receiptCode)) throw new Error("Copy is unavailable in this browser.");
+      setReceiptCopied(true);
+      onSaved("Receipt ID copied.");
+      window.setTimeout(() => setReceiptCopied(false), 2200);
+    } catch (error) {
+      onSaved(error instanceof Error ? error.message : "Receipt ID could not be copied.");
+    }
+  }
+  const submitted = detail.application.status === "submitted" || detail.application.status === "accepted" || Boolean(receiptCode);
+  return <AnimatedPanel className="ao-view-stack"><button className="ao-back-link" type="button" onClick={onBack}>← Back to applications</button><div className="ao-view-heading"><div><span className="ao-eyebrow"><span className="ao-eyebrow-mark" /> Application review</span><h1>{detail.template.name}</h1><p>{detail.template.description}</p></div><StatusPill status={submitted ? "submitted" : detail.application.status} /></div><div className="ao-application-detail-grid"><section className="ao-product-card"><div className="ao-card-heading"><div><div className="ao-card-kicker">Review before sharing</div><h2>{submitted ? "Your packet is complete." : `${detail.application.readinessScore}% ready to go`}</h2></div><span className="ao-verified-label"><BadgeCheck /> Source-aware</span></div><div className="ao-progress-track ao-progress-track--large"><span style={{ width: `${submitted ? 100 : detail.application.readinessScore}%` }} /></div><div className="ao-field-list">{detail.fields.map((field) => <div className={`ao-field-row ao-field-row--${field.state}`} key={field.id}><div className="ao-field-main"><span className="ao-field-label">{field.label}</span><strong>{field.valueText ?? "Needs your input"}</strong><span className="ao-field-source">{field.sourceLabel ? <><BadgeCheck /> {field.sourceLabel}</> : <><CircleAlert /> Citizen input required</>}</span></div>{!submitted && field.state === "needs_confirmation" ? <button className="ao-button ao-button--outline" type="button" onClick={() => void confirmField(field)} disabled={confirming === field.requirementKey}>{confirming === field.requirementKey ? "Saving..." : "Confirm"}<Check /></button> : field.state === "confirmed" || field.state === "prefilled" ? <span className="ao-field-confirmed"><CheckCircle2 /> Ready</span> : null}</div>)}</div></section><aside className="ao-product-card ao-consent-card"><div className="ao-card-kicker">{submitted ? "Submission confirmed" : "Purpose-bound consent"}</div>{submitted ? <div className="ao-submission-confirmation" role="status" aria-live="polite"><span className="ao-submission-confirmation-mark"><Check /></span><h2>Application submitted.</h2><p>{detail.template.externalPortalName} received your approved packet. Your receipt is saved to this workspace.</p><div className="ao-receipt-id-card"><span>Receipt ID</span><strong>{receiptCode ?? "Preparing receipt"}</strong><small>{submittedAt ? `Submitted ${formatDate(submittedAt)}` : "Submitted just now"}</small></div><div className="ao-inline-actions ao-receipt-actions"><button className="ao-button ao-button--outline" type="button" onClick={() => void downloadReceipt()} disabled={receiptBusy}>{receiptBusy ? "Preparing..." : "Download receipt"}<Download /></button><button className="ao-button ao-button--quiet" type="button" onClick={() => void copyReceipt()} disabled={!receiptCode}>{receiptCopied ? "Copied" : "Copy ID"}<Copy /></button><button className="ao-button ao-button--quiet" type="button" onClick={() => window.print()}>Print</button></div></div> : <><h2>Only share what this form needs.</h2><p>{detail.template.externalPortalName} receives the fields listed on this page for this application only.</p><div className="ao-consent-summary"><div><span>Fields</span><strong>{detail.fields.length}</strong></div><div><span>Unresolved</span><strong>{unresolved.length}</strong></div><div><span>Sharing</span><strong>{detail.application.status === "submitted" ? "Complete" : "Not yet"}</strong></div></div><label className="ao-consent-check"><input type="checkbox" checked={consent} onChange={(event) => setConsent(event.target.checked)} /><span>I reviewed the fields and approve sharing this application packet.</span></label><button className="ao-button ao-button--primary ao-button--full" type="button" disabled={!consent || unresolved.length > 0 || submitting} onClick={() => void submit()}>{submitting ? "Submitting securely..." : "Share and submit"}<ArrowRight /></button></>}<p className="ao-card-footnote"><LockKeyhole /> You can revoke future access from Consent history.</p></aside></div><section className="ao-product-card"><div className="ao-card-heading"><div><div className="ao-card-kicker">Application timeline</div><h2>What happened</h2></div>{receiptCode ? <span className="ao-mono-label">{receiptCode}</span> : null}</div><div className="ao-timeline">{detail.events.map((event) => <div className="ao-timeline-row" key={event.id}><span className="ao-timeline-dot"><Check /></span><div><strong>{event.title}</strong><span>{event.description}</span></div><time>{formatDate(event.occurredAt)}</time></div>)}{detail.events.length === 0 ? <EmptyState icon={ClipboardList} title="No timeline events yet" body="The application timeline will appear here after your first review action." /> : null}</div></section></AnimatedPanel>;
 }
 
 function ConsentsView({ onSaved }: { onSaved: (message: string) => void }) {
   const [consents, setConsents] = useState<Consent[]>([]);
   const [loading, setLoading] = useState(true);
+  const [revoking, setRevoking] = useState<string | null>(null);
   async function load() { setLoading(true); const response = await fetch("/api/consents", { cache: "no-store" }); if (response.ok) { const body = (await response.json()) as { consents: Consent[]; partnerConsents?: Consent[] }; setConsents([...body.consents, ...(body.partnerConsents ?? []).map((consent) => ({ ...consent, formId: consent.formId ?? null }))]); } setLoading(false); }
   useEffect(() => {
     let active = true;
@@ -264,8 +476,20 @@ function ConsentsView({ onSaved }: { onSaved: (message: string) => void }) {
     });
     return () => { active = false; };
   }, []);
-  async function revoke(id: string) { const consent = consents.find((item) => item.id === id); if (!consent || consent.revokedAt) return; const response = await fetch(`/api/consents/${id}/revoke`, { method: "POST" }); if (response.ok) { await load(); onSaved("Future access for this application was revoked."); } else onSaved("We could not revoke this consent yet."); }
-  return <AnimatedPanel className="ao-view-stack"><div className="ao-view-heading"><div><span className="ao-eyebrow"><span className="ao-eyebrow-mark" /> Consent history</span><h1>Know what moved.</h1><p>A human-readable record of the information you approved for each application.</p></div><ShieldCheck className="ao-heading-icon" /></div><section className="ao-product-card">{loading ? <div className="ao-loading-line">Loading your consent history...</div> : consents.length === 0 ? <EmptyState icon={ShieldCheck} title="No consent records yet" body="When you submit an application, its sharing scope will appear here." /> : <div className="ao-consent-list">{consents.map((consent) => <div className="ao-consent-row" key={consent.id}><span className={`ao-consent-icon ${consent.revokedAt ? "ao-consent-icon--revoked" : ""}`}>{consent.revokedAt ? <X /> : <Check />}</span><div className="ao-list-copy"><strong>{consent.purpose}</strong><small>{consent.scope.length} fields · approved {formatDate(consent.approvedAt)} · {consent.method} verification</small></div>{consent.revokedAt ? <span className="ao-revoked-label">Revoked {formatDate(consent.revokedAt)}</span> : <button className="ao-button ao-button--outline" onClick={() => void revoke(consent.id)}>Revoke access <LockKeyhole /></button>}</div>)}</div>}</section></AnimatedPanel>;
+  async function revoke(id: string) {
+    const consent = consents.find((item) => item.id === id);
+    if (!consent || consent.revokedAt) return;
+    setRevoking(id);
+    try {
+      const response = await fetch(`/api/consents/${id}/revoke`, { method: "POST" });
+      if (response.ok) { await load(); onSaved("Future access for this application was revoked."); } else onSaved("We could not revoke this consent yet.");
+    } catch {
+      onSaved("We could not revoke this consent. Check your connection and try again.");
+    } finally {
+      setRevoking(null);
+    }
+  }
+  return <AnimatedPanel className="ao-view-stack"><div className="ao-view-heading"><div><span className="ao-eyebrow"><span className="ao-eyebrow-mark" /> Consent history</span><h1>Know what moved.</h1><p>A human-readable record of the information you approved for each application.</p></div><ShieldCheck className="ao-heading-icon" /></div><section className="ao-product-card">{loading ? <div className="ao-loading-line">Loading your consent history...</div> : consents.length === 0 ? <EmptyState icon={ShieldCheck} title="No consent records yet" body="When you submit an application, its sharing scope will appear here." /> : <div className="ao-consent-list">{consents.map((consent) => <div className="ao-consent-row" key={consent.id}><span className={`ao-consent-icon ${consent.revokedAt ? "ao-consent-icon--revoked" : ""}`}>{consent.revokedAt ? <X /> : <Check />}</span><div className="ao-list-copy"><strong>{consent.purpose}</strong><small>{consent.scope.length} fields · approved {formatDate(consent.approvedAt)} · {consent.method} verification</small></div>{consent.revokedAt ? <span className="ao-revoked-label">Revoked {formatDate(consent.revokedAt)}</span> : <button className="ao-button ao-button--outline" type="button" onClick={() => void revoke(consent.id)} disabled={revoking === consent.id}>{revoking === consent.id ? "Revoking..." : "Revoke access"} <LockKeyhole /></button>}</div>)}</div>}</section></AnimatedPanel>;
 }
 
 function NotificationsView({ snapshot }: { snapshot: Snapshot }) {
@@ -321,10 +545,19 @@ export default function AuthenticatedWorkspace() {
   const [partnerApplicationDetail, setPartnerApplicationDetail] = useState<PartnerApplication | null>(null);
   const [mobileNav, setMobileNav] = useState(false);
 
-  async function refresh() {
-    const response = await fetch("/api/me", { cache: "no-store" });
-    if (response.ok) { const data = (await response.json()) as { snapshot: Snapshot }; setSnapshot(data.snapshot); }
-    setLoading(false);
+  async function refresh(): Promise<boolean> {
+    try {
+      const response = await fetch("/api/me", { cache: "no-store" });
+      if (!response.ok) throw new Error("Your profile could not be refreshed.");
+      const data = (await response.json()) as { snapshot: Snapshot };
+      setSnapshot(data.snapshot);
+      return true;
+    } catch {
+      notify("Your workspace could not be refreshed. Please try again.");
+      return false;
+    } finally {
+      setLoading(false);
+    }
   }
   useEffect(() => {
     let active = true;
@@ -339,12 +572,62 @@ export default function AuthenticatedWorkspace() {
   }, []);
   function notify(text: string) { setMessage(text); window.setTimeout(() => setMessage(""), 4200); }
   function navigate(nextView: View) { setApplicationDetail(null); setPartnerApplicationDetail(null); setView(nextView); setMobileNav(false); window.scrollTo({ top: 0, behavior: "smooth" }); }
-  async function createPacket() { setCreating(true); const response = await fetch("/api/applications", { method: "POST", headers: { "content-type": "application/json" }, body: JSON.stringify({ templateSlug: "national-stem-entrance-2026" }) }); if (response.ok) { notify("Application packet created. Review it before sharing."); await refresh(); setView("applications"); } else notify("We could not create the packet yet."); setCreating(false); }
+  async function createPacket() {
+    setCreating(true);
+    try {
+      const response = await fetch("/api/applications", { method: "POST", headers: { "content-type": "application/json" }, body: JSON.stringify({ templateSlug: "national-stem-entrance-2026" }) });
+      if (!response.ok) throw new Error("We could not create the packet yet.");
+      notify("Application packet created. Review it before sharing.");
+      await refresh();
+      setView("applications");
+    } catch (error) {
+      notify(error instanceof Error ? error.message : "We could not create the packet yet.");
+    } finally {
+      setCreating(false);
+    }
+  }
   async function uploadDocument(event: ChangeEvent<HTMLInputElement>) { const file = event.target.files?.[0]; event.target.value = ""; if (!file) return; setUploading(true); try { const extension = file.name.split(".").pop()?.toLowerCase() || "bin"; await upload(`documents/${crypto.randomUUID()}.${extension}`, file, { access: "private", handleUploadUrl: "/api/documents/upload", clientPayload: JSON.stringify({ title: file.name, documentType: "citizen_document", provider: "manual" }) }); notify("Private document uploaded and linked to your profile."); await refresh(); } catch { notify("The document could not be uploaded. Please try again."); } finally { setUploading(false); } }
-  async function openApplication(id: string) { setLoading(true); const response = await fetch(`/api/applications/${id}`, { cache: "no-store" }); if (response.ok) { const data = (await response.json()) as { application: ApplicationDetail }; setApplicationDetail(data.application); setView("applications"); } else notify("That application could not be loaded."); setLoading(false); }
+  async function downloadDocument(document: Snapshot["documents"][number]) {
+    try {
+      const response = await fetch(`/api/documents/${document.id}/download`, { cache: "no-store" });
+      if (!response.ok) throw new Error("That document could not be opened.");
+      const filename = document.title.replace(/[^a-z0-9._-]+/gi, "_") || "applyonce-document";
+      triggerDownload(await response.blob(), filename);
+      notify("Private document downloaded.");
+    } catch (error) {
+      notify(error instanceof Error ? error.message : "That document could not be opened.");
+      throw error;
+    }
+  }
+  async function deleteDocument(document: Snapshot["documents"][number]) {
+    try {
+      const response = await fetch(`/api/documents/${document.id}`, { method: "DELETE" });
+      const body = (await response.json().catch(() => null)) as { error?: string } | null;
+      if (!response.ok) throw new Error(body?.error ?? "That document could not be deleted.");
+      notify(`${document.title} was removed from your private wallet.`);
+      await refresh();
+    } catch (error) {
+      notify(error instanceof Error ? error.message : "That document could not be deleted.");
+      throw error;
+    }
+  }
+  async function openApplication(id: string) {
+    setLoading(true);
+    try {
+      const response = await fetch(`/api/applications/${id}`, { cache: "no-store" });
+      if (!response.ok) throw new Error("That application could not be loaded.");
+      const data = (await response.json()) as { application: ApplicationDetail };
+      setApplicationDetail(data.application);
+      setView("applications");
+    } catch (error) {
+      notify(error instanceof Error ? error.message : "That application could not be loaded.");
+    } finally {
+      setLoading(false);
+    }
+  }
 
   const pageTitle = navItems.find((item) => item.id === view)?.label ?? "Overview";
-  const content = loading && !snapshot ? <div className="ao-loading-card"><div className="ao-loading-spinner" /><span>Loading your private workspace...</span></div> : !snapshot ? <div className="ao-loading-card"><CircleAlert /><span>Your profile could not be loaded. Refresh to try again.</span><button className="ao-button ao-button--outline" onClick={() => void refresh()}>Refresh</button></div> : partnerApplicationDetail ? <PartnerApplicationDetail application={partnerApplicationDetail} snapshot={snapshot} onBack={() => setPartnerApplicationDetail(null)} onNavigate={navigate} /> : applicationDetail ? <ApplicationDetail detail={applicationDetail} onBack={() => setApplicationDetail(null)} onRefresh={async () => { await refresh(); const response = await fetch(`/api/applications/${applicationDetail.application.id}`, { cache: "no-store" }); if (response.ok) setApplicationDetail(((await response.json()) as { application: ApplicationDetail }).application); }} onSaved={notify} /> : view === "overview" ? <Overview snapshot={snapshot} onNavigate={navigate} onCreate={() => void createPacket()} creating={creating} /> : view === "profile" ? <ProfileView snapshot={snapshot} onSaved={async (text) => { notify(text); await refresh(); }} /> : view === "sources" ? <SourcesView snapshot={snapshot} onRefresh={refresh} onSaved={notify} /> : view === "documents" ? <DocumentsView snapshot={snapshot} onUpload={uploadDocument} uploading={uploading} /> : view === "applications" ? <ApplicationsView snapshot={snapshot} onCreate={() => void createPacket()} creating={creating} onOpen={(id) => void openApplication(id)} onOpenPartner={(application) => { setPartnerApplicationDetail(application); setView("applications"); }} /> : view === "consents" ? <ConsentsView onSaved={notify} /> : view === "notifications" ? <NotificationsView snapshot={snapshot} /> : <SettingsView snapshot={snapshot} onSaved={notify} />;
+  const content = loading && !snapshot ? <div className="ao-loading-card"><div className="ao-loading-spinner" /><span>Loading your private workspace...</span></div> : !snapshot ? <div className="ao-loading-card"><CircleAlert /><span>Your profile could not be loaded. Refresh to try again.</span><button className="ao-button ao-button--outline" type="button" onClick={() => void refresh()}>Refresh</button></div> : partnerApplicationDetail ? <PartnerApplicationDetail application={partnerApplicationDetail} snapshot={snapshot} onBack={() => setPartnerApplicationDetail(null)} onNavigate={navigate} /> : applicationDetail ? <ApplicationDetail detail={applicationDetail} onBack={() => setApplicationDetail(null)} onRefresh={async () => { await refresh(); try { const response = await fetch(`/api/applications/${applicationDetail.application.id}`, { cache: "no-store" }); if (response.ok) setApplicationDetail(((await response.json()) as { application: ApplicationDetail }).application); } catch { notify("The application was submitted, but its latest status could not be loaded. Refresh to see it."); } }} onSaved={notify} /> : view === "overview" ? <Overview snapshot={snapshot} onNavigate={navigate} onCreate={() => void createPacket()} creating={creating} /> : view === "profile" ? <ProfileView snapshot={snapshot} onSaved={async (text) => { notify(text); await refresh(); }} /> : view === "sources" ? <SourcesView snapshot={snapshot} onRefresh={refresh} onSaved={notify} /> : view === "documents" ? <DocumentsView snapshot={snapshot} onUpload={uploadDocument} onDownload={downloadDocument} onDelete={deleteDocument} uploading={uploading} /> : view === "applications" ? <ApplicationsView snapshot={snapshot} onCreate={() => void createPacket()} creating={creating} onOpen={(id) => void openApplication(id)} onOpenPartner={(application) => { setPartnerApplicationDetail(application); setView("applications"); }} /> : view === "consents" ? <ConsentsView onSaved={notify} /> : view === "notifications" ? <NotificationsView snapshot={snapshot} /> : <SettingsView snapshot={snapshot} onSaved={notify} />;
 
   return <div className="ao-workspace-shell">
     <aside className={`ao-product-sidebar ${mobileNav ? "ao-product-sidebar--open" : ""}`}>

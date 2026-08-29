@@ -9,15 +9,15 @@ import {
   GitBranch,
   LockKeyhole,
   MousePointer2,
-  UsersRound,
 } from "lucide-react";
 import AnimatedRail from "@/components/marketing/AnimatedRail";
 import { ApplyOnceLogo } from "@/components/brand/ApplyOnceLogo";
+import { SourceMark } from "@/components/brand/SourceMark";
 
 const sources = [
-  { name: "DigiLocker", detail: "Certificates", icon: FileCheck2, tone: "mint" },
-  { name: "MeriPehchaan", detail: "Identity", icon: Fingerprint, tone: "indigo" },
-  { name: "Your profile", detail: "Preferences", icon: UsersRound, tone: "sun" },
+  { name: "DigiLocker", detail: "Certificates", provider: "digilocker" as const },
+  { name: "MeriPehchaan", detail: "Identity", provider: "meripehchaan" as const },
+  { name: "Your profile", detail: "Preferences", provider: "profile" as const },
 ];
 
 const benefits = [
@@ -113,9 +113,9 @@ export default function Home() {
             <Link className="ao-text-link ao-text-link--light" href="/security">Explore the security model <ArrowRight /></Link>
           </div>
           <div className="ao-flow-list">
-            {sources.map(({ name, detail, icon: Icon, tone }) => (
+            {sources.map(({ name, detail, provider }) => (
               <div className="ao-flow-source" key={name}>
-                <span className={`ao-source-icon ao-source-icon--${tone}`}><Icon /></span>
+                <SourceMark provider={provider} size="sm" />
                 <div><strong>{name}</strong><span>{detail} stays scoped to the application purpose.</span></div>
                 <Check className="ao-flow-check" />
               </div>

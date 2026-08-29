@@ -11,6 +11,7 @@ import {
   CheckCircle2,
   ClipboardCheck,
   Copy,
+  Download,
   ExternalLink,
   FileText,
   LockKeyhole,
@@ -73,6 +74,15 @@ function formatDate(value: string) {
     dateStyle: "medium",
     timeStyle: "short",
   }).format(new Date(value));
+}
+
+function triggerDownload(blob: Blob, filename: string) {
+  const url = URL.createObjectURL(blob);
+  const anchor = window.document.createElement("a");
+  anchor.href = url;
+  anchor.download = filename;
+  anchor.click();
+  window.setTimeout(() => URL.revokeObjectURL(url), 1000);
 }
 
 function fieldValueLabel(field: FormField, values: Record<string, string>) {
@@ -278,9 +288,29 @@ export default function HostedForm({ slug }: { slug: string }) {
 
   async function copyReceipt() {
     if (!submission) return;
-    await navigator.clipboard?.writeText(submission.receiptCode);
-    setCopied(true);
-    window.setTimeout(() => setCopied(false), 2200);
+    try {
+      if (!navigator.clipboard) throw new Error("Clipboard access is unavailable.");
+      await navigator.clipboard.writeText(submission.receiptCode);
+      setCopied(true);
+      window.setTimeout(() => setCopied(false), 2200);
+    } catch {
+      setError("Clipboard access is unavailable. Copy the receipt ID manually.");
+    }
+  }
+
+  function downloadReceipt() {
+    if (!submission || !payload) return;
+    const receipt = {
+      product: "ApplyOnce",
+      receiptCode: submission.receiptCode,
+      organization: organization.name,
+      application: form.name,
+      applicant: { name: submission.applicantName, email: submission.applicantEmail },
+      status: submission.status,
+      submittedAt: submission.createdAt,
+      consentRecorded: Boolean(submission.partnerConsentId),
+    };
+    triggerDownload(new Blob([JSON.stringify(receipt, null, 2)], { type: "application/json" }), `${submission.receiptCode.toLowerCase()}-receipt.json`);
   }
 
   if (loading) {
@@ -325,17 +355,17 @@ export default function HostedForm({ slug }: { slug: string }) {
                 <section className="ao-hosted-card"><div className="ao-hosted-card-head"><div><span className="ao-card-kicker">Step 1 of 2</span><h2>Tell us about yourself</h2></div><UserRound /></div><div className="ao-hosted-contact-grid"><label className="ao-hosted-field"><span className="ao-hosted-field-label"><span>Your full name<em>Required</em></span></span><input value={applicantName} onChange={(event) => { setApplicantName(event.target.value); updateValue("full_name", event.target.value); }} autoComplete="name" required /></label><label className="ao-hosted-field"><span className="ao-hosted-field-label"><span>Email address<em>Required</em></span></span><input value={applicantEmail} onChange={(event) => { setApplicantEmail(event.target.value); updateValue("email_address", event.target.value); }} type="email" autoComplete="email" required /></label></div></section>
                 <section className="ao-hosted-card"><div className="ao-hosted-card-head"><div><span className="ao-card-kicker">Application information</span><h2>Only what this application needs</h2></div><ClipboardCheck /></div><div className="ao-hosted-fields">{form.formSchema.fields.filter((field) => field.key !== "full_name" && field.key !== "email_address").map((field) => <FormFieldInput key={field.key} field={field} value={values[field.key] ?? ""} onChange={(value) => updateValue(field.key, value)} reused={Boolean(viewer.authenticated && values[field.key] && field.profileKey)} />)}</div></section>
                 {form.formSchema.documents.length > 0 ? <section className="ao-hosted-card ao-hosted-doc-card"><div className="ao-hosted-card-head"><div><span className="ao-card-kicker">Documents</span><h2>Keep your documents private</h2></div><FileText /></div><p className="ao-hosted-card-copy">Upload only what this application requests. Required documents can be added now or after submission if the partner asks for them.</p><div className="ao-hosted-document-list">{form.formSchema.documents.map((document) => { const uploaded = uploadedDocuments.find((item) => item.key === document.key); return <div className="ao-hosted-document" key={document.key}><span className="ao-list-icon ao-list-icon--mint"><FileText /></span><span><strong>{document.label}</strong><small>{uploaded ? `Added: ${uploaded.title}` : document.required ? "Required before review is complete" : "Optional"}</small></span>{uploaded ? <span className="ao-hosted-doc-status ao-hosted-doc-status--ready"><BadgeCheck /> Added</span> : viewerIsAuthenticated ? <label className="ao-hosted-upload-action"><Upload /> {uploadingDocument === document.key ? "Uploading..." : "Add file"}<input className="ao-hidden-input" type="file" accept="application/pdf,image/jpeg,image/png" onChange={(event) => void uploadDocument(document.key, event)} disabled={uploadingDocument !== null} /></label> : <Link className="ao-hosted-doc-status" href="/sign-in"><LockKeyhole /> Sign in to add</Link>}</div>; })}</div></section> : null}
-                <div className="ao-hosted-actions"><span className="ao-hosted-save-note"><Sparkles /> Your progress stays in this browser until you submit.</span><button className="ao-button ao-button--primary" onClick={review}>Review information <ArrowRight /></button></div>
+                <div className="ao-hosted-actions"><span className="ao-hosted-save-note"><Sparkles /> Your progress stays in this browser until you submit.</span><button className="ao-button ao-button--primary" type="button" onClick={review}>Review information <ArrowRight /></button></div>
               </motion.div>
             ) : step === "review" ? (
               <motion.div key="review" className="ao-hosted-stage" initial={reducedMotion ? false : { opacity: 0, x: 12 }} animate={{ opacity: 1, x: 0 }} exit={reducedMotion ? undefined : { opacity: 0, x: -12 }} transition={{ duration: .2 }}>
                 <section className="ao-hosted-card"><div className="ao-hosted-card-head"><div><span className="ao-card-kicker">Step 2 of 2</span><h2>Review before you share</h2></div><BadgeCheck /></div><p className="ao-hosted-card-copy">Check every value. ApplyOnce will send only the information shown below to {organization.name} for this form’s stated purpose.</p><div className="ao-hosted-review-grid"><div><span>Name</span><strong>{applicantName}</strong></div><div><span>Email</span><strong>{applicantEmail}</strong></div>{form.formSchema.fields.map((field) => <div key={field.key}><span>{field.label}</span><strong>{values[field.key] || "Not provided"}</strong>{viewer.authenticated && field.profileKey && values[field.key] ? <small><BadgeCheck /> Profile value</small> : null}</div>)}</div></section>
                 <section className="ao-hosted-card ao-hosted-consent-card"><div className="ao-hosted-card-head"><div><span className="ao-card-kicker">Purpose-bound consent</span><h2>{organization.name} is requesting your permission</h2></div><ShieldCheck /></div><p>{form.purpose}</p><div className="ao-hosted-consent-summary"><div><CheckCircle2 /><span><strong>{form.formSchema.fields.length} fields</strong> will be shared after you confirm.</span></div><div><FileText /><span><strong>{uploadedDocuments.length} documents</strong> will be shared. {missingRequiredDocuments.length > 0 ? `${missingRequiredDocuments.length} required document${missingRequiredDocuments.length === 1 ? " is" : "s are"} still missing.` : "All requested documents are attached."}</span></div><div><LockKeyhole /><span>Your consent is recorded with a receipt and can be reviewed later.</span></div></div><label className="ao-hosted-consent-check"><input type="checkbox" checked={consentAccepted} onChange={(event) => { setConsentAccepted(event.target.checked); setError(""); }} /><span>I have reviewed the information and consent to share it with {organization.name} for this purpose.</span></label></section>
-                <div className="ao-hosted-actions"><button className="ao-button ao-button--quiet" onClick={() => { setStep("details"); setError(""); }}><ArrowLeft /> Edit information</button><button className="ao-button ao-button--primary" onClick={() => void submit()} disabled={submitting || !consentAccepted}>{submitting ? "Submitting securely..." : "Share and submit"}<ArrowRight /></button></div>
+                <div className="ao-hosted-actions"><button className="ao-button ao-button--quiet" type="button" onClick={() => { setStep("details"); setError(""); }}><ArrowLeft /> Edit information</button><button className="ao-button ao-button--primary" type="button" onClick={() => void submit()} disabled={submitting || !consentAccepted}>{submitting ? "Submitting securely..." : "Share and submit"}<ArrowRight /></button></div>
               </motion.div>
             ) : (
               <motion.div key="complete" className="ao-hosted-stage" initial={reducedMotion ? false : { opacity: 0, y: 12 }} animate={{ opacity: 1, y: 0 }} transition={{ duration: .28 }}>
-                <section className="ao-hosted-success"><div className="ao-hosted-success-mark"><Check /></div><span className="ao-eyebrow"><span className="ao-eyebrow-mark" /> Submission complete</span><h2>Your application is on its way.</h2><p>{organization.name} received your application and your consent receipt is ready below.</p><div className="ao-hosted-receipt"><span>Receipt ID</span><strong>{submission?.receiptCode}</strong><button onClick={() => void copyReceipt()}>{copied ? <Check /> : <Copy />} {copied ? "Copied" : "Copy ID"}</button><div><span>Submitted</span><strong>{submission ? formatDate(submission.createdAt) : "Just now"}</strong></div><div><span>Status</span><strong className="ao-hosted-receipt-status">{submission?.status === "needs_documents" ? "Needs documents" : "Received"}</strong></div></div><div className="ao-hosted-actions ao-hosted-actions--center"><button className="ao-button ao-button--outline" onClick={() => window.print()}><ExternalLink /> Print receipt</button><Link className="ao-button ao-button--primary" href="/">Done <ArrowRight /></Link></div></section><div className="ao-hosted-aftercare"><ShieldCheck /><div><strong>What happens next?</strong><span>{submission?.status === "needs_documents" ? "The partner can review your details now and request the missing document. " : "Your application is ready for the partner to review. "}Keep your receipt ID. If you signed in, status updates will also appear in your ApplyOnce workspace.</span></div>{viewer.authenticated ? <Link href="/app">Open workspace <ArrowRight /></Link> : <Link href="/sign-in">Sign in to track <ArrowRight /></Link>}</div></motion.div>
+                <section className="ao-hosted-success"><div className="ao-hosted-success-mark"><Check /></div><span className="ao-eyebrow"><span className="ao-eyebrow-mark" /> Application submitted</span><h2>Your application was submitted successfully.</h2><p>{organization.name} received your application. Your consent receipt is ready below, and your receipt ID is the proof of submission.</p><div className="ao-hosted-receipt"><span>Receipt ID</span><strong>{submission?.receiptCode}</strong><button type="button" onClick={() => void copyReceipt()}>{copied ? <Check /> : <Copy />} {copied ? "Copied" : "Copy ID"}</button><div><span>Submitted</span><strong>{submission ? formatDate(submission.createdAt) : "Just now"}</strong></div><div><span>Status</span><strong className="ao-hosted-receipt-status">{submission?.status === "needs_documents" ? "Needs documents" : "Received"}</strong></div></div><div className="ao-hosted-actions ao-hosted-actions--center"><button className="ao-button ao-button--outline" type="button" onClick={downloadReceipt}><Download /> Download receipt</button><button className="ao-button ao-button--outline" type="button" onClick={() => window.print()}><ExternalLink /> Print receipt</button><Link className="ao-button ao-button--primary" href="/">Done <ArrowRight /></Link></div></section><div className="ao-hosted-aftercare"><ShieldCheck /><div><strong>What happens next?</strong><span>{submission?.status === "needs_documents" ? "The partner can review your details now and request the missing document. " : "Your application is ready for the partner to review. "}Keep your receipt ID. If you signed in, status updates will also appear in your ApplyOnce workspace.</span></div>{viewer.authenticated ? <Link href="/app">Open workspace <ArrowRight /></Link> : <Link href="/sign-in">Sign in to track <ArrowRight /></Link>}</div></motion.div>
             )}
           </AnimatePresence>
         </section>
