@@ -1,7 +1,6 @@
 "use client";
 
 import { useEffect, useState } from "react";
-import Link from "next/link";
 import {
   ArrowLeft,
   ArrowRight,
@@ -30,6 +29,7 @@ import {
   WalletCards,
 } from "lucide-react";
 import { Button, Chip } from "@heroui/react";
+import { ApplyOnceLogo } from "@/components/brand/ApplyOnceLogo";
 
 type DemoStep = "dashboard" | "review" | "form" | "receipt";
 
@@ -51,7 +51,7 @@ const sourceRows = [
 ];
 
 function Brand() {
-  return <Link className="brand" href="/"><span className="brand-mark"><Sparkles /></span>ApplyOnce</Link>;
+  return <ApplyOnceLogo size="sm" />;
 }
 
 function DemoTopbar({ backendReady }: { backendReady: boolean }) {

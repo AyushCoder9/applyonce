@@ -1,0 +1,2 @@
+ALTER TABLE "partner_submissions" ADD COLUMN "idempotency_key" text;--> statement-breakpoint
+CREATE UNIQUE INDEX "partner_submissions_idempotency_idx" ON "partner_submissions" USING btree ("form_id","idempotency_key");

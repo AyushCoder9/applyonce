@@ -67,6 +67,36 @@ export const notificationStatusEnum = pgEnum("notification_status", [
   "failed",
 ]);
 
+export const partnerMemberRoleEnum = pgEnum("partner_member_role", [
+  "owner",
+  "admin",
+  "reviewer",
+  "developer",
+  "support",
+]);
+
+export const partnerFormStatusEnum = pgEnum("partner_form_status", [
+  "draft",
+  "published",
+  "archived",
+]);
+
+export const partnerConsentMethodEnum = pgEnum("partner_consent_method", [
+  "otp",
+  "passkey",
+  "biometric",
+  "manual",
+]);
+
+export const partnerSubmissionStatusEnum = pgEnum("partner_submission_status", [
+  "received",
+  "under_review",
+  "needs_documents",
+  "accepted",
+  "rejected",
+  "completed",
+]);
+
 const jsonObject = () => sql`'{}'::jsonb`;
 const jsonArray = () => sql`'[]'::jsonb`;
 
@@ -332,6 +362,225 @@ export const notifications = pgTable(
   (table) => [index("notifications_profile_idx").on(table.profileId, table.createdAt)],
 );
 
+export const dataExportRequests = pgTable(
+  "data_export_requests",
+  {
+    id: uuid("id").defaultRandom().primaryKey(),
+    profileId: uuid("profile_id")
+      .notNull()
+      .references(() => profiles.id, { onDelete: "cascade" }),
+    status: text("status").notNull().default("requested"),
+    requestedAt: timestamp("requested_at", { withTimezone: true }).defaultNow().notNull(),
+    completedAt: timestamp("completed_at", { withTimezone: true }),
+    createdAt: timestamp("created_at", { withTimezone: true }).defaultNow().notNull(),
+  },
+  (table) => [index("data_export_requests_profile_idx").on(table.profileId, table.createdAt)],
+);
+
+export const dataDeletionRequests = pgTable(
+  "data_deletion_requests",
+  {
+    id: uuid("id").defaultRandom().primaryKey(),
+    profileId: uuid("profile_id")
+      .notNull()
+      .references(() => profiles.id, { onDelete: "cascade" }),
+    status: text("status").notNull().default("requested"),
+    reason: text("reason"),
+    requestedAt: timestamp("requested_at", { withTimezone: true }).defaultNow().notNull(),
+    completedAt: timestamp("completed_at", { withTimezone: true }),
+    createdAt: timestamp("created_at", { withTimezone: true }).defaultNow().notNull(),
+  },
+  (table) => [index("data_deletion_requests_profile_idx").on(table.profileId, table.createdAt)],
+);
+
+export const organizations = pgTable(
+  "organizations",
+  {
+    id: uuid("id").defaultRandom().primaryKey(),
+    clerkOrgId: text("clerk_org_id").unique(),
+    name: text("name").notNull(),
+    slug: text("slug").notNull().unique(),
+    kind: text("kind").notNull().default("education_partner"),
+    ownerClerkUserId: text("owner_clerk_user_id").notNull(),
+    createdAt: timestamp("created_at", { withTimezone: true }).defaultNow().notNull(),
+    updatedAt: timestamp("updated_at", { withTimezone: true }).defaultNow().notNull(),
+  },
+  (table) => [index("organizations_owner_idx").on(table.ownerClerkUserId)],
+);
+
+export const organizationMembers = pgTable(
+  "organization_members",
+  {
+    id: uuid("id").defaultRandom().primaryKey(),
+    organizationId: uuid("organization_id")
+      .notNull()
+      .references(() => organizations.id, { onDelete: "cascade" }),
+    clerkUserId: text("clerk_user_id").notNull(),
+    email: text("email").notNull(),
+    role: partnerMemberRoleEnum("role").notNull().default("reviewer"),
+    createdAt: timestamp("created_at", { withTimezone: true }).defaultNow().notNull(),
+    updatedAt: timestamp("updated_at", { withTimezone: true }).defaultNow().notNull(),
+  },
+  (table) => [
+    uniqueIndex("organization_members_org_user_idx").on(table.organizationId, table.clerkUserId),
+    index("organization_members_user_idx").on(table.clerkUserId),
+  ],
+);
+
+export const partnerForms = pgTable(
+  "partner_forms",
+  {
+    id: uuid("id").defaultRandom().primaryKey(),
+    organizationId: uuid("organization_id")
+      .notNull()
+      .references(() => organizations.id, { onDelete: "cascade" }),
+    slug: text("slug").notNull().unique(),
+    name: text("name").notNull(),
+    description: text("description").notNull(),
+    category: text("category").notNull().default("admissions"),
+    purpose: text("purpose").notNull(),
+    status: partnerFormStatusEnum("status").notNull().default("draft"),
+    version: integer("version").notNull().default(1),
+    formSchema: jsonb("form_schema").$type<{
+      fields: Array<{
+        key: string;
+        label: string;
+        type: string;
+        required: boolean;
+        profileKey?: string;
+        helpText?: string;
+      }>;
+      documents: Array<{ key: string; label: string; required: boolean }>;
+    }>().notNull().default(sql`'{"fields":[],"documents":[]}'::jsonb`),
+    branding: jsonb("branding").$type<{ accentColor?: string; logoUrl?: string; organizationName?: string }>().notNull().default(jsonObject()),
+    createdByClerkUserId: text("created_by_clerk_user_id").notNull(),
+    publishedAt: timestamp("published_at", { withTimezone: true }),
+    createdAt: timestamp("created_at", { withTimezone: true }).defaultNow().notNull(),
+    updatedAt: timestamp("updated_at", { withTimezone: true }).defaultNow().notNull(),
+  },
+  (table) => [
+    index("partner_forms_org_idx").on(table.organizationId),
+    index("partner_forms_status_idx").on(table.status),
+  ],
+);
+
+export const partnerSubmissions = pgTable(
+  "partner_submissions",
+  {
+    id: uuid("id").defaultRandom().primaryKey(),
+    formId: uuid("form_id")
+      .notNull()
+      .references(() => partnerForms.id, { onDelete: "cascade" }),
+    profileId: uuid("profile_id").references(() => profiles.id, { onDelete: "set null" }),
+    applicationId: uuid("application_id").references(() => applications.id, { onDelete: "set null" }),
+    applicantName: text("applicant_name").notNull(),
+    applicantEmail: text("applicant_email").notNull(),
+    status: partnerSubmissionStatusEnum("status").notNull().default("received"),
+    receiptCode: text("receipt_code").notNull().unique(),
+    data: jsonb("data").$type<Record<string, string>>().notNull().default(jsonObject()),
+    documentIds: jsonb("document_ids").$type<string[]>().notNull().default(jsonArray()),
+    partnerConsentId: uuid("partner_consent_id").references(() => partnerConsents.id, { onDelete: "set null" }),
+    idempotencyKey: text("idempotency_key"),
+    createdAt: timestamp("created_at", { withTimezone: true }).defaultNow().notNull(),
+    updatedAt: timestamp("updated_at", { withTimezone: true }).defaultNow().notNull(),
+  },
+  (table) => [
+    index("partner_submissions_form_idx").on(table.formId, table.createdAt),
+    index("partner_submissions_profile_idx").on(table.profileId),
+    index("partner_submissions_status_idx").on(table.status),
+    uniqueIndex("partner_submissions_idempotency_idx").on(table.formId, table.idempotencyKey),
+  ],
+);
+
+export const partnerConsents = pgTable(
+  "partner_consents",
+  {
+    id: uuid("id").defaultRandom().primaryKey(),
+    formId: uuid("form_id")
+      .notNull()
+      .references(() => partnerForms.id, { onDelete: "cascade" }),
+    submissionId: uuid("submission_id").notNull(),
+    profileId: uuid("profile_id").references(() => profiles.id, { onDelete: "set null" }),
+    applicantName: text("applicant_name").notNull(),
+    applicantEmail: text("applicant_email").notNull(),
+    purpose: text("purpose").notNull(),
+    scope: jsonb("scope").$type<string[]>().notNull().default(jsonArray()),
+    method: partnerConsentMethodEnum("method").notNull().default("manual"),
+    version: text("version").notNull().default("2026-08-30"),
+    consentHash: text("consent_hash").notNull(),
+    approvedAt: timestamp("approved_at", { withTimezone: true }).defaultNow().notNull(),
+    revokedAt: timestamp("revoked_at", { withTimezone: true }),
+    createdAt: timestamp("created_at", { withTimezone: true }).defaultNow().notNull(),
+  },
+  (table) => [
+    index("partner_consents_form_idx").on(table.formId, table.createdAt),
+    index("partner_consents_profile_idx").on(table.profileId, table.createdAt),
+    index("partner_consents_submission_idx").on(table.submissionId),
+  ],
+);
+
+export const partnerWebhooks = pgTable(
+  "partner_webhooks",
+  {
+    id: uuid("id").defaultRandom().primaryKey(),
+    organizationId: uuid("organization_id")
+      .notNull()
+      .references(() => organizations.id, { onDelete: "cascade" }),
+    url: text("url").notNull(),
+    secretHash: text("secret_hash").notNull(),
+    secretCiphertext: text("secret_ciphertext"),
+    events: jsonb("events").$type<string[]>().notNull().default(jsonArray()),
+    active: boolean("active").notNull().default(true),
+    lastDeliveryAt: timestamp("last_delivery_at", { withTimezone: true }),
+    lastError: text("last_error"),
+    createdAt: timestamp("created_at", { withTimezone: true }).defaultNow().notNull(),
+    updatedAt: timestamp("updated_at", { withTimezone: true }).defaultNow().notNull(),
+  },
+  (table) => [index("partner_webhooks_org_idx").on(table.organizationId)],
+);
+
+export const partnerApiKeys = pgTable(
+  "partner_api_keys",
+  {
+    id: uuid("id").defaultRandom().primaryKey(),
+    organizationId: uuid("organization_id")
+      .notNull()
+      .references(() => organizations.id, { onDelete: "cascade" }),
+    name: text("name").notNull(),
+    keyPrefix: text("key_prefix").notNull(),
+    keyHash: text("key_hash").notNull(),
+    scopes: jsonb("scopes").$type<string[]>().notNull().default(jsonArray()),
+    createdByClerkUserId: text("created_by_clerk_user_id").notNull(),
+    lastUsedAt: timestamp("last_used_at", { withTimezone: true }),
+    expiresAt: timestamp("expires_at", { withTimezone: true }),
+    revokedAt: timestamp("revoked_at", { withTimezone: true }),
+    createdAt: timestamp("created_at", { withTimezone: true }).defaultNow().notNull(),
+  },
+  (table) => [
+    uniqueIndex("partner_api_keys_hash_idx").on(table.keyHash),
+    index("partner_api_keys_org_idx").on(table.organizationId, table.createdAt),
+  ],
+);
+
+export const partnerWebhookDeliveries = pgTable(
+  "partner_webhook_deliveries",
+  {
+    id: uuid("id").defaultRandom().primaryKey(),
+    webhookId: uuid("webhook_id")
+      .notNull()
+      .references(() => partnerWebhooks.id, { onDelete: "cascade" }),
+    eventType: text("event_type").notNull(),
+    payload: jsonb("payload").$type<Record<string, unknown>>().notNull().default(jsonObject()),
+    statusCode: integer("status_code"),
+    status: text("status").notNull().default("pending"),
+    attempts: integer("attempts").notNull().default(0),
+    lastError: text("last_error"),
+    deliveredAt: timestamp("delivered_at", { withTimezone: true }),
+    createdAt: timestamp("created_at", { withTimezone: true }).defaultNow().notNull(),
+  },
+  (table) => [index("partner_webhook_deliveries_webhook_idx").on(table.webhookId, table.createdAt)],
+);
+
 export const schema = {
   profiles,
   sourceConnections,
@@ -344,4 +593,14 @@ export const schema = {
   consents,
   applicationEvents,
   notifications,
+  dataExportRequests,
+  dataDeletionRequests,
+  organizations,
+  organizationMembers,
+  partnerForms,
+  partnerSubmissions,
+  partnerConsents,
+  partnerWebhooks,
+  partnerWebhookDeliveries,
+  partnerApiKeys,
 };

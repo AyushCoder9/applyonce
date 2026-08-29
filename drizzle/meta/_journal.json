@@ -8,6 +8,48 @@
       "when": 1788021166368,
       "tag": "0000_blue_sprite",
       "breakpoints": true
+    },
+    {
+      "idx": 1,
+      "version": "7",
+      "when": 1788031458077,
+      "tag": "0001_outstanding_omega_red",
+      "breakpoints": true
+    },
+    {
+      "idx": 2,
+      "version": "7",
+      "when": 1788033063426,
+      "tag": "0002_optimal_terror",
+      "breakpoints": true
+    },
+    {
+      "idx": 3,
+      "version": "7",
+      "when": 1788033808758,
+      "tag": "0003_amazing_professor_monster",
+      "breakpoints": true
+    },
+    {
+      "idx": 4,
+      "version": "7",
+      "when": 1788034093766,
+      "tag": "0004_yummy_alice",
+      "breakpoints": true
+    },
+    {
+      "idx": 5,
+      "version": "7",
+      "when": 1788034441431,
+      "tag": "0005_icy_daredevil",
+      "breakpoints": true
+    },
+    {
+      "idx": 6,
+      "version": "7",
+      "when": 1788035769404,
+      "tag": "0006_giant_the_phantom",
+      "breakpoints": true
     }
   ]
 }

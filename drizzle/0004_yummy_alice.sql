@@ -1,0 +1,1 @@
+ALTER TABLE "partner_webhooks" ADD COLUMN "secret_ciphertext" text;

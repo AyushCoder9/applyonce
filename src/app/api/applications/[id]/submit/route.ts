@@ -1,4 +1,4 @@
-import { and, eq } from "drizzle-orm";
+import { and, desc, eq } from "drizzle-orm";
 import { z } from "zod";
 import { getDatabase } from "@/db";
 import { applicationEvents, consents } from "@/db/schema";
@@ -33,6 +33,16 @@ export async function POST(
     return Response.json({ error: "Application not found" }, { status: 404 });
   }
 
+  if (application.application.status === "submitted" && application.application.receiptCode) {
+    const [existingConsent] = await getDatabase()
+      .select({ consentHash: consents.consentHash })
+      .from(consents)
+      .where(and(eq(consents.applicationId, id), eq(consents.profileId, profile.id)))
+      .orderBy(desc(consents.approvedAt))
+      .limit(1);
+    return Response.json({ application, consentHash: existingConsent?.consentHash ?? null, idempotent: true });
+  }
+
   const unresolved = application.fields.filter(
     (field) => field.state === "missing" || field.state === "needs_confirmation",
   );
@@ -46,24 +56,12 @@ export async function POST(
     );
   }
 
-  const version = "2026-08-01";
   const consentHash = createConsentHash({
     profileId: profile.id,
     applicationId: id,
     purpose: parsed.data.purpose,
     scope: parsed.data.scope,
-    version,
-  });
-  const db = getDatabase();
-
-  await db.insert(consents).values({
-    profileId: profile.id,
-    applicationId: id,
-    purpose: parsed.data.purpose,
-    scope: parsed.data.scope,
-    method: parsed.data.method,
-    version,
-    consentHash,
+    version: "2026-08-30",
   });
 
   const submitted = await submitApplication({
@@ -72,6 +70,7 @@ export async function POST(
     purpose: parsed.data.purpose,
     scope: parsed.data.scope,
     consentHash,
+    consentMethod: parsed.data.method,
   });
 
   if (!submitted) {

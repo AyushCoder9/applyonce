@@ -1,6 +1,6 @@
 import { desc, eq } from "drizzle-orm";
 import { getDatabase } from "@/db";
-import { consents } from "@/db/schema";
+import { consents, partnerConsents } from "@/db/schema";
 import { ensureActorProfile, getActor } from "@/lib/auth";
 
 export async function GET() {
@@ -15,6 +15,11 @@ export async function GET() {
     .from(consents)
     .where(eq(consents.profileId, profile.id))
     .orderBy(desc(consents.approvedAt));
+  const partnerRows = await getDatabase()
+    .select()
+    .from(partnerConsents)
+    .where(eq(partnerConsents.profileId, profile.id))
+    .orderBy(desc(partnerConsents.approvedAt));
 
-  return Response.json({ consents: rows });
+  return Response.json({ consents: rows, partnerConsents: partnerRows });
 }

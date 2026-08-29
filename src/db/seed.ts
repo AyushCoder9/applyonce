@@ -11,8 +11,12 @@ import {
   applications,
   documents,
   notifications,
+  organizationMembers,
+  organizations,
   profileClaims,
   profiles,
+  partnerForms,
+  partnerSubmissions,
   schema,
   sourceConnections,
 } from "@/db/schema";
@@ -92,6 +96,82 @@ async function seed() {
   console.log(`Seeded ${template.slug} with ${requirementCount.length} requirements`);
 
   await seedDemo(template.id);
+  await seedPartnerWorkspace();
+}
+
+async function seedPartnerWorkspace() {
+  const [insertedOrganization] = await db
+    .insert(organizations)
+    .values({
+      clerkOrgId: "demo_partner_applyonce",
+      name: "Northstar Education",
+      slug: "northstar-education",
+      ownerClerkUserId: "demo_partner_applyonce",
+    })
+    .onConflictDoNothing({ target: organizations.slug })
+    .returning();
+
+  const [organization] = insertedOrganization
+    ? [insertedOrganization]
+    : await db.select().from(organizations).where(eq(organizations.slug, "northstar-education")).limit(1);
+  if (!organization) throw new Error("Unable to create partner demo workspace");
+
+  await db
+    .insert(organizationMembers)
+    .values({
+      organizationId: organization.id,
+      clerkUserId: "demo_partner_applyonce",
+      email: "partner.demo@example.com",
+      role: "owner",
+    })
+    .onConflictDoNothing({ target: [organizationMembers.organizationId, organizationMembers.clerkUserId] });
+
+  const defaultSchema = {
+    fields: [
+      { key: "full_name", label: "Full name", type: "text", required: true, profileKey: "full_name", helpText: "Use the name on your official identity record." },
+      { key: "email_address", label: "Email address", type: "email", required: true, profileKey: "email_address" },
+      { key: "academic_record", label: "Latest academic record", type: "text", required: true, profileKey: "academic_record" },
+      { key: "preferred_course", label: "Preferred course", type: "select", required: true, helpText: "Choose your first preference." },
+    ],
+    documents: [{ key: "class_xii_marksheet", label: "Class XII marksheet", required: true }],
+  };
+
+  const [insertedForm] = await db
+    .insert(partnerForms)
+    .values({
+      organizationId: organization.id,
+      slug: "northstar-undergraduate-2026",
+      name: "Northstar Undergraduate 2026",
+      description: "A calmer admissions form for Northstar Education applicants.",
+      category: "Admissions",
+      purpose: "Evaluate an undergraduate admission application for the 2026 intake.",
+      status: "published",
+      formSchema: defaultSchema,
+      branding: { accentColor: "#4F46E5", organizationName: "Northstar Education" },
+      createdByClerkUserId: "demo_partner_applyonce",
+      publishedAt: new Date("2026-08-29T13:20:00.000Z"),
+    })
+    .onConflictDoNothing({ target: partnerForms.slug })
+    .returning();
+  const [form] = insertedForm
+    ? [insertedForm]
+    : await db.select().from(partnerForms).where(eq(partnerForms.slug, "northstar-undergraduate-2026")).limit(1);
+  if (!form) throw new Error("Unable to create partner demo form");
+
+  const [demoProfile] = await db.select().from(profiles).where(eq(profiles.clerkUserId, "demo_applyonce")).limit(1);
+  const existingSubmission = await db.select({ id: partnerSubmissions.id }).from(partnerSubmissions).where(eq(partnerSubmissions.formId, form.id)).limit(1);
+  if (!existingSubmission[0]) {
+    await db.insert(partnerSubmissions).values({
+      formId: form.id,
+      profileId: demoProfile?.id,
+      applicantName: "Aanya Mehta",
+      applicantEmail: "aanya.mehta.demo@example.com",
+      status: "under_review",
+      receiptCode: "AP-2026-NSTAR01",
+      data: { full_name: "Aanya Mehta", email_address: "aanya.mehta.demo@example.com", academic_record: "Class XII · 91.4%", preferred_course: "Computer Science" },
+    });
+  }
+  console.log("Seeded Northstar partner workspace and hosted form");
 }
 
 async function seedDemo(templateId: string) {

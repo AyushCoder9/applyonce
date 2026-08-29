@@ -1,0 +1,16 @@
+<svg width="1200" height="630" viewBox="0 0 1200 630" fill="none" xmlns="http://www.w3.org/2000/svg">
+  <title>ApplyOnce</title>
+  <rect width="1200" height="630" fill="#F7F9F7"/>
+  <circle cx="1030" cy="96" r="180" fill="#CFF7E9"/>
+  <circle cx="150" cy="590" r="220" fill="#F8C969" fill-opacity=".64"/>
+  <path d="M0 510C190 412 344 520 530 446C711 374 776 494 965 410C1052 371 1120 369 1200 402" stroke="#4F46E5" stroke-width="4" stroke-linecap="round" stroke-dasharray="10 14"/>
+  <g transform="translate(100 115)">
+    <path d="M42 25h57a22 22 0 0 1 22 22v27" stroke="#17212B" stroke-width="12" stroke-linecap="round"/>
+    <path d="M42 25A22 22 0 0 0 20 47v109a22 22 0 0 0 22 22h104a32 32 0 0 0 32-32V78h-82a22 22 0 0 1-22-22V25H42Z" fill="#17212B" fill-opacity=".1" stroke="#17212B" stroke-width="12" stroke-linejoin="round"/>
+    <path d="m58 128 18 18 42-42" stroke="#17212B" stroke-width="12" stroke-linecap="round" stroke-linejoin="round"/>
+    <circle cx="146" cy="35" r="19" fill="#CFF7E9" stroke="#17212B" stroke-width="10"/>
+  </g>
+  <text x="100" y="370" fill="#17212B" font-family="Arial, Helvetica, sans-serif" font-size="76" font-weight="700" letter-spacing="-4">ApplyOnce</text>
+  <text x="104" y="430" fill="#66727D" font-family="Arial, Helvetica, sans-serif" font-size="28">Your details. Once. Anywhere.</text>
+  <text x="104" y="505" fill="#4F46E5" font-family="Arial, Helvetica, sans-serif" font-size="18" font-weight="700" letter-spacing="2">VERIFY  ·  CONSENT  ·  APPLY</text>
+</svg>

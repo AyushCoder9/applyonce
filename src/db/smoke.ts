@@ -47,22 +47,12 @@ async function smoke() {
 
     const scope = created.fields.map((field) => field.requirementKey);
     const purpose = "Smoke test application packet";
-    const version = "2026-08-01";
     const consentHash = createConsentHash({
       profileId,
       applicationId: created.application.id,
       purpose,
       scope,
-      version,
-    });
-    await db.insert(consents).values({
-      profileId,
-      applicationId: created.application.id,
-      purpose,
-      scope,
-      method: "manual",
-      version,
-      consentHash,
+      version: "2026-08-30",
     });
 
     const submitted = await submitApplication({
@@ -71,9 +61,26 @@ async function smoke() {
       purpose,
       scope,
       consentHash,
+      consentMethod: "manual",
     });
     if (!submitted || submitted.application.status !== "submitted" || !submitted.application.receiptCode) {
       throw new Error("Application did not submit or generate a receipt");
+    }
+
+    const retried = await submitApplication({
+      profileId,
+      applicationId: created.application.id,
+      purpose,
+      scope,
+      consentHash,
+      consentMethod: "manual",
+    });
+    const consentRows = await db
+      .select({ id: consents.id })
+      .from(consents)
+      .where(and(eq(consents.profileId, profileId), eq(consents.applicationId, created.application.id)));
+    if (!retried || retried.application.receiptCode !== submitted.application.receiptCode || consentRows.length !== 1) {
+      throw new Error("Retry created a duplicate application consent");
     }
 
     const reloaded = await getApplication(created.application.id, profileId);

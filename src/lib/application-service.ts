@@ -1,4 +1,4 @@
-import { and, asc, desc, eq } from "drizzle-orm";
+import { and, asc, desc, eq, ne } from "drizzle-orm";
 import { getDatabase } from "@/db";
 import {
   applicationEvents,
@@ -6,8 +6,12 @@ import {
   applicationRequirements,
   applicationTemplates,
   applications,
+  consents,
   documents,
   notifications,
+  organizations,
+  partnerForms,
+  partnerSubmissions,
   profileClaims,
   profiles,
   sourceConnections,
@@ -213,6 +217,17 @@ export async function listApplications(profileId: string) {
     .orderBy(desc(applications.updatedAt));
 }
 
+export async function listPartnerApplications(profileId: string) {
+  const db = getDatabase();
+  return db
+    .select({ submission: partnerSubmissions, form: partnerForms, organization: organizations })
+    .from(partnerSubmissions)
+    .innerJoin(partnerForms, eq(partnerSubmissions.formId, partnerForms.id))
+    .innerJoin(organizations, eq(partnerForms.organizationId, organizations.id))
+    .where(eq(partnerSubmissions.profileId, profileId))
+    .orderBy(desc(partnerSubmissions.updatedAt));
+}
+
 export async function getProfileSnapshot(profileId: string) {
   const db = getDatabase();
   const [profile] = await db.select().from(profiles).where(eq(profiles.id, profileId)).limit(1);
@@ -221,12 +236,13 @@ export async function getProfileSnapshot(profileId: string) {
     return null;
   }
 
-  const [connections, claims, profileDocuments, appRows, events, profileNotifications] =
+  const [connections, claims, profileDocuments, appRows, partnerAppRows, events, profileNotifications] =
     await Promise.all([
       db.select().from(sourceConnections).where(eq(sourceConnections.profileId, profileId)),
       getProfileClaims(profileId),
       db.select().from(documents).where(eq(documents.profileId, profileId)),
       listApplications(profileId),
+      listPartnerApplications(profileId),
       db
         .select()
         .from(applicationEvents)
@@ -247,6 +263,7 @@ export async function getProfileSnapshot(profileId: string) {
     claims,
     documents: profileDocuments,
     applications: appRows,
+    partnerApplications: partnerAppRows,
     events,
     notifications: profileNotifications,
   };
@@ -258,23 +275,14 @@ export async function submitApplication(input: {
   purpose: string;
   scope: string[];
   consentHash: string;
+  consentMethod: "otp" | "passkey" | "biometric" | "manual";
 }) {
   const db = getDatabase();
-  const [application] = await db
-    .select()
-    .from(applications)
-    .where(and(eq(applications.id, input.applicationId), eq(applications.profileId, input.profileId)))
-    .limit(1);
-
-  if (!application) {
-    return null;
-  }
-
   const submittedAt = new Date();
   const externalApplicationId = `NSE26-${input.applicationId.slice(0, 6).toUpperCase()}`;
-  const receiptCode = application.receiptCode ?? createReceiptCode("AO");
+  const receiptCode = createReceiptCode("AO");
 
-  const updated = await db.transaction(async (tx) => {
+  const result = await db.transaction(async (tx) => {
     const [updatedApplication] = await tx
       .update(applications)
       .set({
@@ -284,16 +292,50 @@ export async function submitApplication(input: {
         submittedAt,
         updatedAt: submittedAt,
       })
-      .where(eq(applications.id, input.applicationId))
+      .where(and(eq(applications.id, input.applicationId), eq(applications.profileId, input.profileId), ne(applications.status, "submitted")))
       .returning();
+
+    if (!updatedApplication) {
+      const [existingApplication] = await tx
+        .select()
+        .from(applications)
+        .where(and(eq(applications.id, input.applicationId), eq(applications.profileId, input.profileId)))
+        .limit(1);
+      return { application: existingApplication ?? null, created: false };
+    }
+
+    const [consent] = await tx
+      .insert(consents)
+      .values({
+        profileId: input.profileId,
+        applicationId: input.applicationId,
+        purpose: input.purpose,
+        scope: input.scope,
+        method: input.consentMethod,
+        version: "2026-08-30",
+        consentHash: input.consentHash,
+      })
+      .returning({ id: consents.id });
+
+    if (!consent) {
+      throw new Error("Unable to record application consent");
+    }
 
     await tx
       .update(applicationFields)
       .set({ sharedWithRecipient: true, updatedAt: submittedAt })
       .where(eq(applicationFields.applicationId, input.applicationId));
 
-    return updatedApplication;
+    return { application: updatedApplication, created: true };
   });
+
+  if (!result.application) {
+    return null;
+  }
+
+  if (!result.created) {
+    return getApplication(input.applicationId, input.profileId);
+  }
 
   await db.insert(applicationEvents).values({
     profileId: input.profileId,
@@ -313,5 +355,5 @@ export async function submitApplication(input: {
     body: `Your receipt ${receiptCode} is ready. Keep it for future updates.`,
   });
 
-  return updated ? getApplication(input.applicationId, input.profileId) : null;
+  return getApplication(input.applicationId, input.profileId);
 }

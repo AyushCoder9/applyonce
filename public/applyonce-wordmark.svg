@@ -1,0 +1,11 @@
+<svg width="188" height="48" viewBox="0 0 188 48" fill="none" xmlns="http://www.w3.org/2000/svg">
+  <title>ApplyOnce</title>
+  <desc>ApplyOnce verified application wallet.</desc>
+  <g>
+    <path d="M13 7.5h14.5A5.5 5.5 0 0 1 33 13v6.5" stroke="#17212B" stroke-width="3" stroke-linecap="round"/>
+    <path d="M13 7.5A5.5 5.5 0 0 0 7.5 13v22A5.5 5.5 0 0 0 13 40.5h21A6.5 6.5 0 0 0 40.5 34V19.5H24A5.5 5.5 0 0 1 18.5 14V7.5H13Z" fill="#17212B" fill-opacity=".12" stroke="#17212B" stroke-width="3" stroke-linejoin="round"/>
+    <path d="m17 28 4.5 4.5L31.5 22" stroke="#17212B" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"/>
+    <circle cx="37" cy="11" r="5" fill="#CFF7E9" stroke="#17212B" stroke-width="2.5"/>
+  </g>
+  <text x="57" y="30" fill="#17212B" font-family="Arial, Helvetica, sans-serif" font-size="20" font-weight="700" letter-spacing="-0.8">ApplyOnce</text>
+</svg>
