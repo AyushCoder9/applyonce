@@ -1,6 +1,6 @@
 "use client";
 
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import Link from "next/link";
 import {
   ArrowLeft,
@@ -54,10 +54,10 @@ function Brand() {
   return <Link className="brand" href="/"><span className="brand-mark"><Sparkles /></span>ApplyOnce</Link>;
 }
 
-function DemoTopbar() {
+function DemoTopbar({ backendReady }: { backendReady: boolean }) {
   return <header className="demo-topbar">
     <div className="demo-topbar-left"><Brand /><span className="demo-divider" /><span className="demo-label">Citizen application wallet</span></div>
-    <div className="demo-topbar-right"><span className="demo-badge"><Sparkles /> Synthetic demo</span><button className="icon-button" aria-label="Notifications"><Bell /></button><span className="avatar">AM</span></div>
+    <div className="demo-topbar-right"><span className="demo-badge"><Sparkles /> Synthetic demo{backendReady ? " · live data" : ""}</span><button className="icon-button" aria-label="Notifications"><Bell /></button><span className="avatar">AM</span></div>
   </header>;
 }
 
@@ -124,14 +124,45 @@ function FormStage({ issueResolved, onResolve, onSubmit, onBack }: { issueResolv
 }
 
 function ReceiptStage({ onRestart, onBack }: { onRestart: () => void; onBack: () => void }) {
-  return <><JourneyHeader step="receipt" onBack={onBack} /><div className="receipt-wrap"><section className="receipt-card"><div className="receipt-hero"><span className="success-orb"><Check /></span><h1>Application submitted.</h1><p>Your packet was accepted by National STEM Entrance 2026. Keep this receipt — your consent trail is attached.</p></div><div className="receipt-details"><div className="receipt-detail"><span>Submitted at</span><strong>29 Aug 2026 · 8:18 PM</strong></div><div className="receipt-detail"><span>Application ID</span><strong>NSE26-AM-004281</strong></div><div className="receipt-detail"><span>Next update</span><strong>Within 48 hours</strong></div></div><div className="receipt-footer"><span className="receipt-id">RECEIPT / NSE26-AM-004281</span><div className="receipt-actions"><button className="secondary-action"><Download className="inline-arrow" /> Save receipt</button><button className="secondary-action"><Copy className="inline-arrow" /> Copy ID</button></div></div></section><aside className="next-card"><div className="panel-kicker">Consent trail</div><h2>Clear after you apply.</h2><p>Here is the proof of what moved, why it moved, and what is still under your control.</p><div className="receipt-timeline"><div className="receipt-timeline-row"><CheckCircle2 /><span>3 sources verified against your profile</span></div><div className="receipt-timeline-row"><CheckCircle2 /><span>35 fields shared for one stated purpose</span></div><div className="receipt-timeline-row"><CheckCircle2 /><span>Receipt generated and saved to your wallet</span></div><div className="receipt-timeline-row"><LockKeyhole /><span>Connection can be revoked from Consent log</span></div></div><Button className="primary-action" variant="primary" onPress={onRestart} style={{ marginTop: 25, width: "100%" }}>Run it again <ArrowRight className="inline-arrow" /></Button></aside></div></>;
+  const [copied, setCopied] = useState(false);
+  const copyReceipt = async () => {
+    try {
+      await navigator.clipboard.writeText("NSE26-AM-004281");
+      setCopied(true);
+      window.setTimeout(() => setCopied(false), 1800);
+    } catch {
+      setCopied(false);
+    }
+  };
+
+  return <><JourneyHeader step="receipt" onBack={onBack} /><div className="receipt-wrap"><section className="receipt-card"><div className="receipt-hero"><span className="success-orb"><Check /></span><h1>Application submitted.</h1><p>Your packet was accepted by National STEM Entrance 2026. Keep this receipt — your consent trail is attached.</p></div><div className="receipt-details"><div className="receipt-detail"><span>Submitted at</span><strong>29 Aug 2026 · 8:18 PM</strong></div><div className="receipt-detail"><span>Application ID</span><strong>NSE26-AM-004281</strong></div><div className="receipt-detail"><span>Next update</span><strong>Within 48 hours</strong></div></div><div className="receipt-footer"><span className="receipt-id">RECEIPT / NSE26-AM-004281</span><div className="receipt-actions"><button className="secondary-action" onClick={() => window.print()}><Download className="inline-arrow" /> Save receipt</button><button className="secondary-action" onClick={() => void copyReceipt()}><Copy className="inline-arrow" /> {copied ? "Copied" : "Copy ID"}</button></div></div></section><aside className="next-card"><div className="panel-kicker">Consent trail</div><h2>Clear after you apply.</h2><p>Here is the proof of what moved, why it moved, and what is still under your control.</p><div className="receipt-timeline"><div className="receipt-timeline-row"><CheckCircle2 /><span>3 sources verified against your profile</span></div><div className="receipt-timeline-row"><CheckCircle2 /><span>35 fields shared for one stated purpose</span></div><div className="receipt-timeline-row"><CheckCircle2 /><span>Receipt generated and saved to your wallet</span></div><div className="receipt-timeline-row"><LockKeyhole /><span>Connection can be revoked from Consent log</span></div></div><Button className="primary-action" variant="primary" onPress={onRestart} style={{ marginTop: 25, width: "100%" }}>Run it again <ArrowRight className="inline-arrow" /></Button></aside></div></>;
 }
 
 export default function DemoPage() {
   const [step, setStep] = useState<DemoStep>("dashboard");
   const [issueResolved, setIssueResolved] = useState(false);
+  const [backendReady, setBackendReady] = useState(false);
+
+  useEffect(() => {
+    let active = true;
+    fetch("/api/demo", { cache: "no-store" })
+      .then((response) => {
+        if (active) {
+          setBackendReady(response.ok);
+        }
+      })
+      .catch(() => {
+        if (active) {
+          setBackendReady(false);
+        }
+      });
+
+    return () => {
+      active = false;
+    };
+  }, []);
 
   const restart = () => { setIssueResolved(false); setStep("dashboard"); };
 
-  return <main className="demo-page"><DemoTopbar /><div className="demo-layout"><DemoSidebar step={step} onNavigate={setStep} /><section className="demo-main">{step === "dashboard" && <Dashboard onStart={() => setStep("review")} />}{step === "review" && <ReviewStage onContinue={() => setStep("form")} onBack={() => setStep("dashboard")} />}{step === "form" && <FormStage issueResolved={issueResolved} onResolve={() => setIssueResolved(true)} onSubmit={() => setStep("receipt")} onBack={() => setStep("review")} />}{step === "receipt" && <ReceiptStage onRestart={restart} onBack={() => setStep("dashboard")} />}</section></div></main>;
+  return <main className="demo-page"><DemoTopbar backendReady={backendReady} /><div className="demo-layout"><DemoSidebar step={step} onNavigate={setStep} /><section className="demo-main">{step === "dashboard" && <Dashboard onStart={() => setStep("review")} />}{step === "review" && <ReviewStage onContinue={() => setStep("form")} onBack={() => setStep("dashboard")} />}{step === "form" && <FormStage issueResolved={issueResolved} onResolve={() => setIssueResolved(true)} onSubmit={() => setStep("receipt")} onBack={() => setStep("review")} />}{step === "receipt" && <ReceiptStage onRestart={restart} onBack={() => setStep("dashboard")} />}</section></div></main>;
 }

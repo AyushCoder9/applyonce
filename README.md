@@ -27,6 +27,11 @@ The fastest walkthrough is:
 - Source-aware prefilled application review with a deliberate mismatch resolution step.
 - Receipt generation screen with application ID, timestamp, next update, and consent trail.
 - Responsive layout for desktop and small screens, visible keyboard focus, and reduced-motion support.
+- Clerk-backed account boundary for the authenticated workspace at `/app`.
+- Neon Postgres schema and migrations for profiles, source connections, claims, documents, packets, field-level readiness, consents, events, and notifications.
+- Deterministic readiness engine that maps verified claims to portal requirements and separates prefilled values from citizen decisions.
+- Private Vercel Blob upload, download, and deletion routes for documents; uploads are limited to PDF/JPEG/PNG and 10 MB.
+- Public operational endpoints for health, templates, integration status, and the synthetic demo snapshot.
 
 ## Local development
 
@@ -37,13 +42,22 @@ npm run dev
 
 Then open [http://localhost:3000](http://localhost:3000) or [http://localhost:3000/demo](http://localhost:3000/demo).
 
+After pulling Vercel development variables, initialize the local/provisioned database with:
+
+```bash
+npm run db:migrate
+npm run db:seed
+```
+
 ## Production build
 
 ```bash
 npm run lint
+npm run typecheck
+npm test
 npm run build
 ```
 
 ## Product direction after the submission
 
-The prototype intentionally stops at a safe, synthetic boundary. The next layer is a modular monolith with a real consent ledger, encrypted claims, source adapters, a signed packet exchange, application status webhooks, and a partner SDK. Government or private integrations would be enabled only through their official consent and API onboarding flows; no credentials or real citizen documents belong in this demo.
+The public demo uses synthetic data. DigiLocker, MeriPehchaan, and APAAR are represented as consent-gated connector contracts; production access still requires each provider's official partner approval and credentials. Resend is intentionally disabled until a verified sending domain is supplied. In-app notifications work through the database outbox today, while email can be enabled without changing the application workflow once that domain is available.
