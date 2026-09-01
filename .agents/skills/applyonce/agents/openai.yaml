@@ -1,0 +1,6 @@
+interface:
+  display_name: "Applyonce"
+  short_description: "Repo-specific patterns and workflows for applyonce"
+  default_prompt: "Use the applyonce repo skill to follow existing architecture, testing, and workflow conventions."
+policy:
+  allow_implicit_invocation: true
