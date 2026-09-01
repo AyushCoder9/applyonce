@@ -1,7 +1,7 @@
 import dotenv from "dotenv";
 import { and, eq } from "drizzle-orm";
 import { getDatabase } from "@/db";
-import { consents, profiles } from "@/db/schema";
+import { applicationSnapshots, consents, profiles } from "@/db/schema";
 import { STEM_REQUIREMENTS } from "@/lib/application-template";
 import { createApplicationPacket, getApplication, submitApplication } from "@/lib/application-service";
 import { createConsentHash } from "@/lib/intelligence";
@@ -79,8 +79,12 @@ async function smoke() {
       .select({ id: consents.id })
       .from(consents)
       .where(and(eq(consents.profileId, profileId), eq(consents.applicationId, created.application.id)));
-    if (!retried || retried.application.receiptCode !== submitted.application.receiptCode || consentRows.length !== 1) {
-      throw new Error("Retry created a duplicate application consent");
+    const snapshotRows = await db
+      .select({ id: applicationSnapshots.id, hash: applicationSnapshots.payloadHash })
+      .from(applicationSnapshots)
+      .where(and(eq(applicationSnapshots.profileId, profileId), eq(applicationSnapshots.applicationId, created.application.id)));
+    if (!retried || retried.application.receiptCode !== submitted.application.receiptCode || consentRows.length !== 1 || snapshotRows.length !== 1 || snapshotRows[0]?.hash.length !== 64) {
+      throw new Error("Retry created duplicate or incomplete submission records");
     }
 
     const reloaded = await getApplication(created.application.id, profileId);

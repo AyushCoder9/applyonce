@@ -1,8 +1,11 @@
 import { getPartnerRequestContext, listPartnerForms, listPartnerSubmissions } from "@/lib/partner-service";
+import { getActor } from "@/lib/auth";
 
 export async function GET(request: Request) {
+  const actor = await getActor();
+  if (!actor) return Response.json({ error: "Authentication required" }, { status: 401 });
   const context = await getPartnerRequestContext(request, "forms:read");
-  if (!context) return Response.json({ error: "Authentication required" }, { status: 401 });
+  if (!context) return Response.json({ error: "Partner onboarding is required", code: "partner_onboarding_required" }, { status: 404 });
   const { organization, membership } = context;
   const [forms, submissions] = await Promise.all([
     listPartnerForms(organization.id),
@@ -10,7 +13,7 @@ export async function GET(request: Request) {
   ]);
 
   return Response.json({
-    organization: { id: organization.id, name: organization.name, slug: organization.slug, kind: organization.kind },
+    organization: { id: organization.id, name: organization.name, slug: organization.slug, kind: organization.kind, status: organization.status, verifiedDomain: organization.verifiedDomain },
     membership: { role: membership.role },
     forms,
     submissions,

@@ -290,6 +290,25 @@ export const applicationFields = pgTable(
   ],
 );
 
+export const applicationSnapshots = pgTable(
+  "application_snapshots",
+  {
+    id: uuid("id").defaultRandom().primaryKey(),
+    applicationId: uuid("application_id")
+      .notNull()
+      .unique()
+      .references(() => applications.id, { onDelete: "cascade" }),
+    profileId: uuid("profile_id")
+      .notNull()
+      .references(() => profiles.id, { onDelete: "cascade" }),
+    version: text("version").notNull().default("2026-09-02"),
+    payload: jsonb("payload").$type<Record<string, unknown>>().notNull(),
+    payloadHash: text("payload_hash").notNull(),
+    createdAt: timestamp("created_at", { withTimezone: true }).defaultNow().notNull(),
+  },
+  (table) => [index("application_snapshots_profile_idx").on(table.profileId, table.createdAt)],
+);
+
 export const consents = pgTable(
   "consents",
   {
@@ -401,6 +420,10 @@ export const organizations = pgTable(
     name: text("name").notNull(),
     slug: text("slug").notNull().unique(),
     kind: text("kind").notNull().default("education_partner"),
+    status: text("status").notNull().default("approved"),
+    contactEmail: text("contact_email"),
+    verifiedDomain: text("verified_domain"),
+    termsAcceptedAt: timestamp("terms_accepted_at", { withTimezone: true }),
     ownerClerkUserId: text("owner_clerk_user_id").notNull(),
     createdAt: timestamp("created_at", { withTimezone: true }).defaultNow().notNull(),
     updatedAt: timestamp("updated_at", { withTimezone: true }).defaultNow().notNull(),
@@ -461,6 +484,42 @@ export const partnerForms = pgTable(
   (table) => [
     index("partner_forms_org_idx").on(table.organizationId),
     index("partner_forms_status_idx").on(table.status),
+  ],
+);
+
+export const partnerFormVersions = pgTable(
+  "partner_form_versions",
+  {
+    id: uuid("id").defaultRandom().primaryKey(),
+    formId: uuid("form_id")
+      .notNull()
+      .references(() => partnerForms.id, { onDelete: "cascade" }),
+    organizationId: uuid("organization_id")
+      .notNull()
+      .references(() => organizations.id, { onDelete: "cascade" }),
+    version: integer("version").notNull(),
+    name: text("name").notNull(),
+    description: text("description").notNull(),
+    category: text("category").notNull(),
+    purpose: text("purpose").notNull(),
+    formSchema: jsonb("form_schema").$type<{
+      fields: Array<{
+        key: string;
+        label: string;
+        type: string;
+        required: boolean;
+        profileKey?: string;
+        helpText?: string;
+      }>;
+      documents: Array<{ key: string; label: string; required: boolean }>;
+    }>().notNull(),
+    branding: jsonb("branding").$type<{ accentColor?: string; logoUrl?: string; organizationName?: string }>().notNull().default(jsonObject()),
+    publishedByClerkUserId: text("published_by_clerk_user_id").notNull(),
+    publishedAt: timestamp("published_at", { withTimezone: true }).defaultNow().notNull(),
+  },
+  (table) => [
+    uniqueIndex("partner_form_versions_form_version_idx").on(table.formId, table.version),
+    index("partner_form_versions_org_idx").on(table.organizationId, table.publishedAt),
   ],
 );
 
@@ -581,6 +640,23 @@ export const partnerWebhookDeliveries = pgTable(
   (table) => [index("partner_webhook_deliveries_webhook_idx").on(table.webhookId, table.createdAt)],
 );
 
+export const platformAuditEvents = pgTable(
+  "platform_audit_events",
+  {
+    id: uuid("id").defaultRandom().primaryKey(),
+    actorClerkUserId: text("actor_clerk_user_id").notNull(),
+    action: text("action").notNull(),
+    targetType: text("target_type").notNull(),
+    targetId: text("target_id").notNull(),
+    metadata: jsonb("metadata").$type<Record<string, unknown>>().notNull().default(jsonObject()),
+    createdAt: timestamp("created_at", { withTimezone: true }).defaultNow().notNull(),
+  },
+  (table) => [
+    index("platform_audit_events_actor_idx").on(table.actorClerkUserId, table.createdAt),
+    index("platform_audit_events_target_idx").on(table.targetType, table.targetId, table.createdAt),
+  ],
+);
+
 export const schema = {
   profiles,
   sourceConnections,
@@ -590,6 +666,7 @@ export const schema = {
   applicationRequirements,
   applications,
   applicationFields,
+  applicationSnapshots,
   consents,
   applicationEvents,
   notifications,
@@ -598,9 +675,11 @@ export const schema = {
   organizations,
   organizationMembers,
   partnerForms,
+  partnerFormVersions,
   partnerSubmissions,
   partnerConsents,
   partnerWebhooks,
   partnerWebhookDeliveries,
   partnerApiKeys,
+  platformAuditEvents,
 };

@@ -1,5 +1,6 @@
-import { Pool } from "@neondatabase/serverless";
-import { drizzle } from "drizzle-orm/neon-serverless";
+import { attachDatabasePool } from "@vercel/functions";
+import { Pool } from "pg";
+import { drizzle } from "drizzle-orm/node-postgres";
 import * as schema from "./schema";
 
 export type Database = ReturnType<typeof createDatabase>;
@@ -7,13 +8,24 @@ export type Database = ReturnType<typeof createDatabase>;
 let database: Database | null = null;
 
 function createDatabase() {
-  const connectionString = process.env.DATABASE_URL;
+  const configuredConnectionString = process.env.DATABASE_URL;
 
-  if (!connectionString) {
+  if (!configuredConnectionString) {
     throw new Error("DATABASE_URL is not configured");
   }
 
-  const pool = new Pool({ connectionString, max: 3 });
+  // pg 9 will interpret sslmode=require less strictly. Preserve the current
+  // certificate-verifying behavior explicitly before that change lands.
+  const connectionString = configuredConnectionString.replace("sslmode=require", "sslmode=verify-full");
+
+  const pool = new Pool({
+    connectionString,
+    max: 5,
+    idleTimeoutMillis: 10_000,
+    connectionTimeoutMillis: 8_000,
+    allowExitOnIdle: true,
+  });
+  attachDatabasePool(pool);
   return drizzle(pool, { schema });
 }
 
