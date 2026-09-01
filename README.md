@@ -47,23 +47,25 @@ The public demo does not require a login. All demo names, records, dates, identi
 
 ### Citizen product
 
-- Responsive citizen workspace at `/app`.
+- Route-addressable citizen workspace under `/app/*`, with refresh and browser-history recovery.
 - Profile editing with durable Neon/Postgres persistence.
-- Source connection states for DigiLocker, MeriPehchaan, and APAAR-style adapters.
-- Honest sandbox and awaiting-credentials disclosures for external identity rails.
+- One connector registry with explicit sandbox, approval-pending, unavailable, degraded, connected, expired, and revoked states.
+- DigiLocker and MeriPehchaan are approval-pending; APAAR production retrieval is unavailable until approved access exists.
 - Private PDF, JPEG, and PNG document upload through Vercel Blob.
 - Education application packet creation and deterministic readiness scoring.
 - Field-level source labels, confirmation, and review states.
 - Purpose-bound consent records and consent revocation.
-- Application receipts and copy/print actions.
+- Transactional immutable application snapshots, purpose-bound consent, timeline events, notifications, and hashed receipts.
+- Application receipts with copy, print, and snapshot-integrity details.
 - One application shelf for both ApplyOnce packets and authenticated hosted-form submissions, with receipt and status detail.
 - In-app notifications and application timeline events.
 - Durable profile export and queued data-deletion request controls.
 
 ### Partner product
 
-- Organization and membership records with partner roles.
-- Partner dashboard at `/partner`.
+- Intentional organization onboarding and membership records with partner roles.
+- Route-addressable partner workspace under `/partner/*`.
+- Restricted operator approval flow that blocks publication until an organization is approved and writes immutable audit events.
 - Form creation, field editing, mapping metadata, preview, and publishing.
 - Hosted mobile-first form runtime at `/portal/[slug]`.
 - Authenticated profile prefill when the applicant is signed in.
@@ -73,17 +75,19 @@ The public demo does not require a login. All demo names, records, dates, identi
 - Submission detail review with submitted values, consent state, receipt, and document count.
 - Citizen-facing timeline events for authenticated hosted-form applicants.
 - Webhook endpoint registration with encrypted signing secrets.
-- HMAC-signed delivery primitives, failure tracking, retry processing, and delivery inspection routes.
+- HMAC-signed delivery primitives, public-network destination checks, failure tracking, durable Workflow retries, and delivery inspection routes.
 
 ### Platform foundation
 
 - Next.js App Router and React.
 - Clerk authentication and server-side actor checks.
-- Neon Postgres with Drizzle ORM and migration files.
+- Standard PostgreSQL through Drizzle and `pg`, with migration files and provider-neutral domain code.
 - Vercel Blob private document storage.
 - Zod validation at API boundaries.
 - Idempotency protection for hosted submissions.
-- Transactional core submission and consent recording for safe retries.
+- Transactional snapshot, consent, receipt, event, and notification recording for safe retries.
+- Deterministic, auditable eligibility rules with three outcomes and explanation traces.
+- OpenAPI 3.1 contract at `/api/openapi`.
 - Tenant-scoped partner queries.
 - Security and readiness endpoints.
 - Responsive custom design system using Sora, Geist, IBM Plex Mono, HeroUI primitives, Lucide icons, and isolated Motion components.
@@ -92,7 +96,7 @@ The public demo does not require a login. All demo names, records, dates, identi
 
 ApplyOnce separates the stable application layer from external provider credentials.
 
-- DigiLocker, MeriPehchaan, and APAAR have adapter-shaped connection states and a safe sandbox path in this repository.
+- The synthetic source is sandbox-only. Manual upload is real. DigiLocker and MeriPehchaan remain approval-pending, and APAAR production retrieval remains unavailable.
 - A connector is not presented as live government connectivity until its official partner approval, credentials, consent flow, and retrieval request are verified.
 - The product does not scrape protected portals, bypass CAPTCHA, automate arbitrary external sites, or store face, fingerprint, or iris templates.
 - Aadhaar and other sensitive identity values are not collected by default.
@@ -116,16 +120,17 @@ Next.js route handlers
   ├─ Webhook queue and retry processor
   └─ Private Blob upload boundary
        │
-       ├─ Neon/Postgres via Drizzle
-       ├─ Vercel Blob
+       ├─ PostgreSQL via pg and Drizzle
+       ├─ Vercel Blob in demo/preview
+       ├─ Vercel Workflow for durable webhook delivery
        └─ Official provider adapters when configured
 ```
 
 ### Data model
 
-Core citizen tables include `profiles`, `source_connections`, `profile_claims`, `documents`, `application_templates`, `application_requirements`, `applications`, `application_fields`, `consents`, `application_events`, and `notifications`.
+Core citizen tables include `profiles`, `source_connections`, `profile_claims`, `documents`, `application_templates`, `application_requirements`, `applications`, `application_fields`, `application_snapshots`, `consents`, `application_events`, and `notifications`.
 
-Partner tables include `organizations`, `organization_members`, `partner_forms`, `partner_submissions`, `partner_consents`, `partner_webhooks`, `partner_webhook_deliveries`, and `partner_api_keys`.
+Partner tables include `organizations`, `organization_members`, immutable `partner_form_versions`, `partner_forms`, `partner_submissions`, `partner_consents`, `partner_webhooks`, `partner_webhook_deliveries`, and `partner_api_keys`. Platform reviews write `platform_audit_events`.
 
 Account-control tables include `data_export_requests` and `data_deletion_requests`.
 
@@ -133,6 +138,7 @@ Important invariants:
 
 - Partner-owned records are always queried with the authenticated organization scope.
 - Consent and timeline records are append-only events from the application layer.
+- Published form versions and submitted application snapshots are immutable.
 - API and hosted submissions can carry an idempotency key.
 - Webhook signing secrets are encrypted at rest and are not returned by list endpoints.
 - Private document files are never exposed through public URLs.
@@ -146,6 +152,7 @@ src/
     api/                  Next.js route handlers
     app/                  Citizen workspace
     partner/              Partner workspace
+    ops/                  Restricted platform operations
     portal/[slug]/        Hosted partner form runtime
     docs/                 Partner documentation
     security/             Public security boundary
@@ -160,6 +167,8 @@ src/
   lib/
     application-service.ts
     intelligence.ts       Deterministic readiness and consent helpers
+    eligibility.ts        Versionable deterministic eligibility AST
+    connectors/           Honest connector registry and states
     partner-service.ts    Partner forms, submissions, webhooks
 public/
   applyonce-mark.svg
@@ -173,8 +182,8 @@ drizzle/
 
 Requirements:
 
-- Node.js 24 LTS or newer compatible Node.js runtime.
-- A Neon/Postgres database.
+- Node.js 24 LTS (the repository pins `24.x`).
+- PostgreSQL. Neon is used for local/preview; the Supabase Mumbai production cutover is gated on Marketplace terms and migration verification.
 - Clerk application keys.
 - A Vercel Blob store for private document upload.
 
@@ -193,6 +202,7 @@ NEXT_PUBLIC_CLERK_PUBLISHABLE_KEY=
 CLERK_SECRET_KEY=
 BLOB_READ_WRITE_TOKEN=
 WEBHOOK_ENCRYPTION_KEY=     # long random server-only secret
+APPLYONCE_OPS_USER_IDS=     # comma-separated Clerk user IDs allowed into /ops
 ```
 
 Optional email values:
@@ -224,6 +234,8 @@ npm run dev          # Start Next.js development mode
 npm run lint         # ESLint
 npm run typecheck    # TypeScript without emit
 npm test             # Vitest suite
+npm run test:e2e     # Playwright desktop and mobile public journeys
+npm run audit:interactions # Reject placeholder links, empty actions, and false receipt claims
 npm run build        # Production build
 npm run db:generate  # Generate a Drizzle migration
 npm run db:migrate   # Apply migrations
@@ -296,7 +308,7 @@ ApplyOnce is production-shaped software, not a claim of absolute security. The b
 - Private Blob upload and ownership checks.
 - MIME and size limits for document uploads.
 - HTTPS-only webhook endpoints outside local development.
-- Private-network webhook target rejection for common SSRF destinations.
+- DNS and IP validation that rejects private, loopback, link-local, reserved, and mapped private webhook destinations before each delivery.
 - Encrypted webhook secrets and HMAC signatures.
 - Consent hashes and revocation events.
 - Idempotent hosted submissions.
@@ -317,6 +329,9 @@ npm run db:migrate
 npm run db:seed
 npm run db:smoke
 npm run db:partner-smoke
+npm run audit:interactions
+npm run test:e2e
+npm audit --audit-level=moderate
 npm run build
 ```
 
@@ -344,10 +359,11 @@ The mark represents one verified profile rail branching into multiple applicatio
 ## Roadmap
 
 - Add verified official DigiLocker and other provider credentials through their approved partner processes.
+- Complete the gated Supabase Mumbai production migration after Marketplace terms are accepted and migration hashes match.
+- Replace the synthetic/demo Blob path with S3/KMS/GuardDuty Mumbai after the AWS account and OIDC trust are approved.
 - Add short-lived hosted form sessions with resumable encrypted drafts.
-- Add API-key rotation, rate limiting, and a scheduled key-expiry worker.
-- Add a background queue for scheduled webhook retries and retention processing.
-- Add formal audit export, deletion execution workflow, and operator approvals.
+- Add API-key rotation, rate limiting, and scheduled key-expiry and retention workers.
+- Complete data-export and deletion execution workflows with legal-hold handling.
 - Add Hindi localization and more education templates.
 - Expand to jobs, healthcare, licences, and public-service applications only after the education workflow is proven.
 

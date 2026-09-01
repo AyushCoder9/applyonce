@@ -1,4 +1,5 @@
 import { emailDeliveryStatus } from "@/lib/notifications";
+import { connectorRegistry } from "@/lib/connectors/registry";
 
 const integrations = [
   {
@@ -16,27 +17,6 @@ const integrations = [
     purpose: "Consent ledger, profile claims, application packets, and event history.",
   },
   {
-    id: "digilocker",
-    name: "DigiLocker",
-    category: "Source connector",
-    status: "adapter_ready",
-    purpose: "Official document retrieval after the citizen authorises a partner connection.",
-  },
-  {
-    id: "meripehchaan",
-    name: "MeriPehchaan",
-    category: "Source connector",
-    status: "adapter_ready",
-    purpose: "Federated identity and profile claims through an approved integration.",
-  },
-  {
-    id: "apaar",
-    name: "APAAR",
-    category: "Source connector",
-    status: "adapter_ready",
-    purpose: "Academic record retrieval through a supported institutional flow.",
-  },
-  {
     id: "resend",
     name: "Resend",
     category: "Notifications",
@@ -47,7 +27,7 @@ const integrations = [
 
 export async function GET() {
   return Response.json({
-    integrations,
+    integrations: [...integrations, ...connectorRegistry.map((connector) => ({ id: connector.id, name: connector.name, category: "Source connector", status: connector.state, purpose: connector.purpose, liveData: connector.liveData, disclosure: connector.disclosure }))],
     email: emailDeliveryStatus(),
     note: "Source connectors are deliberately consent-gated. No real citizen data is used by the public demo.",
   });

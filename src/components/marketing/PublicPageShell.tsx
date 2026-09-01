@@ -20,6 +20,7 @@ export default function PublicPageShell({
           <ApplyOnceLogo size="md" />
           <nav aria-label="Public navigation">
             <Link href="/">Home</Link>
+            <Link href="/programs">Programs</Link>
             <Link href="/how-it-works">How it works</Link>
             <Link href="/security">Security</Link>
             <Link href="/docs">Partner docs</Link>
@@ -40,7 +41,7 @@ export default function PublicPageShell({
 
         <footer className="ao-public-footer">
           <div><ApplyOnceLogo size="sm" /><span>One profile. Many applications. Clear consent.</span></div>
-          <nav aria-label="Footer navigation"><Link href="/security">Security</Link><Link href="/docs">Docs</Link><a href="https://github.com/AyushCoder9/applyonce" target="_blank" rel="noreferrer"><GitBranch /> View source code</a></nav>
+          <nav aria-label="Footer navigation"><Link href="/privacy">Privacy</Link><Link href="/security">Security</Link><Link href="/docs">Docs</Link><a href="https://github.com/AyushCoder9/applyonce" target="_blank" rel="noreferrer"><GitBranch /> View source code</a></nav>
         </footer>
       </div>
     </main>

@@ -1,5 +1,7 @@
 import { and, desc, eq, isNull, sql } from "drizzle-orm";
 import { createCipheriv, createHash, createHmac, createDecipheriv, randomBytes } from "node:crypto";
+import { lookup } from "node:dns/promises";
+import { isIP } from "node:net";
 import { getDatabase } from "@/db";
 import {
   applicationEvents,
@@ -8,6 +10,7 @@ import {
   partnerConsents,
   partnerApiKeys,
   partnerForms,
+  partnerFormVersions,
   partnerSubmissions,
   partnerWebhooks,
   partnerWebhookDeliveries,
@@ -77,7 +80,8 @@ export async function getPartnerRequestContext(request: Request, requiredScope?:
 
   const actor = await getActor();
   if (!actor) return null;
-  const context = await ensurePartnerOrganization(actor);
+  const context = await findPartnerOrganization(actor);
+  if (!context) return null;
   return { organization: context.organization, membership: context.membership, apiKey: false };
 }
 
@@ -153,16 +157,35 @@ function isWebhookEventSubscribed(events: string[], eventType: string) {
   return events.includes("*") || events.includes(eventType);
 }
 
+export function isPrivateNetworkAddress(address: string) {
+  const normalized = address.toLowerCase().replace(/^::ffff:/, "");
+  if (normalized.includes(":")) {
+    return normalized === "::" || normalized === "::1" || normalized.startsWith("fc") || normalized.startsWith("fd") || normalized.startsWith("fe8") || normalized.startsWith("fe9") || normalized.startsWith("fea") || normalized.startsWith("feb");
+  }
+  const octets = normalized.split(".").map(Number);
+  if (octets.length !== 4 || octets.some((part) => !Number.isInteger(part) || part < 0 || part > 255)) return true;
+  const [first, second] = octets;
+  return first === 0 || first === 10 || first === 127 || first >= 224 || (first === 100 && second >= 64 && second <= 127) || (first === 169 && second === 254) || (first === 172 && second >= 16 && second <= 31) || (first === 192 && second === 168);
+}
+
 function assertWebhookUrl(value: string) {
   const parsed = new URL(value);
   const hostname = parsed.hostname.toLowerCase();
   const blockedHostnames = new Set(["localhost", "127.0.0.1", "0.0.0.0", "::1"]);
-  const blockedPrivateRange = /^(10\.|192\.168\.|172\.(1[6-9]|2\d|3[0-1])\.|169\.254\.)/;
   if (parsed.protocol !== "https:" && process.env.NODE_ENV !== "development") {
     throw new Error("Webhook endpoints must use HTTPS");
   }
-  if (blockedHostnames.has(hostname) || hostname.endsWith(".local") || blockedPrivateRange.test(hostname)) {
+  if (blockedHostnames.has(hostname) || hostname.endsWith(".local") || (isIP(hostname) > 0 && isPrivateNetworkAddress(hostname))) {
     throw new Error("Webhook endpoints cannot point to a private network");
+  }
+  return parsed.toString();
+}
+
+async function assertPublicWebhookDestination(value: string) {
+  const parsed = new URL(assertWebhookUrl(value));
+  const addresses = isIP(parsed.hostname) > 0 ? [{ address: parsed.hostname }] : await lookup(parsed.hostname, { all: true, verbatim: true });
+  if (addresses.length === 0 || addresses.some(({ address }) => isPrivateNetworkAddress(address))) {
+    throw new Error("Webhook destination resolved to a private or reserved network");
   }
   return parsed.toString();
 }
@@ -207,7 +230,8 @@ export async function processPartnerWebhookDeliveries(organizationId: string, li
       const body = webhookPayload({ eventType: delivery.eventType, deliveryId: delivery.id, payload: delivery.payload });
       const timestamp = Math.floor(Date.now() / 1000).toString();
       const signature = createHmac("sha256", decryptWebhookSecret(webhook.secretCiphertext)).update(`${timestamp}.${body}`).digest("hex");
-      const response = await fetch(webhook.url, {
+      const safeDestination = await assertPublicWebhookDestination(webhook.url);
+      const response = await fetch(safeDestination, {
         method: "POST",
         headers: {
           "content-type": "application/json",
@@ -233,7 +257,7 @@ export async function processPartnerWebhookDeliveries(organizationId: string, li
   return { queued: rows.length, attempted: pending.length, delivered, failed };
 }
 
-export async function ensurePartnerOrganization(actor: Actor) {
+export async function findPartnerOrganization(actor: Actor) {
   const db = getDatabase();
   const [existing] = await db
     .select({ organization: organizations, membership: organizationMembers })
@@ -246,15 +270,40 @@ export async function ensurePartnerOrganization(actor: Actor) {
     return { organization: existing.organization, membership: existing.membership };
   }
 
-  const baseSlug = slugify(actor.fullName || "partner-workspace") || "partner-workspace";
-  const slug = `${baseSlug}-${actor.clerkUserId.slice(-8).toLowerCase()}`;
+  return null;
+}
+
+export async function ensurePartnerOrganization(actor: Actor) {
+  const existing = await findPartnerOrganization(actor);
+  if (!existing) throw new Error("Partner onboarding is required");
+  return existing;
+}
+
+export async function createPartnerOrganization(input: {
+  actor: Actor;
+  name: string;
+  kind: string;
+  contactEmail: string;
+  verifiedDomain?: string | null;
+}) {
+  const existing = await findPartnerOrganization(input.actor);
+  if (existing) return existing;
+
+  const baseSlug = slugify(input.name) || "partner-workspace";
+  const slug = `${baseSlug}-${input.actor.clerkUserId.slice(-8).toLowerCase()}`;
+  const db = getDatabase();
   const created = await db.transaction(async (tx) => {
     const [organization] = await tx
       .insert(organizations)
       .values({
-        name: `${actor.fullName || "Partner"} workspace`,
+        name: input.name,
         slug,
-        ownerClerkUserId: actor.clerkUserId,
+        kind: input.kind,
+        status: "approval_pending",
+        contactEmail: input.contactEmail,
+        verifiedDomain: input.verifiedDomain || null,
+        termsAcceptedAt: new Date(),
+        ownerClerkUserId: input.actor.clerkUserId,
       })
       .returning();
 
@@ -264,8 +313,8 @@ export async function ensurePartnerOrganization(actor: Actor) {
       .insert(organizationMembers)
       .values({
         organizationId: organization.id,
-        clerkUserId: actor.clerkUserId,
-        email: actor.email,
+        clerkUserId: input.actor.clerkUserId,
+        email: input.actor.email,
         role: "owner",
       })
       .returning();
@@ -295,13 +344,45 @@ export async function getPartnerForm(formId: string, organizationId: string) {
 }
 
 export async function getPublishedPartnerForm(slug: string) {
-  const [form] = await getDatabase()
-    .select({ form: partnerForms, organization: organizations })
+  const [published] = await getDatabase()
+    .select({ form: partnerForms, version: partnerFormVersions, organization: organizations })
     .from(partnerForms)
     .innerJoin(organizations, eq(partnerForms.organizationId, organizations.id))
-    .where(and(eq(partnerForms.slug, slug), eq(partnerForms.status, "published")))
+    .innerJoin(partnerFormVersions, eq(partnerFormVersions.formId, partnerForms.id))
+    .where(eq(partnerForms.slug, slug))
+    .orderBy(desc(partnerFormVersions.version))
     .limit(1);
-  return form ?? null;
+  if (!published) return null;
+  return {
+    organization: published.organization,
+    form: {
+      ...published.form,
+      name: published.version.name,
+      description: published.version.description,
+      category: published.version.category,
+      purpose: published.version.purpose,
+      formSchema: published.version.formSchema,
+      branding: published.version.branding,
+      version: published.version.version,
+      status: "published" as const,
+      publishedAt: published.version.publishedAt,
+    },
+  };
+}
+
+export async function listPublishedPartnerPrograms() {
+  const rows = await getDatabase()
+    .select({ form: partnerForms, version: partnerFormVersions, organization: organizations })
+    .from(partnerForms)
+    .innerJoin(organizations, eq(partnerForms.organizationId, organizations.id))
+    .innerJoin(partnerFormVersions, eq(partnerFormVersions.formId, partnerForms.id))
+    .where(eq(organizations.status, "approved"))
+    .orderBy(desc(partnerFormVersions.publishedAt));
+  const latestByForm = new Map<string, (typeof rows)[number]>();
+  for (const row of rows) {
+    if (!latestByForm.has(row.form.id)) latestByForm.set(row.form.id, row);
+  }
+  return [...latestByForm.values()];
 }
 
 export async function createPartnerForm(input: {
@@ -350,6 +431,8 @@ export async function updatePartnerForm(input: {
       ...(input.purpose ? { purpose: input.purpose } : {}),
       ...(input.formSchema ? { formSchema: input.formSchema } : {}),
       ...(input.branding ? { branding: input.branding } : {}),
+      status: "draft",
+      publishedAt: null,
       version: sql`${partnerForms.version} + 1`,
       updatedAt: new Date(),
     })
@@ -358,13 +441,39 @@ export async function updatePartnerForm(input: {
   return form ?? null;
 }
 
-export async function publishPartnerForm(formId: string, organizationId: string) {
-  const [form] = await getDatabase()
-    .update(partnerForms)
-    .set({ status: "published", publishedAt: new Date(), updatedAt: new Date() })
-    .where(and(eq(partnerForms.id, formId), eq(partnerForms.organizationId, organizationId)))
-    .returning();
-  return form ?? null;
+export async function publishPartnerForm(formId: string, organizationId: string, publishedByClerkUserId: string) {
+  const db = getDatabase();
+  return db.transaction(async (tx) => {
+    const [draft] = await tx
+      .select()
+      .from(partnerForms)
+      .where(and(eq(partnerForms.id, formId), eq(partnerForms.organizationId, organizationId)))
+      .limit(1);
+    if (!draft) return null;
+
+    await tx
+      .insert(partnerFormVersions)
+      .values({
+        formId: draft.id,
+        organizationId,
+        version: draft.version,
+        name: draft.name,
+        description: draft.description,
+        category: draft.category,
+        purpose: draft.purpose,
+        formSchema: draft.formSchema,
+        branding: draft.branding,
+        publishedByClerkUserId,
+      })
+      .onConflictDoNothing({ target: [partnerFormVersions.formId, partnerFormVersions.version] });
+
+    const [form] = await tx
+      .update(partnerForms)
+      .set({ status: "published", publishedAt: new Date(), updatedAt: new Date() })
+      .where(and(eq(partnerForms.id, formId), eq(partnerForms.organizationId, organizationId)))
+      .returning();
+    return form ?? null;
+  });
 }
 
 export async function listPartnerSubmissions(organizationId: string) {

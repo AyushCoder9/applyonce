@@ -16,6 +16,7 @@ import {
   profileClaims,
   profiles,
   partnerForms,
+  partnerFormVersions,
   partnerSubmissions,
   schema,
   sourceConnections,
@@ -107,6 +108,10 @@ async function seedPartnerWorkspace() {
       name: "Northstar Education",
       slug: "northstar-education",
       ownerClerkUserId: "demo_partner_applyonce",
+      status: "approved",
+      contactEmail: "partner.demo@example.com",
+      verifiedDomain: "synthetic.applyonce.local",
+      termsAcceptedAt: new Date("2026-08-29T13:00:00.000Z"),
     })
     .onConflictDoNothing({ target: organizations.slug })
     .returning();
@@ -157,6 +162,23 @@ async function seedPartnerWorkspace() {
     ? [insertedForm]
     : await db.select().from(partnerForms).where(eq(partnerForms.slug, "northstar-undergraduate-2026")).limit(1);
   if (!form) throw new Error("Unable to create partner demo form");
+
+  await db
+    .insert(partnerFormVersions)
+    .values({
+      formId: form.id,
+      organizationId: organization.id,
+      version: form.version,
+      name: form.name,
+      description: form.description,
+      category: form.category,
+      purpose: form.purpose,
+      formSchema: form.formSchema,
+      branding: form.branding,
+      publishedByClerkUserId: "demo_partner_applyonce",
+      publishedAt: form.publishedAt ?? new Date("2026-08-29T13:20:00.000Z"),
+    })
+    .onConflictDoNothing({ target: [partnerFormVersions.formId, partnerFormVersions.version] });
 
   const [demoProfile] = await db.select().from(profiles).where(eq(profiles.clerkUserId, "demo_applyonce")).limit(1);
   const existingSubmission = await db.select({ id: partnerSubmissions.id }).from(partnerSubmissions).where(eq(partnerSubmissions.formId, form.id)).limit(1);

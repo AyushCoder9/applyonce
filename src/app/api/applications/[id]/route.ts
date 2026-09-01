@@ -48,13 +48,16 @@ export async function PATCH(
   const profile = await ensureActorProfile(actor);
   const db = getDatabase();
   const [ownedApplication] = await db
-    .select({ id: applications.id })
+    .select({ id: applications.id, status: applications.status })
     .from(applications)
     .where(and(eq(applications.id, id), eq(applications.profileId, profile.id)))
     .limit(1);
 
   if (!ownedApplication) {
     return Response.json({ error: "Application not found" }, { status: 404 });
+  }
+  if (ownedApplication.status === "submitted" || ownedApplication.status === "accepted" || ownedApplication.status === "rejected") {
+    return Response.json({ error: "Submitted application snapshots cannot be changed" }, { status: 409 });
   }
 
   const [field] = await db

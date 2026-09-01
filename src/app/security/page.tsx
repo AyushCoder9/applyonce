@@ -7,7 +7,7 @@ const controls = [
   { icon: Database, title: "Tenant isolation", copy: "Partner records are organization-scoped. Client-supplied organization IDs are never trusted for access." },
   { icon: Fingerprint, title: "Official rails only", copy: "ApplyOnce does not scrape protected portals, bypass CAPTCHA, or store face, fingerprint, or iris templates." },
   { icon: LockKeyhole, title: "Auditable consent", copy: "Consent hashes, revocations, status changes, and important actions are recorded as durable events." },
-  { icon: ShieldCheck, title: "Honest state", copy: "Sandbox, adapter-ready, unavailable, and connected states remain visibly different to users." },
+  { icon: ShieldCheck, title: "Honest state", copy: "Sandbox, approval-pending, unavailable, degraded, and connected states remain visibly different to users." },
 ];
 
 export default function SecurityPage() {

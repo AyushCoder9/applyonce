@@ -9,7 +9,7 @@ import { createConsentHash } from "@/lib/intelligence";
 const submitSchema = z.object({
   purpose: z.string().min(5).max(240),
   scope: z.array(z.string().min(1).max(120)).min(1).max(100),
-  method: z.enum(["otp", "passkey", "biometric", "manual"]).default("manual"),
+  method: z.enum(["otp", "passkey", "manual"]).default("manual"),
 });
 
 export async function POST(

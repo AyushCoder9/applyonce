@@ -4,6 +4,7 @@ import { useCallback, useEffect, useState } from "react";
 import type { FormEvent } from "react";
 import { AnimatePresence, motion, useReducedMotion } from "motion/react";
 import Link from "next/link";
+import { useRouter } from "next/navigation";
 import { ApplyOnceLogo, ApplyOnceMark } from "@/components/brand/ApplyOnceLogo";
 import {
   Activity,
@@ -37,22 +38,31 @@ import {
 } from "lucide-react";
 
 type PartnerView = "overview" | "forms" | "submissions" | "developer" | "settings";
+type PartnerSection = "overview" | "programs" | "submissions" | "team" | "api-keys" | "webhooks" | "integrations" | "audit" | "settings";
 type FormField = { key: string; label: string; type: string; required: boolean; profileKey?: string; helpText?: string };
 type PartnerForm = { id: string; slug: string; name: string; description: string; category: string; purpose: string; status: string; version: number; publishedAt: string | null; updatedAt: string; formSchema: { fields: FormField[]; documents: Array<{ key: string; label: string; required: boolean }> }; branding: { accentColor?: string; logoUrl?: string; organizationName?: string } };
 type Submission = { submission: { id: string; applicantName: string; applicantEmail: string; status: string; receiptCode: string; data: Record<string, string>; documentIds: string[]; partnerConsentId: string | null; createdAt: string; updatedAt: string }; form: { id: string; name: string; description: string; purpose: string; version: number; formSchema: { fields: FormField[]; documents: Array<{ key: string; label: string; required: boolean }> } } };
-type Overview = { organization: { id: string; name: string; slug: string }; membership: { role: string }; forms: PartnerForm[]; submissions: Submission[]; metrics: { publishedForms: number; submissions: number; needsReview: number; needsDocuments: number } };
+type Overview = { organization: { id: string; name: string; slug: string; status: string; verifiedDomain?: string | null }; membership: { role: string }; forms: PartnerForm[]; submissions: Submission[]; metrics: { publishedForms: number; submissions: number; needsReview: number; needsDocuments: number } };
 type Webhook = { id: string; url: string; events: string[]; active: boolean; lastDeliveryAt?: string | null; lastError?: string | null; createdAt: string };
 type ApiKey = { id: string; name: string; keyPrefix: string; scopes: string[]; lastUsedAt?: string | null; expiresAt?: string | null; revokedAt?: string | null; createdAt: string };
 type TeamMember = { id: string; email: string; role: string; createdAt: string; updatedAt: string };
 const API_KEY_SCOPES = ["forms:read", "forms:write", "submissions:read", "submissions:write", "webhooks:read", "webhooks:write"];
 
-const navItems: Array<{ id: PartnerView; label: string; icon: typeof LayoutDashboard }> = [
+const navItems: Array<{ id: PartnerSection; label: string; icon: typeof LayoutDashboard }> = [
   { id: "overview", label: "Overview", icon: LayoutDashboard },
-  { id: "forms", label: "Application forms", icon: ClipboardList },
+  { id: "programs", label: "Programs", icon: ClipboardList },
   { id: "submissions", label: "Submissions", icon: UsersRound },
-  { id: "developer", label: "Developer tools", icon: Code2 },
-  { id: "settings", label: "Workspace settings", icon: Settings2 },
+  { id: "api-keys", label: "Developer tools", icon: Code2 },
+  { id: "team", label: "Team & settings", icon: Settings2 },
 ];
+
+function viewForSection(section: PartnerSection): PartnerView {
+  if (section === "programs") return "forms";
+  if (["api-keys", "webhooks", "integrations"].includes(section)) return "developer";
+  if (["team", "audit", "settings"].includes(section)) return "settings";
+  if (section === "submissions") return "submissions";
+  return "overview";
+}
 
 function formatDate(value: string | null | undefined) {
   if (!value) return "Not published";
@@ -372,26 +382,65 @@ function SettingsView({ data, onNotify }: { data: Overview; onNotify: (message: 
   return <PartnerPanel><div className="ao-view-heading"><div><span className="ao-eyebrow"><span className="ao-eyebrow-mark" /> Workspace settings</span><h1>{data.organization.name}</h1><p>Manage the organization identity and how your team works with applicants.</p></div><Settings2 className="ao-heading-icon" /></div><div className="ao-settings-grid"><section className="ao-product-card"><div className="ao-card-kicker">Organization</div><h2>Education partner workspace</h2><p>Organization slug: <span className="ao-mono-label">{data.organization.slug}</span></p><div className="ao-setting-row"><span><UsersRound /><span><strong>Team access</strong><small>Owner and reviewer roles</small></span></span><span className="ao-setting-value">{data.membership.role}</span></div><button className="ao-button ao-button--outline ao-button--full" onClick={() => void loadTeam()} disabled={loadingTeam}>{loadingTeam ? "Loading team..." : "View team access"} <UsersRound /></button>{teamLoaded ? <div className="ao-team-list">{members.map((member) => <div className="ao-team-row" key={member.id}><span className="ao-topbar-avatar">{member.email.slice(0, 2).toUpperCase()}</span><span><strong>{member.email}</strong><small>Joined {formatDate(member.createdAt)}</small></span><span className="ao-setting-value">{member.role}</span></div>)}</div> : null}</section><section className="ao-product-card"><div className="ao-card-kicker">Safety boundary</div><h2>Consent stays visible.</h2><p>Applicants review the purpose and requested fields before any form submission reaches your organization.</p><div className="ao-guide-row"><ShieldCheck /><span>Purpose-bound sharing</span></div><div className="ao-guide-row"><BadgeCheck /><span>Source-aware values</span></div><div className="ao-guide-row"><Activity /><span>Auditable status history</span></div></section></div><section className="ao-product-card ao-settings-footer"><div><strong>Open source product</strong><span>Review the code, data boundaries, and implementation notes.</span></div><a className="ao-button ao-button--outline" href="https://github.com/AyushCoder9/applyonce" target="_blank" rel="noreferrer"><Github /> View source code</a></section></PartnerPanel>;
 }
 
-export default function PartnerWorkspace() {
+function PartnerOnboarding({ onComplete }: { onComplete: () => Promise<void> }) {
+  const [form, setForm] = useState({ name: "", kind: "education_partner", contactEmail: "", domain: "", acceptTerms: false });
+  const [saving, setSaving] = useState(false);
+  const [error, setError] = useState("");
+
+  async function submit(event: FormEvent<HTMLFormElement>) {
+    event.preventDefault();
+    setSaving(true);
+    setError("");
+    try {
+      const response = await fetch("/api/partner/onboarding", {
+        method: "POST",
+        headers: { "content-type": "application/json" },
+        body: JSON.stringify({ ...form, domain: form.domain.trim() || null }),
+      });
+      if (!response.ok) throw new Error(await responseError(response, "Your organization could not be created."));
+      await onComplete();
+    } catch (submitError) {
+      setError(submitError instanceof Error ? submitError.message : "Your organization could not be created.");
+    } finally {
+      setSaving(false);
+    }
+  }
+
+  return <div className="ao-partner-onboarding"><header><ApplyOnceLogo size="md" /><Link href="/app/today" className="ao-button ao-button--quiet">Return to citizen workspace<ArrowLeft /></Link></header><main><section className="ao-onboarding-copy"><span className="ao-eyebrow"><span className="ao-eyebrow-mark" /> Verified partner entry</span><h1>Create an organization intentionally.</h1><p>ApplyOnce does not silently create partner workspaces. Tell us who will receive applications and how applicants can verify you.</p><div className="ao-guide-row"><ShieldCheck /><span>Public forms require organization approval</span></div><div className="ao-guide-row"><BadgeCheck /><span>Every submission remains purpose-bound</span></div><div className="ao-guide-row"><Activity /><span>Publication and status changes are audited</span></div></section><form className="ao-product-card ao-onboarding-form" onSubmit={(event) => void submit(event)}><div className="ao-card-kicker">Organization onboarding</div><h2>Start your approval profile</h2><div className="ao-form-grid ao-form-grid--single"><label>Organization name<input value={form.name} onChange={(event) => setForm({ ...form, name: event.target.value })} placeholder="Northstar Education" required minLength={3} /></label><label>Organization type<select value={form.kind} onChange={(event) => setForm({ ...form, kind: event.target.value })}><option value="education_partner">Education institution</option><option value="exam_organizer">Exam organizer</option><option value="scholarship_provider">Scholarship provider</option><option value="public_service">Public-service provider</option><option value="employer">Employer</option><option value="healthcare_administration">Healthcare administration</option></select></label><label>Official contact email<input type="email" value={form.contactEmail} onChange={(event) => setForm({ ...form, contactEmail: event.target.value })} placeholder="applications@example.org" required /></label><label>Official domain <span>(optional)</span><input value={form.domain} onChange={(event) => setForm({ ...form, domain: event.target.value.replace(/^https?:\/\//, "") })} placeholder="example.org" /></label></div><label className="ao-terms-check"><input type="checkbox" checked={form.acceptTerms} onChange={(event) => setForm({ ...form, acceptTerms: event.target.checked })} /><span>I confirm I am authorized to represent this organization and accept the partner data-use terms.</span></label>{error ? <div className="ao-inline-form-error" role="alert"><CircleAlert />{error}</div> : null}<button className="ao-button ao-button--primary ao-button--full" type="submit" disabled={saving || !form.acceptTerms}>{saving ? "Creating approval profile..." : "Create partner workspace"}<ArrowRight /></button><p className="ao-form-help"><LockKeyhole /> You can build drafts immediately. Public publication remains blocked until approval.</p></form></main></div>;
+}
+
+export default function PartnerWorkspace({ initialSection = "overview", initialFormId }: { initialSection?: PartnerSection; initialFormId?: string }) {
+  const router = useRouter();
   const [data, setData] = useState<Overview | null>(null);
-  const [view, setView] = useState<PartnerView>("overview");
+  const [section, setSection] = useState<PartnerSection>(initialSection);
+  const view = viewForSection(section);
   const [form, setForm] = useState<PartnerForm | null>(null);
   const [loading, setLoading] = useState(true);
+  const [onboardingRequired, setOnboardingRequired] = useState(false);
   const [message, setMessage] = useState("");
   const [mobileNav, setMobileNav] = useState(false);
   async function reload() {
     try {
       const response = await fetch("/api/partner/overview", { cache: "no-store" });
-      if (!response.ok) throw new Error("The partner workspace could not be refreshed.");
-      setData((await response.json()) as Overview);
+      const body = (await response.json().catch(() => null)) as (Overview & { code?: string }) | null;
+      if (response.status === 404 && body?.code === "partner_onboarding_required") {
+        setOnboardingRequired(true);
+        setData(null);
+        return;
+      }
+      if (!response.ok || !body) throw new Error("The partner workspace could not be refreshed.");
+      setOnboardingRequired(false);
+      setData(body);
     } finally {
       setLoading(false);
     }
   }
-  useEffect(() => { let active = true; fetch("/api/partner/overview", { cache: "no-store" }).then(async (response) => { if (!active) return; if (response.ok) setData((await response.json()) as Overview); setLoading(false); }).catch(() => { if (active) setLoading(false); }); return () => { active = false; }; }, []);
+  useEffect(() => { let active = true; fetch("/api/partner/overview", { cache: "no-store" }).then(async (response) => { if (!active) return; const body = (await response.json().catch(() => null)) as (Overview & { code?: string }) | null; if (response.ok && body) { setData(body); if (initialFormId) setForm(body.forms.find((item) => item.id === initialFormId) ?? null); } if (response.status === 404 && body?.code === "partner_onboarding_required") setOnboardingRequired(true); setLoading(false); }).catch(() => { if (active) setLoading(false); }); return () => { active = false; }; }, [initialFormId]);
   const notify = useCallback((text: string) => { setMessage(text); window.setTimeout(() => setMessage(""), 4200); }, []);
-  function navigate(next: PartnerView) { setForm(null); setView(next); setMobileNav(false); window.scrollTo({ top: 0, behavior: "smooth" }); }
-  const currentLabel = navItems.find((item) => item.id === view)?.label ?? "Overview";
-  const content = loading && !data ? <div className="ao-loading-card"><div className="ao-loading-spinner" /><span>Loading partner workspace...</span></div> : !data ? <div className="ao-loading-card"><CircleAlert /><span>The partner workspace could not be loaded.</span><button className="ao-button ao-button--outline" type="button" onClick={() => void reload().catch(() => notify("The partner workspace could not be refreshed."))}>Retry</button></div> : form ? <FormEditor form={form} onBack={() => setForm(null)} onReload={async () => { await reload(); const response = await fetch(`/api/partner/forms/${form.id}`, { cache: "no-store" }); if (response.ok) setForm(((await response.json()) as { form: PartnerForm }).form); }} onNotify={notify} /> : view === "overview" ? <OverviewView data={data} onView={navigate} /> : view === "forms" ? <FormsView data={data} onReload={reload} onOpenForm={setForm} onNotify={notify} /> : view === "submissions" ? <SubmissionsView data={data} onReload={reload} onNotify={notify} /> : view === "developer" ? <DeveloperView onNotify={notify} /> : <SettingsView data={data} onNotify={notify} />;
-  return <div className="ao-workspace-shell ao-partner-workspace"><aside className={`ao-product-sidebar ${mobileNav ? "ao-product-sidebar--open" : ""}`}><div className="ao-sidebar-head"><ApplyOnceLogo size="sm" /><button className="ao-sidebar-close" onClick={() => setMobileNav(false)} aria-label="Close navigation"><X /></button></div><div className="ao-sidebar-context"><span>Partner workspace</span><strong>{data?.organization.name ?? "Loading workspace"}</strong></div><nav className="ao-product-nav" aria-label="Partner navigation">{navItems.map(({ id, label, icon: Icon }) => <button className={view === id && !form ? "is-active" : ""} key={id} onClick={() => navigate(id)}><Icon /><span>{label}</span>{id === "submissions" && data?.metrics.needsReview ? <em>{data.metrics.needsReview}</em> : null}</button>)}</nav><div className="ao-sidebar-bottom"><Link href="/app" className="ao-partner-switch"><span><UsersRound /><span><strong>Are you applying?</strong><small>Open citizen workspace</small></span></span><ArrowRight /></Link><a className="ao-sidebar-source" href="https://github.com/AyushCoder9/applyonce" target="_blank" rel="noreferrer"><Github /> Open source on GitHub</a><div className="ao-sidebar-security"><ShieldCheck /><span>Consent visible by default</span></div></div></aside>{mobileNav ? <button className="ao-nav-scrim" onClick={() => setMobileNav(false)} aria-label="Close navigation" /> : null}<section className="ao-workspace-main"><header className="ao-product-topbar"><button className="ao-mobile-menu" onClick={() => setMobileNav(true)} aria-label="Open navigation"><Menu /></button><span className="ao-breadcrumb">Partner workspace <ChevronRight /> {currentLabel}</span><div className="ao-topbar-actions"><button className="ao-topbar-icon" onClick={() => notify("You are up to date.")} aria-label="View notifications"><Bell /></button><span className="ao-topbar-user"><span className="ao-topbar-avatar">{data?.organization.name.split(" ").map((part) => part[0]).join("").slice(0, 2) ?? "PW"}</span><span>{data?.membership.role ?? "Owner"}</span></span></div></header><main className="ao-workspace-content">{message ? <div className="ao-toast" role="status"><CheckCircle2 />{message}<button onClick={() => setMessage("")} aria-label="Dismiss message"><X /></button></div> : null}<AnimatePresence mode="wait"><div key={`${view}-${form?.id ?? "none"}`}>{content}</div></AnimatePresence></main></section></div>;
+  function navigate(next: PartnerSection) { setForm(null); setSection(next); setMobileNav(false); router.push(`/partner/${next}`); window.scrollTo({ top: 0, behavior: "smooth" }); }
+  function openForm(next: PartnerForm) { setForm(next); router.push(`/partner/programs/${next.id}/builder`); window.scrollTo({ top: 0, behavior: "smooth" }); }
+  const currentLabel = navItems.find((item) => item.id === section)?.label ?? "Partner workspace";
+  if (!loading && onboardingRequired) return <PartnerOnboarding onComplete={async () => { setOnboardingRequired(false); await reload(); }} />;
+  const content = loading && !data ? <div className="ao-loading-card"><div className="ao-loading-spinner" /><span>Loading partner workspace...</span></div> : !data ? <div className="ao-loading-card"><CircleAlert /><span>The partner workspace could not be loaded.</span><button className="ao-button ao-button--outline" type="button" onClick={() => void reload().catch(() => notify("The partner workspace could not be refreshed."))}>Retry</button></div> : form ? <FormEditor form={form} onBack={() => { setForm(null); router.push("/partner/programs"); }} onReload={async () => { await reload(); const response = await fetch(`/api/partner/forms/${form.id}`, { cache: "no-store" }); if (response.ok) setForm(((await response.json()) as { form: PartnerForm }).form); }} onNotify={notify} /> : view === "overview" ? <OverviewView data={data} onView={(next) => navigate(next === "forms" ? "programs" : next === "developer" ? "api-keys" : next === "settings" ? "team" : next)} /> : view === "forms" ? <FormsView data={data} onReload={reload} onOpenForm={openForm} onNotify={notify} /> : view === "submissions" ? <SubmissionsView data={data} onReload={reload} onNotify={notify} /> : view === "developer" ? <DeveloperView onNotify={notify} /> : <SettingsView data={data} onNotify={notify} />;
+  return <div className="ao-workspace-shell ao-partner-workspace"><aside className={`ao-product-sidebar ${mobileNav ? "ao-product-sidebar--open" : ""}`}><div className="ao-sidebar-head"><ApplyOnceLogo size="sm" /><button className="ao-sidebar-close" onClick={() => setMobileNav(false)} aria-label="Close navigation"><X /></button></div><div className="ao-sidebar-context"><span>Partner workspace</span><strong>{data?.organization.name ?? "Loading workspace"}</strong></div><nav className="ao-product-nav" aria-label="Partner navigation">{navItems.map(({ id, label, icon: Icon }) => <Link className={section === id && !form ? "is-active" : ""} key={id} href={`/partner/${id}`} onClick={() => { setSection(id); setForm(null); setMobileNav(false); }}><Icon /><span>{label}</span>{id === "submissions" && data?.metrics.needsReview ? <em>{data.metrics.needsReview}</em> : null}</Link>)}</nav><div className="ao-sidebar-bottom"><Link href="/app/today" className="ao-partner-switch"><span><UsersRound /><span><strong>Are you applying?</strong><small>Open citizen workspace</small></span></span><ArrowRight /></Link><a className="ao-sidebar-source" href="https://github.com/AyushCoder9/applyonce" target="_blank" rel="noreferrer"><Github /> Open source on GitHub</a><div className="ao-sidebar-security"><ShieldCheck /><span>Consent visible by default</span></div></div></aside>{mobileNav ? <button className="ao-nav-scrim" onClick={() => setMobileNav(false)} aria-label="Close navigation" /> : null}<section className="ao-workspace-main"><header className="ao-product-topbar"><button className="ao-mobile-menu" onClick={() => setMobileNav(true)} aria-label="Open navigation"><Menu /></button><span className="ao-breadcrumb">Partner workspace <ChevronRight /> {currentLabel}</span><div className="ao-topbar-actions"><button className="ao-topbar-icon" onClick={() => notify("You are up to date.")} aria-label="View notifications"><Bell /></button><span className="ao-topbar-user"><span className="ao-topbar-avatar">{data?.organization.name.split(" ").map((part) => part[0]).join("").slice(0, 2) ?? "PW"}</span><span>{data?.membership.role ?? "Owner"}</span></span></div></header><main className="ao-workspace-content">{message ? <div className="ao-toast" role="status"><CheckCircle2 />{message}<button onClick={() => setMessage("")} aria-label="Dismiss message"><X /></button></div> : null}<AnimatePresence mode="wait"><div key={`${view}-${form?.id ?? "none"}`}>{content}</div></AnimatePresence></main></section></div>;
 }

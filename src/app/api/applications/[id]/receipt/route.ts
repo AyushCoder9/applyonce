@@ -1,8 +1,9 @@
 import { and, desc, eq } from "drizzle-orm";
 import { getDatabase } from "@/db";
-import { consents } from "@/db/schema";
+import { applicationSnapshots, consents } from "@/db/schema";
 import { ensureActorProfile, getActor } from "@/lib/auth";
 import { getApplication } from "@/lib/application-service";
+import { applicationReceiptSchema } from "@/lib/contracts/application";
 
 export async function GET(
   _request: Request,
@@ -29,16 +30,24 @@ export async function GET(
     .where(and(eq(consents.applicationId, id), eq(consents.profileId, profile.id)))
     .orderBy(desc(consents.approvedAt))
     .limit(1);
+  const [snapshot] = await getDatabase()
+    .select({ payloadHash: applicationSnapshots.payloadHash, version: applicationSnapshots.version })
+    .from(applicationSnapshots)
+    .where(and(eq(applicationSnapshots.applicationId, id), eq(applicationSnapshots.profileId, profile.id)))
+    .limit(1);
 
-  return Response.json({
-    receipt: {
+  const receipt = applicationReceiptSchema.parse({
       receiptCode: application.application.receiptCode,
-      externalApplicationId: application.application.externalApplicationId,
+      applicationReference: application.application.externalApplicationId,
       submittedAt: application.application.submittedAt,
       applicationName: application.template.name,
-      portal: application.template.externalPortalName,
+      intendedDestination: application.template.externalPortalName,
+      submissionChannel: "applyonce_hosted",
+      externalReceiptConfirmed: false,
+      snapshotHash: snapshot?.payloadHash ?? null,
+      snapshotVersion: snapshot?.version ?? null,
       consentHash: consent?.consentHash ?? null,
       scope: consent?.scope ?? [],
-    },
   });
+  return Response.json({ receipt });
 }

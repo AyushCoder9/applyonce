@@ -12,6 +12,8 @@
 
 # testing
 /coverage
+/playwright-report
+/test-results
 
 # next.js
 /.next/
@@ -46,3 +48,4 @@ skills-lock.json
 # typescript
 *.tsbuildinfo
 next-env.d.ts
+/.swc

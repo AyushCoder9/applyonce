@@ -1,9 +1,11 @@
+import { createHash } from "node:crypto";
 import { and, asc, desc, eq, ne } from "drizzle-orm";
 import { getDatabase } from "@/db";
 import {
   applicationEvents,
   applicationFields,
   applicationRequirements,
+  applicationSnapshots,
   applicationTemplates,
   applications,
   consents,
@@ -279,7 +281,7 @@ export async function submitApplication(input: {
 }) {
   const db = getDatabase();
   const submittedAt = new Date();
-  const externalApplicationId = `NSE26-${input.applicationId.slice(0, 6).toUpperCase()}`;
+  const applicationReference = `AOAPP-${input.applicationId.slice(0, 8).toUpperCase()}`;
   const receiptCode = createReceiptCode("AO");
 
   const result = await db.transaction(async (tx) => {
@@ -287,7 +289,7 @@ export async function submitApplication(input: {
       .update(applications)
       .set({
         status: "submitted",
-        externalApplicationId,
+        externalApplicationId: applicationReference,
         receiptCode,
         submittedAt,
         updatedAt: submittedAt,
@@ -321,10 +323,57 @@ export async function submitApplication(input: {
       throw new Error("Unable to record application consent");
     }
 
+    const submittedFields = await tx
+      .select({ key: applicationFields.requirementKey, label: applicationFields.label, value: applicationFields.valueText, source: applicationFields.sourceLabel, confidence: applicationFields.confidence })
+      .from(applicationFields)
+      .where(eq(applicationFields.applicationId, input.applicationId))
+      .orderBy(asc(applicationFields.requirementKey));
+    const snapshotPayload = {
+      applicationId: input.applicationId,
+      profileId: input.profileId,
+      applicationReference,
+      receiptCode,
+      submittedAt: submittedAt.toISOString(),
+      purpose: input.purpose,
+      scope: [...input.scope].sort(),
+      fields: submittedFields,
+      submissionChannel: "applyonce_hosted",
+      externalReceiptConfirmed: false,
+    };
+    const payloadHash = createHash("sha256").update(JSON.stringify(snapshotPayload)).digest("hex");
+    await tx.insert(applicationSnapshots).values({
+      applicationId: input.applicationId,
+      profileId: input.profileId,
+      payload: snapshotPayload,
+      payloadHash,
+    });
+
     await tx
       .update(applicationFields)
       .set({ sharedWithRecipient: true, updatedAt: submittedAt })
       .where(eq(applicationFields.applicationId, input.applicationId));
+
+    await tx.insert(applicationEvents).values({
+      profileId: input.profileId,
+      applicationId: input.applicationId,
+      eventType: "submitted",
+      title: "ApplyOnce submission recorded",
+      description: "ApplyOnce securely recorded the approved packet. This event does not claim receipt by an external portal.",
+      metadata: { applicationReference, receiptCode, snapshotHash: payloadHash, submissionChannel: "applyonce_hosted", externalReceiptConfirmed: false },
+      occurredAt: submittedAt,
+    });
+
+    await tx.insert(notifications).values({
+      profileId: input.profileId,
+      applicationId: input.applicationId,
+      channel: "in_app",
+      type: "application_submitted",
+      status: "sent",
+      subject: "Your ApplyOnce submission is confirmed",
+      body: `Your ApplyOnce receipt ${receiptCode} is ready. Any external portal confirmation will be shown separately.`,
+      provider: "database_outbox",
+      sentAt: submittedAt,
+    });
 
     return { application: updatedApplication, created: true };
   });
@@ -336,24 +385,6 @@ export async function submitApplication(input: {
   if (!result.created) {
     return getApplication(input.applicationId, input.profileId);
   }
-
-  await db.insert(applicationEvents).values({
-    profileId: input.profileId,
-    applicationId: input.applicationId,
-    eventType: "submitted",
-    title: "Application submitted",
-    description: "The approved packet was submitted to the receiving portal.",
-    metadata: { externalApplicationId, receiptCode },
-    occurredAt: submittedAt,
-  });
-
-  await queueInAppNotification({
-    profileId: input.profileId,
-    applicationId: input.applicationId,
-    type: "application_submitted",
-    subject: "Application submitted successfully",
-    body: `Your receipt ${receiptCode} is ready. Keep it for future updates.`,
-  });
 
   return getApplication(input.applicationId, input.profileId);
 }
