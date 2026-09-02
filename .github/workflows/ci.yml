@@ -6,6 +6,10 @@ jobs:
     services:
       postgres: { image: postgres:16-alpine, env: { POSTGRES_USER: praman, POSTGRES_PASSWORD: praman, POSTGRES_DB: praman }, ports: ["5434:5432"], options: --health-cmd pg_isready --health-interval 5s --health-retries 10 }
       redis: { image: redis:7-alpine, ports: ["6380:6379"] }
+      minio:
+        image: bitnami/minio:2025
+        env: { MINIO_ROOT_USER: praman, MINIO_ROOT_PASSWORD: praman123, MINIO_DEFAULT_BUCKETS: praman-docs }
+        ports: ["9002:9000"]
     env:
       DATABASE_URL: postgres://praman:praman@localhost:5434/praman
       REDIS_URL: redis://localhost:6380
@@ -13,6 +17,12 @@ jobs:
       BETTER_AUTH_SECRET: ci-secret-ci-secret-ci-secret-ci-secret
       BETTER_AUTH_URL: http://localhost:3300
       NEXT_PUBLIC_APP_URL: http://localhost:3300
+      S3_ENDPOINT: http://localhost:9002
+      S3_REGION: us-east-1
+      S3_BUCKET: praman-docs
+      S3_ACCESS_KEY: praman
+      S3_SECRET_KEY: praman123
+      S3_FORCE_PATH_STYLE: "true"
     steps:
       - uses: actions/checkout@v4
       - uses: pnpm/action-setup@v4
