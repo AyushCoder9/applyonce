@@ -1,0 +1,10 @@
+{
+  "name": "@praman/providers",
+  "version": "0.1.0",
+  "private": true,
+  "type": "module",
+  "exports": { ".": "./src/index.ts", "./fixtures": "./src/fixtures.ts" },
+  "scripts": { "test": "vitest run", "typecheck": "tsc --noEmit" },
+  "dependencies": { "@praman/schema": "workspace:*" },
+  "devDependencies": { "typescript": "catalog:", "vitest": "catalog:", "@types/node": "catalog:" }
+}

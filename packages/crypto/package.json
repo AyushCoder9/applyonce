@@ -1,0 +1,10 @@
+{
+  "name": "@praman/crypto",
+  "version": "0.1.0",
+  "private": true,
+  "type": "module",
+  "exports": { ".": "./src/index.ts" },
+  "scripts": { "test": "vitest run", "typecheck": "tsc --noEmit" },
+  "dependencies": { "jose": "catalog:" },
+  "devDependencies": { "typescript": "catalog:", "vitest": "catalog:", "@types/node": "catalog:" }
+}

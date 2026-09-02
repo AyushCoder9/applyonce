@@ -1,0 +1,22 @@
+{
+  "name": "praman",
+  "private": true,
+  "packageManager": "pnpm@9.15.9",
+  "engines": { "node": ">=22" },
+  "scripts": {
+    "dev": "turbo dev",
+    "build": "turbo build",
+    "test": "turbo test",
+    "lint": "turbo lint",
+    "typecheck": "turbo typecheck",
+    "db:generate": "pnpm --filter @praman/db generate",
+    "db:migrate": "pnpm --filter @praman/db migrate",
+    "db:seed": "pnpm --filter @praman/db seed",
+    "db:reset": "pnpm --filter @praman/db reset",
+    "graph": "graphify update ."
+  },
+  "devDependencies": {
+    "turbo": "catalog:",
+    "typescript": "catalog:"
+  }
+}

@@ -1,0 +1,19 @@
+# docker compose -f docker-compose.yml -f docker-compose.demo.yml up --build
+services:
+  web:
+    build: { context: ., args: { APP: web } }
+    env_file: .env
+    environment: { DATABASE_URL: postgres://praman:praman@postgres:5432/praman, REDIS_URL: redis://redis:6379, S3_ENDPOINT: http://minio:9000 }
+    ports: ["3100:3100"]
+    depends_on: [postgres, redis, minio]
+  worker:
+    build: { context: ., args: { APP: worker } }
+    env_file: .env
+    environment: { DATABASE_URL: postgres://praman:praman@postgres:5432/praman, REDIS_URL: redis://redis:6379, S3_ENDPOINT: http://minio:9000 }
+    depends_on: [postgres, redis, minio]
+  portal:
+    build: { context: ., args: { APP: demo-exam-portal } }
+    env_file: .env
+    environment: { PRAMAN_API_URL: http://web:3100 }
+    ports: ["3101:3101"]
+    depends_on: [web]
