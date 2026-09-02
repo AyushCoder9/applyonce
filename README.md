@@ -178,6 +178,10 @@ drizzle/
   *.sql                  Ordered database migrations
 ```
 
+## Agent handoff
+
+The structured, evidence-bound context for the next AI or human contributor is in [`docs/agent-context/00-index.md`](docs/agent-context/00-index.md). It records the product intent, current implementation truth, architecture, workflows, security boundaries, verification commands, and the remaining production work. It is kept public-safe: it contains no credentials, real personal data, or private conversation transcript.
+
 ## Local setup
 
 Requirements:
