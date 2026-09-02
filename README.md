@@ -2,6 +2,8 @@
 
 **प्रमाण** · The verified-profile layer for India. Enter your details once, verify them against the issuer (DigiLocker, UIDAI, CBSE, Income Tax, ABDM…), then push them into any exam form, college application, scholarship, bank KYC, job or government scheme with one consent tap. Institutions get an **“Apply with Praman”** button and signed, verified JSON. A browser extension autofills portals that never integrated. Families manage minors and elders. A consent ledger and application tracker close the loop. Built for DPDP Act 2023.
 
+Lineage: this repository previously held the single-app **ApplyOnce** prototype (history preserved; its docs live in `docs/legacy-applyonce/`, private notes in `private-context/`). Praman is the from-scratch rebuild as a monorepo.
+
 ## What’s inside
 | Path | What |
 |---|---|
