@@ -13,6 +13,14 @@ This folder is everything a builder (you + Claude Code, or a smaller model) need
 | `05-API-AND-FLOWS.md` | API surface, end-to-end user flows, partner "Apply with Praman" protocol, extension autofill | Before integrations |
 | `06-CLAUDE-CODE-PLAYBOOK.md` | CLAUDE.md, plugin setup (graphify, ponytail), phase-by-phase prompts | When building |
 | `CLAUDE.md` | Drop into repo root verbatim | Day 1 |
+| `07-USE-CASE-CATALOG.md` | 165+ application types by life stage, top-40 fields → registry keys, special populations | Prioritising |
+| `08-INTEGRATIONS-PLAN.md` | Provider-by-provider access path (mock → sandbox → live), DPDP checklist, 12-month roadmap | Before provider work |
+| `09-GTM-AND-BUSINESS.md` | Analogs (Myinfo), India landscape, pricing, TAM, moats, 12-month GTM, pitch | Fundraising / GTM |
+| `10-PRD-v2.md` | Consolidated PRD with MoSCoW + acceptance criteria per surface | Building |
+| `11-UX-FLOWS.md` | 10 end-to-end flows with edge paths, EN/HI copy, events | Building UI |
+| `RUNBOOK.md` | Deploy, env matrix, provider switch, key rotation, breach runbook | Ops |
+| `plans/2026-09-02-build-plan.md` | Decisions + work packages + API surface (the build contract) | Any code change |
+| `research/01..05` | Raw research: DPI integrations, use cases, UI libraries, market, verified stack notes | Reference |
 
 ## The one-paragraph pitch
 Every Indian fills the same 40 fields — name, DOB, parents, category, income, address, Aadhaar, 10th/12th marks — into every exam form, college application, scholarship, bank KYC, hospital registration, job portal, and government scheme. DigiLocker stores *documents*; nobody stores *verified structured facts* and lets a citizen push them into any form with one consent tap. Praman is the verified-profile layer: enter once, verify against the issuer, then autofill any form (partner SDK, browser extension, or hosted forms) with purpose-scoped consent, and track every application's lifecycle in one place. Built for DPDP Act 2023 from day one.

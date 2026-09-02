@@ -7,13 +7,13 @@ import { db, t, getDek, putFact, audit } from "@praman/db";
 import { providers, MOCK_OTP } from "@praman/providers";
 
 const mockSms = (process.env.PROVIDER_SMS ?? "mock") === "mock";
-const url = process.env.BETTER_AUTH_URL ?? "http://localhost:3100";
+const url = process.env.BETTER_AUTH_URL ?? "http://localhost:3300";
 
 export const auth = betterAuth({
   baseURL: url,
   secret: process.env.BETTER_AUTH_SECRET ?? "dev-secret-change-me-dev-secret-change-me",
   database: drizzleAdapter(db, { provider: "pg", schema: { user: t.user, session: t.session, account: t.account, verification: t.verification, passkey: t.passkey } }),
-  trustedOrigins: [url, process.env.NEXT_PUBLIC_DEMO_PORTAL_URL ?? "http://localhost:3101", "chrome-extension://*"],
+  trustedOrigins: [url, process.env.NEXT_PUBLIC_DEMO_PORTAL_URL ?? "http://localhost:3301", "chrome-extension://*"],
   user: { additionalFields: { locale: { type: "string", required: false, defaultValue: "en" }, role: { type: "string", required: false, defaultValue: "citizen", input: false } } },
   session: {
     additionalFields: { steppedUpAt: { type: "date", required: false, input: false }, activeProfileId: { type: "string", required: false, input: false } },

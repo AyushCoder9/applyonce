@@ -1,0 +1,203 @@
+{
+  "id": "bta-demo",
+  "name": "Bharat Test Agency \u2014 BTA-JEE 2026 (manual form)",
+  "status": "verified",
+  "match": [
+    "http://localhost:3301/apply/manual*",
+    "http://localhost:3301/status/*"
+  ],
+  "fingerprint": "#candidate_name",
+  "fields": [
+    {
+      "selector": "#candidate_name",
+      "key": "identity.full_name",
+      "transform": "upper"
+    },
+    {
+      "selector": "#dob",
+      "key": "identity.dob",
+      "transform": "dd/mm/yyyy"
+    },
+    {
+      "selector": "#gender",
+      "key": "identity.gender"
+    },
+    {
+      "selector": "#nationality",
+      "key": "identity.nationality"
+    },
+    {
+      "selector": "#aadhaar_last4",
+      "key": "identity.aadhaar_last4"
+    },
+    {
+      "selector": "#blood_group",
+      "key": "identity.blood_group"
+    },
+    {
+      "selector": "#apaar_id",
+      "key": "identity.apaar_id"
+    },
+    {
+      "selector": "#mobile",
+      "key": "contact.mobile_primary"
+    },
+    {
+      "selector": "#email",
+      "key": "contact.email_primary"
+    },
+    {
+      "selector": "#address_permanent_line1",
+      "key": "address.permanent.line1"
+    },
+    {
+      "selector": "#address_permanent_line2",
+      "key": "address.permanent.line2"
+    },
+    {
+      "selector": "#village_town_permanent",
+      "key": "address.permanent.village_town"
+    },
+    {
+      "selector": "#district_permanent",
+      "key": "address.permanent.district"
+    },
+    {
+      "selector": "#state_permanent",
+      "key": "address.permanent.state"
+    },
+    {
+      "selector": "#pincode_permanent",
+      "key": "address.permanent.pincode"
+    },
+    {
+      "selector": "#address_current_line1",
+      "key": "address.current.line1"
+    },
+    {
+      "selector": "#village_town_current",
+      "key": "address.current.village_town"
+    },
+    {
+      "selector": "#district_current",
+      "key": "address.current.district"
+    },
+    {
+      "selector": "#state_current",
+      "key": "address.current.state"
+    },
+    {
+      "selector": "#pincode_current",
+      "key": "address.current.pincode"
+    },
+    {
+      "selector": "#father_name",
+      "key": "family.father.name"
+    },
+    {
+      "selector": "#father_occupation",
+      "key": "family.father.occupation"
+    },
+    {
+      "selector": "#father_mobile",
+      "key": "family.father.mobile"
+    },
+    {
+      "selector": "#mother_name",
+      "key": "family.mother.name"
+    },
+    {
+      "selector": "#mother_occupation",
+      "key": "family.mother.occupation"
+    },
+    {
+      "selector": "#family_annual_income",
+      "key": "family.annual_income_total"
+    },
+    {
+      "selector": "#parent_govt_servant",
+      "key": "family.parent_govt_servant"
+    },
+    {
+      "selector": "#category",
+      "key": "category.social"
+    },
+    {
+      "selector": "#category_certificate_no",
+      "key": "category.certificate_no"
+    },
+    {
+      "selector": "#category_valid_until",
+      "key": "category.valid_until",
+      "transform": "dd/mm/yyyy"
+    },
+    {
+      "selector": "#pwd",
+      "key": "category.pwd"
+    },
+    {
+      "selector": "#pwd_type",
+      "key": "category.pwd_type"
+    },
+    {
+      "selector": "#udid_no",
+      "key": "category.udid_no"
+    },
+    {
+      "selector": "#scribe_required",
+      "key": "category.scribe_required"
+    },
+    {
+      "selector": "#domicile_state",
+      "key": "category.domicile_state"
+    },
+    {
+      "selector": "#class10_board",
+      "key": "education.class10.board"
+    },
+    {
+      "selector": "#class10_year",
+      "key": "education.class10.year"
+    },
+    {
+      "selector": "#class10_roll_no",
+      "key": "education.class10.roll_no"
+    },
+    {
+      "selector": "#class10_percentage",
+      "key": "education.class10.percentage"
+    },
+    {
+      "selector": "#class10_school_name",
+      "key": "education.class10.school_name"
+    },
+    {
+      "selector": "#class12_board",
+      "key": "education.class12.board"
+    },
+    {
+      "selector": "#class12_year",
+      "key": "education.class12.year"
+    },
+    {
+      "selector": "#class12_roll_no",
+      "key": "education.class12.roll_no"
+    },
+    {
+      "selector": "#class12_percentage",
+      "key": "education.class12.percentage"
+    },
+    {
+      "selector": "#class12_school_name",
+      "key": "education.class12.school_name"
+    },
+    {
+      "selector": "#class12_stream",
+      "key": "education.class12.stream"
+    }
+  ],
+  "capture": {
+    "selector": "[data-testid=application-ref], #application-ref, .application-ref",
+    "regex": "BTA26-[A-Z0-9]+"
+  }
+}

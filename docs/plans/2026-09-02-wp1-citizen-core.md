@@ -19,4 +19,4 @@ Contract: docs/plans/2026-09-02-build-plan.md §1–§3 (WP1 ownership). No new 
 - Bottom-sheet editors = HeroUI `Drawer placement="bottom"` on mobile, `right` on desktop.
 
 ## Verify
-`pnpm --filter @praman/web typecheck` · `pnpm --filter @praman/web test` · `pnpm --filter @praman/web test:e2e` (dev server on 3100) · curl the endpoints with a cookie jar (see report).
+`pnpm --filter @praman/web typecheck` · `pnpm --filter @praman/web test` · `pnpm --filter @praman/web test:e2e` (dev server on 3300) · curl the endpoints with a cookie jar (see report).

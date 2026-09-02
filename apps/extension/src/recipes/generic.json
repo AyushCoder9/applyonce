@@ -1,0 +1,23 @@
+{
+  "id": "generic",
+  "name": "Generic (label-text heuristics)",
+  "status": "community",
+  "match": ["*"],
+  "fields": [],
+  "labelMap": [
+    { "pattern": "candidate|applicant|full name", "key": "identity.full_name" },
+    { "pattern": "father", "key": "family.father.name" },
+    { "pattern": "mother", "key": "family.mother.name" },
+    { "pattern": "date of birth|dob", "key": "identity.dob" },
+    { "pattern": "pin ?code", "key": "address.permanent.pincode" },
+    { "pattern": "category", "key": "category.social" },
+    { "pattern": "12th|xii|intermediate.*(%|percent)", "key": "education.class12.percentage" },
+    { "pattern": "email", "key": "contact.email_primary" },
+    { "pattern": "mobile|phone", "key": "contact.mobile_primary" },
+    { "pattern": "gender", "key": "identity.gender" },
+    { "pattern": "state", "key": "address.permanent.state" },
+    { "pattern": "district", "key": "address.permanent.district" },
+    { "pattern": "pan", "key": "identity.pan" },
+    { "pattern": "aadhaar", "key": "identity.aadhaar_last4" }
+  ]
+}

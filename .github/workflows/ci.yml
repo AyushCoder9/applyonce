@@ -11,8 +11,8 @@ jobs:
       REDIS_URL: redis://localhost:6380
       PRAMAN_KEK_HEX: "0000000000000000000000000000000000000000000000000000000000000000"
       BETTER_AUTH_SECRET: ci-secret-ci-secret-ci-secret-ci-secret
-      BETTER_AUTH_URL: http://localhost:3100
-      NEXT_PUBLIC_APP_URL: http://localhost:3100
+      BETTER_AUTH_URL: http://localhost:3300
+      NEXT_PUBLIC_APP_URL: http://localhost:3300
     steps:
       - uses: actions/checkout@v4
       - uses: pnpm/action-setup@v4

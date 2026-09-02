@@ -1,0 +1,240 @@
+@import "tailwindcss";
+
+/*
+ * Bharat Test Agency deliberately does NOT use Praman's design system
+ * (apps/web/DESIGN.md). This is a dense, dated, white/blue/grey
+ * government-portal look on purpose — see docs/04-DESIGN-SYSTEM.md #19.
+ */
+@theme {
+  --color-gov-saffron: #ff9933;
+  --color-gov-green: #138808;
+  --color-gov-navy: #0b3d69;
+  --color-gov-navy-dark: #06263f;
+  --color-gov-blue: #1a5fb4;
+  --color-gov-blue-dark: #0f3f7a;
+  --color-gov-bg: #eef1f4;
+  --color-gov-surface: #ffffff;
+  --color-gov-border: #c7ccd1;
+  --color-gov-ink: #1a1a1a;
+  --color-gov-ink-2: #4a4a4a;
+  --color-gov-link: #0b4f8a;
+  --color-gov-error: #a4141a;
+  --color-gov-error-bg: #fdecec;
+  --color-gov-success: #14622a;
+  --color-gov-success-bg: #eaf6ec;
+  --color-gov-verified: #14622a;
+  --color-gov-verified-bg: #e6f4ea;
+  --color-gov-document: #0b4f8a;
+  --color-gov-document-bg: #e8f1fa;
+  --color-gov-self: #8a5a00;
+  --color-gov-self-bg: #fdf3df;
+  --color-gov-entered: #4a4a4a;
+  --color-gov-entered-bg: #eceef0;
+  --radius-gov: 3px;
+}
+
+html {
+  color-scheme: light;
+}
+body {
+  background: var(--color-gov-bg);
+  color: var(--color-gov-ink);
+  font-family: Arial, Helvetica, "Segoe UI", sans-serif;
+  font-size: 14px;
+  line-height: 1.5;
+}
+a {
+  color: var(--color-gov-link);
+}
+h1, h2, h3 {
+  font-family: Georgia, "Times New Roman", serif;
+  color: var(--color-gov-navy-dark);
+  line-height: 1.25;
+}
+* {
+  box-sizing: border-box;
+}
+fieldset {
+  border: none;
+  padding: 0;
+  margin: 0;
+}
+legend {
+  padding: 0;
+}
+table {
+  border-collapse: collapse;
+}
+*:focus-visible {
+  outline: 3px solid #0b4f8a;
+  outline-offset: 1px;
+}
+
+/* ---------- layout chrome ---------- */
+.tricolour-stripe {
+  height: 6px;
+  background: linear-gradient(to right, var(--color-gov-saffron) 0 33.33%, #ffffff 33.33% 66.66%, var(--color-gov-green) 66.66% 100%);
+}
+.gov-header {
+  background: var(--color-gov-navy);
+  color: #fff;
+}
+.gov-footer {
+  background: var(--color-gov-navy-dark);
+  color: #d7e0e8;
+}
+
+/* ---------- form primitives (native inputs, dense gov styling) ---------- */
+.field {
+  margin-bottom: 14px;
+}
+.field label {
+  display: block;
+  font-weight: 700;
+  font-size: 13px;
+  margin-bottom: 4px;
+  color: var(--color-gov-ink);
+}
+.field .req {
+  color: var(--color-gov-error);
+  margin-left: 2px;
+}
+.field .help {
+  display: block;
+  font-size: 12px;
+  color: var(--color-gov-ink-2);
+  margin-top: 3px;
+}
+.field .error {
+  display: block;
+  font-size: 12px;
+  color: var(--color-gov-error);
+  margin-top: 3px;
+  font-weight: 600;
+}
+.gov-input,
+.gov-select {
+  width: 100%;
+  max-width: 460px;
+  padding: 7px 9px;
+  border: 1px solid var(--color-gov-border);
+  border-radius: var(--radius-gov);
+  background: #fff;
+  font-size: 14px;
+  font-family: inherit;
+  color: var(--color-gov-ink);
+}
+.gov-input:focus,
+.gov-select:focus {
+  border-color: var(--color-gov-blue);
+}
+.gov-input[aria-invalid="true"],
+.gov-select[aria-invalid="true"] {
+  border-color: var(--color-gov-error);
+  background: var(--color-gov-error-bg);
+}
+.gov-checkbox-row {
+  display: flex;
+  align-items: flex-start;
+  gap: 8px;
+}
+.gov-checkbox-row input {
+  margin-top: 3px;
+}
+.gov-file-input {
+  display: block;
+  font-size: 13px;
+}
+
+.btn {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  border-radius: var(--radius-gov);
+  border: 1px solid transparent;
+  font-weight: 700;
+  font-size: 14px;
+  padding: 9px 18px;
+  cursor: pointer;
+  text-decoration: none;
+  font-family: inherit;
+}
+.btn-primary {
+  background: var(--color-gov-blue);
+  color: #fff;
+}
+.btn-primary:hover {
+  background: var(--color-gov-blue-dark);
+}
+.btn-secondary {
+  background: #fff;
+  color: var(--color-gov-blue);
+  border-color: var(--color-gov-blue);
+}
+.btn-secondary:hover {
+  background: #eef4fb;
+}
+.btn-success {
+  background: var(--color-gov-success);
+  color: #fff;
+}
+.btn-danger {
+  background: var(--color-gov-error);
+  color: #fff;
+}
+.btn[disabled] {
+  opacity: 0.5;
+  cursor: not-allowed;
+}
+
+.gov-card {
+  background: var(--color-gov-surface);
+  border: 1px solid var(--color-gov-border);
+  border-radius: var(--radius-gov);
+}
+
+/* ---------- source badges ---------- */
+.badge {
+  display: inline-flex;
+  align-items: center;
+  gap: 4px;
+  font-size: 11px;
+  font-weight: 700;
+  padding: 2px 8px;
+  border-radius: 999px;
+  white-space: nowrap;
+  border: 1px solid transparent;
+}
+.badge-verified {
+  color: var(--color-gov-verified);
+  background: var(--color-gov-verified-bg);
+  border-color: #b7ddc0;
+}
+.badge-document {
+  color: var(--color-gov-document);
+  background: var(--color-gov-document-bg);
+  border-color: #b9d3ea;
+}
+.badge-self {
+  color: var(--color-gov-self);
+  background: var(--color-gov-self-bg);
+  border-color: #ecd9a8;
+}
+.badge-entered {
+  color: var(--color-gov-entered);
+  background: var(--color-gov-entered-bg);
+  border-color: #cfd3d7;
+}
+
+/* ---------- progress bar ---------- */
+.progress-track {
+  background: #dbe1e6;
+  border-radius: 999px;
+  height: 8px;
+  overflow: hidden;
+}
+.progress-fill {
+  background: var(--color-gov-blue);
+  height: 100%;
+  transition: width 200ms ease;
+}

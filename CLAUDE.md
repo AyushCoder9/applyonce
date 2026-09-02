@@ -15,7 +15,7 @@ Read `docs/` before planning. `docs/03-DATA-MODEL.md` + `packages/schema/src/reg
 - When compacting, preserve: modified file list, open plan file path, failing test names, env vars introduced.
 
 ## Commands
-`docker compose up -d` (postgres :5434, redis :6380, minio :9002) · `cp .env.example .env` · `pnpm db:reset` (drop + migrate + seed) · `pnpm dev` (web :3100, worker, demo portal :3101) · `pnpm test` · `pnpm typecheck` · `pnpm graph`
+`docker compose up -d` (postgres :5434, redis :6380, minio :9002) · `cp .env.example .env` · `pnpm db:reset` (drop + migrate + seed) · `pnpm dev` (web :3300, worker, demo portal :3301) · `pnpm test` · `pnpm typecheck` · `pnpm graph`
 
 Demo logins (mock SMS, OTP **123456**): 9876543210 Aarav (student) · 9876500002 Sunita (parent, guardian of Riya + Kamla) · 9123456780 Vikram (job seeker) · 9000000001 BTA partner admin · 9000000000 Praman admin.
 

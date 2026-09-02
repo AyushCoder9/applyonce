@@ -16,7 +16,7 @@ export function fmtValue(key: string, v: FactValue | undefined, locale: Locale =
     case "money": return fmtMoney(Number(v));
     case "percentage": return `${v}%`;
     case "bool": return v ? (locale === "hi" ? "हाँ" : "Yes") : locale === "hi" ? "नहीं" : "No";
-    case "enum": { const g = key.endsWith(".gender") ? "gender" : key === "category.social" ? "social" : key.endsWith(".board") ? "board" : null; return (g && ENUM_LABELS[g]?.[String(v)]?.[locale]) ?? String(v); }
+    case "enum": { const g = key.endsWith(".gender") ? "gender" : key === "category.social" ? "social" : key.endsWith(".board") ? "board" : key === "identity.nationality" ? "nationality" : key === "prefs.language" ? "language" : null; const raw = String(v); const pretty = g ? null : raw.includes("_") || /^[a-z]/.test(raw) ? raw.replace(/_/g, " ").replace(/^\w/, (c) => c.toUpperCase()) : null; if (!g && pretty) return pretty; return (g && ENUM_LABELS[g]?.[String(v)]?.[locale]) ?? String(v); }
     case "string[]": return Array.isArray(v) ? v.join(", ") : String(v);
     case "file_ref": return locale === "hi" ? "दस्तावेज़ संलग्न" : "Document attached";
     case "json": return Array.isArray(v) ? `${v.length} ${locale === "hi" ? "प्रविष्टियाँ" : "entries"}` : "…";

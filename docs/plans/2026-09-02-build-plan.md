@@ -5,7 +5,7 @@ Status: foundation DONE (schema · crypto · db+migrations+seed · providers moc
 ## 0. Decisions already made (do not re-litigate)
 | Area | Decision | Why |
 |---|---|---|
-| Ports | web **3100**, demo portal **3101**, postgres 5434, redis 6380, minio 9002 | 3000/3001/5432/6379/9000 are taken on the dev machine |
+| Ports | web **3300**, demo portal **3301**, postgres 5434, redis 6380, minio 9002 | 3000/3001/5432/6379/9000 are taken on the dev machine |
 | Auth | better-auth 1.7: `phoneNumber` (OTP; mock accepts **123456**) + `@better-auth/passkey`. Session extra fields `steppedUpAt`, `activeProfileId`. | see `apps/web/src/lib/auth.ts` |
 | Step-up | `POST /api/v1/auth/step-up` (passkey or OTP re-verify) sets `session.steppedUpAt`; `citizen(req,{stepUp:true})` enforces ≤5 min freshness | required before share / reveal / export / download |
 | Addresses | stored as facts (`address.permanent.pincode` …), no separate table | one FactRow UI, one share path |

@@ -1,0 +1,23 @@
+{
+  "id": "nsp",
+  "name": "National Scholarship Portal (community, best-effort)",
+  "status": "community",
+  "match": ["https://scholarships.gov.in/*"],
+  "fields": [
+    { "selector": "input[name=studentName], #studentName", "key": "identity.full_name" },
+    { "selector": "input[name=dob], #dob", "key": "identity.dob", "transform": "dd/mm/yyyy" },
+    { "selector": "select[name=gender], #gender", "key": "identity.gender" },
+    { "selector": "select[name=category], #category", "key": "category.social" },
+    { "selector": "input[name=mobileNumber], #mobileNumber", "key": "contact.mobile_primary" },
+    { "selector": "input[name=emailId], #emailId", "key": "contact.email_primary" },
+    { "selector": "input[name=aadhaarNumber], #aadhaarNumber", "key": "identity.aadhaar_last4" },
+    { "selector": "input[name=bankAccountNumber], #bankAccountNumber", "key": "bank.primary.account_no" },
+    { "selector": "input[name=ifscCode], #ifscCode", "key": "bank.primary.ifsc" },
+    { "selector": "input[name=fatherName], #fatherName", "key": "family.father.name" },
+    { "selector": "input[name=motherName], #motherName", "key": "family.mother.name" },
+    { "selector": "input[name=annualIncome], #annualIncome", "key": "family.annual_income_total" },
+    { "selector": "select[name=state], #state", "key": "address.permanent.state" },
+    { "selector": "input[name=pincode], #pincode", "key": "address.permanent.pincode" }
+  ],
+  "capture": { "selector": "#applicationId, .application-id", "regex": "\\d{6,}" }
+}

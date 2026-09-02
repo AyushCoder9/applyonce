@@ -24,9 +24,9 @@ pnpm install
 cp .env.example .env
 docker compose up -d            # postgres :5434 · redis :6380 · minio :9002
 pnpm db:reset                   # migrate + seed demo data
-pnpm dev                        # web :3100 · worker · demo portal :3101
+pnpm dev                        # web :3300 · worker · demo portal :3301
 ```
-Open http://localhost:3100 → **Log in** with `9876543210`, OTP `123456` (mock SMS). Then open http://localhost:3101 and click **Apply with Praman**.
+Open http://localhost:3300 → **Log in** with `9876543210`, OTP `123456` (mock SMS). Then open http://localhost:3301 and click **Apply with Praman**.
 
 Demo accounts (OTP `123456`): `9876543210` Aarav (student, DigiLocker-verified) · `9876500002` Sunita (parent; guardian of Riya 15 and Kamla 72) · `9123456780` Vikram (job seeker) · `9000000001` partner admin (BTA, Nova University, bank sandbox) · `9000000000` Praman admin.
 

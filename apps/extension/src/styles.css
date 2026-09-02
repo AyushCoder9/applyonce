@@ -1,0 +1,42 @@
+/* Praman brand tokens, copied from apps/web/src/app/globals.css (docs/04-DESIGN-SYSTEM.md).
+   Copied, not imported, so the extension bundles independently of the web app. */
+@import "tailwindcss";
+
+@theme {
+  --color-brand-500: #4f46e5;
+  --color-brand-600: #4338ca;
+  --color-accent-400: #ff8a4c;
+  --color-accent-500: #ff6b2c;
+  --color-accent-600: #e85a1f;
+  --color-verified-50: #ecfdf5;
+  --color-verified-500: #059669;
+  --color-verified-700: #047857;
+  --color-pending-50: #fffbeb;
+  --color-pending-500: #d97706;
+  --color-pending-700: #b45309;
+  --color-danger-50: #fef2f2;
+  --color-danger-500: #dc2626;
+  --color-bg: #fbfaf7;
+  --color-surface: #ffffff;
+  --color-surface-2: #f4f2ec;
+  --color-line: #e7e4dc;
+  --color-ink: #14141f;
+  --color-ink-2: #4b4b5c;
+  --color-ink-3: #7a7a8c;
+  --radius-sm: 10px;
+  --radius-md: 14px;
+  --radius-pill: 999px;
+}
+
+html, body { width: 340px; }
+body {
+  background: var(--color-bg);
+  color: var(--color-ink);
+  font-family: Inter, system-ui, sans-serif;
+  font-size: 13px;
+  line-height: 1.45;
+}
+.praman-card { background: var(--color-surface); border: 1px solid var(--color-line); border-radius: var(--radius-md); }
+.praman-cta { background: var(--color-accent-500); color: #fff; border-radius: var(--radius-pill); font-weight: 600; border: none; cursor: pointer; }
+.praman-cta:hover { background: var(--color-accent-600); }
+.praman-cta:disabled { opacity: .55; cursor: default; }

@@ -54,6 +54,9 @@ h1, h2, h3, .font-display { font-family: var(--font-display); letter-spacing: -0
 *:focus-visible { outline: 2px solid var(--color-brand-500); outline-offset: 2px; border-radius: 6px; }
 @media (prefers-reduced-motion: reduce) { *, *::before, *::after { animation-duration: 0.01ms !important; transition-duration: 0.01ms !important; } }
 
+/* HeroUI ships a base `.card{display:flex;flex-direction:column;gap;padding}`; we never use its Card, so neutralise it for our `card` utility. */
+@layer components { .card { display: block; flex-direction: row; gap: 0; padding: 0; position: static; overflow: visible; border-radius: var(--radius-lg); box-shadow: var(--shadow-card); } }
+
 /* utilities */
 @utility card { background: var(--color-surface); border: 1px solid var(--color-line); border-radius: var(--radius-lg); box-shadow: var(--shadow-card); }
 @utility cta { background: var(--color-accent-500); color: white; border-radius: var(--radius-pill); font-weight: 600; &:hover { background: var(--color-accent-600); } }

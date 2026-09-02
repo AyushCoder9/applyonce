@@ -1,0 +1,27 @@
+{
+  "id": "nta-jee",
+  "name": "JEE (Main) registration — NTA (community, best-effort)",
+  "status": "community",
+  "match": ["https://*.nta.ac.in/*"],
+  "fields": [
+    { "selector": "input[name=candidateName], #candidateName", "key": "identity.full_name" },
+    { "selector": "input[name=dob], #dob", "key": "identity.dob", "transform": "dd/mm/yyyy" },
+    { "selector": "select[name=gender], #gender", "key": "identity.gender" },
+    { "selector": "select[name=category], #category", "key": "category.social" },
+    { "selector": "select[name=nationality], #nationality", "key": "identity.nationality" },
+    { "selector": "input[name=mobileNumber], #mobileNumber", "key": "contact.mobile_primary" },
+    { "selector": "input[name=emailId], #emailId", "key": "contact.email_primary" },
+    { "selector": "input[name=fatherName], #fatherName", "key": "family.father.name" },
+    { "selector": "input[name=motherName], #motherName", "key": "family.mother.name" },
+    { "selector": "select[name=stateOfEligibility], #stateOfEligibility", "key": "category.domicile_state" },
+    { "selector": "select[name=class10Board], #class10Board", "key": "education.class10.board" },
+    { "selector": "input[name=class10RollNo], #class10RollNo", "key": "education.class10.roll_no" },
+    { "selector": "input[name=class10PassingYear], #class10PassingYear", "key": "education.class10.year" },
+    { "selector": "select[name=class12Board], #class12Board", "key": "education.class12.board" },
+    { "selector": "input[name=class12RollNo], #class12RollNo", "key": "education.class12.roll_no" },
+    { "selector": "input[name=class12PassingYear], #class12PassingYear", "key": "education.class12.year" },
+    { "selector": "select[name=state], #permanentState", "key": "address.permanent.state" },
+    { "selector": "input[name=pincode], #permanentPincode", "key": "address.permanent.pincode" }
+  ],
+  "capture": { "selector": ".application-number, #applicationNumber", "regex": "\\d{10,}" }
+}

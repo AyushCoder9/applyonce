@@ -3,7 +3,7 @@
   "version": "0.1.0",
   "private": true,
   "type": "module",
-  "scripts": { "dev": "next dev -p 3101", "build": "next build", "start": "next start -p 3101", "typecheck": "tsc --noEmit" },
+  "scripts": { "dev": "next dev -p 3301", "build": "next build", "start": "next start -p 3301", "typecheck": "tsc --noEmit" },
   "dependencies": { "@praman/sdk": "workspace:*", "@praman/schema": "workspace:*", "next": "catalog:", "react": "catalog:", "react-dom": "catalog:", "zod": "catalog:" },
   "devDependencies": { "typescript": "catalog:", "@types/node": "catalog:", "@types/react": "catalog:", "@types/react-dom": "catalog:", "tailwindcss": "catalog:", "@tailwindcss/postcss": "catalog:", "postcss": "^8.5.0" }
 }
