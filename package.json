@@ -26,6 +26,7 @@
     "@vercel/config": "catalog:",
     "eslint": "catalog:",
     "eslint-plugin-react-hooks": "catalog:",
+    "next": "catalog:",
     "turbo": "catalog:",
     "typescript": "catalog:"
   },

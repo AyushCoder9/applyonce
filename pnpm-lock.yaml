@@ -158,6 +158,9 @@ importers:
       eslint-plugin-react-hooks:
         specifier: 'catalog:'
         version: 7.1.1(eslint@10.10.0(jiti@2.7.0))
+      next:
+        specifier: 'catalog:'
+        version: 16.3.4(@babel/core@7.29.7)(@playwright/test@1.62.1)(@types/node@26.4.1)(react-dom@19.2.8(react@19.2.8))(react@19.2.8)
       turbo:
         specifier: 'catalog:'
         version: 2.10.12
