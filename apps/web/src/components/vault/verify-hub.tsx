@@ -4,8 +4,8 @@ import { useEffect, useState } from "react";
 import { useRouter } from "next/navigation";
 import { Button, Chip, ProgressBar, toast } from "@heroui/react";
 import { ShieldCheck, CreditCard, HeartPulse, Landmark, PenTool, RotateCw, Check, AlertTriangle, CalendarClock, Loader2 } from "lucide-react";
-import type { Fact } from "@praman/schema";
-import { PanInput, SourceChip, fmtDate, daysUntil, label, verifierName, cx } from "@praman/ui";
+import type { Fact } from "@applyonce/schema";
+import { PanInput, SourceChip, fmtDate, daysUntil, label, verifierName, cx } from "@applyonce/ui";
 import { api, tr, type Locale } from "./i18n";
 import { useEvents, type JobEvent } from "./use-events";
 

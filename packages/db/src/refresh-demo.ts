@@ -2,8 +2,8 @@
 import { db, sql } from "./client";
 import * as t from "./schema";
 import { eq, and } from "drizzle-orm";
-import { sampleDocument, AARAV, SUNITA, VIKRAM } from "@praman/providers/fixtures";
-import { sha256 } from "@praman/crypto";
+import { sampleDocument, AARAV, SUNITA, VIKRAM } from "@applyonce/providers/fixtures";
+import { sha256 } from "@applyonce/crypto";
 if ((process.env.PROVIDER_DIGILOCKER ?? "mock") !== "mock") throw new Error("Demo fixtures require mock DigiLocker mode");
 for (const person of [AARAV,SUNITA,VIKRAM]) {
   const profile=await db.query.profiles.findFirst({where:and(eq(t.profiles.ownerUserId,person.id),eq(t.profiles.kind,"self"))});

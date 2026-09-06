@@ -4,9 +4,9 @@ import { randomUUID } from "node:crypto";
 import { cookies } from "next/headers";
 import { revalidatePath } from "next/cache";
 import { z } from "zod";
-import { db, t, and, eq, audit, systemDek } from "@praman/db";
-import { sha256, randomToken, encrypt, decryptString } from "@praman/crypto";
-import { APPLICATION_STATUSES, isFactKey, type PramanPayload } from "@praman/schema";
+import { db, t, and, eq, audit, systemDek } from "@applyonce/db";
+import { sha256, randomToken, encrypt, decryptString } from "@applyonce/crypto";
+import { APPLICATION_STATUSES, isFactKey, type ApplyOncePayload } from "@applyonce/schema";
 import { ApiError } from "@/lib/api";
 import { SESSION_TTL_MS } from "@/lib/share";
 import { decodeJws } from "@/lib/signing";
@@ -14,6 +14,7 @@ import { queueWebhook, flushDeliveries, pushApplicationStatus, createVerificatio
 import { requirePartnerMember, canManage } from "./session";
 import { saveForm } from "./forms";
 import { requireUser } from "@/lib/session";
+import { deploymentAppUrl } from "@/lib/urls";
 
 type R<T = undefined> = { ok: true; data: T } | { ok: false; error: string; fields?: Record<string, string> };
 const wrap = async <T>(fn: () => Promise<T>): Promise<R<T>> => {
@@ -32,7 +33,7 @@ export async function switchOrganisation(form: FormData) {
   const id = z.uuid().parse(form.get("partnerId"));
   const member = await db.query.partnerMembers.findFirst({where:and(eq(t.partnerMembers.partnerId,id),eq(t.partnerMembers.userId,session.user.id))});
   if (!member) throw new ApiError(403,"FORBIDDEN");
-  (await cookies()).set("praman_partner", id, {httpOnly:true,sameSite:"lax",secure:process.env.NODE_ENV==="production",path:"/",maxAge:86400*30});
+  (await cookies()).set("applyonce_partner", id, {httpOnly:true,sameSite:"lax",secure:process.env.NODE_ENV==="production",path:"/",maxAge:86400*30});
   revalidatePath("/partner","layout");
 }
 
@@ -75,8 +76,9 @@ export async function createTestSession(formId: string): Promise<R<{ share_url: 
     const form = await db.query.forms.findFirst({ where: and(eq(t.forms.id, formId), eq(t.forms.partnerId, partner.id)) });
     if (!form) throw new ApiError(404, "FORM_NOT_FOUND");
     const token = randomToken(32);
-    await db.insert(t.shareSessions).values({ partnerId: partner.id, formId: form.id, token, returnUrl: `${process.env.NEXT_PUBLIC_APP_URL ?? "http://localhost:3300"}/partner/forms/${form.id}?test=returned`, state: `console-test:${Date.now()}`, env: "sandbox", expiresAt: new Date(Date.now() + SESSION_TTL_MS) });
-    return { share_url: `${process.env.NEXT_PUBLIC_APP_URL ?? "http://localhost:3300"}/share/${token}` };
+    const app = deploymentAppUrl();
+    await db.insert(t.shareSessions).values({ partnerId: partner.id, formId: form.id, token, returnUrl: `${app}/partner/forms/${form.id}?test=returned`, state: `console-test:${Date.now()}`, env: "sandbox", expiresAt: new Date(Date.now() + SESSION_TTL_MS) });
+    return { share_url: `${app}/share/${token}` };
   });
 }
 
@@ -85,7 +87,7 @@ export async function createApiKey(raw: { env: "sandbox" | "live"; label?: strin
   return wrap(async () => {
     const { partner, session } = await manager();
     const env = z.enum(["sandbox", "live"]).parse(raw.env);
-    if (env === "live" && partner.status !== "verified") throw new ApiError(403, "PARTNER_NOT_VERIFIED", "Live keys unlock once Praman verifies your organisation");
+    if (env === "live" && partner.status !== "verified") throw new ApiError(403, "PARTNER_NOT_VERIFIED", "Live keys unlock once ApplyOnce verifies your organisation");
     const key = `pk_${env}_${randomToken(24).replace(/[^a-zA-Z0-9]/g, "").slice(0, 28)}`;
     const [row] = await db.insert(t.partnerApiKeys).values({ partnerId: partner.id, env, keyHash: sha256(key), prefix: key.slice(0, 14), label: raw.label?.slice(0, 60) || null }).returning({ id: t.partnerApiKeys.id });
     await audit({ actorUserId: session.user.id, actorPartnerId: partner.id, action: "apikey.create", targetType: "partner_api_key", targetId: row!.id, meta: { env } });
@@ -134,7 +136,7 @@ export async function deleteWebhook(id: string): Promise<R> {
 export async function testWebhook(id?: string): Promise<R<{ deliveries: number }>> {
   return wrap(async () => {
     const { partner } = await requirePartnerMember();
-    const ids = await queueWebhook(partner.id, "test.ping", { partner_id: partner.id, message: "Hello from the Praman console" }, undefined, { webhookId: id });
+    const ids = await queueWebhook(partner.id, "test.ping", { partner_id: partner.id, message: "Hello from the ApplyOnce console" }, undefined, { webhookId: id });
     if (!ids.length) throw new ApiError(404, "NO_WEBHOOKS", "Add an endpoint first");
     await flushDeliveries(ids);
     revalidatePath("/partner/developers");
@@ -148,7 +150,7 @@ export async function addMember(raw: { phone: string; role: "admin" | "developer
     const { partner, session } = await manager();
     const i = z.object({ phone: z.string().regex(/^[6-9]\d{9}$/, "10-digit mobile"), role: z.enum(["admin", "developer", "reviewer"]) }).parse(raw);
     const u = await db.query.user.findFirst({ where: eq(t.user.phoneNumber, `+91${i.phone}`) });
-    if (!u) throw new ApiError(404, "USER_NOT_FOUND", "Ask them to sign up at Praman with this number first", { phone: "No Praman account" });
+    if (!u) throw new ApiError(404, "USER_NOT_FOUND", "Ask them to sign up at ApplyOnce with this number first", { phone: "No ApplyOnce account" });
     const existing = await db.query.partnerMembers.findFirst({where:and(eq(t.partnerMembers.partnerId,partner.id),eq(t.partnerMembers.userId,u.id))});
     if (existing?.role === "owner") throw new ApiError(403,"OWNER_PROTECTED","The organization owner cannot be demoted here.");
     await db.insert(t.partnerMembers).values({ partnerId: partner.id, userId: u.id, role: i.role }).onConflictDoUpdate({ target: [t.partnerMembers.partnerId, t.partnerMembers.userId], set: { role: i.role } });
@@ -202,15 +204,15 @@ export async function requestVerificationAction(applicationId: string, factKeys:
   });
 }
 /** Decrypted payload for the applicant drawer — partner members only, application must be theirs. */
-export async function getApplicantPayload(applicationId: string): Promise<R<{ payload: PramanPayload; exchanged_at: string | null; consent_status: "active" | "revoked" | "expired" }>> {
+export async function getApplicantPayload(applicationId: string): Promise<R<{ payload: ApplyOncePayload; exchanged_at: string | null; consent_status: "active" | "revoked" | "expired" }>> {
   return wrap(async () => {
     const { partner, session } = await requirePartnerMember();
     await partnerApplication(partner.id, applicationId);
     const share = await db.query.shares.findFirst({ where: eq(t.shares.applicationId, applicationId) });
-    if (!share) throw new ApiError(404, "NO_SHARE", "This application has no Praman payload");
+    if (!share) throw new ApiError(404, "NO_SHARE", "This application has no ApplyOnce payload");
     const consent = (await db.query.consents.findFirst({ where: eq(t.consents.id, share.consentId) }))!;
     if (!consent || consent.revokedAt || consent.expiresAt.getTime() <= Date.now()) throw new ApiError(403,"CONSENT_INACTIVE","Access ended. Ask the citizen for a new consent.");
-    const payload = decodeJws<PramanPayload>(decryptString(systemDek(), share.payloadEnc, `share:${share.id}`));
+    const payload = decodeJws<ApplyOncePayload>(decryptString(systemDek(), share.payloadEnc, `share:${share.id}`));
     await audit({ actorUserId: session.user.id, actorPartnerId: partner.id, action: "share.view", targetType: "share", targetId: share.id });
     return { payload, exchanged_at: share.exchangedAt?.toISOString() ?? null, consent_status: consent.revokedAt ? "revoked" : consent.expiresAt.getTime() < Date.now() ? "expired" : "active" };
   });

@@ -26,7 +26,7 @@ describe("envelope", () => {
 describe("jws", () => {
   it("signs and verifies with JWKS; rejects wrong audience", async () => {
     const key = await generateSigningKey();
-    const jws = await signPayload(key, { iss: "praman", aud: "partner-1", consent_id: "c1" });
+    const jws = await signPayload(key, { iss: "applyonce", aud: "partner-1", consent_id: "c1" });
     const p = await verifyPayload<{ consent_id: string }>(jws, { keys: [key.publicJwk] }, { audience: "partner-1" });
     expect(p.consent_id).toBe("c1");
     await expect(verifyPayload(jws, { keys: [key.publicJwk] }, { audience: "partner-2" })).rejects.toThrow();

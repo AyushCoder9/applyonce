@@ -1,6 +1,6 @@
 import { z } from "zod";
-import { db, t, eq, and } from "@praman/db";
-import { enqueue } from "@praman/jobs";
+import { db, t, eq, and } from "@applyonce/db";
+import { enqueue } from "@applyonce/jobs";
 import { handler, citizen, ok, body, log, ApiError } from "@/lib/api";
 import { claimTransition, isPending } from "@/components/family/logic";
 import { verifyFamilyToken } from "../../_tokens";

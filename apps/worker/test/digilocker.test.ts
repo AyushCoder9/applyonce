@@ -1,7 +1,7 @@
 /** digilocker.sync against the real seeded DB. Sunita's seed has only 2 docs (aadhaar, pan) + a provider_link with meta.ref. */
 import { describe, it, expect, beforeAll, afterAll } from "vitest";
-import { db, eq, and, sql, profiles, verificationJobs, documents, getDek, getFacts } from "@praman/db";
-import { SUNITA } from "@praman/providers/fixtures";
+import { db, eq, and, sql, profiles, verificationJobs, documents, getDek, getFacts } from "@applyonce/db";
+import { SUNITA } from "@applyonce/providers/fixtures";
 import { runInline } from "../src/inline";
 
 let profileId: string;

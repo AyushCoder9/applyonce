@@ -10,7 +10,7 @@ export default async function PartnerOnboarding() {
   return (
     <div className="mx-auto max-w-xl">
       <h1 className="font-display text-3xl font-bold">Register your organisation</h1>
-      <p className="mt-2 mb-6 text-ink-2">Takes two minutes. You get sandbox keys immediately; live keys after Praman verifies your registration.</p>
+      <p className="mt-2 mb-6 text-ink-2">Takes two minutes. You get sandbox keys immediately; live keys after ApplyOnce verifies your registration.</p>
       <OnboardingForm />
     </div>
   );

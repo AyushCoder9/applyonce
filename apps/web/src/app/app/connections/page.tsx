@@ -1,7 +1,7 @@
 import Link from "next/link";
 import { Link2 } from "lucide-react";
-import { db, t, eq, inArray, desc } from "@praman/db";
-import { PageHeader, EmptyState, fmtDate, purposeLabel } from "@praman/ui";
+import { db, t, eq, inArray, desc } from "@applyonce/db";
+import { PageHeader, EmptyState, fmtDate, purposeLabel } from "@applyonce/ui";
 import { requireUser, listProfiles } from "@/lib/session";
 import { RevokeButton } from "@/components/applications/consent-actions";
 
@@ -19,7 +19,7 @@ export default async function ConnectionsPage() {
     <>
       <PageHeader title="Connections" subtitle={`${active} organisation${active === 1 ? "" : "s"} can currently use your data. Every share has a consent ID you can quote.`} />
       {!rows.length ? (
-        <EmptyState icon={<Link2 className="size-6" />} title="Nothing shared yet" blurb="When you apply with Praman, the exact fields you shared are listed here." action={<Link href="/app/apply" className="cta px-5 py-2.5">Find a form</Link>} />
+        <EmptyState icon={<Link2 className="size-6" />} title="Nothing shared yet" blurb="When you apply with ApplyOnce, the exact fields you shared are listed here." action={<Link href="/app/apply" className="cta px-5 py-2.5">Find a form</Link>} />
       ) : (
         <ul className="grid gap-3">
           {rows.map(({ c, partner, form }) => { const st = status(c); const prof = all.find((p) => p.id === c.profileId); return (

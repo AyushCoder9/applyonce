@@ -1,12 +1,12 @@
 import Link from "next/link";
-import { exchangeShareToken, loadPramanConfig } from "@/lib/praman";
+import { exchangeShareToken, loadApplyOnceConfig } from "@/lib/applyonce";
 import { getDraft } from "@/lib/store";
 import { cookies } from "next/headers";
 import { redirect } from "next/navigation";
 import { mapPayloadToRows } from "@/lib/payload-map";
 import { ReturnForm } from "./ReturnForm";
 
-export const metadata = { title: "Apply with Praman — BTA-JEE 2026" };
+export const metadata = { title: "Apply with ApplyOnce — BTA-JEE 2026" };
 
 function ErrorCard({ title, children }: { title: string; children: React.ReactNode }) {
   return (

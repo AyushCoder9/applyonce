@@ -1,5 +1,5 @@
 import { z } from "zod";
-import { db, t, and, eq } from "@praman/db";
+import { db, t, and, eq } from "@applyonce/db";
 import { handler, citizen, body, ok, ApiError } from "@/lib/api";
 
 /** POST /api/v1/applications/:id/documents {document_id, label?} — attach one of the profile’s documents. */

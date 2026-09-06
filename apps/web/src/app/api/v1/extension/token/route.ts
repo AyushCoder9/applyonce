@@ -1,5 +1,5 @@
-import { db, t } from "@praman/db";
-import { randomToken } from "@praman/crypto";
+import { db, t } from "@applyonce/db";
+import { randomToken } from "@applyonce/crypto";
 import { handler, citizen, ok, log } from "@/lib/api";
 
 const THIRTY_DAYS_MS = 30 * 24 * 60 * 60 * 1000;
@@ -16,7 +16,7 @@ export const POST = handler(async (req) => {
     token,
     expiresAt,
     steppedUpAt: (session.session as {steppedUpAt?:Date|null}).steppedUpAt ?? null,
-    userAgent: "praman-extension",
+    userAgent: "applyonce-extension",
     ipAddress: req.headers.get("x-forwarded-for") ?? null,
   });
   await log(session, "extension.token.create", "session", id);

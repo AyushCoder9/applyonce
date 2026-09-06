@@ -11,8 +11,8 @@ form's `requestedFields` (`packages/db/src/seed.ts`) + 5 BTA-only `customFields`
 actual seeded form has 56; this file mirrors the seed exactly, per the task brief.)
 
 Registry key column is the exact `fact_key` from `packages/schema/src/registry.ts` —
-`@praman/sdk`/the partner API return `SharedFact[]` keyed by these. `—` means the field is a
-BTA-only custom question (`PramanPayload.custom.<id>`), not a canonical fact.
+`@applyonce/sdk`/the partner API return `SharedFact[]` keyed by these. `—` means the field is a
+BTA-only custom question (`ApplyOncePayload.custom.<id>`), not a canonical fact.
 
 ## Step 1 — Personal Details
 
@@ -111,4 +111,4 @@ BTA-only custom question (`PramanPayload.custom.<id>`), not a canonical fact.
 - Date fields (`dob`, `category_valid_until`) expect **DD/MM/YYYY** text, not ISO.
 - File inputs (`photo`, `signature`, `*_marksheet`, `category_certificate`) cannot be filled
   by script for security reasons in real browsers — per docs/05 F3, the extension should skip
-  these and show its "attach from Praman" helper instead.
+  these and show its "attach from ApplyOnce" helper instead.

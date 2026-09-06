@@ -12,7 +12,7 @@ const STATUS_LABELS: Record<string, string> = {
 const ACTOR_LABELS: Record<StatusEvent["actor"], string> = {
   citizen: "You",
   bta: "Bharat Test Agency",
-  praman: "Praman",
+  applyonce: "ApplyOnce",
   system: "System",
 };
 

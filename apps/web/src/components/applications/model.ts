@@ -1,6 +1,6 @@
 /** Application wire shape + status presentation shared by API routes and pages. */
-import type { t } from "@praman/db";
-import type { ApplicationStatus } from "@praman/schema";
+import type { t } from "@applyonce/db";
+import type { ApplicationStatus } from "@applyonce/schema";
 
 export const serializeApp = (a: typeof t.applications.$inferSelect) => ({ id: a.id, profile_id: a.profileId, partner_id: a.partnerId, form_id: a.formId, title: a.title, org_name: a.orgName, kind: a.kind, external_ref: a.externalRef, status: a.status, deadline_at: a.deadlineAt?.toISOString() ?? null, submitted_at: a.submittedAt?.toISOString() ?? null, source: a.source, portal_url: a.portalUrl, created_at: a.createdAt.toISOString(), updated_at: a.updatedAt.toISOString() });
 export type AppDto = ReturnType<typeof serializeApp>;

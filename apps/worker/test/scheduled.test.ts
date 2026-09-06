@@ -1,8 +1,8 @@
 /** scan.expiries: Aarav's OBC-NCL certificate (category.valid_until) expires ~40 days out -> falls in the 60-day window. */
 import { describe, it, expect, beforeAll, afterAll } from "vitest";
-import { db, eq, and, sql, profiles, facts, notifications } from "@praman/db";
-import { redis } from "@praman/jobs";
-import { AARAV } from "@praman/providers/fixtures";
+import { db, eq, and, sql, profiles, facts, notifications } from "@applyonce/db";
+import { redis } from "@applyonce/jobs";
+import { AARAV } from "@applyonce/providers/fixtures";
 import { runInline } from "../src/inline";
 
 let profileId: string;
@@ -19,11 +19,11 @@ beforeAll(async () => {
   expect(daysLeft).toBeGreaterThan(30);
   expect(daysLeft).toBeLessThanOrEqual(60);
   // clear any prior dedupe claim so the scan actually fires this run
-  await redis().del(`praman:scan:expiry:${factId}:60d`);
+  await redis().del(`applyonce:scan:expiry:${factId}:60d`);
 });
 
 afterAll(async () => {
-  await redis().del(`praman:scan:expiry:${factId}:60d`);
+  await redis().del(`applyonce:scan:expiry:${factId}:60d`);
   await sql.end();
 });
 

@@ -1,5 +1,5 @@
 import { z } from "zod";
-import { db, t, eq } from "@praman/db";
+import { db, t, eq } from "@applyonce/db";
 import { handler, citizen, body, ok, ApiError } from "@/lib/api";
 
 /** POST /api/v1/applications/:id/events {title, body?} — a citizen note on the timeline. */

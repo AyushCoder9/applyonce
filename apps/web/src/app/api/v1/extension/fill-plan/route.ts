@@ -1,7 +1,7 @@
-import { getDek, getFacts } from "@praman/db";
-import { field, isFactKey, scopeContains } from "@praman/schema";
-import { fmtValue } from "@praman/ui";
-import { MOCK_OTP } from "@praman/providers";
+import { getDek, getFacts } from "@applyonce/db";
+import { field, isFactKey, scopeContains } from "@applyonce/schema";
+import { fmtValue } from "@applyonce/ui";
+import { MOCK_OTP } from "@applyonce/providers";
 import { handler, ok, ApiError } from "@/lib/api";
 import { extensionUser } from "../_auth";
 
@@ -17,7 +17,7 @@ export const GET = handler(async (req) => {
   const url = new URL(req.url);
   const keys = (url.searchParams.get("keys") ?? "").split(",").map((k) => k.trim()).filter(Boolean);
   if (!keys.length) throw new ApiError(400, "KEYS_REQUIRED", "Pass ?keys=fact.key,fact.key2");
-  const stepUp = req.headers.get("x-praman-step-up") ?? "";
+  const stepUp = req.headers.get("x-applyonce-step-up") ?? "";
   const mockSms = (process.env.PROVIDER_SMS ?? "mock") === "mock";
   const steppedUp = (mockSms && stepUp === MOCK_OTP) || (!!extSession.steppedUpAt && Date.now()-extSession.steppedUpAt.getTime()<300000);
 

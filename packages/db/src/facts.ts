@@ -3,8 +3,8 @@
  * enforces "issuer-verified is never overwritten by a weaker source" (creates a mismatch instead), keeps history.
  */
 import { and, eq, inArray } from "drizzle-orm";
-import { field, isFactKey, validateFact, type Source, type Fact, type FactValue, SOURCES, documentTypeForKey } from "@praman/schema";
-import { encryptJson, decryptJson } from "@praman/crypto";
+import { field, isFactKey, validateFact, type Source, type Fact, type FactValue, SOURCES, documentTypeForKey } from "@applyonce/schema";
+import { encryptJson, decryptJson } from "@applyonce/crypto";
 import { db, type Db, type Tx } from "./client";
 import { facts, factHistory, mismatches, documents } from "./schema";
 

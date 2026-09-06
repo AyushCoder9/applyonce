@@ -1,4 +1,4 @@
-import { db, t, eq } from "@praman/db";
+import { db, t, eq } from "@applyonce/db";
 import { handler, citizen, ok, ApiError, log } from "@/lib/api";
 import { dispatchWebhook } from "@/lib/webhooks";
 

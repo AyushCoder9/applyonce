@@ -1,6 +1,6 @@
 import { z } from "zod";
-import { db, t, and, eq, isNull, audit, systemDek } from "@praman/db";
-import { decryptString } from "@praman/crypto";
+import { db, t, and, eq, isNull, audit, systemDek } from "@applyonce/db";
+import { decryptString } from "@applyonce/crypto";
 import { handler, partner, body, ok, ApiError } from "@/lib/api";
 import { hashToken, shareTokenSessionId } from "@/lib/share";
 

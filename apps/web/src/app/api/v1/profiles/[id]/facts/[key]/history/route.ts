@@ -1,6 +1,6 @@
-import { db, t, eq, and, desc, getDek, mask } from "@praman/db";
-import { field, isFactKey, type FactValue } from "@praman/schema";
-import { decryptJson } from "@praman/crypto";
+import { db, t, eq, and, desc, getDek, mask } from "@applyonce/db";
+import { field, isFactKey, type FactValue } from "@applyonce/schema";
+import { decryptJson } from "@applyonce/crypto";
 import { handler, citizen, ok, ApiError } from "@/lib/api";
 import { isSteppedUp, scopeAllows } from "@/lib/session";
 import { sectionOf } from "../../../../_lib";

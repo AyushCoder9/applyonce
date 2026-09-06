@@ -602,15 +602,15 @@
       "source_location": "L13"
     },
     {
-      "id": "packages_schema_src_payload_pramanpayload",
-      "label": "PramanPayload",
+      "id": "packages_schema_src_payload_applyoncepayload",
+      "label": "ApplyOncePayload",
       "_callable": true,
       "_callable_class": true,
       "_origin": "ast",
       "community": 41,
       "community_name": "payload.ts",
       "file_type": "code",
-      "norm_label": "pramanpayload",
+      "norm_label": "applyoncepayload",
       "source_file": "packages/schema/src/payload.ts",
       "source_location": "L38"
     },
@@ -3523,13 +3523,13 @@
       "source_location": "L4"
     },
     {
-      "id": "ref_praman",
-      "label": "PRAMAN_*",
+      "id": "ref_applyonce",
+      "label": "APPLYONCE_*",
       "_origin": "ast",
       "community": 11,
       "community_name": "globalEnv",
       "file_type": "concept",
-      "norm_label": "praman_*",
+      "norm_label": "applyonce_*",
       "source_file": "turbo.json",
       "source_location": "L4"
     },
@@ -4139,13 +4139,13 @@
       "source_location": "L8"
     },
     {
-      "id": "packages_sdk_package_dependencies_praman_schema",
-      "label": "@praman/schema",
+      "id": "packages_sdk_package_dependencies_applyonce_schema",
+      "label": "@applyonce/schema",
       "_origin": "ast",
       "community": 14,
       "community_name": "sdk/package.json",
       "file_type": "code",
-      "norm_label": "@praman/schema",
+      "norm_label": "@applyonce/schema",
       "source_file": "packages/sdk/package.json",
       "source_location": "L8"
     },
@@ -4304,13 +4304,13 @@
       "source_location": "L8"
     },
     {
-      "id": "packages_sdk_package_json_praman_schema",
-      "label": "@praman/schema",
+      "id": "packages_sdk_package_json_applyonce_schema",
+      "label": "@applyonce/schema",
       "_origin": "ast",
       "community": 14,
       "community_name": "sdk/package.json",
       "file_type": "concept",
-      "norm_label": "@praman/schema",
+      "norm_label": "@applyonce/schema",
       "source_file": "packages/sdk/package.json",
       "source_location": "L8"
     },
@@ -4352,7 +4352,7 @@
       "label": "01-PRD.md",
       "_origin": "ast",
       "community": 15,
-      "community_name": "01 \u2014 Product Requirements Document: Praman",
+      "community_name": "01 \u2014 Product Requirements Document: ApplyOnce",
       "file_type": "document",
       "node_kind": "page",
       "norm_label": "01-prd.md",
@@ -4360,14 +4360,14 @@
       "source_location": "L1"
     },
     {
-      "id": "docs_01_prd_01_product_requirements_document_praman",
-      "label": "01 \u2014 Product Requirements Document: Praman",
+      "id": "docs_01_prd_01_product_requirements_document_applyonce",
+      "label": "01 \u2014 Product Requirements Document: ApplyOnce",
       "_origin": "ast",
       "community": 15,
-      "community_name": "01 \u2014 Product Requirements Document: Praman",
+      "community_name": "01 \u2014 Product Requirements Document: ApplyOnce",
       "file_type": "document",
       "node_kind": "heading",
-      "norm_label": "01 \u2014 product requirements document: praman",
+      "norm_label": "01 \u2014 product requirements document: applyonce",
       "source_file": "docs/01-PRD.md",
       "source_location": "L1"
     },
@@ -4376,7 +4376,7 @@
       "label": "1. Problem",
       "_origin": "ast",
       "community": 15,
-      "community_name": "01 \u2014 Product Requirements Document: Praman",
+      "community_name": "01 \u2014 Product Requirements Document: ApplyOnce",
       "file_type": "document",
       "node_kind": "heading",
       "norm_label": "1. problem",
@@ -4388,7 +4388,7 @@
       "label": "2. Vision",
       "_origin": "ast",
       "community": 15,
-      "community_name": "01 \u2014 Product Requirements Document: Praman",
+      "community_name": "01 \u2014 Product Requirements Document: ApplyOnce",
       "file_type": "document",
       "node_kind": "heading",
       "norm_label": "2. vision",
@@ -4400,7 +4400,7 @@
       "label": "3. Personas",
       "_origin": "ast",
       "community": 15,
-      "community_name": "01 \u2014 Product Requirements Document: Praman",
+      "community_name": "01 \u2014 Product Requirements Document: ApplyOnce",
       "file_type": "document",
       "node_kind": "heading",
       "norm_label": "3. personas",
@@ -4412,7 +4412,7 @@
       "label": "4.1 Education",
       "_origin": "ast",
       "community": 15,
-      "community_name": "01 \u2014 Product Requirements Document: Praman",
+      "community_name": "01 \u2014 Product Requirements Document: ApplyOnce",
       "file_type": "document",
       "node_kind": "heading",
       "norm_label": "4.1 education",
@@ -4424,7 +4424,7 @@
       "label": "4.2 Identity & civic",
       "_origin": "ast",
       "community": 15,
-      "community_name": "01 \u2014 Product Requirements Document: Praman",
+      "community_name": "01 \u2014 Product Requirements Document: ApplyOnce",
       "file_type": "document",
       "node_kind": "heading",
       "norm_label": "4.2 identity & civic",
@@ -4436,7 +4436,7 @@
       "label": "4.3 Financial & KYC",
       "_origin": "ast",
       "community": 15,
-      "community_name": "01 \u2014 Product Requirements Document: Praman",
+      "community_name": "01 \u2014 Product Requirements Document: ApplyOnce",
       "file_type": "document",
       "node_kind": "heading",
       "norm_label": "4.3 financial & kyc",
@@ -4448,7 +4448,7 @@
       "label": "4.4 Health",
       "_origin": "ast",
       "community": 15,
-      "community_name": "01 \u2014 Product Requirements Document: Praman",
+      "community_name": "01 \u2014 Product Requirements Document: ApplyOnce",
       "file_type": "document",
       "node_kind": "heading",
       "norm_label": "4.4 health",
@@ -4460,7 +4460,7 @@
       "label": "4.5 Employment",
       "_origin": "ast",
       "community": 15,
-      "community_name": "01 \u2014 Product Requirements Document: Praman",
+      "community_name": "01 \u2014 Product Requirements Document: ApplyOnce",
       "file_type": "document",
       "node_kind": "heading",
       "norm_label": "4.5 employment",
@@ -4472,7 +4472,7 @@
       "label": "4.6 Family & delegation",
       "_origin": "ast",
       "community": 15,
-      "community_name": "01 \u2014 Product Requirements Document: Praman",
+      "community_name": "01 \u2014 Product Requirements Document: ApplyOnce",
       "file_type": "document",
       "node_kind": "heading",
       "norm_label": "4.6 family & delegation",
@@ -4484,7 +4484,7 @@
       "label": "4.7 Housing, travel, daily life",
       "_origin": "ast",
       "community": 15,
-      "community_name": "01 \u2014 Product Requirements Document: Praman",
+      "community_name": "01 \u2014 Product Requirements Document: ApplyOnce",
       "file_type": "document",
       "node_kind": "heading",
       "norm_label": "4.7 housing, travel, daily life",
@@ -4496,7 +4496,7 @@
       "label": "4.8 Institution side (the other half of the marketplace)",
       "_origin": "ast",
       "community": 15,
-      "community_name": "01 \u2014 Product Requirements Document: Praman",
+      "community_name": "01 \u2014 Product Requirements Document: ApplyOnce",
       "file_type": "document",
       "node_kind": "heading",
       "norm_label": "4.8 institution side (the other half of the marketplace)",
@@ -4508,7 +4508,7 @@
       "label": "4. Use-case map (extensive)",
       "_origin": "ast",
       "community": 15,
-      "community_name": "01 \u2014 Product Requirements Document: Praman",
+      "community_name": "01 \u2014 Product Requirements Document: ApplyOnce",
       "file_type": "document",
       "node_kind": "heading",
       "norm_label": "4. use-case map (extensive)",
@@ -4520,7 +4520,7 @@
       "label": "5. Feature list (Phase 1 = shippable product)",
       "_origin": "ast",
       "community": 15,
-      "community_name": "01 \u2014 Product Requirements Document: Praman",
+      "community_name": "01 \u2014 Product Requirements Document: ApplyOnce",
       "file_type": "document",
       "node_kind": "heading",
       "norm_label": "5. feature list (phase 1 = shippable product)",
@@ -4532,7 +4532,7 @@
       "label": "6. Non-goals (Phase 1)",
       "_origin": "ast",
       "community": 15,
-      "community_name": "01 \u2014 Product Requirements Document: Praman",
+      "community_name": "01 \u2014 Product Requirements Document: ApplyOnce",
       "file_type": "document",
       "node_kind": "heading",
       "norm_label": "6. non-goals (phase 1)",
@@ -4544,7 +4544,7 @@
       "label": "7. Success metrics",
       "_origin": "ast",
       "community": 15,
-      "community_name": "01 \u2014 Product Requirements Document: Praman",
+      "community_name": "01 \u2014 Product Requirements Document: ApplyOnce",
       "file_type": "document",
       "node_kind": "heading",
       "norm_label": "7. success metrics",
@@ -4556,7 +4556,7 @@
       "label": "8. Risks & mitigations",
       "_origin": "ast",
       "community": 15,
-      "community_name": "01 \u2014 Product Requirements Document: Praman",
+      "community_name": "01 \u2014 Product Requirements Document: ApplyOnce",
       "file_type": "document",
       "node_kind": "heading",
       "norm_label": "8. risks & mitigations",
@@ -4568,7 +4568,7 @@
       "label": "Citizen app",
       "_origin": "ast",
       "community": 15,
-      "community_name": "01 \u2014 Product Requirements Document: Praman",
+      "community_name": "01 \u2014 Product Requirements Document: ApplyOnce",
       "file_type": "document",
       "node_kind": "heading",
       "norm_label": "citizen app",
@@ -4580,7 +4580,7 @@
       "label": "Partner console",
       "_origin": "ast",
       "community": 15,
-      "community_name": "01 \u2014 Product Requirements Document: Praman",
+      "community_name": "01 \u2014 Product Requirements Document: ApplyOnce",
       "file_type": "document",
       "node_kind": "heading",
       "norm_label": "partner console",
@@ -4592,7 +4592,7 @@
       "label": "Platform",
       "_origin": "ast",
       "community": 15,
-      "community_name": "01 \u2014 Product Requirements Document: Praman",
+      "community_name": "01 \u2014 Product Requirements Document: ApplyOnce",
       "file_type": "document",
       "node_kind": "heading",
       "norm_label": "platform",
@@ -4768,14 +4768,14 @@
       "source_location": "L113"
     },
     {
-      "id": "docs_research_03_ui_libraries_and_design_recommendation_for_praman_heroui_v3_heroui_react_heroui_styles",
-      "label": "Recommendation for Praman: **HeroUI v3** (`@heroui/react` + `@heroui/styles`)",
+      "id": "docs_research_03_ui_libraries_and_design_recommendation_for_applyonce_heroui_v3_heroui_react_heroui_styles",
+      "label": "Recommendation for ApplyOnce: **HeroUI v3** (`@heroui/react` + `@heroui/styles`)",
       "_origin": "ast",
       "community": 16,
       "community_name": "Part B \u2014 HeroUI v3 integration notes (verified against the published npm packages, 2026-09-02)",
       "file_type": "document",
       "node_kind": "heading",
-      "norm_label": "recommendation for praman: **heroui v3** (`@heroui/react` + `@heroui/styles`)",
+      "norm_label": "recommendation for applyonce: **heroui v3** (`@heroui/react` + `@heroui/styles`)",
       "source_file": "docs/research/03-ui-libraries-and-design.md",
       "source_location": "L75"
     },
@@ -4840,14 +4840,14 @@
       "source_location": "L117"
     },
     {
-      "id": "docs_research_03_ui_libraries_and_design_ui_component_libraries_design_direction_praman_sept_2026",
-      "label": "UI Component Libraries & Design Direction \u2014 Praman (Sept 2026)",
+      "id": "docs_research_03_ui_libraries_and_design_ui_component_libraries_design_direction_applyonce_sept_2026",
+      "label": "UI Component Libraries & Design Direction \u2014 ApplyOnce (Sept 2026)",
       "_origin": "ast",
       "community": 16,
       "community_name": "Part B \u2014 HeroUI v3 integration notes (verified against the published npm packages, 2026-09-02)",
       "file_type": "document",
       "node_kind": "heading",
-      "norm_label": "ui component libraries & design direction \u2014 praman (sept 2026)",
+      "norm_label": "ui component libraries & design direction \u2014 applyonce (sept 2026)",
       "source_file": "docs/research/03-ui-libraries-and-design.md",
       "source_location": "L1"
     },
@@ -5152,14 +5152,14 @@
       "source_location": "L35"
     },
     {
-      "id": "docs_05_api_and_flows_3_praman_sdk_partner_facing_tiny",
-      "label": "3. `@praman/sdk` (partner-facing, tiny)",
+      "id": "docs_05_api_and_flows_3_applyonce_sdk_partner_facing_tiny",
+      "label": "3. `@applyonce/sdk` (partner-facing, tiny)",
       "_origin": "ast",
       "community": 18,
       "community_name": "1. API surface (Next.js route handlers, `/api/v1`)",
       "file_type": "document",
       "node_kind": "heading",
-      "norm_label": "3. `@praman/sdk` (partner-facing, tiny)",
+      "norm_label": "3. `@applyonce/sdk` (partner-facing, tiny)",
       "source_file": "docs/05-API-AND-FLOWS.md",
       "source_location": "L71"
     },
@@ -5248,14 +5248,14 @@
       "source_location": "L37"
     },
     {
-      "id": "docs_05_api_and_flows_f2_apply_with_praman_partner_initiated",
-      "label": "F2 \u2014 Apply with Praman (partner-initiated)",
+      "id": "docs_05_api_and_flows_f2_apply_with_applyonce_partner_initiated",
+      "label": "F2 \u2014 Apply with ApplyOnce (partner-initiated)",
       "_origin": "ast",
       "community": 18,
       "community_name": "1. API surface (Next.js route handlers, `/api/v1`)",
       "file_type": "document",
       "node_kind": "heading",
-      "norm_label": "f2 \u2014 apply with praman (partner-initiated)",
+      "norm_label": "f2 \u2014 apply with applyonce (partner-initiated)",
       "source_file": "docs/05-API-AND-FLOWS.md",
       "source_location": "L46"
     },
@@ -5366,13 +5366,13 @@
       "source_location": "L8"
     },
     {
-      "id": "packages_providers_package_dependencies_praman_schema",
-      "label": "@praman/schema",
+      "id": "packages_providers_package_dependencies_applyonce_schema",
+      "label": "@applyonce/schema",
       "_origin": "ast",
       "community": 19,
       "community_name": "providers/package.json",
       "file_type": "code",
-      "norm_label": "@praman/schema",
+      "norm_label": "@applyonce/schema",
       "source_file": "packages/providers/package.json",
       "source_location": "L8"
     },
@@ -5520,13 +5520,13 @@
       "source_location": "L3"
     },
     {
-      "id": "packages_providers_package_json_praman_schema",
-      "label": "@praman/schema",
+      "id": "packages_providers_package_json_applyonce_schema",
+      "label": "@applyonce/schema",
       "_origin": "ast",
       "community": 19,
       "community_name": "providers/package.json",
       "file_type": "concept",
-      "norm_label": "@praman/schema",
+      "norm_label": "@applyonce/schema",
       "source_file": "packages/providers/package.json",
       "source_location": "L8"
     },
@@ -6393,7 +6393,7 @@
       "label": "04-DESIGN-SYSTEM.md",
       "_origin": "ast",
       "community": 23,
-      "community_name": "04 \u2014 Design system (\"Praman Bright\")",
+      "community_name": "04 \u2014 Design system (\"ApplyOnce Bright\")",
       "file_type": "document",
       "node_kind": "page",
       "norm_label": "04-design-system.md",
@@ -6401,14 +6401,14 @@
       "source_location": "L1"
     },
     {
-      "id": "docs_04_design_system_04_design_system_praman_bright",
-      "label": "04 \u2014 Design system (\"Praman Bright\")",
+      "id": "docs_04_design_system_04_design_system_applyonce_bright",
+      "label": "04 \u2014 Design system (\"ApplyOnce Bright\")",
       "_origin": "ast",
       "community": 23,
-      "community_name": "04 \u2014 Design system (\"Praman Bright\")",
+      "community_name": "04 \u2014 Design system (\"ApplyOnce Bright\")",
       "file_type": "document",
       "node_kind": "heading",
-      "norm_label": "04 \u2014 design system (\"praman bright\")",
+      "norm_label": "04 \u2014 design system (\"applyonce bright\")",
       "source_file": "docs/04-DESIGN-SYSTEM.md",
       "source_location": "L1"
     },
@@ -6417,7 +6417,7 @@
       "label": "1. Personality",
       "_origin": "ast",
       "community": 23,
-      "community_name": "04 \u2014 Design system (\"Praman Bright\")",
+      "community_name": "04 \u2014 Design system (\"ApplyOnce Bright\")",
       "file_type": "document",
       "node_kind": "heading",
       "norm_label": "1. personality",
@@ -6429,7 +6429,7 @@
       "label": "2. Tokens (Tailwind v4 `@theme` + HeroUI theme)",
       "_origin": "ast",
       "community": 23,
-      "community_name": "04 \u2014 Design system (\"Praman Bright\")",
+      "community_name": "04 \u2014 Design system (\"ApplyOnce Bright\")",
       "file_type": "document",
       "node_kind": "heading",
       "norm_label": "2. tokens (tailwind v4 `@theme` + heroui theme)",
@@ -6441,7 +6441,7 @@
       "label": "3. Colour usage rules",
       "_origin": "ast",
       "community": 23,
-      "community_name": "04 \u2014 Design system (\"Praman Bright\")",
+      "community_name": "04 \u2014 Design system (\"ApplyOnce Bright\")",
       "file_type": "document",
       "node_kind": "heading",
       "norm_label": "3. colour usage rules",
@@ -6453,7 +6453,7 @@
       "label": "4. Motion",
       "_origin": "ast",
       "community": 23,
-      "community_name": "04 \u2014 Design system (\"Praman Bright\")",
+      "community_name": "04 \u2014 Design system (\"ApplyOnce Bright\")",
       "file_type": "document",
       "node_kind": "heading",
       "norm_label": "4. motion",
@@ -6465,7 +6465,7 @@
       "label": "5. Components (HeroUI v3 base \u2192 composed in `packages/ui`)",
       "_origin": "ast",
       "community": 23,
-      "community_name": "04 \u2014 Design system (\"Praman Bright\")",
+      "community_name": "04 \u2014 Design system (\"ApplyOnce Bright\")",
       "file_type": "document",
       "node_kind": "heading",
       "norm_label": "5. components (heroui v3 base \u2192 composed in `packages/ui`)",
@@ -6477,7 +6477,7 @@
       "label": "6. Layouts",
       "_origin": "ast",
       "community": 23,
-      "community_name": "04 \u2014 Design system (\"Praman Bright\")",
+      "community_name": "04 \u2014 Design system (\"ApplyOnce Bright\")",
       "file_type": "document",
       "node_kind": "heading",
       "norm_label": "6. layouts",
@@ -6489,7 +6489,7 @@
       "label": "7. Complete page list",
       "_origin": "ast",
       "community": 23,
-      "community_name": "04 \u2014 Design system (\"Praman Bright\")",
+      "community_name": "04 \u2014 Design system (\"ApplyOnce Bright\")",
       "file_type": "document",
       "node_kind": "heading",
       "norm_label": "7. complete page list",
@@ -6501,7 +6501,7 @@
       "label": "8. Copy voice",
       "_origin": "ast",
       "community": 23,
-      "community_name": "04 \u2014 Design system (\"Praman Bright\")",
+      "community_name": "04 \u2014 Design system (\"ApplyOnce Bright\")",
       "file_type": "document",
       "node_kind": "heading",
       "norm_label": "8. copy voice",
@@ -6513,7 +6513,7 @@
       "label": "Admin (`/admin`, internal)",
       "_origin": "ast",
       "community": 23,
-      "community_name": "04 \u2014 Design system (\"Praman Bright\")",
+      "community_name": "04 \u2014 Design system (\"ApplyOnce Bright\")",
       "file_type": "document",
       "node_kind": "heading",
       "norm_label": "admin (`/admin`, internal)",
@@ -6525,7 +6525,7 @@
       "label": "Auth (`/auth`)",
       "_origin": "ast",
       "community": 23,
-      "community_name": "04 \u2014 Design system (\"Praman Bright\")",
+      "community_name": "04 \u2014 Design system (\"ApplyOnce Bright\")",
       "file_type": "document",
       "node_kind": "heading",
       "norm_label": "auth (`/auth`)",
@@ -6537,7 +6537,7 @@
       "label": "Citizen app (`/app`)",
       "_origin": "ast",
       "community": 23,
-      "community_name": "04 \u2014 Design system (\"Praman Bright\")",
+      "community_name": "04 \u2014 Design system (\"ApplyOnce Bright\")",
       "file_type": "document",
       "node_kind": "heading",
       "norm_label": "citizen app (`/app`)",
@@ -6549,7 +6549,7 @@
       "label": "Demo exam portal (`apps/demo-exam-portal`, `bta.demo`)",
       "_origin": "ast",
       "community": 23,
-      "community_name": "04 \u2014 Design system (\"Praman Bright\")",
+      "community_name": "04 \u2014 Design system (\"ApplyOnce Bright\")",
       "file_type": "document",
       "node_kind": "heading",
       "norm_label": "demo exam portal (`apps/demo-exam-portal`, `bta.demo`)",
@@ -6561,7 +6561,7 @@
       "label": "Onboarding (`/welcome`, wizard)",
       "_origin": "ast",
       "community": 23,
-      "community_name": "04 \u2014 Design system (\"Praman Bright\")",
+      "community_name": "04 \u2014 Design system (\"ApplyOnce Bright\")",
       "file_type": "document",
       "node_kind": "heading",
       "norm_label": "onboarding (`/welcome`, wizard)",
@@ -6573,7 +6573,7 @@
       "label": "Partner console (`/partner`)",
       "_origin": "ast",
       "community": 23,
-      "community_name": "04 \u2014 Design system (\"Praman Bright\")",
+      "community_name": "04 \u2014 Design system (\"ApplyOnce Bright\")",
       "file_type": "document",
       "node_kind": "heading",
       "norm_label": "partner console (`/partner`)",
@@ -6585,7 +6585,7 @@
       "label": "Public (`/`)",
       "_origin": "ast",
       "community": 23,
-      "community_name": "04 \u2014 Design system (\"Praman Bright\")",
+      "community_name": "04 \u2014 Design system (\"ApplyOnce Bright\")",
       "file_type": "document",
       "node_kind": "heading",
       "norm_label": "public (`/`)",
@@ -6597,7 +6597,7 @@
       "label": "Share flow (`/share/[token]`, embeddable)",
       "_origin": "ast",
       "community": 23,
-      "community_name": "04 \u2014 Design system (\"Praman Bright\")",
+      "community_name": "04 \u2014 Design system (\"ApplyOnce Bright\")",
       "file_type": "document",
       "node_kind": "heading",
       "norm_label": "share flow (`/share/[token]`, embeddable)",
@@ -7682,14 +7682,14 @@
       "source_location": "L70"
     },
     {
-      "id": "docs_10_prd_v2_4_6_sdk_praman_sdk",
-      "label": "4.6 SDK (`@praman/sdk`)",
+      "id": "docs_10_prd_v2_4_6_sdk_applyonce_sdk",
+      "label": "4.6 SDK (`@applyonce/sdk`)",
       "_origin": "ast",
       "community": 29,
       "community_name": "10 \u2014 PRD v2 (supersedes 01-PRD.md, kept consistent with it)",
       "file_type": "document",
       "node_kind": "heading",
-      "norm_label": "4.6 sdk (`@praman/sdk`)",
+      "norm_label": "4.6 sdk (`@applyonce/sdk`)",
       "source_file": "docs/10-PRD-v2.md",
       "source_location": "L80"
     },
@@ -7755,14 +7755,14 @@
     },
     {
       "id": "schema",
-      "label": "@praman/schema",
+      "label": "@applyonce/schema",
       "_origin": "ast",
       "community": 3,
       "community_name": "core.ts",
       "confidence": "EXTRACTED",
       "file_type": "code",
-      "norm_label": "@praman/schema",
-      "source_file": "@praman/schema"
+      "norm_label": "@applyonce/schema",
+      "source_file": "@applyonce/schema"
     },
     {
       "id": "packages_db_src_schema_core",
@@ -8253,7 +8253,7 @@
       "label": "01-integrations-india-dpi.md",
       "_origin": "ast",
       "community": 30,
-      "community_name": "India DPI & KYC Integration Landscape for Praman (2026)",
+      "community_name": "India DPI & KYC Integration Landscape for ApplyOnce (2026)",
       "file_type": "document",
       "node_kind": "page",
       "norm_label": "01-integrations-india-dpi.md",
@@ -8265,7 +8265,7 @@
       "label": "10. Exam & Admission Bodies",
       "_origin": "ast",
       "community": 30,
-      "community_name": "India DPI & KYC Integration Landscape for Praman (2026)",
+      "community_name": "India DPI & KYC Integration Landscape for ApplyOnce (2026)",
       "file_type": "document",
       "node_kind": "heading",
       "norm_label": "10. exam & admission bodies",
@@ -8277,7 +8277,7 @@
       "label": "11. KYC/Identity Aggregators (2026 comparison)",
       "_origin": "ast",
       "community": 30,
-      "community_name": "India DPI & KYC Integration Landscape for Praman (2026)",
+      "community_name": "India DPI & KYC Integration Landscape for ApplyOnce (2026)",
       "file_type": "document",
       "node_kind": "heading",
       "norm_label": "11. kyc/identity aggregators (2026 comparison)",
@@ -8289,7 +8289,7 @@
       "label": "12. Legal \u2014 DPDP Act 2023 + DPDP Rules 2025",
       "_origin": "ast",
       "community": 30,
-      "community_name": "India DPI & KYC Integration Landscape for Praman (2026)",
+      "community_name": "India DPI & KYC Integration Landscape for ApplyOnce (2026)",
       "file_type": "document",
       "node_kind": "heading",
       "norm_label": "12. legal \u2014 dpdp act 2023 + dpdp rules 2025",
@@ -8301,7 +8301,7 @@
       "label": "13. Auth Tech for Citizens",
       "_origin": "ast",
       "community": 30,
-      "community_name": "India DPI & KYC Integration Landscape for Praman (2026)",
+      "community_name": "India DPI & KYC Integration Landscape for ApplyOnce (2026)",
       "file_type": "document",
       "node_kind": "heading",
       "norm_label": "13. auth tech for citizens",
@@ -8313,7 +8313,7 @@
       "label": "1. DigiLocker \u2014 API Setu, Entity Locker, MeriPehchaan",
       "_origin": "ast",
       "community": 30,
-      "community_name": "India DPI & KYC Integration Landscape for Praman (2026)",
+      "community_name": "India DPI & KYC Integration Landscape for ApplyOnce (2026)",
       "file_type": "document",
       "node_kind": "heading",
       "norm_label": "1. digilocker \u2014 api setu, entity locker, meripehchaan",
@@ -8325,7 +8325,7 @@
       "label": "2. Aadhaar \u2014 Offline XML, Online OTP eKYC, Vault, Legal Boundaries",
       "_origin": "ast",
       "community": 30,
-      "community_name": "India DPI & KYC Integration Landscape for Praman (2026)",
+      "community_name": "India DPI & KYC Integration Landscape for ApplyOnce (2026)",
       "file_type": "document",
       "node_kind": "heading",
       "norm_label": "2. aadhaar \u2014 offline xml, online otp ekyc, vault, legal boundaries",
@@ -8337,7 +8337,7 @@
       "label": "3. PAN Verification",
       "_origin": "ast",
       "community": 30,
-      "community_name": "India DPI & KYC Integration Landscape for Praman (2026)",
+      "community_name": "India DPI & KYC Integration Landscape for ApplyOnce (2026)",
       "file_type": "document",
       "node_kind": "heading",
       "norm_label": "3. pan verification",
@@ -8349,7 +8349,7 @@
       "label": "4. ABHA / ABDM (Ayushman Bharat Digital Mission)",
       "_origin": "ast",
       "community": 30,
-      "community_name": "India DPI & KYC Integration Landscape for Praman (2026)",
+      "community_name": "India DPI & KYC Integration Landscape for ApplyOnce (2026)",
       "file_type": "document",
       "node_kind": "heading",
       "norm_label": "4. abha / abdm (ayushman bharat digital mission)",
@@ -8361,7 +8361,7 @@
       "label": "5. Account Aggregator (Sahamati / ReBIT / RBI)",
       "_origin": "ast",
       "community": 30,
-      "community_name": "India DPI & KYC Integration Landscape for Praman (2026)",
+      "community_name": "India DPI & KYC Integration Landscape for ApplyOnce (2026)",
       "file_type": "document",
       "node_kind": "heading",
       "norm_label": "5. account aggregator (sahamati / rebit / rbi)",
@@ -8373,7 +8373,7 @@
       "label": "6. APAAR ID / ABC / NAD / DigiLocker Education Documents",
       "_origin": "ast",
       "community": 30,
-      "community_name": "India DPI & KYC Integration Landscape for Praman (2026)",
+      "community_name": "India DPI & KYC Integration Landscape for ApplyOnce (2026)",
       "file_type": "document",
       "node_kind": "heading",
       "norm_label": "6. apaar id / abc / nad / digilocker education documents",
@@ -8385,7 +8385,7 @@
       "label": "7. e-Sign (Aadhaar-based Digital Signature)",
       "_origin": "ast",
       "community": 30,
-      "community_name": "India DPI & KYC Integration Landscape for Praman (2026)",
+      "community_name": "India DPI & KYC Integration Landscape for ApplyOnce (2026)",
       "file_type": "document",
       "node_kind": "heading",
       "norm_label": "7. e-sign (aadhaar-based digital signature)",
@@ -8397,7 +8397,7 @@
       "label": "8. CKYC (CERSAI)",
       "_origin": "ast",
       "community": 30,
-      "community_name": "India DPI & KYC Integration Landscape for Praman (2026)",
+      "community_name": "India DPI & KYC Integration Landscape for ApplyOnce (2026)",
       "file_type": "document",
       "node_kind": "heading",
       "norm_label": "8. ckyc (cersai)",
@@ -8409,7 +8409,7 @@
       "label": "9. Government Portals \u2014 API vs. DigiLocker-only vs. Manual",
       "_origin": "ast",
       "community": 30,
-      "community_name": "India DPI & KYC Integration Landscape for Praman (2026)",
+      "community_name": "India DPI & KYC Integration Landscape for ApplyOnce (2026)",
       "file_type": "document",
       "node_kind": "heading",
       "norm_label": "9. government portals \u2014 api vs. digilocker-only vs. manual",
@@ -8417,26 +8417,26 @@
       "source_location": "L107"
     },
     {
-      "id": "docs_research_01_integrations_india_dpi_india_dpi_kyc_integration_landscape_for_praman_2026",
-      "label": "India DPI & KYC Integration Landscape for Praman (2026)",
+      "id": "docs_research_01_integrations_india_dpi_india_dpi_kyc_integration_landscape_for_applyonce_2026",
+      "label": "India DPI & KYC Integration Landscape for ApplyOnce (2026)",
       "_origin": "ast",
       "community": 30,
-      "community_name": "India DPI & KYC Integration Landscape for Praman (2026)",
+      "community_name": "India DPI & KYC Integration Landscape for ApplyOnce (2026)",
       "file_type": "document",
       "node_kind": "heading",
-      "norm_label": "india dpi & kyc integration landscape for praman (2026)",
+      "norm_label": "india dpi & kyc integration landscape for applyonce (2026)",
       "source_file": "docs/research/01-integrations-india-dpi.md",
       "source_location": "L1"
     },
     {
-      "id": "docs_research_01_integrations_india_dpi_recommended_integration_path_for_praman_v1_2026",
-      "label": "Recommended integration path for Praman v1 (2026)",
+      "id": "docs_research_01_integrations_india_dpi_recommended_integration_path_for_applyonce_v1_2026",
+      "label": "Recommended integration path for ApplyOnce v1 (2026)",
       "_origin": "ast",
       "community": 30,
-      "community_name": "India DPI & KYC Integration Landscape for Praman (2026)",
+      "community_name": "India DPI & KYC Integration Landscape for ApplyOnce (2026)",
       "file_type": "document",
       "node_kind": "heading",
-      "norm_label": "recommended integration path for praman v1 (2026)",
+      "norm_label": "recommended integration path for applyonce v1 (2026)",
       "source_file": "docs/research/01-integrations-india-dpi.md",
       "source_location": "L182"
     },
@@ -8609,14 +8609,14 @@
       "source_location": "L310"
     },
     {
-      "id": "docs_research_02_use_cases_and_forms_part_e_ranked_prioritisation_for_praman_v1_top_10_by_frequency_pain_feasibility",
-      "label": "Part E \u2014 Ranked prioritisation for Praman v1 (top 10 by frequency \u00d7 pain \u00d7 feasibility)",
+      "id": "docs_research_02_use_cases_and_forms_part_e_ranked_prioritisation_for_applyonce_v1_top_10_by_frequency_pain_feasibility",
+      "label": "Part E \u2014 Ranked prioritisation for ApplyOnce v1 (top 10 by frequency \u00d7 pain \u00d7 feasibility)",
       "_origin": "ast",
       "community": 31,
       "community_name": "Part A \u2014 Life-stage use-case map (150+ application types)",
       "file_type": "document",
       "node_kind": "heading",
-      "norm_label": "part e \u2014 ranked prioritisation for praman v1 (top 10 by frequency \u00d7 pain \u00d7 feasibility)",
+      "norm_label": "part e \u2014 ranked prioritisation for applyonce v1 (top 10 by frequency \u00d7 pain \u00d7 feasibility)",
       "source_file": "docs/research/02-use-cases-and-forms.md",
       "source_location": "L324"
     },
@@ -9538,57 +9538,57 @@
       "source_location": "L9"
     },
     {
-      "id": "apps_worker_package_dependencies_praman_crypto",
-      "label": "@praman/crypto",
+      "id": "apps_worker_package_dependencies_applyonce_crypto",
+      "label": "@applyonce/crypto",
       "_origin": "ast",
       "community": 4,
       "community_name": "dependencies",
       "file_type": "code",
-      "norm_label": "@praman/crypto",
+      "norm_label": "@applyonce/crypto",
       "source_file": "apps/worker/package.json",
       "source_location": "L8"
     },
     {
-      "id": "apps_worker_package_dependencies_praman_db",
-      "label": "@praman/db",
+      "id": "apps_worker_package_dependencies_applyonce_db",
+      "label": "@applyonce/db",
       "_origin": "ast",
       "community": 4,
       "community_name": "dependencies",
       "file_type": "code",
-      "norm_label": "@praman/db",
+      "norm_label": "@applyonce/db",
       "source_file": "apps/worker/package.json",
       "source_location": "L8"
     },
     {
-      "id": "apps_worker_package_dependencies_praman_jobs",
-      "label": "@praman/jobs",
+      "id": "apps_worker_package_dependencies_applyonce_jobs",
+      "label": "@applyonce/jobs",
       "_origin": "ast",
       "community": 4,
       "community_name": "dependencies",
       "file_type": "code",
-      "norm_label": "@praman/jobs",
+      "norm_label": "@applyonce/jobs",
       "source_file": "apps/worker/package.json",
       "source_location": "L8"
     },
     {
-      "id": "apps_worker_package_dependencies_praman_providers",
-      "label": "@praman/providers",
+      "id": "apps_worker_package_dependencies_applyonce_providers",
+      "label": "@applyonce/providers",
       "_origin": "ast",
       "community": 4,
       "community_name": "dependencies",
       "file_type": "code",
-      "norm_label": "@praman/providers",
+      "norm_label": "@applyonce/providers",
       "source_file": "apps/worker/package.json",
       "source_location": "L8"
     },
     {
-      "id": "apps_worker_package_dependencies_praman_schema",
-      "label": "@praman/schema",
+      "id": "apps_worker_package_dependencies_applyonce_schema",
+      "label": "@applyonce/schema",
       "_origin": "ast",
       "community": 4,
       "community_name": "dependencies",
       "file_type": "code",
-      "norm_label": "@praman/schema",
+      "norm_label": "@applyonce/schema",
       "source_file": "apps/worker/package.json",
       "source_location": "L8"
     },
@@ -9813,57 +9813,57 @@
       "source_location": "L9"
     },
     {
-      "id": "apps_worker_package_json_praman_crypto",
-      "label": "@praman/crypto",
+      "id": "apps_worker_package_json_applyonce_crypto",
+      "label": "@applyonce/crypto",
       "_origin": "ast",
       "community": 4,
       "community_name": "dependencies",
       "file_type": "concept",
-      "norm_label": "@praman/crypto",
+      "norm_label": "@applyonce/crypto",
       "source_file": "apps/worker/package.json",
       "source_location": "L8"
     },
     {
-      "id": "apps_worker_package_json_praman_db",
-      "label": "@praman/db",
+      "id": "apps_worker_package_json_applyonce_db",
+      "label": "@applyonce/db",
       "_origin": "ast",
       "community": 4,
       "community_name": "dependencies",
       "file_type": "concept",
-      "norm_label": "@praman/db",
+      "norm_label": "@applyonce/db",
       "source_file": "apps/worker/package.json",
       "source_location": "L8"
     },
     {
-      "id": "apps_worker_package_json_praman_jobs",
-      "label": "@praman/jobs",
+      "id": "apps_worker_package_json_applyonce_jobs",
+      "label": "@applyonce/jobs",
       "_origin": "ast",
       "community": 4,
       "community_name": "dependencies",
       "file_type": "concept",
-      "norm_label": "@praman/jobs",
+      "norm_label": "@applyonce/jobs",
       "source_file": "apps/worker/package.json",
       "source_location": "L8"
     },
     {
-      "id": "apps_worker_package_json_praman_providers",
-      "label": "@praman/providers",
+      "id": "apps_worker_package_json_applyonce_providers",
+      "label": "@applyonce/providers",
       "_origin": "ast",
       "community": 4,
       "community_name": "dependencies",
       "file_type": "concept",
-      "norm_label": "@praman/providers",
+      "norm_label": "@applyonce/providers",
       "source_file": "apps/worker/package.json",
       "source_location": "L8"
     },
     {
-      "id": "apps_worker_package_json_praman_schema",
-      "label": "@praman/schema",
+      "id": "apps_worker_package_json_applyonce_schema",
+      "label": "@applyonce/schema",
       "_origin": "ast",
       "community": 4,
       "community_name": "dependencies",
       "file_type": "concept",
-      "norm_label": "@praman/schema",
+      "norm_label": "@applyonce/schema",
       "source_file": "apps/worker/package.json",
       "source_location": "L8"
     },
@@ -10289,7 +10289,7 @@
       "label": "04-market-competitors-gtm.md",
       "_origin": "ast",
       "community": 45,
-      "community_name": "Praman \u2014 Market, Competitors, Business Model & GTM Research",
+      "community_name": "ApplyOnce \u2014 Market, Competitors, Business Model & GTM Research",
       "file_type": "document",
       "node_kind": "page",
       "norm_label": "04-market-competitors-gtm.md",
@@ -10301,7 +10301,7 @@
       "label": "A. Global analogs",
       "_origin": "ast",
       "community": 45,
-      "community_name": "Praman \u2014 Market, Competitors, Business Model & GTM Research",
+      "community_name": "ApplyOnce \u2014 Market, Competitors, Business Model & GTM Research",
       "file_type": "document",
       "node_kind": "heading",
       "norm_label": "a. global analogs",
@@ -10313,7 +10313,7 @@
       "label": "B. India landscape",
       "_origin": "ast",
       "community": 45,
-      "community_name": "Praman \u2014 Market, Competitors, Business Model & GTM Research",
+      "community_name": "ApplyOnce \u2014 Market, Competitors, Business Model & GTM Research",
       "file_type": "document",
       "node_kind": "heading",
       "norm_label": "b. india landscape",
@@ -10325,7 +10325,7 @@
       "label": "C. Private competitors and adjacents",
       "_origin": "ast",
       "community": 45,
-      "community_name": "Praman \u2014 Market, Competitors, Business Model & GTM Research",
+      "community_name": "ApplyOnce \u2014 Market, Competitors, Business Model & GTM Research",
       "file_type": "document",
       "node_kind": "heading",
       "norm_label": "c. private competitors and adjacents",
@@ -10337,7 +10337,7 @@
       "label": "D. Business model options and TAM/SAM/SOM",
       "_origin": "ast",
       "community": 45,
-      "community_name": "Praman \u2014 Market, Competitors, Business Model & GTM Research",
+      "community_name": "ApplyOnce \u2014 Market, Competitors, Business Model & GTM Research",
       "file_type": "document",
       "node_kind": "heading",
       "norm_label": "d. business model options and tam/sam/som",
@@ -10349,7 +10349,7 @@
       "label": "E. Regulatory sequencing and GTM enablers",
       "_origin": "ast",
       "community": 45,
-      "community_name": "Praman \u2014 Market, Competitors, Business Model & GTM Research",
+      "community_name": "ApplyOnce \u2014 Market, Competitors, Business Model & GTM Research",
       "file_type": "document",
       "node_kind": "heading",
       "norm_label": "e. regulatory sequencing and gtm enablers",
@@ -10361,7 +10361,7 @@
       "label": "F. Risks and moats",
       "_origin": "ast",
       "community": 45,
-      "community_name": "Praman \u2014 Market, Competitors, Business Model & GTM Research",
+      "community_name": "ApplyOnce \u2014 Market, Competitors, Business Model & GTM Research",
       "file_type": "document",
       "node_kind": "heading",
       "norm_label": "f. risks and moats",
@@ -10373,7 +10373,7 @@
       "label": "G. Recommended 12-month GTM plan",
       "_origin": "ast",
       "community": 45,
-      "community_name": "Praman \u2014 Market, Competitors, Business Model & GTM Research",
+      "community_name": "ApplyOnce \u2014 Market, Competitors, Business Model & GTM Research",
       "file_type": "document",
       "node_kind": "heading",
       "norm_label": "g. recommended 12-month gtm plan",
@@ -10381,14 +10381,14 @@
       "source_location": "L121"
     },
     {
-      "id": "docs_research_04_market_competitors_gtm_praman_market_competitors_business_model_gtm_research",
-      "label": "Praman \u2014 Market, Competitors, Business Model & GTM Research",
+      "id": "docs_research_04_market_competitors_gtm_applyonce_market_competitors_business_model_gtm_research",
+      "label": "ApplyOnce \u2014 Market, Competitors, Business Model & GTM Research",
       "_origin": "ast",
       "community": 45,
-      "community_name": "Praman \u2014 Market, Competitors, Business Model & GTM Research",
+      "community_name": "ApplyOnce \u2014 Market, Competitors, Business Model & GTM Research",
       "file_type": "document",
       "node_kind": "heading",
-      "norm_label": "praman \u2014 market, competitors, business model & gtm research",
+      "norm_label": "applyonce \u2014 market, competitors, business model & gtm research",
       "source_file": "docs/research/04-market-competitors-gtm.md",
       "source_location": "L1"
     },
@@ -10745,13 +10745,13 @@
       "source_location": "L22"
     },
     {
-      "id": "packages_ui_package_dependencies_praman_schema",
-      "label": "@praman/schema",
+      "id": "packages_ui_package_dependencies_applyonce_schema",
+      "label": "@applyonce/schema",
       "_origin": "ast",
       "community": 5,
       "community_name": "devDependencies",
       "file_type": "code",
-      "norm_label": "@praman/schema",
+      "norm_label": "@applyonce/schema",
       "source_file": "packages/ui/package.json",
       "source_location": "L21"
     },
@@ -11075,13 +11075,13 @@
       "source_location": "L22"
     },
     {
-      "id": "packages_ui_package_json_praman_schema",
-      "label": "@praman/schema",
+      "id": "packages_ui_package_json_applyonce_schema",
+      "label": "@applyonce/schema",
       "_origin": "ast",
       "community": 5,
       "community_name": "devDependencies",
       "file_type": "concept",
-      "norm_label": "@praman/schema",
+      "norm_label": "@applyonce/schema",
       "source_file": "packages/ui/package.json",
       "source_location": "L21"
     },
@@ -11486,7 +11486,7 @@
       "label": "CLAUDE.md",
       "_origin": "ast",
       "community": 55,
-      "community_name": "Praman \u2014 agent instructions",
+      "community_name": "ApplyOnce \u2014 agent instructions",
       "file_type": "document",
       "node_kind": "page",
       "norm_label": "claude.md",
@@ -11498,7 +11498,7 @@
       "label": "Commands",
       "_origin": "ast",
       "community": 55,
-      "community_name": "Praman \u2014 agent instructions",
+      "community_name": "ApplyOnce \u2014 agent instructions",
       "file_type": "document",
       "node_kind": "heading",
       "norm_label": "commands",
@@ -11506,14 +11506,14 @@
       "source_location": "L17"
     },
     {
-      "id": "claude_praman_agent_instructions",
-      "label": "Praman \u2014 agent instructions",
+      "id": "claude_applyonce_agent_instructions",
+      "label": "ApplyOnce \u2014 agent instructions",
       "_origin": "ast",
       "community": 55,
-      "community_name": "Praman \u2014 agent instructions",
+      "community_name": "ApplyOnce \u2014 agent instructions",
       "file_type": "document",
       "node_kind": "heading",
-      "norm_label": "praman \u2014 agent instructions",
+      "norm_label": "applyonce \u2014 agent instructions",
       "source_file": "CLAUDE.md",
       "source_location": "L1"
     },
@@ -11522,7 +11522,7 @@
       "label": "Standing rules (stated once)",
       "_origin": "ast",
       "community": 55,
-      "community_name": "Praman \u2014 agent instructions",
+      "community_name": "ApplyOnce \u2014 agent instructions",
       "file_type": "document",
       "node_kind": "heading",
       "norm_label": "standing rules (stated once)",
@@ -11534,7 +11534,7 @@
       "label": "Structure",
       "_origin": "ast",
       "community": 55,
-      "community_name": "Praman \u2014 agent instructions",
+      "community_name": "ApplyOnce \u2014 agent instructions",
       "file_type": "document",
       "node_kind": "heading",
       "norm_label": "structure",
@@ -11661,7 +11661,7 @@
       "label": "00-README.md",
       "_origin": "ast",
       "community": 58,
-      "community_name": "Praman \u2014 build kit",
+      "community_name": "ApplyOnce \u2014 build kit",
       "file_type": "document",
       "node_kind": "page",
       "norm_label": "00-readme.md",
@@ -11673,7 +11673,7 @@
       "label": "Honest constraints baked into the plan",
       "_origin": "ast",
       "community": 58,
-      "community_name": "Praman \u2014 build kit",
+      "community_name": "ApplyOnce \u2014 build kit",
       "file_type": "document",
       "node_kind": "heading",
       "norm_label": "honest constraints baked into the plan",
@@ -11681,14 +11681,14 @@
       "source_location": "L20"
     },
     {
-      "id": "docs_00_readme_praman_build_kit",
-      "label": "Praman \u2014 build kit",
+      "id": "docs_00_readme_applyonce_build_kit",
+      "label": "ApplyOnce \u2014 build kit",
       "_origin": "ast",
       "community": 58,
-      "community_name": "Praman \u2014 build kit",
+      "community_name": "ApplyOnce \u2014 build kit",
       "file_type": "document",
       "node_kind": "heading",
-      "norm_label": "praman \u2014 build kit",
+      "norm_label": "applyonce \u2014 build kit",
       "source_file": "docs/00-README.md",
       "source_location": "L1"
     },
@@ -11697,7 +11697,7 @@
       "label": "The one-paragraph pitch",
       "_origin": "ast",
       "community": 58,
-      "community_name": "Praman \u2014 build kit",
+      "community_name": "ApplyOnce \u2014 build kit",
       "file_type": "document",
       "node_kind": "heading",
       "norm_label": "the one-paragraph pitch",
@@ -11760,24 +11760,24 @@
       "source_location": "L7"
     },
     {
-      "id": "apps_demo_exam_portal_package_dependencies_praman_schema",
-      "label": "@praman/schema",
+      "id": "apps_demo_exam_portal_package_dependencies_applyonce_schema",
+      "label": "@applyonce/schema",
       "_origin": "ast",
       "community": 6,
       "community_name": "devDependencies",
       "file_type": "code",
-      "norm_label": "@praman/schema",
+      "norm_label": "@applyonce/schema",
       "source_file": "apps/demo-exam-portal/package.json",
       "source_location": "L7"
     },
     {
-      "id": "apps_demo_exam_portal_package_dependencies_praman_sdk",
-      "label": "@praman/sdk",
+      "id": "apps_demo_exam_portal_package_dependencies_applyonce_sdk",
+      "label": "@applyonce/sdk",
       "_origin": "ast",
       "community": 6,
       "community_name": "devDependencies",
       "file_type": "code",
-      "norm_label": "@praman/sdk",
+      "norm_label": "@applyonce/sdk",
       "source_file": "apps/demo-exam-portal/package.json",
       "source_location": "L7"
     },
@@ -12024,13 +12024,13 @@
       "source_location": "L8"
     },
     {
-      "id": "apps_demo_exam_portal_package_json_praman_schema",
-      "label": "@praman/schema",
+      "id": "apps_demo_exam_portal_package_json_applyonce_schema",
+      "label": "@applyonce/schema",
       "_origin": "ast",
       "community": 6,
       "community_name": "devDependencies",
       "file_type": "concept",
-      "norm_label": "@praman/schema",
+      "norm_label": "@applyonce/schema",
       "source_file": "apps/demo-exam-portal/package.json",
       "source_location": "L7"
     },
@@ -12134,13 +12134,13 @@
       "source_location": "L7"
     },
     {
-      "id": "praman_sdk",
-      "label": "@praman/sdk",
+      "id": "applyonce_sdk",
+      "label": "@applyonce/sdk",
       "_origin": "ast",
       "community": 6,
       "community_name": "devDependencies",
       "file_type": "concept",
-      "norm_label": "@praman/sdk",
+      "norm_label": "@applyonce/sdk",
       "source_file": "apps/demo-exam-portal/package.json",
       "source_location": "L7"
     },
@@ -12389,13 +12389,13 @@
       "source_location": "L7"
     },
     {
-      "id": "apps_extension_package_dependencies_praman_schema",
-      "label": "@praman/schema",
+      "id": "apps_extension_package_dependencies_applyonce_schema",
+      "label": "@applyonce/schema",
       "_origin": "ast",
       "community": 7,
       "community_name": "devDependencies",
       "file_type": "code",
-      "norm_label": "@praman/schema",
+      "norm_label": "@applyonce/schema",
       "source_file": "apps/extension/package.json",
       "source_location": "L7"
     },
@@ -12642,13 +12642,13 @@
       "source_location": "L3"
     },
     {
-      "id": "apps_extension_package_json_praman_schema",
-      "label": "@praman/schema",
+      "id": "apps_extension_package_json_applyonce_schema",
+      "label": "@applyonce/schema",
       "_origin": "ast",
       "community": 7,
       "community_name": "devDependencies",
       "file_type": "concept",
-      "norm_label": "@praman/schema",
+      "norm_label": "@applyonce/schema",
       "source_file": "apps/extension/package.json",
       "source_location": "L7"
     },
@@ -12961,46 +12961,46 @@
       "source_location": "L40"
     },
     {
-      "id": "apps_web_package_dependencies_praman_crypto",
-      "label": "@praman/crypto",
+      "id": "apps_web_package_dependencies_applyonce_crypto",
+      "label": "@applyonce/crypto",
       "_origin": "ast",
       "community": 78,
-      "community_name": "@praman/crypto",
+      "community_name": "@applyonce/crypto",
       "file_type": "code",
-      "norm_label": "@praman/crypto",
+      "norm_label": "@applyonce/crypto",
       "source_file": "apps/web/package.json",
       "source_location": "L17"
     },
     {
-      "id": "apps_web_package_json_praman_crypto",
-      "label": "@praman/crypto",
+      "id": "apps_web_package_json_applyonce_crypto",
+      "label": "@applyonce/crypto",
       "_origin": "ast",
       "community": 78,
-      "community_name": "@praman/crypto",
+      "community_name": "@applyonce/crypto",
       "file_type": "concept",
-      "norm_label": "@praman/crypto",
+      "norm_label": "@applyonce/crypto",
       "source_file": "apps/web/package.json",
       "source_location": "L17"
     },
     {
-      "id": "apps_web_package_dependencies_praman_db",
-      "label": "@praman/db",
+      "id": "apps_web_package_dependencies_applyonce_db",
+      "label": "@applyonce/db",
       "_origin": "ast",
       "community": 79,
-      "community_name": "@praman/db",
+      "community_name": "@applyonce/db",
       "file_type": "code",
-      "norm_label": "@praman/db",
+      "norm_label": "@applyonce/db",
       "source_file": "apps/web/package.json",
       "source_location": "L16"
     },
     {
-      "id": "apps_web_package_json_praman_db",
-      "label": "@praman/db",
+      "id": "apps_web_package_json_applyonce_db",
+      "label": "@applyonce/db",
       "_origin": "ast",
       "community": 79,
-      "community_name": "@praman/db",
+      "community_name": "@applyonce/db",
       "file_type": "concept",
-      "norm_label": "@praman/db",
+      "norm_label": "@applyonce/db",
       "source_file": "apps/web/package.json",
       "source_location": "L16"
     },
@@ -13049,35 +13049,35 @@
       "source_location": "L23"
     },
     {
-      "id": "packages_db_package_dependencies_praman_crypto",
-      "label": "@praman/crypto",
+      "id": "packages_db_package_dependencies_applyonce_crypto",
+      "label": "@applyonce/crypto",
       "_origin": "ast",
       "community": 8,
       "community_name": "db/package.json",
       "file_type": "code",
-      "norm_label": "@praman/crypto",
+      "norm_label": "@applyonce/crypto",
       "source_file": "packages/db/package.json",
       "source_location": "L21"
     },
     {
-      "id": "packages_db_package_dependencies_praman_providers",
-      "label": "@praman/providers",
+      "id": "packages_db_package_dependencies_applyonce_providers",
+      "label": "@applyonce/providers",
       "_origin": "ast",
       "community": 8,
       "community_name": "db/package.json",
       "file_type": "code",
-      "norm_label": "@praman/providers",
+      "norm_label": "@applyonce/providers",
       "source_file": "packages/db/package.json",
       "source_location": "L24"
     },
     {
-      "id": "packages_db_package_dependencies_praman_schema",
-      "label": "@praman/schema",
+      "id": "packages_db_package_dependencies_applyonce_schema",
+      "label": "@applyonce/schema",
       "_origin": "ast",
       "community": 8,
       "community_name": "db/package.json",
       "file_type": "code",
-      "norm_label": "@praman/schema",
+      "norm_label": "@applyonce/schema",
       "source_file": "packages/db/package.json",
       "source_location": "L20"
     },
@@ -13324,35 +13324,35 @@
       "source_location": "L22"
     },
     {
-      "id": "packages_db_package_json_praman_crypto",
-      "label": "@praman/crypto",
+      "id": "packages_db_package_json_applyonce_crypto",
+      "label": "@applyonce/crypto",
       "_origin": "ast",
       "community": 8,
       "community_name": "db/package.json",
       "file_type": "concept",
-      "norm_label": "@praman/crypto",
+      "norm_label": "@applyonce/crypto",
       "source_file": "packages/db/package.json",
       "source_location": "L21"
     },
     {
-      "id": "packages_db_package_json_praman_providers",
-      "label": "@praman/providers",
+      "id": "packages_db_package_json_applyonce_providers",
+      "label": "@applyonce/providers",
       "_origin": "ast",
       "community": 8,
       "community_name": "db/package.json",
       "file_type": "concept",
-      "norm_label": "@praman/providers",
+      "norm_label": "@applyonce/providers",
       "source_file": "packages/db/package.json",
       "source_location": "L24"
     },
     {
-      "id": "packages_db_package_json_praman_schema",
-      "label": "@praman/schema",
+      "id": "packages_db_package_json_applyonce_schema",
+      "label": "@applyonce/schema",
       "_origin": "ast",
       "community": 8,
       "community_name": "db/package.json",
       "file_type": "concept",
-      "norm_label": "@praman/schema",
+      "norm_label": "@applyonce/schema",
       "source_file": "packages/db/package.json",
       "source_location": "L20"
     },
@@ -13412,90 +13412,90 @@
       "source_location": "L23"
     },
     {
-      "id": "apps_web_package_dependencies_praman_jobs",
-      "label": "@praman/jobs",
+      "id": "apps_web_package_dependencies_applyonce_jobs",
+      "label": "@applyonce/jobs",
       "_origin": "ast",
       "community": 80,
-      "community_name": "@praman/jobs",
+      "community_name": "@applyonce/jobs",
       "file_type": "code",
-      "norm_label": "@praman/jobs",
+      "norm_label": "@applyonce/jobs",
       "source_file": "apps/web/package.json",
       "source_location": "L43"
     },
     {
-      "id": "apps_web_package_json_praman_jobs",
-      "label": "@praman/jobs",
+      "id": "apps_web_package_json_applyonce_jobs",
+      "label": "@applyonce/jobs",
       "_origin": "ast",
       "community": 80,
-      "community_name": "@praman/jobs",
+      "community_name": "@applyonce/jobs",
       "file_type": "concept",
-      "norm_label": "@praman/jobs",
+      "norm_label": "@applyonce/jobs",
       "source_file": "apps/web/package.json",
       "source_location": "L43"
     },
     {
-      "id": "apps_web_package_dependencies_praman_providers",
-      "label": "@praman/providers",
+      "id": "apps_web_package_dependencies_applyonce_providers",
+      "label": "@applyonce/providers",
       "_origin": "ast",
       "community": 81,
-      "community_name": "@praman/providers",
+      "community_name": "@applyonce/providers",
       "file_type": "code",
-      "norm_label": "@praman/providers",
+      "norm_label": "@applyonce/providers",
       "source_file": "apps/web/package.json",
       "source_location": "L18"
     },
     {
-      "id": "apps_web_package_json_praman_providers",
-      "label": "@praman/providers",
+      "id": "apps_web_package_json_applyonce_providers",
+      "label": "@applyonce/providers",
       "_origin": "ast",
       "community": 81,
-      "community_name": "@praman/providers",
+      "community_name": "@applyonce/providers",
       "file_type": "concept",
-      "norm_label": "@praman/providers",
+      "norm_label": "@applyonce/providers",
       "source_file": "apps/web/package.json",
       "source_location": "L18"
     },
     {
-      "id": "apps_web_package_dependencies_praman_schema",
-      "label": "@praman/schema",
+      "id": "apps_web_package_dependencies_applyonce_schema",
+      "label": "@applyonce/schema",
       "_origin": "ast",
       "community": 82,
-      "community_name": "@praman/schema",
+      "community_name": "@applyonce/schema",
       "file_type": "code",
-      "norm_label": "@praman/schema",
+      "norm_label": "@applyonce/schema",
       "source_file": "apps/web/package.json",
       "source_location": "L15"
     },
     {
-      "id": "apps_web_package_json_praman_schema",
-      "label": "@praman/schema",
+      "id": "apps_web_package_json_applyonce_schema",
+      "label": "@applyonce/schema",
       "_origin": "ast",
       "community": 82,
-      "community_name": "@praman/schema",
+      "community_name": "@applyonce/schema",
       "file_type": "concept",
-      "norm_label": "@praman/schema",
+      "norm_label": "@applyonce/schema",
       "source_file": "apps/web/package.json",
       "source_location": "L15"
     },
     {
-      "id": "apps_web_package_dependencies_praman_ui",
-      "label": "@praman/ui",
+      "id": "apps_web_package_dependencies_applyonce_ui",
+      "label": "@applyonce/ui",
       "_origin": "ast",
       "community": 83,
-      "community_name": "@praman/ui",
+      "community_name": "@applyonce/ui",
       "file_type": "code",
-      "norm_label": "@praman/ui",
+      "norm_label": "@applyonce/ui",
       "source_file": "apps/web/package.json",
       "source_location": "L19"
     },
     {
-      "id": "praman_ui",
-      "label": "@praman/ui",
+      "id": "applyonce_ui",
+      "label": "@applyonce/ui",
       "_origin": "ast",
       "community": 83,
-      "community_name": "@praman/ui",
+      "community_name": "@applyonce/ui",
       "file_type": "concept",
-      "norm_label": "@praman/ui",
+      "norm_label": "@applyonce/ui",
       "source_file": "apps/web/package.json",
       "source_location": "L19"
     },
@@ -13676,13 +13676,13 @@
       "source_location": "L53"
     },
     {
-      "id": "apps_web_package_devdependencies_praman_config",
-      "label": "@praman/config",
+      "id": "apps_web_package_devdependencies_applyonce_config",
+      "label": "@applyonce/config",
       "_origin": "ast",
       "community": 9,
       "community_name": "devDependencies",
       "file_type": "code",
-      "norm_label": "@praman/config",
+      "norm_label": "@applyonce/config",
       "source_file": "apps/web/package.json",
       "source_location": "L46"
     },
@@ -13995,13 +13995,13 @@
       "source_location": "L55"
     },
     {
-      "id": "praman_config",
-      "label": "@praman/config",
+      "id": "applyonce_config",
+      "label": "@applyonce/config",
       "_origin": "ast",
       "community": 9,
       "community_name": "devDependencies",
       "file_type": "concept",
-      "norm_label": "@praman/config",
+      "norm_label": "@applyonce/config",
       "source_file": "apps/web/package.json",
       "source_location": "L46"
     },
@@ -15896,7 +15896,7 @@
       "weight": 1.0
     },
     {
-      "source": "packages_schema_src_payload_pramanpayload",
+      "source": "packages_schema_src_payload_applyoncepayload",
       "target": "packages_schema_src_types_purpose",
       "relation": "references",
       "_origin": "ast",
@@ -16749,7 +16749,7 @@
     },
     {
       "source": "turbo_globalenv",
-      "target": "ref_praman",
+      "target": "ref_applyonce",
       "relation": "extends",
       "_origin": "ast",
       "confidence": "EXTRACTED",
@@ -16832,8 +16832,8 @@
       "weight": 1.0
     },
     {
-      "source": "apps_demo_exam_portal_package_dependencies_praman_schema",
-      "target": "apps_demo_exam_portal_package_json_praman_schema",
+      "source": "apps_demo_exam_portal_package_dependencies_applyonce_schema",
+      "target": "apps_demo_exam_portal_package_json_applyonce_schema",
       "relation": "imports",
       "_origin": "ast",
       "confidence": "EXTRACTED",
@@ -16844,8 +16844,8 @@
       "weight": 1.0
     },
     {
-      "source": "apps_demo_exam_portal_package_dependencies_praman_sdk",
-      "target": "praman_sdk",
+      "source": "apps_demo_exam_portal_package_dependencies_applyonce_sdk",
+      "target": "applyonce_sdk",
       "relation": "imports",
       "_origin": "ast",
       "confidence": "EXTRACTED",
@@ -16976,8 +16976,8 @@
       "weight": 1.0
     },
     {
-      "source": "apps_extension_package_dependencies_praman_schema",
-      "target": "apps_extension_package_json_praman_schema",
+      "source": "apps_extension_package_dependencies_applyonce_schema",
+      "target": "apps_extension_package_json_applyonce_schema",
       "relation": "imports",
       "_origin": "ast",
       "confidence": "EXTRACTED",
@@ -17312,8 +17312,8 @@
       "weight": 1.0
     },
     {
-      "source": "apps_web_package_dependencies_praman_crypto",
-      "target": "apps_web_package_json_praman_crypto",
+      "source": "apps_web_package_dependencies_applyonce_crypto",
+      "target": "apps_web_package_json_applyonce_crypto",
       "relation": "imports",
       "_origin": "ast",
       "confidence": "EXTRACTED",
@@ -17324,8 +17324,8 @@
       "weight": 1.0
     },
     {
-      "source": "apps_web_package_dependencies_praman_db",
-      "target": "apps_web_package_json_praman_db",
+      "source": "apps_web_package_dependencies_applyonce_db",
+      "target": "apps_web_package_json_applyonce_db",
       "relation": "imports",
       "_origin": "ast",
       "confidence": "EXTRACTED",
@@ -17336,8 +17336,8 @@
       "weight": 1.0
     },
     {
-      "source": "apps_web_package_dependencies_praman_jobs",
-      "target": "apps_web_package_json_praman_jobs",
+      "source": "apps_web_package_dependencies_applyonce_jobs",
+      "target": "apps_web_package_json_applyonce_jobs",
       "relation": "imports",
       "_origin": "ast",
       "confidence": "EXTRACTED",
@@ -17348,8 +17348,8 @@
       "weight": 1.0
     },
     {
-      "source": "apps_web_package_dependencies_praman_providers",
-      "target": "apps_web_package_json_praman_providers",
+      "source": "apps_web_package_dependencies_applyonce_providers",
+      "target": "apps_web_package_json_applyonce_providers",
       "relation": "imports",
       "_origin": "ast",
       "confidence": "EXTRACTED",
@@ -17360,8 +17360,8 @@
       "weight": 1.0
     },
     {
-      "source": "apps_web_package_dependencies_praman_schema",
-      "target": "apps_web_package_json_praman_schema",
+      "source": "apps_web_package_dependencies_applyonce_schema",
+      "target": "apps_web_package_json_applyonce_schema",
       "relation": "imports",
       "_origin": "ast",
       "confidence": "EXTRACTED",
@@ -17372,8 +17372,8 @@
       "weight": 1.0
     },
     {
-      "source": "apps_web_package_dependencies_praman_ui",
-      "target": "praman_ui",
+      "source": "apps_web_package_dependencies_applyonce_ui",
+      "target": "applyonce_ui",
       "relation": "imports",
       "_origin": "ast",
       "confidence": "EXTRACTED",
@@ -17516,8 +17516,8 @@
       "weight": 1.0
     },
     {
-      "source": "apps_web_package_devdependencies_praman_config",
-      "target": "praman_config",
+      "source": "apps_web_package_devdependencies_applyonce_config",
+      "target": "applyonce_config",
       "relation": "imports",
       "_origin": "ast",
       "confidence": "EXTRACTED",
@@ -18200,8 +18200,8 @@
       "weight": 1.0
     },
     {
-      "source": "apps_worker_package_dependencies_praman_crypto",
-      "target": "apps_worker_package_json_praman_crypto",
+      "source": "apps_worker_package_dependencies_applyonce_crypto",
+      "target": "apps_worker_package_json_applyonce_crypto",
       "relation": "imports",
       "_origin": "ast",
       "confidence": "EXTRACTED",
@@ -18212,8 +18212,8 @@
       "weight": 1.0
     },
     {
-      "source": "apps_worker_package_dependencies_praman_db",
-      "target": "apps_worker_package_json_praman_db",
+      "source": "apps_worker_package_dependencies_applyonce_db",
+      "target": "apps_worker_package_json_applyonce_db",
       "relation": "imports",
       "_origin": "ast",
       "confidence": "EXTRACTED",
@@ -18224,8 +18224,8 @@
       "weight": 1.0
     },
     {
-      "source": "apps_worker_package_dependencies_praman_jobs",
-      "target": "apps_worker_package_json_praman_jobs",
+      "source": "apps_worker_package_dependencies_applyonce_jobs",
+      "target": "apps_worker_package_json_applyonce_jobs",
       "relation": "imports",
       "_origin": "ast",
       "confidence": "EXTRACTED",
@@ -18236,8 +18236,8 @@
       "weight": 1.0
     },
     {
-      "source": "apps_worker_package_dependencies_praman_providers",
-      "target": "apps_worker_package_json_praman_providers",
+      "source": "apps_worker_package_dependencies_applyonce_providers",
+      "target": "apps_worker_package_json_applyonce_providers",
       "relation": "imports",
       "_origin": "ast",
       "confidence": "EXTRACTED",
@@ -18248,8 +18248,8 @@
       "weight": 1.0
     },
     {
-      "source": "apps_worker_package_dependencies_praman_schema",
-      "target": "apps_worker_package_json_praman_schema",
+      "source": "apps_worker_package_dependencies_applyonce_schema",
+      "target": "apps_worker_package_json_applyonce_schema",
       "relation": "imports",
       "_origin": "ast",
       "confidence": "EXTRACTED",
@@ -18584,8 +18584,8 @@
       "weight": 1.0
     },
     {
-      "source": "packages_db_package_dependencies_praman_crypto",
-      "target": "packages_db_package_json_praman_crypto",
+      "source": "packages_db_package_dependencies_applyonce_crypto",
+      "target": "packages_db_package_json_applyonce_crypto",
       "relation": "imports",
       "_origin": "ast",
       "confidence": "EXTRACTED",
@@ -18596,8 +18596,8 @@
       "weight": 1.0
     },
     {
-      "source": "packages_db_package_dependencies_praman_providers",
-      "target": "packages_db_package_json_praman_providers",
+      "source": "packages_db_package_dependencies_applyonce_providers",
+      "target": "packages_db_package_json_applyonce_providers",
       "relation": "imports",
       "_origin": "ast",
       "confidence": "EXTRACTED",
@@ -18608,8 +18608,8 @@
       "weight": 1.0
     },
     {
-      "source": "packages_db_package_dependencies_praman_schema",
-      "target": "packages_db_package_json_praman_schema",
+      "source": "packages_db_package_dependencies_applyonce_schema",
+      "target": "packages_db_package_json_applyonce_schema",
       "relation": "imports",
       "_origin": "ast",
       "confidence": "EXTRACTED",
@@ -19412,8 +19412,8 @@
       "weight": 1.0
     },
     {
-      "source": "packages_providers_package_dependencies_praman_schema",
-      "target": "packages_providers_package_json_praman_schema",
+      "source": "packages_providers_package_dependencies_applyonce_schema",
+      "target": "packages_providers_package_json_applyonce_schema",
       "relation": "imports",
       "_origin": "ast",
       "confidence": "EXTRACTED",
@@ -20072,8 +20072,8 @@
       "weight": 1.0
     },
     {
-      "source": "packages_sdk_package_dependencies_praman_schema",
-      "target": "packages_sdk_package_json_praman_schema",
+      "source": "packages_sdk_package_dependencies_applyonce_schema",
+      "target": "packages_sdk_package_json_applyonce_schema",
       "relation": "imports",
       "_origin": "ast",
       "confidence": "EXTRACTED",
@@ -20132,8 +20132,8 @@
       "weight": 1.0
     },
     {
-      "source": "packages_ui_package_dependencies_praman_schema",
-      "target": "packages_ui_package_json_praman_schema",
+      "source": "packages_ui_package_dependencies_applyonce_schema",
+      "target": "packages_ui_package_json_applyonce_schema",
       "relation": "imports",
       "_origin": "ast",
       "confidence": "EXTRACTED",
@@ -21899,7 +21899,7 @@
     },
     {
       "source": "apps_demo_exam_portal_package_dependencies",
-      "target": "apps_demo_exam_portal_package_dependencies_praman_schema",
+      "target": "apps_demo_exam_portal_package_dependencies_applyonce_schema",
       "relation": "contains",
       "_origin": "ast",
       "confidence": "EXTRACTED",
@@ -21910,7 +21910,7 @@
     },
     {
       "source": "apps_demo_exam_portal_package_dependencies",
-      "target": "apps_demo_exam_portal_package_dependencies_praman_sdk",
+      "target": "apps_demo_exam_portal_package_dependencies_applyonce_sdk",
       "relation": "contains",
       "_origin": "ast",
       "confidence": "EXTRACTED",
@@ -22229,7 +22229,7 @@
     },
     {
       "source": "apps_extension_package_dependencies",
-      "target": "apps_extension_package_dependencies_praman_schema",
+      "target": "apps_extension_package_dependencies_applyonce_schema",
       "relation": "contains",
       "_origin": "ast",
       "confidence": "EXTRACTED",
@@ -22570,7 +22570,7 @@
     },
     {
       "source": "apps_web_package_dependencies",
-      "target": "apps_web_package_dependencies_praman_schema",
+      "target": "apps_web_package_dependencies_applyonce_schema",
       "relation": "contains",
       "_origin": "ast",
       "confidence": "EXTRACTED",
@@ -22581,7 +22581,7 @@
     },
     {
       "source": "apps_web_package_dependencies",
-      "target": "apps_web_package_dependencies_praman_db",
+      "target": "apps_web_package_dependencies_applyonce_db",
       "relation": "contains",
       "_origin": "ast",
       "confidence": "EXTRACTED",
@@ -22592,7 +22592,7 @@
     },
     {
       "source": "apps_web_package_dependencies",
-      "target": "apps_web_package_dependencies_praman_crypto",
+      "target": "apps_web_package_dependencies_applyonce_crypto",
       "relation": "contains",
       "_origin": "ast",
       "confidence": "EXTRACTED",
@@ -22603,7 +22603,7 @@
     },
     {
       "source": "apps_web_package_dependencies",
-      "target": "apps_web_package_dependencies_praman_providers",
+      "target": "apps_web_package_dependencies_applyonce_providers",
       "relation": "contains",
       "_origin": "ast",
       "confidence": "EXTRACTED",
@@ -22614,7 +22614,7 @@
     },
     {
       "source": "apps_web_package_dependencies",
-      "target": "apps_web_package_dependencies_praman_ui",
+      "target": "apps_web_package_dependencies_applyonce_ui",
       "relation": "contains",
       "_origin": "ast",
       "confidence": "EXTRACTED",
@@ -22878,7 +22878,7 @@
     },
     {
       "source": "apps_web_package_dependencies",
-      "target": "apps_web_package_dependencies_praman_jobs",
+      "target": "apps_web_package_dependencies_applyonce_jobs",
       "relation": "contains",
       "_origin": "ast",
       "confidence": "EXTRACTED",
@@ -22889,7 +22889,7 @@
     },
     {
       "source": "apps_web_package_devdependencies",
-      "target": "apps_web_package_devdependencies_praman_config",
+      "target": "apps_web_package_devdependencies_applyonce_config",
       "relation": "contains",
       "_origin": "ast",
       "confidence": "EXTRACTED",
@@ -23835,7 +23835,7 @@
     },
     {
       "source": "apps_worker_package_dependencies",
-      "target": "apps_worker_package_dependencies_praman_crypto",
+      "target": "apps_worker_package_dependencies_applyonce_crypto",
       "relation": "contains",
       "_origin": "ast",
       "confidence": "EXTRACTED",
@@ -23846,7 +23846,7 @@
     },
     {
       "source": "apps_worker_package_dependencies",
-      "target": "apps_worker_package_dependencies_praman_db",
+      "target": "apps_worker_package_dependencies_applyonce_db",
       "relation": "contains",
       "_origin": "ast",
       "confidence": "EXTRACTED",
@@ -23857,7 +23857,7 @@
     },
     {
       "source": "apps_worker_package_dependencies",
-      "target": "apps_worker_package_dependencies_praman_jobs",
+      "target": "apps_worker_package_dependencies_applyonce_jobs",
       "relation": "contains",
       "_origin": "ast",
       "confidence": "EXTRACTED",
@@ -23868,7 +23868,7 @@
     },
     {
       "source": "apps_worker_package_dependencies",
-      "target": "apps_worker_package_dependencies_praman_providers",
+      "target": "apps_worker_package_dependencies_applyonce_providers",
       "relation": "contains",
       "_origin": "ast",
       "confidence": "EXTRACTED",
@@ -23879,7 +23879,7 @@
     },
     {
       "source": "apps_worker_package_dependencies",
-      "target": "apps_worker_package_dependencies_praman_schema",
+      "target": "apps_worker_package_dependencies_applyonce_schema",
       "relation": "contains",
       "_origin": "ast",
       "confidence": "EXTRACTED",
@@ -24066,7 +24066,7 @@
     },
     {
       "source": "claude",
-      "target": "claude_praman_agent_instructions",
+      "target": "claude_applyonce_agent_instructions",
       "relation": "contains",
       "_origin": "ast",
       "confidence": "EXTRACTED",
@@ -24076,7 +24076,7 @@
       "weight": 1.0
     },
     {
-      "source": "claude_praman_agent_instructions",
+      "source": "claude_applyonce_agent_instructions",
       "target": "claude_commands",
       "relation": "contains",
       "_origin": "ast",
@@ -24087,7 +24087,7 @@
       "weight": 1.0
     },
     {
-      "source": "claude_praman_agent_instructions",
+      "source": "claude_applyonce_agent_instructions",
       "target": "claude_structure",
       "relation": "contains",
       "_origin": "ast",
@@ -24098,7 +24098,7 @@
       "weight": 1.0
     },
     {
-      "source": "claude_praman_agent_instructions",
+      "source": "claude_applyonce_agent_instructions",
       "target": "claude_standing_rules_stated_once",
       "relation": "contains",
       "_origin": "ast",
@@ -24110,7 +24110,7 @@
     },
     {
       "source": "docs_00_readme",
-      "target": "docs_00_readme_praman_build_kit",
+      "target": "docs_00_readme_applyonce_build_kit",
       "relation": "contains",
       "_origin": "ast",
       "confidence": "EXTRACTED",
@@ -24120,7 +24120,7 @@
       "weight": 1.0
     },
     {
-      "source": "docs_00_readme_praman_build_kit",
+      "source": "docs_00_readme_applyonce_build_kit",
       "target": "docs_00_readme_the_one_paragraph_pitch",
       "relation": "contains",
       "_origin": "ast",
@@ -24131,7 +24131,7 @@
       "weight": 1.0
     },
     {
-      "source": "docs_00_readme_praman_build_kit",
+      "source": "docs_00_readme_applyonce_build_kit",
       "target": "docs_00_readme_honest_constraints_baked_into_the_plan",
       "relation": "contains",
       "_origin": "ast",
@@ -24143,7 +24143,7 @@
     },
     {
       "source": "docs_01_prd",
-      "target": "docs_01_prd_01_product_requirements_document_praman",
+      "target": "docs_01_prd_01_product_requirements_document_applyonce",
       "relation": "contains",
       "_origin": "ast",
       "confidence": "EXTRACTED",
@@ -24153,7 +24153,7 @@
       "weight": 1.0
     },
     {
-      "source": "docs_01_prd_01_product_requirements_document_praman",
+      "source": "docs_01_prd_01_product_requirements_document_applyonce",
       "target": "docs_01_prd_6_non_goals_phase_1",
       "relation": "contains",
       "_origin": "ast",
@@ -24164,7 +24164,7 @@
       "weight": 1.0
     },
     {
-      "source": "docs_01_prd_01_product_requirements_document_praman",
+      "source": "docs_01_prd_01_product_requirements_document_applyonce",
       "target": "docs_01_prd_7_success_metrics",
       "relation": "contains",
       "_origin": "ast",
@@ -24175,7 +24175,7 @@
       "weight": 1.0
     },
     {
-      "source": "docs_01_prd_01_product_requirements_document_praman",
+      "source": "docs_01_prd_01_product_requirements_document_applyonce",
       "target": "docs_01_prd_8_risks_mitigations",
       "relation": "contains",
       "_origin": "ast",
@@ -24186,7 +24186,7 @@
       "weight": 1.0
     },
     {
-      "source": "docs_01_prd_01_product_requirements_document_praman",
+      "source": "docs_01_prd_01_product_requirements_document_applyonce",
       "target": "docs_01_prd_2_vision",
       "relation": "contains",
       "_origin": "ast",
@@ -24197,7 +24197,7 @@
       "weight": 1.0
     },
     {
-      "source": "docs_01_prd_01_product_requirements_document_praman",
+      "source": "docs_01_prd_01_product_requirements_document_applyonce",
       "target": "docs_01_prd_3_personas",
       "relation": "contains",
       "_origin": "ast",
@@ -24208,7 +24208,7 @@
       "weight": 1.0
     },
     {
-      "source": "docs_01_prd_01_product_requirements_document_praman",
+      "source": "docs_01_prd_01_product_requirements_document_applyonce",
       "target": "docs_01_prd_4_use_case_map_extensive",
       "relation": "contains",
       "_origin": "ast",
@@ -24219,7 +24219,7 @@
       "weight": 1.0
     },
     {
-      "source": "docs_01_prd_01_product_requirements_document_praman",
+      "source": "docs_01_prd_01_product_requirements_document_applyonce",
       "target": "docs_01_prd_1_problem",
       "relation": "contains",
       "_origin": "ast",
@@ -24230,7 +24230,7 @@
       "weight": 1.0
     },
     {
-      "source": "docs_01_prd_01_product_requirements_document_praman",
+      "source": "docs_01_prd_01_product_requirements_document_applyonce",
       "target": "docs_01_prd_5_feature_list_phase_1_shippable_product",
       "relation": "contains",
       "_origin": "ast",
@@ -24627,7 +24627,7 @@
     },
     {
       "source": "docs_04_design_system",
-      "target": "docs_04_design_system_04_design_system_praman_bright",
+      "target": "docs_04_design_system_04_design_system_applyonce_bright",
       "relation": "contains",
       "_origin": "ast",
       "confidence": "EXTRACTED",
@@ -24637,7 +24637,7 @@
       "weight": 1.0
     },
     {
-      "source": "docs_04_design_system_04_design_system_praman_bright",
+      "source": "docs_04_design_system_04_design_system_applyonce_bright",
       "target": "docs_04_design_system_8_copy_voice",
       "relation": "contains",
       "_origin": "ast",
@@ -24648,7 +24648,7 @@
       "weight": 1.0
     },
     {
-      "source": "docs_04_design_system_04_design_system_praman_bright",
+      "source": "docs_04_design_system_04_design_system_applyonce_bright",
       "target": "docs_04_design_system_3_colour_usage_rules",
       "relation": "contains",
       "_origin": "ast",
@@ -24659,7 +24659,7 @@
       "weight": 1.0
     },
     {
-      "source": "docs_04_design_system_04_design_system_praman_bright",
+      "source": "docs_04_design_system_04_design_system_applyonce_bright",
       "target": "docs_04_design_system_4_motion",
       "relation": "contains",
       "_origin": "ast",
@@ -24670,7 +24670,7 @@
       "weight": 1.0
     },
     {
-      "source": "docs_04_design_system_04_design_system_praman_bright",
+      "source": "docs_04_design_system_04_design_system_applyonce_bright",
       "target": "docs_04_design_system_1_personality",
       "relation": "contains",
       "_origin": "ast",
@@ -24681,7 +24681,7 @@
       "weight": 1.0
     },
     {
-      "source": "docs_04_design_system_04_design_system_praman_bright",
+      "source": "docs_04_design_system_04_design_system_applyonce_bright",
       "target": "docs_04_design_system_5_components_heroui_v3_base_composed_in_packages_ui",
       "relation": "contains",
       "_origin": "ast",
@@ -24692,7 +24692,7 @@
       "weight": 1.0
     },
     {
-      "source": "docs_04_design_system_04_design_system_praman_bright",
+      "source": "docs_04_design_system_04_design_system_applyonce_bright",
       "target": "docs_04_design_system_6_layouts",
       "relation": "contains",
       "_origin": "ast",
@@ -24703,7 +24703,7 @@
       "weight": 1.0
     },
     {
-      "source": "docs_04_design_system_04_design_system_praman_bright",
+      "source": "docs_04_design_system_04_design_system_applyonce_bright",
       "target": "docs_04_design_system_2_tokens_tailwind_v4_theme_heroui_theme",
       "relation": "contains",
       "_origin": "ast",
@@ -24714,7 +24714,7 @@
       "weight": 1.0
     },
     {
-      "source": "docs_04_design_system_04_design_system_praman_bright",
+      "source": "docs_04_design_system_04_design_system_applyonce_bright",
       "target": "docs_04_design_system_7_complete_page_list",
       "relation": "contains",
       "_origin": "ast",
@@ -24847,7 +24847,7 @@
     },
     {
       "source": "docs_05_api_and_flows_05_api_user_flows_partner_protocol_extension",
-      "target": "docs_05_api_and_flows_3_praman_sdk_partner_facing_tiny",
+      "target": "docs_05_api_and_flows_3_applyonce_sdk_partner_facing_tiny",
       "relation": "contains",
       "_origin": "ast",
       "confidence": "EXTRACTED",
@@ -24968,7 +24968,7 @@
     },
     {
       "source": "docs_05_api_and_flows_2_end_to_end_flows",
-      "target": "docs_05_api_and_flows_f2_apply_with_praman_partner_initiated",
+      "target": "docs_05_api_and_flows_f2_apply_with_applyonce_partner_initiated",
       "relation": "contains",
       "_origin": "ast",
       "confidence": "EXTRACTED",
@@ -25650,7 +25650,7 @@
     },
     {
       "source": "docs_10_prd_v2_4_feature_list_by_surface_moscow_acceptance_criteria",
-      "target": "docs_10_prd_v2_4_6_sdk_praman_sdk",
+      "target": "docs_10_prd_v2_4_6_sdk_applyonce_sdk",
       "relation": "contains",
       "_origin": "ast",
       "confidence": "EXTRACTED",
@@ -25661,7 +25661,7 @@
     },
     {
       "source": "docs_research_01_integrations_india_dpi",
-      "target": "docs_research_01_integrations_india_dpi_india_dpi_kyc_integration_landscape_for_praman_2026",
+      "target": "docs_research_01_integrations_india_dpi_india_dpi_kyc_integration_landscape_for_applyonce_2026",
       "relation": "contains",
       "_origin": "ast",
       "confidence": "EXTRACTED",
@@ -25671,7 +25671,7 @@
       "weight": 1.0
     },
     {
-      "source": "docs_research_01_integrations_india_dpi_india_dpi_kyc_integration_landscape_for_praman_2026",
+      "source": "docs_research_01_integrations_india_dpi_india_dpi_kyc_integration_landscape_for_applyonce_2026",
       "target": "docs_research_01_integrations_india_dpi_9_government_portals_api_vs_digilocker_only_vs_manual",
       "relation": "contains",
       "_origin": "ast",
@@ -25682,7 +25682,7 @@
       "weight": 1.0
     },
     {
-      "source": "docs_research_01_integrations_india_dpi_india_dpi_kyc_integration_landscape_for_praman_2026",
+      "source": "docs_research_01_integrations_india_dpi_india_dpi_kyc_integration_landscape_for_applyonce_2026",
       "target": "docs_research_01_integrations_india_dpi_10_exam_admission_bodies",
       "relation": "contains",
       "_origin": "ast",
@@ -25693,7 +25693,7 @@
       "weight": 1.0
     },
     {
-      "source": "docs_research_01_integrations_india_dpi_india_dpi_kyc_integration_landscape_for_praman_2026",
+      "source": "docs_research_01_integrations_india_dpi_india_dpi_kyc_integration_landscape_for_applyonce_2026",
       "target": "docs_research_01_integrations_india_dpi_11_kyc_identity_aggregators_2026_comparison",
       "relation": "contains",
       "_origin": "ast",
@@ -25704,7 +25704,7 @@
       "weight": 1.0
     },
     {
-      "source": "docs_research_01_integrations_india_dpi_india_dpi_kyc_integration_landscape_for_praman_2026",
+      "source": "docs_research_01_integrations_india_dpi_india_dpi_kyc_integration_landscape_for_applyonce_2026",
       "target": "docs_research_01_integrations_india_dpi_12_legal_dpdp_act_2023_dpdp_rules_2025",
       "relation": "contains",
       "_origin": "ast",
@@ -25715,7 +25715,7 @@
       "weight": 1.0
     },
     {
-      "source": "docs_research_01_integrations_india_dpi_india_dpi_kyc_integration_landscape_for_praman_2026",
+      "source": "docs_research_01_integrations_india_dpi_india_dpi_kyc_integration_landscape_for_applyonce_2026",
       "target": "docs_research_01_integrations_india_dpi_13_auth_tech_for_citizens",
       "relation": "contains",
       "_origin": "ast",
@@ -25726,8 +25726,8 @@
       "weight": 1.0
     },
     {
-      "source": "docs_research_01_integrations_india_dpi_india_dpi_kyc_integration_landscape_for_praman_2026",
-      "target": "docs_research_01_integrations_india_dpi_recommended_integration_path_for_praman_v1_2026",
+      "source": "docs_research_01_integrations_india_dpi_india_dpi_kyc_integration_landscape_for_applyonce_2026",
+      "target": "docs_research_01_integrations_india_dpi_recommended_integration_path_for_applyonce_v1_2026",
       "relation": "contains",
       "_origin": "ast",
       "confidence": "EXTRACTED",
@@ -25737,7 +25737,7 @@
       "weight": 1.0
     },
     {
-      "source": "docs_research_01_integrations_india_dpi_india_dpi_kyc_integration_landscape_for_praman_2026",
+      "source": "docs_research_01_integrations_india_dpi_india_dpi_kyc_integration_landscape_for_applyonce_2026",
       "target": "docs_research_01_integrations_india_dpi_2_aadhaar_offline_xml_online_otp_ekyc_vault_legal_boundaries",
       "relation": "contains",
       "_origin": "ast",
@@ -25748,7 +25748,7 @@
       "weight": 1.0
     },
     {
-      "source": "docs_research_01_integrations_india_dpi_india_dpi_kyc_integration_landscape_for_praman_2026",
+      "source": "docs_research_01_integrations_india_dpi_india_dpi_kyc_integration_landscape_for_applyonce_2026",
       "target": "docs_research_01_integrations_india_dpi_3_pan_verification",
       "relation": "contains",
       "_origin": "ast",
@@ -25759,7 +25759,7 @@
       "weight": 1.0
     },
     {
-      "source": "docs_research_01_integrations_india_dpi_india_dpi_kyc_integration_landscape_for_praman_2026",
+      "source": "docs_research_01_integrations_india_dpi_india_dpi_kyc_integration_landscape_for_applyonce_2026",
       "target": "docs_research_01_integrations_india_dpi_4_abha_abdm_ayushman_bharat_digital_mission",
       "relation": "contains",
       "_origin": "ast",
@@ -25770,7 +25770,7 @@
       "weight": 1.0
     },
     {
-      "source": "docs_research_01_integrations_india_dpi_india_dpi_kyc_integration_landscape_for_praman_2026",
+      "source": "docs_research_01_integrations_india_dpi_india_dpi_kyc_integration_landscape_for_applyonce_2026",
       "target": "docs_research_01_integrations_india_dpi_1_digilocker_api_setu_entity_locker_meripehchaan",
       "relation": "contains",
       "_origin": "ast",
@@ -25781,7 +25781,7 @@
       "weight": 1.0
     },
     {
-      "source": "docs_research_01_integrations_india_dpi_india_dpi_kyc_integration_landscape_for_praman_2026",
+      "source": "docs_research_01_integrations_india_dpi_india_dpi_kyc_integration_landscape_for_applyonce_2026",
       "target": "docs_research_01_integrations_india_dpi_5_account_aggregator_sahamati_rebit_rbi",
       "relation": "contains",
       "_origin": "ast",
@@ -25792,7 +25792,7 @@
       "weight": 1.0
     },
     {
-      "source": "docs_research_01_integrations_india_dpi_india_dpi_kyc_integration_landscape_for_praman_2026",
+      "source": "docs_research_01_integrations_india_dpi_india_dpi_kyc_integration_landscape_for_applyonce_2026",
       "target": "docs_research_01_integrations_india_dpi_6_apaar_id_abc_nad_digilocker_education_documents",
       "relation": "contains",
       "_origin": "ast",
@@ -25803,7 +25803,7 @@
       "weight": 1.0
     },
     {
-      "source": "docs_research_01_integrations_india_dpi_india_dpi_kyc_integration_landscape_for_praman_2026",
+      "source": "docs_research_01_integrations_india_dpi_india_dpi_kyc_integration_landscape_for_applyonce_2026",
       "target": "docs_research_01_integrations_india_dpi_7_e_sign_aadhaar_based_digital_signature",
       "relation": "contains",
       "_origin": "ast",
@@ -25814,7 +25814,7 @@
       "weight": 1.0
     },
     {
-      "source": "docs_research_01_integrations_india_dpi_india_dpi_kyc_integration_landscape_for_praman_2026",
+      "source": "docs_research_01_integrations_india_dpi_india_dpi_kyc_integration_landscape_for_applyonce_2026",
       "target": "docs_research_01_integrations_india_dpi_8_ckyc_cersai",
       "relation": "contains",
       "_origin": "ast",
@@ -25969,7 +25969,7 @@
     },
     {
       "source": "docs_research_02_use_cases_and_forms_research_02_use_cases_and_forms_across_an_indian_citizen_s_life",
-      "target": "docs_research_02_use_cases_and_forms_part_e_ranked_prioritisation_for_praman_v1_top_10_by_frequency_pain_feasibility",
+      "target": "docs_research_02_use_cases_and_forms_part_e_ranked_prioritisation_for_applyonce_v1_top_10_by_frequency_pain_feasibility",
       "relation": "contains",
       "_origin": "ast",
       "confidence": "EXTRACTED",
@@ -25991,7 +25991,7 @@
     },
     {
       "source": "docs_research_03_ui_libraries_and_design",
-      "target": "docs_research_03_ui_libraries_and_design_ui_component_libraries_design_direction_praman_sept_2026",
+      "target": "docs_research_03_ui_libraries_and_design_ui_component_libraries_design_direction_applyonce_sept_2026",
       "relation": "contains",
       "_origin": "ast",
       "confidence": "EXTRACTED",
@@ -26035,7 +26035,7 @@
     },
     {
       "source": "docs_research_03_ui_libraries_and_design_part_a_library_comparison_2026_state",
-      "target": "docs_research_03_ui_libraries_and_design_recommendation_for_praman_heroui_v3_heroui_react_heroui_styles",
+      "target": "docs_research_03_ui_libraries_and_design_recommendation_for_applyonce_heroui_v3_heroui_react_heroui_styles",
       "relation": "contains",
       "_origin": "ast",
       "confidence": "EXTRACTED",
@@ -26155,7 +26155,7 @@
       "weight": 1.0
     },
     {
-      "source": "docs_research_03_ui_libraries_and_design_ui_component_libraries_design_direction_praman_sept_2026",
+      "source": "docs_research_03_ui_libraries_and_design_ui_component_libraries_design_direction_applyonce_sept_2026",
       "target": "docs_research_03_ui_libraries_and_design_part_c_design_references_12_best_in_class_bright_but_trustworthy",
       "relation": "contains",
       "_origin": "ast",
@@ -26166,7 +26166,7 @@
       "weight": 1.0
     },
     {
-      "source": "docs_research_03_ui_libraries_and_design_ui_component_libraries_design_direction_praman_sept_2026",
+      "source": "docs_research_03_ui_libraries_and_design_ui_component_libraries_design_direction_applyonce_sept_2026",
       "target": "docs_research_03_ui_libraries_and_design_part_d_product_specific_patterns_concrete_rules",
       "relation": "contains",
       "_origin": "ast",
@@ -26177,7 +26177,7 @@
       "weight": 1.0
     },
     {
-      "source": "docs_research_03_ui_libraries_and_design_ui_component_libraries_design_direction_praman_sept_2026",
+      "source": "docs_research_03_ui_libraries_and_design_ui_component_libraries_design_direction_applyonce_sept_2026",
       "target": "docs_research_03_ui_libraries_and_design_part_e_motion_the_motion_package_v13_react_19",
       "relation": "contains",
       "_origin": "ast",
@@ -26188,7 +26188,7 @@
       "weight": 1.0
     },
     {
-      "source": "docs_research_03_ui_libraries_and_design_ui_component_libraries_design_direction_praman_sept_2026",
+      "source": "docs_research_03_ui_libraries_and_design_ui_component_libraries_design_direction_applyonce_sept_2026",
       "target": "docs_research_03_ui_libraries_and_design_part_a_library_comparison_2026_state",
       "relation": "contains",
       "_origin": "ast",
@@ -26199,7 +26199,7 @@
       "weight": 1.0
     },
     {
-      "source": "docs_research_03_ui_libraries_and_design_ui_component_libraries_design_direction_praman_sept_2026",
+      "source": "docs_research_03_ui_libraries_and_design_ui_component_libraries_design_direction_applyonce_sept_2026",
       "target": "docs_research_03_ui_libraries_and_design_part_b_heroui_v3_integration_notes_verified_against_the_published_npm_packages_2026_09_02",
       "relation": "contains",
       "_origin": "ast",
@@ -26211,7 +26211,7 @@
     },
     {
       "source": "docs_research_04_market_competitors_gtm",
-      "target": "docs_research_04_market_competitors_gtm_praman_market_competitors_business_model_gtm_research",
+      "target": "docs_research_04_market_competitors_gtm_applyonce_market_competitors_business_model_gtm_research",
       "relation": "contains",
       "_origin": "ast",
       "confidence": "EXTRACTED",
@@ -26221,7 +26221,7 @@
       "weight": 1.0
     },
     {
-      "source": "docs_research_04_market_competitors_gtm_praman_market_competitors_business_model_gtm_research",
+      "source": "docs_research_04_market_competitors_gtm_applyonce_market_competitors_business_model_gtm_research",
       "target": "docs_research_04_market_competitors_gtm_f_risks_and_moats",
       "relation": "contains",
       "_origin": "ast",
@@ -26232,7 +26232,7 @@
       "weight": 1.0
     },
     {
-      "source": "docs_research_04_market_competitors_gtm_praman_market_competitors_business_model_gtm_research",
+      "source": "docs_research_04_market_competitors_gtm_applyonce_market_competitors_business_model_gtm_research",
       "target": "docs_research_04_market_competitors_gtm_g_recommended_12_month_gtm_plan",
       "relation": "contains",
       "_origin": "ast",
@@ -26243,7 +26243,7 @@
       "weight": 1.0
     },
     {
-      "source": "docs_research_04_market_competitors_gtm_praman_market_competitors_business_model_gtm_research",
+      "source": "docs_research_04_market_competitors_gtm_applyonce_market_competitors_business_model_gtm_research",
       "target": "docs_research_04_market_competitors_gtm_b_india_landscape",
       "relation": "contains",
       "_origin": "ast",
@@ -26254,7 +26254,7 @@
       "weight": 1.0
     },
     {
-      "source": "docs_research_04_market_competitors_gtm_praman_market_competitors_business_model_gtm_research",
+      "source": "docs_research_04_market_competitors_gtm_applyonce_market_competitors_business_model_gtm_research",
       "target": "docs_research_04_market_competitors_gtm_a_global_analogs",
       "relation": "contains",
       "_origin": "ast",
@@ -26265,7 +26265,7 @@
       "weight": 1.0
     },
     {
-      "source": "docs_research_04_market_competitors_gtm_praman_market_competitors_business_model_gtm_research",
+      "source": "docs_research_04_market_competitors_gtm_applyonce_market_competitors_business_model_gtm_research",
       "target": "docs_research_04_market_competitors_gtm_c_private_competitors_and_adjacents",
       "relation": "contains",
       "_origin": "ast",
@@ -26276,7 +26276,7 @@
       "weight": 1.0
     },
     {
-      "source": "docs_research_04_market_competitors_gtm_praman_market_competitors_business_model_gtm_research",
+      "source": "docs_research_04_market_competitors_gtm_applyonce_market_competitors_business_model_gtm_research",
       "target": "docs_research_04_market_competitors_gtm_d_business_model_options_and_tam_sam_som",
       "relation": "contains",
       "_origin": "ast",
@@ -26287,7 +26287,7 @@
       "weight": 1.0
     },
     {
-      "source": "docs_research_04_market_competitors_gtm_praman_market_competitors_business_model_gtm_research",
+      "source": "docs_research_04_market_competitors_gtm_applyonce_market_competitors_business_model_gtm_research",
       "target": "docs_research_04_market_competitors_gtm_e_regulatory_sequencing_and_gtm_enablers",
       "relation": "contains",
       "_origin": "ast",
@@ -27531,7 +27531,7 @@
     },
     {
       "source": "packages_db_package_dependencies",
-      "target": "packages_db_package_dependencies_praman_schema",
+      "target": "packages_db_package_dependencies_applyonce_schema",
       "relation": "contains",
       "_origin": "ast",
       "confidence": "EXTRACTED",
@@ -27542,7 +27542,7 @@
     },
     {
       "source": "packages_db_package_dependencies",
-      "target": "packages_db_package_dependencies_praman_crypto",
+      "target": "packages_db_package_dependencies_applyonce_crypto",
       "relation": "contains",
       "_origin": "ast",
       "confidence": "EXTRACTED",
@@ -27575,7 +27575,7 @@
     },
     {
       "source": "packages_db_package_dependencies",
-      "target": "packages_db_package_dependencies_praman_providers",
+      "target": "packages_db_package_dependencies_applyonce_providers",
       "relation": "contains",
       "_origin": "ast",
       "confidence": "EXTRACTED",
@@ -29115,7 +29115,7 @@
     },
     {
       "source": "packages_providers_package_dependencies",
-      "target": "packages_providers_package_dependencies_praman_schema",
+      "target": "packages_providers_package_dependencies_applyonce_schema",
       "relation": "contains",
       "_origin": "ast",
       "confidence": "EXTRACTED",
@@ -30061,7 +30061,7 @@
     },
     {
       "source": "packages_schema_src_payload",
-      "target": "packages_schema_src_payload_pramanpayload",
+      "target": "packages_schema_src_payload_applyoncepayload",
       "relation": "contains",
       "_origin": "ast",
       "confidence": "EXTRACTED",
@@ -30710,7 +30710,7 @@
     },
     {
       "source": "packages_sdk_package_dependencies",
-      "target": "packages_sdk_package_dependencies_praman_schema",
+      "target": "packages_sdk_package_dependencies_applyonce_schema",
       "relation": "contains",
       "_origin": "ast",
       "confidence": "EXTRACTED",
@@ -30908,7 +30908,7 @@
     },
     {
       "source": "packages_ui_package_dependencies",
-      "target": "packages_ui_package_dependencies_praman_schema",
+      "target": "packages_ui_package_dependencies_applyonce_schema",
       "relation": "contains",
       "_origin": "ast",
       "confidence": "EXTRACTED",

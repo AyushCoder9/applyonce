@@ -1,12 +1,13 @@
 import { z } from "zod";
 import { randomUUID } from "node:crypto";
-import { db, t, eq, and, inArray, isNull, audit, getDek, getFacts, putFact, systemDek } from "@praman/db";
-import { encrypt, sha256, canonicalHash } from "@praman/crypto";
-import { field, isFactKey, scopeForPurpose, scopeContains, documentAllowed, customAnswerErrors, type PramanPayload, type SharedFact } from "@praman/schema";
+import { db, t, eq, and, inArray, isNull, audit, getDek, getFacts, putFact, systemDek } from "@applyonce/db";
+import { encrypt, sha256, canonicalHash } from "@applyonce/crypto";
+import { field, isFactKey, scopeForPurpose, scopeContains, documentAllowed, customAnswerErrors, type ApplyOncePayload, type SharedFact } from "@applyonce/schema";
 import { handler, citizen, body, ok, ApiError } from "@/lib/api";
 import { loadShareSession, newShareToken, hashToken, withQuery, SHARE_TTL_MS } from "@/lib/share";
 import { signSharePayload } from "@/lib/signing";
 import { queueWebhook, flushDeliveries } from "@/lib/webhooks";
+import { deploymentAppUrl } from "@/lib/urls";
 
 const schema = z.object({
   profileId: z.uuid(),
@@ -77,8 +78,8 @@ export const POST = handler(async (req, { params }) => {
     const token = newShareToken(ss.id);
     const sharedFacts: SharedFact[] = shareableFacts.map((f) => ({ key: f.key, value: f.value, source: f.source, verifiedBy: f.verifiedBy ?? null, verifiedAt: f.verifiedAt ?? null, evidence: doc(field(f.key).type === "file_ref" ? String(f.value) : f.evidenceDocumentId) }));
     const iat = Math.floor(now.getTime() / 1000);
-    const payload: PramanPayload = {
-      iss: "praman", sub: sha256(profile.id + partner.id), aud: partner.id, iat, exp: iat + SHARE_TTL_MS / 1000, jti: shareId,
+    const payload: ApplyOncePayload = {
+      iss: "applyonce", sub: sha256(profile.id + partner.id), aud: partner.id, iat, exp: iat + SHARE_TTL_MS / 1000, jti: shareId,
       consent_id: consent!.id, application_id: app!.id, form_id: form.id, form_version: form.version, purpose: form.purpose,
       profile: { kind: profile.kind, display_name: profile.displayName, ...(profile.role === "guardian" ? { guardian_acting: true } : {}) },
       facts: sharedFacts, custom, profile_hash: canonicalHash(sharedFacts),
@@ -86,11 +87,11 @@ export const POST = handler(async (req, { params }) => {
     const jws = await signSharePayload(payload, SHARE_TTL_MS / 1000);
     await tx.insert(t.shares).values({ id: shareId, consentId: consent!.id, applicationId: app!.id, shareSessionId: ss.id, sharedKeys, payloadHash: sha256(jws), payloadEnc: encrypt(systemDek(), jws, `share:${shareId}`), shareTokenHash: hashToken(token), expiresAt: new Date(now.getTime() + SHARE_TTL_MS) });
     await tx.update(t.shareSessions).set({ status: "consented", profileId: profile.id }).where(eq(t.shareSessions.id, ss.id));
-    await tx.insert(t.applicationEvents).values({ applicationId: app!.id, type: "created", title: `Shared with ${partner.name} via Praman`, body: `${sharedFacts.length} fields · consent ${consent!.id}`, actor: "citizen", meta: { consentId: consent!.id, shareId, fields: sharedFacts.length } });
+    await tx.insert(t.applicationEvents).values({ applicationId: app!.id, type: "created", title: `Shared with ${partner.name} via ApplyOnce`, body: `${sharedFacts.length} fields · consent ${consent!.id}`, actor: "citizen", meta: { consentId: consent!.id, shareId, fields: sharedFacts.length } });
     await audit({ actorUserId: user.id, action: "share.create", targetType: "share", targetId: shareId, meta: { consentId: consent!.id, applicationId: app!.id, partnerId: partner.id, profileId: profile.id, fields: sharedKeys.length, guardian: profile.role === "guardian" } }, tx);
     const deliveries = await queueWebhook(partner.id, "share.completed", { application_id: app!.id, consent_id: consent!.id, share_session_id: ss.id, state: ss.state, form_id: form.id }, tx);
     return { token, consentId: consent!.id, applicationId: app!.id, deliveries, shared: sharedFacts.length };
   });
   await flushDeliveries(result.deliveries).catch(error => console.error("Webhook dispatch pending; consent remains committed", error));
-  return ok({ return_url: ss.state?.startsWith("hosted:") ? `${process.env.NEXT_PUBLIC_APP_URL ?? "http://localhost:3300"}/app/applications/${result.applicationId}?shared=1` : withQuery(ss.returnUrl, { share_token: result.token, state: ss.state }), consent_id: result.consentId, application_id: result.applicationId, shared: result.shared });
+  return ok({ return_url: ss.state?.startsWith("hosted:") ? `${deploymentAppUrl()}/app/applications/${result.applicationId}?shared=1` : withQuery(ss.returnUrl, { share_token: result.token, state: ss.state }), consent_id: result.consentId, application_id: result.applicationId, shared: result.shared });
 });

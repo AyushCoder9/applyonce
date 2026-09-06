@@ -3,7 +3,7 @@
 Contract: build-plan §0–§3. Ownership: `app/app/{family,notifications,settings,extension}`, `app/admin/*` (not layout), `app/(public)/*` (not layout), `api/v1/{family,notifications,me,admin}`, `components/{family,public,settings,admin}`.
 
 ## Approach (ponytail)
-- Server components read DB via `@praman/db`; small `"use client"` islands mutate via `/api/v1/*` then `router.refresh()`.
+- Server components read DB via `@applyonce/db`; small `"use client"` islands mutate via `/api/v1/*` then `router.refresh()`.
 - Family invite/claim links: **stateless HS256 JWT** (`jose`, already a dep) signed with `BETTER_AUTH_SECRET`, 7-day expiry, kinds `invite` | `claim`. No new table. `POST family/elder/accept {token}` handles both kinds (claim = handover at 18) so §3 paths stay exact. "Send claim link" = `PATCH family/:id {sendClaimLink:true}`.
 - Elder accept: if the accepting user already has a `self` profile, the relation's `wardProfileId` is repointed to that profile and the placeholder profile is deleted; else the placeholder becomes `claimedByUserId=user`.
 - Step-up: uses WP1 `components/vault/step-up-dialog.tsx` (`StepUpDialog`) before export/erase.

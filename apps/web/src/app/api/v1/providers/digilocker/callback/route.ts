@@ -1,9 +1,9 @@
 import { NextResponse } from "next/server";
 import { cookies } from "next/headers";
-import { db, t, getDek } from "@praman/db";
-import { enqueue } from "@praman/jobs";
-import { providers } from "@praman/providers";
-import { encrypt } from "@praman/crypto";
+import { db, t, getDek } from "@applyonce/db";
+import { enqueue } from "@applyonce/jobs";
+import { providers } from "@applyonce/providers";
+import { encrypt } from "@applyonce/crypto";
 import { handler, citizen, log } from "@/lib/api";
 import { appUrl, createJob, withJob } from "../../../profiles/_lib";
 
@@ -12,7 +12,7 @@ export const GET = handler(async (req) => {
   const url = new URL(req.url);
   const state = url.searchParams.get("state") ?? "", code = url.searchParams.get("code") ?? "";
   const jar = await cookies();
-  const c = jar.get("praman_dl")?.value;
+  const c = jar.get("applyonce_dl")?.value;
   const saved = c ? (JSON.parse(c) as { state: string; next: string; profileId: string }) : null;
   const next = saved?.next ?? "/app/verify";
   const bounce = (err: string) => NextResponse.redirect(new URL(`${next}${next.includes("?") ? "&" : "?"}error=${err}`, appUrl(req)));
@@ -27,6 +27,6 @@ export const GET = handler(async (req) => {
   await enqueue("digilocker.sync", { jobId: job.id, userId: a.ownerUserId, profileId: a.profile.id, providerRef: done.providerRef });
   await log(a.session, "provider.link", "provider_link", null, { provider: "digilocker", jobId: job.id, profileId: a.profile.id });
   const res = NextResponse.redirect(new URL(withJob(next, job.id), appUrl(req)));
-  res.cookies.delete("praman_dl");
+  res.cookies.delete("applyonce_dl");
   return res;
 });

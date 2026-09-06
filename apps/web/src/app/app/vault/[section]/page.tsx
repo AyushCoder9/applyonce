@@ -1,9 +1,9 @@
 import { notFound } from "next/navigation";
 import { LinkButton } from "@/components/vault/link-button";
 import Link from "next/link";
-import { db, t, eq, completion } from "@praman/db";
-import { SECTIONS, sectionMeta, fieldsInSection, type Section } from "@praman/schema";
-import { PageHeader, EmptyState, ProgressRing } from "@praman/ui";
+import { db, t, eq, completion } from "@applyonce/db";
+import { SECTIONS, sectionMeta, fieldsInSection, type Section } from "@applyonce/schema";
+import { PageHeader, EmptyState, ProgressRing } from "@applyonce/ui";
 import { requireUser, requireProfileAccess, scopeAllows } from "@/lib/session";
 import { loadFacts } from "@/app/api/v1/profiles/_lib";
 import { localeOf, tr } from "@/components/vault/i18n";

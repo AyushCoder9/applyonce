@@ -1,5 +1,5 @@
 /** ponytail: one flat map from job name -> handler. No class hierarchy, no plugin system. */
-import type { JobMap, JobName } from "@praman/jobs";
+import type { JobMap, JobName } from "@applyonce/jobs";
 import { digilockerSync, panVerify, aaIncome, abhaLink } from "./verification";
 import { documentProcess } from "./documents";
 import { webhookDeliver } from "./webhooks";

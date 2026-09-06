@@ -1,5 +1,5 @@
 import { desc } from "drizzle-orm";
-import { sha256 } from "@praman/crypto";
+import { sha256 } from "@applyonce/crypto";
 import { db, type Db, type Tx } from "./client";
 import { auditLog } from "./schema";
 

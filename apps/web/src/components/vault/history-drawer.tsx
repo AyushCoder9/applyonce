@@ -1,8 +1,8 @@
 "use client";
 import { useEffect, useState } from "react";
 import { Drawer, Skeleton, useMediaQuery } from "@heroui/react";
-import type { Fact } from "@praman/schema";
-import { fmtValue, fmtDate, SourceChip, verifierName, label } from "@praman/ui";
+import type { Fact } from "@applyonce/schema";
+import { fmtValue, fmtDate, SourceChip, verifierName, label } from "@applyonce/ui";
 import { api, tr, type Locale } from "./i18n";
 
 type Row = { id: string; changedAt: string; oldSource: string | null; changedBy: string | null; reason: string | null; oldValue: unknown; newValue: unknown };

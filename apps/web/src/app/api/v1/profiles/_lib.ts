@@ -1,7 +1,7 @@
 import "server-only";
-import { db, t, eq, and, getDek, getFacts, mask } from "@praman/db";
-import { field, type Fact } from "@praman/schema";
-import { decryptString } from "@praman/crypto";
+import { db, t, eq, and, getDek, getFacts, mask } from "@applyonce/db";
+import { field, type Fact } from "@applyonce/schema";
+import { decryptString } from "@applyonce/crypto";
 import { scopeAllows } from "@/lib/session";
 import { ApiError } from "@/lib/api";
 

@@ -29,19 +29,19 @@ export const encryptJson = (key: Buffer, v: unknown, aad = "") => encrypt(key, J
 export const decryptJson = <T = unknown>(key: Buffer, blob: Buffer, aad = ""): T => JSON.parse(decryptString(key, blob, aad)) as T;
 
 /** KEK from env (hex, 32 bytes). ponytail: env KEK now; swap for KMS wrap/unwrap when we have a KMS. */
-export function kekFromEnv(hex = process.env.PRAMAN_KEK_HEX): Buffer {
-  if (!hex || !/^[0-9a-f]{64}$/i.test(hex)) throw new Error("PRAMAN_KEK_HEX must be 64 hex chars");
+export function kekFromEnv(hex = process.env.APPLYONCE_KEK_HEX): Buffer {
+  if (!hex || !/^[0-9a-f]{64}$/i.test(hex)) throw new Error("APPLYONCE_KEK_HEX must be 64 hex chars");
   return Buffer.from(hex, "hex");
 }
 export const wrapDek = (kek: Buffer, dek: Buffer, userId: string) => encrypt(kek, dek, `dek:${userId}`);
 export const unwrapDek = (kek: Buffer, wrapped: Buffer, userId: string) => decrypt(kek, wrapped, `dek:${userId}`);
 
 /** Blind index for equality lookups on encrypted columns (phone/email). */
-export function blindIndex(value: string, key = process.env.PRAMAN_BLIND_INDEX_KEY ?? "dev-blind-index-key"): string {
+export function blindIndex(value: string, key = process.env.APPLYONCE_BLIND_INDEX_KEY ?? "dev-blind-index-key"): string {
   return createHmac("sha256", key).update(value.trim().toLowerCase()).digest("hex");
 }
 export const sha256 = (data: Buffer | string) => createHash("sha256").update(data).digest("hex");
-export const hkdf = (ikm: Buffer, info: string, len = 32) => Buffer.from(hkdfSync("sha256", ikm, "praman", info, len));
+export const hkdf = (ikm: Buffer, info: string, len = 32) => Buffer.from(hkdfSync("sha256", ikm, "applyonce", info, len));
 export const safeEqual = (a: string, b: string) => a.length === b.length && timingSafeEqual(Buffer.from(a), Buffer.from(b));
 export const randomToken = (bytes = 32) => randomBytes(bytes).toString("base64url");
 /** stable hash over an object with sorted keys (payload/profile hashes) */

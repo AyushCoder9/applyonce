@@ -1,7 +1,7 @@
 import Link from "next/link";
 import { FileInput } from "lucide-react";
-import { db, t, eq, desc } from "@praman/db";
-import { PageHeader, EmptyState, fmtDate, purposeLabel } from "@praman/ui";
+import { db, t, eq, desc } from "@applyonce/db";
+import { PageHeader, EmptyState, fmtDate, purposeLabel } from "@applyonce/ui";
 import { requirePartnerMember } from "@/components/partner/session";
 
 export const metadata = { title: "Forms" };

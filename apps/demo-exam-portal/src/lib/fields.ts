@@ -1,18 +1,18 @@
 /**
  * BTA-JEE 2026 form field registry — the ONE place the 6-step manual form, the
- * pre-filled "Apply with Praman" return page, and FIELDS.md all read from.
+ * pre-filled "Apply with ApplyOnce" return page, and FIELDS.md all read from.
  *
  * `registryKey` mirrors `packages/schema/src/registry.ts` fact_key exactly (never invent
- * one here) — it is how the Praman payload's `SharedFact[]` gets matched to a field.
+ * one here) — it is how the ApplyOnce payload's `SharedFact[]` gets matched to a field.
  * `registryKey: null` marks the 5 BTA-only custom questions from the seeded form's
- * `customFields` (packages/db/src/seed.ts) — those come back in `PramanPayload.custom`.
+ * `customFields` (packages/db/src/seed.ts) — those come back in `ApplyOncePayload.custom`.
  *
  * This mirrors exactly `requestedFields` (45 required + 6 optional) + `customFields` (5)
  * from the seeded `bta-jee-2026` form — 56 fields total. The 6 steps below group them
  * per docs/04-DESIGN-SYSTEM.md #19 ("Personal · Contact & Address · Parents & Income ·
  * Category & Eligibility · Education · Exam preferences & declaration").
  */
-import { BLOOD_GROUP, BOARD, ENUM_LABELS, INDIA_STATES, NATIONALITY, OCCUPATION, PWD_TYPE, SOCIAL_CATEGORY, STREAM } from "@praman/schema";
+import { BLOOD_GROUP, BOARD, ENUM_LABELS, INDIA_STATES, NATIONALITY, OCCUPATION, PWD_TYPE, SOCIAL_CATEGORY, STREAM } from "@applyonce/schema";
 
 export type FieldKind = "text" | "date" | "select" | "email" | "tel" | "number" | "checkbox" | "file";
 
@@ -24,7 +24,7 @@ export interface FieldOption {
 export interface FieldSpec {
   /** stable HTML id/name — what the browser extension recipe `bta-demo` targets */
   id: string;
-  /** @praman/schema fact_key, or null for a BTA-only custom question */
+  /** @applyonce/schema fact_key, or null for a BTA-only custom question */
   registryKey: string | null;
   label: string;
   help?: string;

@@ -1,13 +1,13 @@
-# Praman — Verify once. Apply anywhere.
+# ApplyOnce — Verify once. Apply anywhere.
 
-Praman turns a citizen's reusable facts and documents into a purpose-bound application. Each answer keeps its source; the citizen reviews exactly what an institution requests, confirms consent, and tracks the resulting application.
+ApplyOnce turns a citizen's reusable facts and documents into a purpose-bound application. Each answer keeps its source; the citizen reviews exactly what an institution requests, confirms consent, and tracks the resulting application.
 
 This is the audited successor to **ApplyOnce**, built as a TypeScript monorepo. It is a working local sandbox. The seeded institutions and issuer records are examples; live government, health and financial provider onboarding remains external work.
 
 ## What you can demonstrate
 
 - **Evidence readiness:** see missing, expired, conflicting and out-of-scope requirements before starting an application. Open the source details and follow repair links.
-- **Ask Praman:** English/Hindi local explanations work without an API key. An optional OpenAI Responses adapter explains the same deterministic result using derived information, without receiving raw facts or documents.
+- **Ask ApplyOnce:** English/Hindi local explanations work without an API key. An optional OpenAI Responses adapter explains the same deterministic result using derived information, without receiving raw facts or documents.
 - **Complete BTA application:** create a partner session → review exact fields → confirm OTP → exchange a signed payload → refresh/edit the saved review → submit → push status back to the citizen tracker.
 - **Citizen controls:** ten vault sections, document uploads and review, sample evidence previews, family scopes, consent receipts/revocation, export, cancellable erasure requests, and a stored declaration receipt.
 - **Partner and operations portals:** switch among seeded organizations; manage forms, applicants, team, keys and webhooks; inspect provider jobs, queues, audit events and data requests.
@@ -28,7 +28,7 @@ pnpm db:seed
 pnpm dev
 ```
 
-Open [Praman](http://localhost:3300) and the [BTA portal](http://localhost:3301). Root commands load `.env` for every workspace; explicit shell exports take precedence. Keep providers in `mock` for this demonstration. `db:seed` is idempotent; `db:refresh-demo` updates existing sample attachment hashes and supplies sample photo/signature records.
+Open [ApplyOnce](http://localhost:3300) and the [BTA portal](http://localhost:3301). Root commands load `.env` for every workspace; explicit shell exports take precedence. Keep providers in `mock` for this demonstration. `db:seed` is idempotent; `db:refresh-demo` updates existing sample attachment hashes and supplies sample photo/signature records.
 
 | Phone | Persona | Purpose |
 |---|---|---|
@@ -54,7 +54,7 @@ pnpm test -- --concurrency=1
 pnpm build
 # With web, worker and BTA running against a disposable seeded database:
 pnpm audit:workflows
-node scripts/run.mjs pnpm --filter @praman/web test:e2e --workers=1
+node scripts/run.mjs pnpm --filter @applyonce/web test:e2e --workers=1
 pnpm inventory
 ```
 

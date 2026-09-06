@@ -1,5 +1,5 @@
 import { z } from "zod";
-import { db, t, eq, asc } from "@praman/db";
+import { db, t, eq, asc } from "@applyonce/db";
 import { handler, citizen, body, ok, ApiError, log } from "@/lib/api";
 import { dispatchWebhook } from "@/lib/webhooks";
 import { serializeApp } from "@/components/applications/model";

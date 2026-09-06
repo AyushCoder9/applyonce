@@ -1,6 +1,6 @@
 import type { Metadata } from "next";
-import { db, t, eq } from "@praman/db";
-import { PageHeader } from "@praman/ui";
+import { db, t, eq } from "@applyonce/db";
+import { PageHeader } from "@applyonce/ui";
 import { requireUser } from "@/lib/session";
 import { mergePrefs } from "@/components/settings/prefs";
 import { PrefsGrid } from "@/components/settings/prefs-grid";

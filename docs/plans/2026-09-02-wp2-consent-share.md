@@ -17,5 +17,5 @@ Contract: `docs/plans/2026-09-02-build-plan.md` §2 WP2, §3 Share/Applications/
 ## Decisions
 - Share token = `${shareSessionId}.${random}`; DB stores only `sha256(token)`. SDK `exchange(token)` derives the session id.
 - Step-up: `POST /api/v1/auth/step-up` is WP1's; a temporary OTP-only version is created only if the file is absent.
-- Deny on the consent screen returns to `return_url?praman_error=denied&state=` (no DB write).
+- Deny on the consent screen returns to `return_url?applyonce_error=denied&state=` (no DB write).
 - `partner/layout.tsx` renders `children` when the user has no organisation (else `/partner/onboarding` is unreachable); pages call `requirePartnerMember()` which redirects to onboarding. One-line foundation fix, flagged in the report.

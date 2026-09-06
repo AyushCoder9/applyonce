@@ -4,8 +4,8 @@ import { useMemo, useState } from "react";
 import { useRouter } from "next/navigation";
 import { Button, TextField, Label, Input, Description, Select, ListBox, Checkbox, Alert, Tabs, toast } from "@heroui/react";
 import { Plus, Trash2 } from "lucide-react";
-import { SECTION_META, fieldsInSection, canShare, PURPOSES, PURPOSE_LABELS, field, type Purpose, type CustomField, type FieldDiffRow } from "@praman/schema";
-import { ConsentFieldList, ConsentSummaryChips, PartnerIdentity } from "@praman/ui";
+import { SECTION_META, fieldsInSection, canShare, PURPOSES, PURPOSE_LABELS, field, type Purpose, type CustomField, type FieldDiffRow } from "@applyonce/schema";
+import { ConsentFieldList, ConsentSummaryChips, PartnerIdentity } from "@applyonce/ui";
 import { saveFormAction } from "./actions";
 
 const KINDS = [["exam", "Exam"], ["admission", "Admission"], ["scholarship", "Scholarship"], ["job", "Job"], ["kyc", "KYC"], ["healthcare", "Healthcare"], ["scheme", "Scheme"], ["other", "Other"]] as const;
@@ -54,7 +54,7 @@ export function FormBuilder({ initial, partnerName, verified }: { initial?: Buil
           <h2 className="font-display text-lg font-bold">Basics</h2>
           <TextField value={name} onChange={setName} isRequired isInvalid={!!fieldErrs.name}><Label>Form name</Label><Input placeholder="e.g. BTA-JEE 2026 Registration" /><Description>{fieldErrs.name ?? "Citizens see this as the application title."}</Description></TextField>
           <div className="grid gap-4 sm:grid-cols-2">
-            <TextField value={slug} onChange={(v) => setSlug(v.toLowerCase())} isInvalid={!!fieldErrs.slug}><Label>Slug</Label><Input placeholder="auto from name" /><Description>{fieldErrs.slug ?? "Used in data-praman-form=\"…\""}</Description></TextField>
+            <TextField value={slug} onChange={(v) => setSlug(v.toLowerCase())} isInvalid={!!fieldErrs.slug}><Label>Slug</Label><Input placeholder="auto from name" /><Description>{fieldErrs.slug ?? "Used in data-applyonce-form=\"…\""}</Description></TextField>
             <Select selectedKey={kind} onSelectionChange={(k) => setKind(String(k))} fullWidth><Label>Application type</Label><Select.Trigger><Select.Value /><Select.Indicator /></Select.Trigger><Select.Popover><ListBox>{KINDS.map(([k, v]) => <ListBox.Item key={k} id={k} textValue={v}>{v}<ListBox.ItemIndicator /></ListBox.Item>)}</ListBox></Select.Popover></Select>
           </div>
           <TextField value={description} onChange={setDescription}><Label>Description</Label><Input placeholder="One line shown in the catalog" /></TextField>
@@ -99,7 +99,7 @@ export function FormBuilder({ initial, partnerName, verified }: { initial?: Buil
         <section className="card grid gap-4 p-5">
           <h2 className="font-display text-lg font-bold">Delivery</h2>
           <TextField value={redirectUrl} onChange={setRedirectUrl} type="url" isRequired isInvalid={!!fieldErrs.redirect_url}><Label>Return URL</Label><Input placeholder="https://portal.example/apply/return" /><Description>{fieldErrs.redirect_url ?? "Citizens land here with ?share_token=…&state=…; exchange it server-side within 10 minutes."}</Description></TextField>
-          <TextField value={webhookUrl} onChange={setWebhookUrl} type="url" isInvalid={!!fieldErrs.webhook_url}><Label>Webhook URL (optional)</Label><Input placeholder="https://portal.example/api/praman/webhook" /><Description>Register endpoints and secrets under Developers → Webhooks; this is a reminder of where events go.</Description></TextField>
+          <TextField value={webhookUrl} onChange={setWebhookUrl} type="url" isInvalid={!!fieldErrs.webhook_url}><Label>Webhook URL (optional)</Label><Input placeholder="https://portal.example/api/applyonce/webhook" /><Description>Register endpoints and secrets under Developers → Webhooks; this is a reminder of where events go.</Description></TextField>
           <div className="grid gap-4 sm:grid-cols-3">
             <TextField value={retention} onChange={setRetention} type="number" isInvalid={!!fieldErrs.retention_days}><Label>Retention (days)</Label><Input /><Description>Consent expires after this.</Description></TextField>
             <TextField value={deadline} onChange={setDeadline} type="date"><Label>Deadline</Label><Input /></TextField>

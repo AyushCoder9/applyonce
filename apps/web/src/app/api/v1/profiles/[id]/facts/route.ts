@@ -1,4 +1,4 @@
-import { SECTIONS } from "@praman/schema";
+import { SECTIONS } from "@applyonce/schema";
 import { handler, citizen, ok, ApiError } from "@/lib/api";
 import { isSteppedUp, scopeAllows } from "@/lib/session";
 import { loadFacts } from "../../_lib";

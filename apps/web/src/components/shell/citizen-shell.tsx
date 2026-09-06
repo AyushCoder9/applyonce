@@ -19,7 +19,7 @@ export function CitizenShell({ children, user, profiles, activeProfileId, unread
   return (
     <div className="min-h-dvh lg:grid lg:grid-cols-[240px_1fr]">
       <aside className="hidden lg:flex flex-col gap-1 border-r border-line bg-surface px-4 py-6 sticky top-0 h-dvh">
-        <Link href="/app" className="flex items-center gap-2 px-2 mb-6"><img src="/icon.svg" alt="" className="size-8 rounded-lg" /><span className="font-display text-xl font-bold">Praman</span></Link>
+        <Link href="/app" className="flex items-center gap-2 px-2 mb-6"><img src="/icon.svg" alt="" className="size-8 rounded-lg" /><span className="font-display text-xl font-bold">ApplyOnce</span></Link>
         {CITIZEN_NAV.map((n) => (
           <Link key={n.href} href={n.href} aria-current={active(n.href) ? "page" : undefined}
             className={`flex items-center gap-3 rounded-md px-3 py-2.5 text-[15px] font-medium transition-colors ${active(n.href) ? "bg-brand-50 text-brand-700" : "text-ink-2 hover:bg-surface-2 hover:text-ink"}`}>
@@ -30,7 +30,7 @@ export function CitizenShell({ children, user, profiles, activeProfileId, unread
       </aside>
       <div className="flex min-h-dvh flex-col">
         <header className="sticky top-0 z-30 flex h-14 items-center gap-2 border-b border-line bg-surface/90 px-3 backdrop-blur sm:px-4 lg:px-8">
-          <Link href="/app" className="lg:hidden flex items-center gap-2"><img src="/icon.svg" alt="" className="size-7 rounded-md" /><span className="hidden font-display font-bold sm:inline">Praman</span></Link>
+          <Link href="/app" className="lg:hidden flex items-center gap-2"><img src="/icon.svg" alt="" className="size-7 rounded-md" /><span className="hidden font-display font-bold sm:inline">ApplyOnce</span></Link>
           <details className="relative lg:hidden">
             <summary aria-label="All pages" className="cursor-pointer list-none rounded-md p-2"><Icon name="Menu" className="size-5" /></summary>
             <nav aria-label="All pages" className="absolute left-0 top-10 z-50 grid min-w-52 gap-1 rounded-xl border border-line bg-surface p-2 shadow-lg">

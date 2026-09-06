@@ -1,10 +1,10 @@
 /**
  * Deliberately old-school government-portal validation: DD/MM/YYYY dates, strict
- * pincode/phone patterns (reused from @praman/schema so a value that passes here
- * would also pass Praman's own registry validation), uppercase names, and
+ * pincode/phone patterns (reused from @applyonce/schema so a value that passes here
+ * would also pass ApplyOnce's own registry validation), uppercase names, and
  * size/format checks on file uploads. Same functions run client- and server-side.
  */
-import { RE } from "@praman/schema";
+import { RE } from "@applyonce/schema";
 import type { FieldSpec } from "./fields";
 
 export interface ValidationResult {
@@ -37,7 +37,7 @@ export function formatDMY(iso: string): string {
   return `${d}/${mo}/${y}`;
 }
 
-/** Accepts either an ISO date (already-verified Praman facts) or a DD/MM/YYYY string (freshly edited on /apply/return) -> ISO, or null if invalid. */
+/** Accepts either an ISO date (already-verified ApplyOnce facts) or a DD/MM/YYYY string (freshly edited on /apply/return) -> ISO, or null if invalid. */
 export function normalizeDateInput(raw: string): string | null {
   if (/^\d{4}-\d{2}-\d{2}$/.test(raw)) return parseDMY(formatDMY(raw));
   return parseDMY(raw);

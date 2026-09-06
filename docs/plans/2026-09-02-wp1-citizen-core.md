@@ -11,12 +11,12 @@ Contract: docs/plans/2026-09-02-build-plan.md §1–§3 (WP1 ownership). No new 
 - tests: `apps/web/src/lib/wp1.test.ts` (coercion + SSE formatter), `apps/web/e2e/wp1-vault.spec.ts`, `apps/web/playwright.config.ts`
 
 ## Decisions
-- DigiLocker OAuth state → httpOnly cookie `praman_dl` (10 min) holding `{state,next,profileId}`; no extra table.
+- DigiLocker OAuth state → httpOnly cookie `applyonce_dl` (10 min) holding `{state,next,profileId}`; no extra table.
 - Step-up OTP verified via `auth.api.consumePhoneNumberOTP` (mock accepts 123456); passkey = client `signIn.passkey()` then POST `{method:'passkey'}`, server accepts if user has a passkey and session created < 2 min ago.
 - SSE = DB polling every 1.5 s (jobs for accessible profiles + new notifications), 25 s heartbeat, closes on abort.
-- `PRAMAN_INLINE_JOBS=1` → `instrumentation.ts` registers `globalThis.__pramanInlineJobs` running digilocker.sync / document.process / pan.verify / abha.link / aa.income in-process (fire-and-forget so SSE progress still streams). Demo fallback until WP4 worker runs.
+- `APPLYONCE_INLINE_JOBS=1` → `instrumentation.ts` registers `globalThis.__applyonceInlineJobs` running digilocker.sync / document.process / pan.verify / abha.link / aa.income in-process (fire-and-forget so SSE progress still streams). Demo fallback until WP4 worker runs.
 - Mock provider docs keep `storageKey=mock/…` (no S3 write); viewer shows placeholder card.
 - Bottom-sheet editors = HeroUI `Drawer placement="bottom"` on mobile, `right` on desktop.
 
 ## Verify
-`pnpm --filter @praman/web typecheck` · `pnpm --filter @praman/web test` · `pnpm --filter @praman/web test:e2e` (dev server on 3300) · curl the endpoints with a cookie jar (see report).
+`pnpm --filter @applyonce/web typecheck` · `pnpm --filter @applyonce/web test` · `pnpm --filter @applyonce/web test:e2e` (dev server on 3300) · curl the endpoints with a cookie jar (see report).

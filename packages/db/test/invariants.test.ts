@@ -2,7 +2,7 @@
 import { describe, it, expect, beforeAll, afterAll } from "vitest";
 import { db, sql, t, eq, getDek, putFact, getFacts, mask, listAccessibleProfiles } from "../src";
 
-process.env.PRAMAN_KEK_HEX ??= "0".repeat(64);
+process.env.APPLYONCE_KEK_HEX ??= "0".repeat(64);
 let profileId: string, partnerId: string, userId = "usr_test_inv";
 
 beforeAll(async () => {
@@ -20,16 +20,16 @@ const share = (consentId: string, keys: string[]) => db.insert(t.shares).values(
 describe("consent invariant (DB trigger)", () => {
   it("rejects a share whose keys exceed consent scope, revoked, or expired consent; accepts a valid one", async () => {
     const [c] = await db.insert(t.consents).values({ profileId, grantedByUserId: userId, partnerId, purpose: "exam_application", scope: ["identity.full_name", "identity.dob"], expiresAt: new Date(Date.now() + 864e5), stepUpMethod: "test" }).returning();
-    await pgErr(share(c!.id, ["identity.full_name", "identity.pan"]), /PRAMAN_SCOPE_EXCEEDED/);
+    await pgErr(share(c!.id, ["identity.full_name", "identity.pan"]), /APPLYONCE_SCOPE_EXCEEDED/);
     await expect(share(c!.id, ["identity.full_name"])).resolves.toBeDefined();
     await db.update(t.consents).set({ revokedAt: new Date() }).where(eq(t.consents.id, c!.id));
-    await pgErr(share(c!.id, ["identity.dob"]), /PRAMAN_CONSENT_REVOKED/);
+    await pgErr(share(c!.id, ["identity.dob"]), /APPLYONCE_CONSENT_REVOKED/);
     const [e] = await db.insert(t.consents).values({ profileId, grantedByUserId: userId, partnerId, purpose: "exam_application", scope: ["identity.dob"], expiresAt: new Date(Date.now() - 1000), stepUpMethod: "test" }).returning();
-    await pgErr(share(e!.id, ["identity.dob"]), /PRAMAN_CONSENT_EXPIRED/);
+    await pgErr(share(e!.id, ["identity.dob"]), /APPLYONCE_CONSENT_EXPIRED/);
   });
   it("audit log is immutable", async () => {
     await db.insert(t.auditLog).values({ action: "test", targetType: "x", hash: "h1" });
-    await pgErr(db.delete(t.auditLog).where(eq(t.auditLog.action, "test")), /PRAMAN_AUDIT_IMMUTABLE/);
+    await pgErr(db.delete(t.auditLog).where(eq(t.auditLog.action, "test")), /APPLYONCE_AUDIT_IMMUTABLE/);
   });
 });
 

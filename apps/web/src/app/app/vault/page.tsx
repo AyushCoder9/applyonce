@@ -1,8 +1,8 @@
 import { IdCard, Phone, MapPin, Users, BadgeCheck, GraduationCap, Briefcase, HeartPulse, Landmark, SlidersHorizontal, Folder, type LucideIcon } from "lucide-react";
 const icons: Record<string, LucideIcon> = { IdCard, Phone, MapPin, Users, BadgeCheck, GraduationCap, Briefcase, HeartPulse, Landmark, SlidersHorizontal, Folder };
-import { getDek, getFacts, completion } from "@praman/db";
-import { SECTION_META, fieldsInSection } from "@praman/schema";
-import { SectionCard, PageHeader, ProgressRing } from "@praman/ui";
+import { getDek, getFacts, completion } from "@applyonce/db";
+import { SECTION_META, fieldsInSection } from "@applyonce/schema";
+import { SectionCard, PageHeader, ProgressRing } from "@applyonce/ui";
 import { requireUser, requireProfileAccess, scopeAllows } from "@/lib/session";
 import { localeOf, tr, SECTION_ICON } from "@/components/vault/i18n";
 

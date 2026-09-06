@@ -1,1 +1,1 @@
-export { tinyPdf } from "@praman/providers";
+export { tinyPdf } from "@applyonce/providers";

@@ -1,6 +1,6 @@
-import { scopeContains } from "@praman/schema";
-import { db, t, eq, and, isNull, desc } from "@praman/db";
-import { PageHeader, daysUntil } from "@praman/ui";
+import { scopeContains } from "@applyonce/schema";
+import { db, t, eq, and, isNull, desc } from "@applyonce/db";
+import { PageHeader, daysUntil } from "@applyonce/ui";
 import { requireUser, requireProfileAccess } from "@/lib/session";
 import { loadFacts } from "@/app/api/v1/profiles/_lib";
 import { localeOf, tr } from "@/components/vault/i18n";

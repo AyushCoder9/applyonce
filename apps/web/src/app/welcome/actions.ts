@@ -1,5 +1,5 @@
 "use server";
-import { db, t, eq, getDek, putFact, audit } from "@praman/db";
+import { db, t, eq, getDek, putFact, audit } from "@applyonce/db";
 import { requireUser, requireProfileAccess } from "@/lib/session";
 
 /** Step 1: name as on Aadhaar (self-declared until DigiLocker verifies it) + UI language. */

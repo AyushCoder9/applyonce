@@ -1,5 +1,5 @@
-import { documentAllowed } from "@praman/schema";
-import { getDek, getFacts, db, t, and, eq } from "@praman/db";
+import { documentAllowed } from "@applyonce/schema";
+import { getDek, getFacts, db, t, and, eq } from "@applyonce/db";
 import { handler, citizen, ok, ApiError } from "@/lib/api";
 import { loadShareSession, buildDiff, diffSummary } from "@/lib/share";
 

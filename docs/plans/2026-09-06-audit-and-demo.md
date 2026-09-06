@@ -1,7 +1,7 @@
 # Full audit and demo completion — 2026-09-06
 
 ## Scope and approach
-Audit the tracked source and documentation of Praman, using the existing Graphify graph for navigation and Ponytail for focused fixes. Work on an isolated branch from main. Preserve the canonical schema, provenance, encryption, purpose-scoped consent and existing HeroUI design language.
+Audit the tracked source and documentation of ApplyOnce, using the existing Graphify graph for navigation and Ponytail for focused fixes. Work on an isolated branch from main. Preserve the canonical schema, provenance, encryption, purpose-scoped consent and existing HeroUI design language.
 
 ## Execution plan
 1. Inventory every tracked file, page, endpoint, visible action and integration. Read the implementation and distinguish old design intent from actual behavior.

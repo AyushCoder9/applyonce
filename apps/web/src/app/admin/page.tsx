@@ -1,5 +1,5 @@
 import Link from "next/link";
-import { StatTile, PageHeader } from "@praman/ui";
+import { StatTile, PageHeader } from "@applyonce/ui";
 import { overviewStats, queueCounts, providerModes } from "@/components/admin/data";
 export const dynamic = "force-dynamic";
 export default async function AdminHome() {
@@ -8,7 +8,7 @@ export default async function AdminHome() {
   const live = providerModes().filter((p) => p.mode !== "mock").length;
   return (
     <>
-      <PageHeader title="Overview" subtitle="Praman internal ops. Every action here is audited." />
+      <PageHeader title="Overview" subtitle="ApplyOnce internal ops. Every action here is audited." />
       <div className="grid gap-4 sm:grid-cols-2 lg:grid-cols-3">
         <StatTile label="Users" value={s.users} delta={`${s.profiles} active profiles`} />
         <StatTile label="Verified facts" value={`${s.verifiedPct}%`} delta={`${s.factsVerified} of ${s.factsTotal}`} tone="verified" />

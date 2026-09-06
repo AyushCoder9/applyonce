@@ -1,8 +1,8 @@
 import { z } from "zod";
-import { db, t, eq } from "@praman/db";
-import { SECTIONS, RELATION } from "@praman/schema";
-import { enqueue } from "@praman/jobs";
-import { providers } from "@praman/providers";
+import { db, t, eq } from "@applyonce/db";
+import { SECTIONS, RELATION } from "@applyonce/schema";
+import { enqueue } from "@applyonce/jobs";
+import { providers } from "@applyonce/providers";
 import { handler, citizen, ok, body, log, ApiError } from "@/lib/api";
 import { PENDING, normPhone, validPhone } from "@/components/family/logic";
 import { signFamilyToken, appUrl } from "../../_tokens";
@@ -23,7 +23,7 @@ export const POST = handler(async (req) => {
   const [r] = await db.insert(t.relations).values({ guardianProfileId: self.id, wardProfileId: p!.id, relation: b.relation, basis: "elder_consent", scope: b.scope, validUntil: PENDING }).returning();
   const token = await signFamilyToken({ kind: "invite", relationId: r!.id, phone, scope: b.scope, validUntil: b.validUntil ?? null });
   const link = `${appUrl()}/app/family/accept?token=${token}`;
-  const msg = `${user.name} wants to help manage your Praman profile (${b.scope.join(", ")}). Tap to review and accept: ${link}`;
+  const msg = `${user.name} wants to help manage your ApplyOnce profile (${b.scope.join(", ")}). Tap to review and accept: ${link}`;
   const existing = await db.query.user.findFirst({ where: eq(t.user.phoneNumber, `+91${phone}`) });
   if (existing) await enqueue("notify", { userId: existing.id, category: "consent", title: `${user.name} asked to manage part of your profile`, body: msg, link: `/app/family/accept?token=${token}`, channels: ["inapp", "sms"] });
   else await providers.sms.send(`+91${phone}`, msg, "transactional"); // no account yet → plain SMS (mock logs it)

@@ -1,5 +1,5 @@
-import { db, t, eq, and, isNull, completion } from "@praman/db";
-import { SECTION_META, fieldsInSection } from "@praman/schema";
+import { db, t, eq, and, isNull, completion } from "@applyonce/db";
+import { SECTION_META, fieldsInSection } from "@applyonce/schema";
 import { handler, citizen, ok } from "@/lib/api";
 import { scopeAllows } from "@/lib/session";
 import { loadFacts } from "../../_lib";

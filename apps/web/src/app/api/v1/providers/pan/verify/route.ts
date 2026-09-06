@@ -1,6 +1,6 @@
 import { z } from "zod";
-import { enqueue } from "@praman/jobs";
-import { RE } from "@praman/schema";
+import { enqueue } from "@applyonce/jobs";
+import { RE } from "@applyonce/schema";
 import { handler, citizen, ApiError, body, ok, log } from "@/lib/api";
 import { createJob } from "../../../profiles/_lib";
 /** POST {pan} → job pan.verify. */

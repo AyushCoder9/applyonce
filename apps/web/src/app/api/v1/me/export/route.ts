@@ -1,5 +1,5 @@
-import { db, t, and, eq, inArray } from "@praman/db";
-import { enqueue } from "@praman/jobs";
+import { db, t, and, eq, inArray } from "@applyonce/db";
+import { enqueue } from "@applyonce/jobs";
 import { handler, citizen, ok, log, ApiError } from "@/lib/api";
 /** DPDP right of access: one open export at a time; worker builds a signed ZIP. Step-up required. */
 export const POST = handler(async (req) => {

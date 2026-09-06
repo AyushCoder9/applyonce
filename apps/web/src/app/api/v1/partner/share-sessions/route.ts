@@ -1,8 +1,9 @@
 import { z } from "zod";
-import { db, t, and, eq } from "@praman/db";
-import { randomToken } from "@praman/crypto";
+import { db, t, and, eq } from "@applyonce/db";
+import { randomToken } from "@applyonce/crypto";
 import { handler, partner, body, ok, idempotent, ApiError } from "@/lib/api";
 import { SESSION_TTL_MS } from "@/lib/share";
+import { deploymentAppUrl } from "@/lib/urls";
 
 const isUuid = (s: string) => /^[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}$/i.test(s);
 
@@ -18,12 +19,13 @@ export const POST = handler(async (req) => {
     if (form.status !== "live") throw new ApiError(409, "FORM_NOT_LIVE", "Publish the form before creating share sessions");
     if (form.deadlineAt && form.deadlineAt.getTime() <= Date.now()) throw new ApiError(409,"FORM_CLOSED","The deadline has passed.");
     const returnUrl = new URL(b.return_url);
+    const app = deploymentAppUrl();
     const allowedOrigins = [new URL(form.redirectUrl).origin];
-    if (env === "sandbox") allowedOrigins.push(new URL(process.env.NEXT_PUBLIC_APP_URL ?? "http://localhost:3300").origin);
+    if (env === "sandbox") allowedOrigins.push(new URL(app).origin);
     if (!allowedOrigins.includes(returnUrl.origin) || returnUrl.username || returnUrl.password || !["https:","http:"].includes(returnUrl.protocol)) throw new ApiError(422,"RETURN_URL_NOT_ALLOWED","Return URL must use the registered form redirect origin.");
     const token = randomToken(32);
     const expiresAt = new Date(Date.now() + SESSION_TTL_MS);
     const [s] = await db.insert(t.shareSessions).values({ partnerId: p.id, formId: form.id, token, returnUrl: b.return_url, state: b.state ?? null, env, expiresAt }).returning({ id: t.shareSessions.id });
-    return { session_id: s!.id, share_url: `${process.env.NEXT_PUBLIC_APP_URL ?? "http://localhost:3300"}/share/${token}`, expires_at: expiresAt.toISOString(), env };
+    return { session_id: s!.id, share_url: `${app}/share/${token}`, expires_at: expiresAt.toISOString(), env };
   }));
 });

@@ -1,7 +1,7 @@
 import "server-only";
 import { createHmac, timingSafeEqual } from "node:crypto";
-import { db,t,eq,and,gt } from "@praman/db";
-import { documentAllowed } from "@praman/schema";
+import { db,t,eq,and,gt } from "@applyonce/db";
+import { documentAllowed } from "@applyonce/schema";
 import { listProfiles } from "./session";
 import { ApiError } from "./api";
 

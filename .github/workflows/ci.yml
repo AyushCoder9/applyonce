@@ -4,27 +4,28 @@ jobs:
   test:
     runs-on: ubuntu-latest
     services:
-      postgres: { image: postgres:16-alpine, env: { POSTGRES_USER: praman, POSTGRES_PASSWORD: praman, POSTGRES_DB: praman }, ports: ["5434:5432"], options: --health-cmd pg_isready --health-interval 5s --health-retries 10 }
+      postgres: { image: postgres:16-alpine, env: { POSTGRES_USER: applyonce, POSTGRES_PASSWORD: applyonce, POSTGRES_DB: applyonce }, ports: ["5434:5432"], options: --health-cmd pg_isready --health-interval 5s --health-retries 10 }
       redis: { image: redis:7-alpine, ports: ["6380:6379"] }
     env:
-      DATABASE_URL: postgres://praman:praman@localhost:5434/praman
+      DATABASE_URL: postgres://applyonce:applyonce@localhost:5434/applyonce
       REDIS_URL: redis://localhost:6380
-      PRAMAN_KEK_HEX: "0000000000000000000000000000000000000000000000000000000000000000"
+      APPLYONCE_KEK_HEX: "0000000000000000000000000000000000000000000000000000000000000000"
       BETTER_AUTH_SECRET: ci-secret-ci-secret-ci-secret-ci-secret
       BETTER_AUTH_URL: http://localhost:3300
       NEXT_PUBLIC_APP_URL: http://localhost:3300
       NEXT_PUBLIC_DEMO_PORTAL_URL: http://localhost:3301
-      PRAMAN_API_URL: http://localhost:3300
-      BTA_PRAMAN_API_KEY: pk_sandbox_bta_demo_key_0001
-      BTA_PRAMAN_FORM_ID: bta-jee-2026
+      DEMO_PORTAL_ENABLED: "1"
+      APPLYONCE_API_URL: http://localhost:3300
+      BTA_APPLYONCE_API_KEY: pk_sandbox_bta_demo_key_0001
+      BTA_APPLYONCE_FORM_ID: bta-jee-2026
       BTA_WEBHOOK_SECRET: whsec_bta_demo_0001
       DEMO_ADMIN_ENABLED: "1"
       DEMO_OFFLINE: "0"
       S3_ENDPOINT: http://localhost:9002
       S3_REGION: us-east-1
-      S3_BUCKET: praman-docs
-      S3_ACCESS_KEY: praman
-      S3_SECRET_KEY: praman123
+      S3_BUCKET: applyonce-docs
+      S3_ACCESS_KEY: applyonce
+      S3_SECRET_KEY: applyonce123
       S3_FORCE_PATH_STYLE: "true"
     steps:
       - uses: actions/checkout@v4
@@ -34,28 +35,28 @@ jobs:
         with: { node-version: 22, cache: pnpm }
       - name: Start MinIO (S3) and create bucket
         run: |
-          docker run -d --name minio -p 9002:9000 -e MINIO_ROOT_USER=praman -e MINIO_ROOT_PASSWORD=praman123 minio/minio:RELEASE.2025-09-07T16-13-09Z server /data
+          docker run -d --name minio -p 9002:9000 -e MINIO_ROOT_USER=applyonce -e MINIO_ROOT_PASSWORD=applyonce123 minio/minio:RELEASE.2025-09-07T16-13-09Z server /data
           sleep 5
-          docker run --rm --network host --entrypoint sh minio/mc -c "mc alias set ci http://localhost:9002 praman praman123 && mc mb -p ci/praman-docs"
+          docker run --rm --network host --entrypoint sh minio/mc -c "mc alias set ci http://localhost:9002 applyonce applyonce123 && mc mb -p ci/applyonce-docs"
       - run: pnpm install --frozen-lockfile
       - run: pnpm audit --prod --audit-level=moderate
       - run: pnpm db:migrate && pnpm db:seed
       - run: pnpm typecheck
       - run: pnpm test -- --concurrency=1
       - run: pnpm build
-      - run: pnpm --filter @praman/web exec playwright install --with-deps chromium
+      - run: pnpm --filter @applyonce/web exec playwright install --with-deps chromium
       - name: Start production-mode sandbox
         run: |
-          node scripts/run.mjs pnpm --filter @praman/web start > /tmp/praman-web.log 2>&1 &
-          node scripts/run.mjs pnpm --filter @praman/demo-exam-portal start > /tmp/praman-bta.log 2>&1 &
-          node scripts/run.mjs pnpm --filter @praman/worker start > /tmp/praman-worker.log 2>&1 &
+          node scripts/run.mjs pnpm --filter @applyonce/web start > /tmp/applyonce-web.log 2>&1 &
+          node scripts/run.mjs pnpm --filter @applyonce/demo-exam-portal start > /tmp/applyonce-bta.log 2>&1 &
+          node scripts/run.mjs pnpm --filter @applyonce/worker start > /tmp/applyonce-worker.log 2>&1 &
           for attempt in $(seq 1 60); do
             if curl -fsS http://localhost:3300/status > /dev/null && curl -fsS http://localhost:3301 > /dev/null; then exit 0; fi
             sleep 2
           done
           exit 1
       - run: pnpm audit:workflows
-      - run: node scripts/run.mjs pnpm --filter @praman/web test:e2e --workers=1
+      - run: node scripts/run.mjs pnpm --filter @applyonce/web test:e2e --workers=1
       - name: Retain audit evidence
         if: always()
         uses: actions/upload-artifact@v4
@@ -64,4 +65,4 @@ jobs:
           path: |
             docs/audit-results.json
             apps/web/test-results
-            /tmp/praman-*.log
+            /tmp/applyonce-*.log

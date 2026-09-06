@@ -1,15 +1,15 @@
 /**
- * DEMO_OFFLINE fixture — a hand-built PramanPayload standing in for a real
+ * DEMO_OFFLINE fixture — a hand-built ApplyOncePayload standing in for a real
  * `POST /partner/share-sessions/:id/exchange` response, so `/apply/return` and
- * `/status/[ref]` can be demoed with WP2's Praman partner API not running.
+ * `/status/[ref]` can be demoed with WP2's ApplyOnce partner API not running.
  *
  * Values are taken from `packages/providers/src/fixtures.ts`'s AARAV demo person,
  * mapped onto exactly the `bta-jee-2026` form's requested fields (see
  * `packages/db/src/seed.ts`) — not imported (this package can't depend on
- * `@praman/providers`), just mirrored by hand.
+ * `@applyonce/providers`), just mirrored by hand.
  */
 import { createHash } from "node:crypto";
-import type { PramanPayload, SharedFact } from "@praman/schema";
+import type { ApplyOncePayload, SharedFact } from "@applyonce/schema";
 
 const inDays = (d: number) => new Date(Date.now() + d * 864e5).toISOString().slice(0, 10);
 const sha256 = (s: string) => createHash("sha256").update(s).digest("hex");
@@ -82,13 +82,13 @@ function buildFacts(): SharedFact[] {
   ];
 }
 
-export function buildOfflinePayload(opts: { formId: string; applicationId: string; consentId: string; audience: string }): PramanPayload {
+export function buildOfflinePayload(opts: { formId: string; applicationId: string; consentId: string; audience: string }): ApplyOncePayload {
   const facts = buildFacts();
   const custom = { exam_city_1: "Lucknow", exam_city_2: "Kanpur", paper: "Paper 1 (B.E./B.Tech)", medium: "English", declaration: true };
   const now = Math.floor(Date.now() / 1000);
   const sortedFacts = [...facts].sort((a, b) => a.key.localeCompare(b.key));
   return {
-    iss: "praman",
+    iss: "applyonce",
     sub: sha256(`offline-demo:${opts.audience}`).slice(0, 32),
     aud: opts.audience,
     iat: now,

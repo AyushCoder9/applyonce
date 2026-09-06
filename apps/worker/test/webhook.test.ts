@@ -1,8 +1,8 @@
 /** webhook.deliver against a local HTTP server that checks the HMAC (real S3/DB not needed for the network hop, but the delivery + secret live in the real DB). */
 import http from "node:http";
 import { describe, it, expect, beforeAll, afterAll } from "vitest";
-import { db, eq, sql, partners, partnerWebhooks, webhookDeliveries, systemDek } from "@praman/db";
-import { encrypt, verifyWebhook } from "@praman/crypto";
+import { db, eq, sql, partners, partnerWebhooks, webhookDeliveries, systemDek } from "@applyonce/db";
+import { encrypt, verifyWebhook } from "@applyonce/crypto";
 import { runInline } from "../src/inline";
 
 const SECRET = "whsec_test_0001";
@@ -19,9 +19,9 @@ beforeAll(async () => {
     let body = "";
     req.on("data", (c) => (body += c));
     req.on("end", () => {
-      const sig = String(req.headers["x-praman-signature"] ?? "");
-      const ts = String(req.headers["x-praman-timestamp"] ?? "");
-      received = { valid: verifyWebhook(SECRET, body, sig, ts), event: String(req.headers["x-praman-event"]), idempotencyKey: String(req.headers["idempotency-key"]) };
+      const sig = String(req.headers["x-applyonce-signature"] ?? "");
+      const ts = String(req.headers["x-applyonce-timestamp"] ?? "");
+      received = { valid: verifyWebhook(SECRET, body, sig, ts), event: String(req.headers["x-applyonce-event"]), idempotencyKey: String(req.headers["idempotency-key"]) };
       res.writeHead(200, { "content-type": "application/json" }).end(JSON.stringify({ ok: true }));
     });
   });

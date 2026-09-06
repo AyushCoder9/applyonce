@@ -17,7 +17,7 @@ export function Prose({ title, updated, intro, children }: { title: string; upda
         <h1 className="font-display text-4xl font-bold md:text-5xl">{title}</h1>
         {updated && <p className="mt-2 text-sm text-ink-3">Last updated {updated}</p>}
         {intro && <p className="mt-4 text-lg text-ink-2">{intro}</p>}
-        <div className="prose-praman mt-10 grid gap-8">{children}</div>
+        <div className="prose-applyonce mt-10 grid gap-8">{children}</div>
       </div>
     </Container>
   );

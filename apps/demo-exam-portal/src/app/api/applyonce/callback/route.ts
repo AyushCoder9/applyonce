@@ -2,14 +2,14 @@ import { randomUUID } from 'node:crypto';
 import { cookies } from 'next/headers';
 import { NextResponse } from 'next/server';
 import { consumeState,saveDraft } from '@/lib/store';
-import { exchangeShareToken,loadPramanConfig } from '@/lib/praman';
+import { exchangeShareToken,loadApplyOnceConfig } from '@/lib/applyonce';
 export async function GET(request:Request) {
-  const url=new URL(request.url),cfg=loadPramanConfig(),state=url.searchParams.get('state');
+  const url=new URL(request.url),cfg=loadApplyOnceConfig(),state=url.searchParams.get('state');
   const jar=await cookies();
   if(!state || jar.get('bta_state')?.value!==state) return NextResponse.redirect(new URL('/apply/return?error=state',cfg.selfUrl));
   const sessionId=consumeState(state);
   if(!sessionId) return NextResponse.redirect(new URL('/apply/return?error=expired',cfg.selfUrl));
-  if(url.searchParams.get('praman_error')==='denied') return NextResponse.redirect(new URL('/apply/return?error=denied',cfg.selfUrl));
+  if(url.searchParams.get('applyonce_error')==='denied') return NextResponse.redirect(new URL('/apply/return?error=denied',cfg.selfUrl));
   const token=url.searchParams.get('share_token');
   if(!token) return NextResponse.redirect(new URL('/apply/return?error=token',cfg.selfUrl));
   try {

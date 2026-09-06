@@ -1,7 +1,7 @@
-import { documentAllowed } from "@praman/schema";
+import { documentAllowed } from "@applyonce/schema";
 import { notFound } from "next/navigation";
-import { db, t, eq, desc } from "@praman/db";
-import { PageHeader } from "@praman/ui";
+import { db, t, eq, desc } from "@applyonce/db";
+import { PageHeader } from "@applyonce/ui";
 import { requireUser, requireProfileAccess } from "@/lib/session";
 import { loadFacts } from "@/app/api/v1/profiles/_lib";
 import { localeOf, tr } from "@/components/vault/i18n";

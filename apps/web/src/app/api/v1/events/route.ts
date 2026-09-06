@@ -1,4 +1,4 @@
-import { db, t, and, or, eq, gt, inArray, desc } from "@praman/db";
+import { db, t, and, or, eq, gt, inArray, desc } from "@applyonce/db";
 import { handler, citizen } from "@/lib/api";
 import { sseResponse, type SseEvent } from "@/lib/sse";
 

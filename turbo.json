@@ -6,7 +6,7 @@
     "DATABASE_URL",
     "REDIS_URL",
     "PROVIDER_*",
-    "PRAMAN_*",
+    "APPLYONCE_*",
     "S3_*",
     "NEXT_PUBLIC_*",
     "BETTER_AUTH_*",

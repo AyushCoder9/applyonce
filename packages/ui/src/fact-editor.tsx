@@ -4,7 +4,7 @@
  * (string | number | boolean | string[] | object | null); `coerceInput` turns raw UI text into that.
  */
 import { TextField, Label, Input, Description, FieldError, TextArea, Select, ListBox, Switch, NumberField } from "@heroui/react";
-import { ENUM_LABELS, documentTypeForKey, type FieldDef, type FactValue } from "@praman/schema";
+import { ENUM_LABELS, documentTypeForKey, type FieldDef, type FactValue } from "@applyonce/schema";
 import { MobileInput, PincodeInput, PanInput, IfscInput } from "./inputs-india";
 import type { Locale } from "./format";
 

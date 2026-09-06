@@ -1,14 +1,14 @@
 import type { Metadata } from "next";
 import Link from "next/link";
 import { ShieldCheck, Lock, ScrollText, EyeOff, ArrowRight, Fingerprint, FileCheck2, Send } from "lucide-react";
-import { db, t, count, eq, inArray } from "@praman/db";
+import { db, t, count, eq, inArray } from "@applyonce/db";
 import { Container, Section, CtaLink } from "@/components/public/blocks";
 import { AutofillDemo } from "@/components/public/autofill-demo";
 
 export const metadata: Metadata = {
-  title: "Praman — Verify once. Apply anywhere.",
+  title: "ApplyOnce — Verify once. Apply anywhere.",
   description: "Enter your details once, verify them with DigiLocker, CBSE, UIDAI and PAN, then fill any exam, college, scholarship, job or KYC form with one consent tap. Consent receipts and source-aware readiness. Free for citizens.",
-  openGraph: { title: "Praman — Verify once. Apply anywhere.", description: "Your verified profile for every Indian form. One consent tap, zero re-typing.", type: "website" },
+  openGraph: { title: "ApplyOnce — Verify once. Apply anywhere.", description: "Your verified profile for every Indian form. One consent tap, zero re-typing.", type: "website" },
 };
 export const revalidate = 300;
 
@@ -38,7 +38,7 @@ export default async function Landing() {
             <p className="hi mt-3 text-xl font-medium text-brand-700 md:text-2xl">एक बार सत्यापित करें। कहीं भी आवेदन करें।</p>
             <p className="mt-5 max-w-xl text-lg text-ink-2">Reuse your saved information across applications. See what is missing, expired or conflicting before you share. Every fact keeps its source; every share gets a receipt.</p>
             <div className="mt-8 flex flex-wrap items-center gap-3">
-              <CtaLink href="/auth/login?mode=register">Create your Praman <ArrowRight className="size-5" /></CtaLink>
+              <CtaLink href="/auth/login?mode=register">Create your ApplyOnce <ArrowRight className="size-5" /></CtaLink>
               <CtaLink href="/demo" variant="secondary">Try the live demo</CtaLink>
             </div>
             <ul className="mt-8 flex flex-wrap gap-x-6 gap-y-2 text-sm text-ink-2">
@@ -63,7 +63,7 @@ export default async function Landing() {
           {[
             { I: Fingerprint, t: "Connect DigiLocker", d: "Log in with your mobile. Pull Aadhaar, Class 10/12 marksheets, category and income certificates straight from the issuer. Each value gets a verified stamp." },
             { I: FileCheck2, t: "Review your vault", d: "Ten sections, one screen each. Fix anything, add what's missing, upload a PDF and we read it. Self-declared stays amber until an issuer confirms it." },
-            { I: Send, t: "Apply with one tap", d: "On any portal with 'Apply with Praman', or with our browser extension, review exactly which fields go where, confirm with your passkey, done." },
+            { I: Send, t: "Apply with one tap", d: "On any portal with 'Apply with ApplyOnce', or with our browser extension, review exactly which fields go where, confirm with your passkey, done." },
           ].map((x, i) => <li key={x.t} className="card relative p-6"><span className="absolute right-5 top-4 font-display text-5xl font-bold text-brand-100">{i + 1}</span><div className="grid size-11 place-items-center rounded-md bg-brand-50 text-brand-600"><x.I className="size-5" /></div><h3 className="mt-4 font-display text-xl font-bold">{x.t}</h3><p className="mt-2 text-ink-2">{x.d}</p></li>)}
         </ol>
       </Section>
@@ -85,7 +85,7 @@ export default async function Landing() {
       <Section>
         <div className="rounded-xl bg-brand-500 px-6 py-10 text-white md:px-12 md:py-14">
           <div className="grid items-center gap-8 md:grid-cols-[1.4fr_1fr]">
-            <div><div className="text-xs font-semibold uppercase tracking-[0.08em] text-brand-100">For exam boards, universities, scholarships, banks</div><h2 className="mt-2 font-display text-3xl font-bold md:text-4xl">Add "Apply with Praman" in an afternoon.</h2><p className="mt-3 max-w-xl text-brand-100">Signed applicant data with per-field provenance, an evidence-readiness check and a consent receipt. Explore the working BTA integration and the partner console.</p></div>
+            <div><div className="text-xs font-semibold uppercase tracking-[0.08em] text-brand-100">For exam boards, universities, scholarships, banks</div><h2 className="mt-2 font-display text-3xl font-bold md:text-4xl">Add "Apply with ApplyOnce" in an afternoon.</h2><p className="mt-3 max-w-xl text-brand-100">Signed applicant data with per-field provenance, an evidence-readiness check and a consent receipt. Explore the working BTA integration and the partner console.</p></div>
             <div className="flex flex-wrap gap-3 md:justify-end"><Link href="/for-institutions" className="inline-flex items-center gap-2 rounded-pill bg-white px-6 py-3 font-semibold text-brand-700 hover:bg-brand-50">See how it works</Link><Link href="/partner/onboarding" className="inline-flex items-center gap-2 rounded-pill border border-white/40 px-6 py-3 font-semibold text-white hover:bg-white/10">Get sandbox keys</Link></div>
           </div>
         </div>

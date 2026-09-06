@@ -40,7 +40,7 @@ export function LoginForm({ next, mode, mock }: { next: string; mode: "login" | 
 
   return (
     <div className="card p-6 sm:p-8">
-      <h1 className="text-2xl font-bold">{mode === "register" ? "Create your Praman" : "Welcome back"}</h1>
+      <h1 className="text-2xl font-bold">{mode === "register" ? "Create your ApplyOnce" : "Welcome back"}</h1>
       <p className="mt-1 text-ink-2">{step === "phone" ? "We’ll send a one-time code to your mobile." : `Enter the 6-digit code sent to +91 ${phone}.`}</p>
       {mock && <Alert status="accent" className="mt-4"><Alert.Indicator /><Alert.Content><Alert.Title>Demo mode</Alert.Title><Alert.Description>Any Indian mobile works. OTP is <b>123456</b>. Try 9876543210 (Aarav, student) or 9876500002 (Sunita, parent).</Alert.Description></Alert.Content></Alert>}
       {err && <Alert status="danger" className="mt-4"><Alert.Indicator /><Alert.Content><Alert.Title>{err}</Alert.Title></Alert.Content></Alert>}

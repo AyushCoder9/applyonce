@@ -1,9 +1,9 @@
 /**
  * Content script: detects a matching recipe on the current page, shows a small banner
- * ("Praman can fill N fields"), and on click fills the page sequentially with a
+ * ("ApplyOnce can fill N fields"), and on click fills the page sequentially with a
  * highlight sweep (docs/04 §4 — 40ms stagger, 900ms fade) plus a 2s "from <issuer>"
  * ghost label under verified fields. Also watches for a recipe's `capture` selector
- * (application/confirmation number) after submit and reports it back to Praman.
+ * (application/confirmation number) after submit and reports it back to ApplyOnce.
  *
  * DOM-heavy and not unit-tested (per WP6 scope) — the pure matching/transform/select
  * logic it calls all lives in `../lib` and `../recipes` and IS unit-tested.
@@ -76,8 +76,8 @@ function selectorFor(el: HTMLElement): string | null {
   const name = el.getAttribute("name");
   if (name) return `[name="${CSS.escape(name)}"]`;
   // last resort: tag a data attribute we control so we can find it again
-  if (!el.dataset.pramanRef) el.dataset.pramanRef = `f${Math.random().toString(36).slice(2, 9)}`;
-  return `[data-praman-ref="${el.dataset.pramanRef}"]`;
+  if (!el.dataset.applyonceRef) el.dataset.applyonceRef = `f${Math.random().toString(36).slice(2, 9)}`;
+  return `[data-applyonce-ref="${el.dataset.applyonceRef}"]`;
 }
 
 function detect(): PageStatus {
@@ -92,18 +92,18 @@ function detect(): PageStatus {
 // ---------- filling ----------
 
 function injectStyles() {
-  if (document.getElementById("praman-fill-styles")) return;
+  if (document.getElementById("applyonce-fill-styles")) return;
   const style = document.createElement("style");
-  style.id = "praman-fill-styles";
+  style.id = "applyonce-fill-styles";
   style.textContent = `
-    .praman-sweep { outline: 2px solid #ff6b2c !important; background-color: rgba(255,138,76,.22) !important; border-radius: 4px; transition: background-color 900ms ease, outline-color 900ms ease; }
-    .praman-sweep.praman-fade { outline-color: rgba(255,138,76,0) !important; background-color: rgba(255,138,76,0) !important; }
-    .praman-ghost { position: absolute; z-index: 2147483647; font: 500 11px/1.4 system-ui, sans-serif; color: #b45309; background: #fffbeb; border: 1px solid #fde68a; border-radius: 6px; padding: 2px 7px; pointer-events: none; opacity: 0; transition: opacity 160ms ease; box-shadow: 0 2px 6px rgba(0,0,0,.08); }
-    .praman-ghost.show { opacity: 1; }
-    #praman-banner { position: fixed; right: 16px; bottom: 16px; z-index: 2147483647; background: #14141f; color: #fff; border-radius: 12px; padding: 12px 14px; font: 500 13px/1.4 system-ui, sans-serif; box-shadow: 0 12px 32px rgba(0,0,0,.28); display: flex; align-items: center; gap: 10px; max-width: 280px; }
-    #praman-banner button { background: #ff6b2c; color: #fff; border: none; border-radius: 999px; padding: 7px 14px; font: 600 12px/1 system-ui, sans-serif; cursor: pointer; }
-    #praman-banner button.secondary { background: transparent; color: #cbd5e1; padding: 4px 6px; }
-    #praman-banner .praman-dismiss { position: absolute; top: -6px; right: -6px; background: #fff; color: #14141f; border-radius: 999px; width: 18px; height: 18px; font-size: 12px; line-height: 18px; text-align: center; cursor: pointer; box-shadow: 0 1px 4px rgba(0,0,0,.25); }
+    .applyonce-sweep { outline: 2px solid #ff6b2c !important; background-color: rgba(255,138,76,.22) !important; border-radius: 4px; transition: background-color 900ms ease, outline-color 900ms ease; }
+    .applyonce-sweep.applyonce-fade { outline-color: rgba(255,138,76,0) !important; background-color: rgba(255,138,76,0) !important; }
+    .applyonce-ghost { position: absolute; z-index: 2147483647; font: 500 11px/1.4 system-ui, sans-serif; color: #b45309; background: #fffbeb; border: 1px solid #fde68a; border-radius: 6px; padding: 2px 7px; pointer-events: none; opacity: 0; transition: opacity 160ms ease; box-shadow: 0 2px 6px rgba(0,0,0,.08); }
+    .applyonce-ghost.show { opacity: 1; }
+    #applyonce-banner { position: fixed; right: 16px; bottom: 16px; z-index: 2147483647; background: #14141f; color: #fff; border-radius: 12px; padding: 12px 14px; font: 500 13px/1.4 system-ui, sans-serif; box-shadow: 0 12px 32px rgba(0,0,0,.28); display: flex; align-items: center; gap: 10px; max-width: 280px; }
+    #applyonce-banner button { background: #ff6b2c; color: #fff; border: none; border-radius: 999px; padding: 7px 14px; font: 600 12px/1 system-ui, sans-serif; cursor: pointer; }
+    #applyonce-banner button.secondary { background: transparent; color: #cbd5e1; padding: 4px 6px; }
+    #applyonce-banner .applyonce-dismiss { position: absolute; top: -6px; right: -6px; background: #fff; color: #14141f; border-radius: 999px; width: 18px; height: 18px; font-size: 12px; line-height: 18px; text-align: center; cursor: pointer; box-shadow: 0 1px 4px rgba(0,0,0,.25); }
   `;
   document.head.appendChild(style);
 }
@@ -111,7 +111,7 @@ function injectStyles() {
 function ghostLabel(el: Element, text: string) {
   const rect = el.getBoundingClientRect();
   const ghost = document.createElement("div");
-  ghost.className = "praman-ghost";
+  ghost.className = "applyonce-ghost";
   ghost.textContent = text;
   ghost.style.left = `${rect.left + window.scrollX}px`;
   ghost.style.top = `${rect.bottom + window.scrollY + 4}px`;
@@ -121,9 +121,9 @@ function ghostLabel(el: Element, text: string) {
 }
 
 function sweep(el: Element) {
-  el.classList.add("praman-sweep");
-  requestAnimationFrame(() => el.classList.add("praman-fade"));
-  setTimeout(() => el.classList.remove("praman-sweep", "praman-fade"), 1000);
+  el.classList.add("applyonce-sweep");
+  requestAnimationFrame(() => el.classList.add("applyonce-fade"));
+  setTimeout(() => el.classList.remove("applyonce-sweep", "applyonce-fade"), 1000);
 }
 
 function setNativeValue(el: HTMLInputElement | HTMLTextAreaElement, value: string) {
@@ -239,28 +239,28 @@ async function runFill(values: Record<string, FillValue>, labels: Record<string,
 // ---------- banner ----------
 
 function showBanner(status: PageStatus) {
-  document.getElementById("praman-banner")?.remove();
+  document.getElementById("applyonce-banner")?.remove();
   if (status.fieldCount === 0 || !status.recipeId) return;
   injectStyles();
   const banner = document.createElement("div");
-  banner.id = "praman-banner";
+  banner.id = "applyonce-banner";
   banner.innerHTML = `
-    <span class="praman-dismiss" title="Dismiss">&times;</span>
-    <span>Praman can fill ${status.fieldCount} field${status.fieldCount === 1 ? "" : "s"}</span>
+    <span class="applyonce-dismiss" title="Dismiss">&times;</span>
+    <span>ApplyOnce can fill ${status.fieldCount} field${status.fieldCount === 1 ? "" : "s"}</span>
     <button type="button">Fill</button>
   `;
-  banner.querySelector(".praman-dismiss")!.addEventListener("click", () => banner.remove());
+  banner.querySelector(".applyonce-dismiss")!.addEventListener("click", () => banner.remove());
   banner.querySelector("button")!.addEventListener("click", async () => {
     banner.querySelector("button")!.textContent = "Filling…";
     try {
-      const auth = await sendToBackground<{ ok: boolean; data?: { connected: boolean; activeProfileId?: string | null } }>({ type: "PRAMAN_AUTH_STATUS" });
+      const auth = await sendToBackground<{ ok: boolean; data?: { connected: boolean; activeProfileId?: string | null } }>({ type: "APPLYONCE_AUTH_STATUS" });
       if (!auth.ok || !auth.data?.connected || !auth.data.activeProfileId) {
-        banner.innerHTML = `<span>Connect Praman first — open the extension icon.</span>`;
+        banner.innerHTML = `<span>Connect ApplyOnce first — open the extension icon.</span>`;
         return;
       }
       const keys = Array.from(new Set(activeFields.map((f) => f.key)));
       const plan = await sendToBackground<{ ok: boolean; data?: { values: Record<string, FillValue>; labels: Record<string, string>; missing: string[] }; error?: { message: string } }>({
-        type: "PRAMAN_FILL_PLAN", recipe: activeRecipe!.id, profileId: auth.data.activeProfileId, keys,
+        type: "APPLYONCE_FILL_PLAN", recipe: activeRecipe!.id, profileId: auth.data.activeProfileId, keys,
       });
       if (!plan.ok || !plan.data) { banner.innerHTML = `<span>${plan.error?.message ?? "Could not load your data"}</span>`; return; }
       const summary = await runFill(plan.data.values, plan.data.labels);
@@ -290,7 +290,7 @@ function startCaptureWatch() {
       captureObserver?.disconnect();
       captureObserver = null;
       sendToBackground({
-        type: "PRAMAN_CREATE_APPLICATION",
+        type: "APPLYONCE_CREATE_APPLICATION",
         recipe: activeRecipe!.id,
         externalRef: m[0],
         portalUrl: location.href,
@@ -309,8 +309,8 @@ function startCaptureWatch() {
 // ---------- wiring ----------
 
 chrome.runtime.onMessage.addListener((msg: GetStatusMsg | ApplyFillMsg, _sender, sendResponse) => {
-  if (msg.type === "PRAMAN_GET_STATUS") { sendResponse(detect()); return; }
-  if (msg.type === "PRAMAN_APPLY_FILL") { runFill(msg.values, msg.labels).then(sendResponse); return true; }
+  if (msg.type === "APPLYONCE_GET_STATUS") { sendResponse(detect()); return; }
+  if (msg.type === "APPLYONCE_APPLY_FILL") { runFill(msg.values, msg.labels).then(sendResponse); return true; }
   return false;
 });
 

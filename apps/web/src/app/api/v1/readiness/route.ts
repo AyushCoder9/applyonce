@@ -1,7 +1,7 @@
-import { redis } from "@praman/jobs";
+import { redis } from "@applyonce/jobs";
 import { z } from 'zod';
-import { db,t,eq,and,isNull,getDek,getFacts } from '@praman/db';
-import { assessReadiness } from '@praman/schema';
+import { db,t,eq,and,isNull,getDek,getFacts } from '@applyonce/db';
+import { assessReadiness } from '@applyonce/schema';
 import { handler,citizen,body,ok,ApiError } from '@/lib/api';
 import { explainReadiness } from '@/lib/readiness-advice';
 

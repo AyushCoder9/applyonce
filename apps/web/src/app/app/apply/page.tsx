@@ -1,7 +1,7 @@
 import Link from "next/link";
 import { Puzzle, Search, Send } from "lucide-react";
-import { db, t, eq, desc } from "@praman/db";
-import { PageHeader, EmptyState, daysUntil, purposeLabel, fmtDate } from "@praman/ui";
+import { db, t, eq, desc } from "@applyonce/db";
+import { PageHeader, EmptyState, daysUntil, purposeLabel, fmtDate } from "@applyonce/ui";
 import { requireUser } from "@/lib/session";
 import { KIND_LABEL } from "@/components/applications/model";
 
@@ -17,12 +17,12 @@ export default async function ApplyPage({ searchParams }: { searchParams: Promis
   const groups = Object.entries(forms.reduce<Record<string, typeof forms>>((acc, r) => ((acc[r.f.kind] ??= []).push(r), acc), {}));
   return (
     <>
-      <PageHeader title="Apply with Praman" subtitle="Pick a form. You’ll see exactly which fields it asks for before anything is shared." />
+      <PageHeader title="Apply with ApplyOnce" subtitle="Pick a form. You’ll see exactly which fields it asks for before anything is shared." />
       <form className="mb-6 flex max-w-lg items-center gap-2 rounded-pill border border-line bg-surface px-4 py-2" role="search">
         <Search className="size-4 text-ink-3" /><input name="q" defaultValue={q} placeholder="Search exam, college, bank…" aria-label="Search forms" className="w-full bg-transparent text-[15px] outline-none" />
       </form>
       {!forms.length ? (
-        <EmptyState icon={<Send className="size-6" />} title={needle ? `Nothing for “${q}”` : "No forms are open right now"} blurb="Portals that don’t use Praman yet can still be filled with the extension." action={<Link href="/app/extension" className="cta px-5 py-2.5">Set up the extension</Link>} />
+        <EmptyState icon={<Send className="size-6" />} title={needle ? `Nothing for “${q}”` : "No forms are open right now"} blurb="Portals that don’t use ApplyOnce yet can still be filled with the extension." action={<Link href="/app/extension" className="cta px-5 py-2.5">Set up the extension</Link>} />
       ) : groups.map(([kind, list]) => (
         <section key={kind} className="mb-8">
           <h2 className="mb-3 font-display text-xl font-bold">{KIND_LABEL[kind] ?? kind}</h2>
@@ -41,7 +41,7 @@ export default async function ApplyPage({ searchParams }: { searchParams: Promis
                 </div>
                 <div className="mt-auto flex items-center justify-between gap-2">
                   <span className="text-xs text-ink-3">Keeps data {f.retentionDays} days</span>
-                  {dl != null && dl < 0 ? <span className="text-sm text-ink-3">Deadline passed</span> : <Link href={`/app/apply/${f.slug}`} className="cta px-4 py-2 text-sm" data-testid="apply-with-praman">Apply with Praman</Link>}
+                  {dl != null && dl < 0 ? <span className="text-sm text-ink-3">Deadline passed</span> : <Link href={`/app/apply/${f.slug}`} className="cta px-4 py-2 text-sm" data-testid="apply-with-applyonce">Apply with ApplyOnce</Link>}
                 </div>
               </article>
             ); })}
@@ -50,7 +50,7 @@ export default async function ApplyPage({ searchParams }: { searchParams: Promis
       ))}
       <section className="card flex flex-col items-start gap-3 p-5 sm:flex-row sm:items-center">
         <div className="grid size-11 shrink-0 place-items-center rounded-md bg-accent-50 text-accent-600"><Puzzle className="size-6" /></div>
-        <div className="flex-1"><h3 className="font-display text-lg font-bold">Open a portal with the extension</h3><p className="text-sm text-ink-2">NTA, NSP, state portals — the Praman extension fills their forms from your vault, field by field.</p></div>
+        <div className="flex-1"><h3 className="font-display text-lg font-bold">Open a portal with the extension</h3><p className="text-sm text-ink-2">NTA, NSP, state portals — the ApplyOnce extension fills their forms from your vault, field by field.</p></div>
         <Link href="/app/extension" className="rounded-pill border border-line px-4 py-2 text-sm font-medium hover:bg-surface-2">Set up</Link>
       </section>
     </>

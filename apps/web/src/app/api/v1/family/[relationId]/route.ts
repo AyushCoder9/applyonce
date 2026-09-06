@@ -1,8 +1,8 @@
 import { z } from "zod";
-import { db, t, eq, and } from "@praman/db";
-import { SECTIONS } from "@praman/schema";
-import { enqueue } from "@praman/jobs";
-import { providers } from "@praman/providers";
+import { db, t, eq, and } from "@applyonce/db";
+import { SECTIONS } from "@applyonce/schema";
+import { enqueue } from "@applyonce/jobs";
+import { providers } from "@applyonce/providers";
 import { handler, citizen, ok, body, log, ApiError } from "@/lib/api";
 import { isHandoverDue, normPhone, validPhone } from "@/components/family/logic";
 import { signFamilyToken, appUrl } from "../_tokens";
@@ -31,9 +31,9 @@ export const PATCH = handler(async (req, { params }) => {
     const phone = normPhone(b.phone);
     const token = await signFamilyToken({ kind: "claim", relationId: rel.id, phone });
     const link = `${appUrl()}/app/family/claim?token=${token}`;
-    const msg = `${ward.displayName}, you're 18 — your Praman profile is yours now. Log in with this number and claim it: ${link}`;
+    const msg = `${ward.displayName}, you're 18 — your ApplyOnce profile is yours now. Log in with this number and claim it: ${link}`;
     const existing = await db.query.user.findFirst({ where: eq(t.user.phoneNumber, `+91${phone}`) });
-    if (existing) await enqueue("notify", { userId: existing.id, category: "system", title: "Claim your Praman profile", body: msg, link: `/app/family/claim?token=${token}`, channels: ["inapp", "sms"] });
+    if (existing) await enqueue("notify", { userId: existing.id, category: "system", title: "Claim your ApplyOnce profile", body: msg, link: `/app/family/claim?token=${token}`, channels: ["inapp", "sms"] });
     else await providers.sms.send(`+91${phone}`, msg, "transactional");
     await log(session, "family.claim.link_sent", "relation", rel.id, { profileId: ward.id, phoneLast4: phone.slice(-4) });
     return ok({ sent: true, ...(process.env.PROVIDER_SMS !== "setu" ? { devLink: link } : {}) });

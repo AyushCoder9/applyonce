@@ -1,4 +1,4 @@
-import { db, t, eq, inArray, desc } from "@praman/db";
+import { db, t, eq, inArray, desc } from "@applyonce/db";
 import { handler, citizen, ok } from "@/lib/api";
 
 /** GET /api/v1/consents — consent ledger across every profile the user can act on. */

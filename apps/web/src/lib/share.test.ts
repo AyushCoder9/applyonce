@@ -1,8 +1,8 @@
 import { describe, it, expect } from "vitest";
-import type { Fact } from "@praman/schema";
+import type { Fact } from "@applyonce/schema";
 import { buildDiff, diffSummary, withQuery, newShareToken, shareTokenSessionId } from "./share";
 
-process.env.PRAMAN_KEK_HEX ??= "0".repeat(64);
+process.env.APPLYONCE_KEK_HEX ??= "0".repeat(64);
 
 const fact = (key: string, value: Fact["value"], source: Fact["source"] = "issuer_verified", verifiedBy: string | null = "cbse"): Fact => ({ key, value, repeatIndex: 0, source, verifiedBy });
 const form = { purpose: "exam_application" as const, requestedFields: [

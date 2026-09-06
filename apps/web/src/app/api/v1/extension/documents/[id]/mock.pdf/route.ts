@@ -1,5 +1,5 @@
-import { documentAllowed } from "@praman/schema";
-import { db, t, eq } from "@praman/db";
+import { documentAllowed } from "@applyonce/schema";
+import { db, t, eq } from "@applyonce/db";
 import { handler, ApiError } from "@/lib/api";
 import { tinyPdf } from "../../../_pdf";
 import { extensionUser } from "../../../_auth";
@@ -13,7 +13,7 @@ export const GET = handler(async (req, { params }) => {
   const profile=all.find(p=>p.id===doc?.profileId);
   if (!doc || !profile || doc.status!=="ready" || !documentAllowed(profile.scope,doc.docType)) throw new ApiError(404, "DOCUMENT_NOT_FOUND");
 
-  const pdf = tinyPdf(doc.title, `${doc.issuerName ?? "Praman"} \xB7 ${doc.docType}`);
+  const pdf = tinyPdf(doc.title, `${doc.issuerName ?? "ApplyOnce"} \xB7 ${doc.docType}`);
   return new Response(new Uint8Array(pdf), {
     headers: {
       "content-type": "application/pdf",

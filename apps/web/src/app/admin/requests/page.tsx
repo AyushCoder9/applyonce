@@ -1,6 +1,6 @@
 import { Chip } from "@/components/client-ui";
-import { db, t, desc, eq } from "@praman/db";
-import { PageHeader } from "@praman/ui";
+import { db, t, desc, eq } from "@applyonce/db";
+import { PageHeader } from "@applyonce/ui";
 import { updateRequest } from "./actions";
 export const dynamic = "force-dynamic";
 const COLOR: Record<string, "warning" | "accent" | "success" | "danger" | "default"> = { pending: "warning", processing: "accent", done: "success", failed: "danger", cancelled: "default" };

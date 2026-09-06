@@ -1,5 +1,5 @@
 import { z } from "zod";
-import { db, t, eq } from "@praman/db";
+import { db, t, eq } from "@applyonce/db";
 import { handler, ok, body, log, ApiError } from "@/lib/api";
 import { adminApi } from "../../../_auth";
 export const POST = handler(async (req, { params }) => {

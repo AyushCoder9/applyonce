@@ -1,5 +1,5 @@
 {
-  "name": "@praman/db",
+  "name": "@applyonce/db",
   "version": "0.1.0",
   "private": true,
   "type": "module",
@@ -17,11 +17,11 @@
     "typecheck": "tsc --noEmit"
   },
   "dependencies": {
-    "@praman/schema": "workspace:*",
-    "@praman/crypto": "workspace:*",
+    "@applyonce/schema": "workspace:*",
+    "@applyonce/crypto": "workspace:*",
     "drizzle-orm": "catalog:",
     "postgres": "catalog:",
-    "@praman/providers": "workspace:*"
+    "@applyonce/providers": "workspace:*"
   },
   "devDependencies": {
     "drizzle-kit": "catalog:",

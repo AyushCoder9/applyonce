@@ -1,6 +1,6 @@
 import { z } from "zod";
-import { db, t, getDek, putFact } from "@praman/db";
-import { GENDER, RELATION } from "@praman/schema";
+import { db, t, getDek, putFact } from "@applyonce/db";
+import { GENDER, RELATION } from "@applyonce/schema";
 import { handler, citizen, ok, body, log, ApiError } from "@/lib/api";
 import { isMinor, validDob } from "@/components/family/logic";
 

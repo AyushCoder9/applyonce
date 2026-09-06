@@ -1,10 +1,10 @@
 import Link from "next/link";
 import { notFound } from "next/navigation";
 import { Lock } from "lucide-react";
-import { db, t, eq, systemDek, mask } from "@praman/db";
-import { decryptString } from "@praman/crypto";
-import { field, type PramanPayload } from "@praman/schema";
-import { PageHeader, FactRow, PartnerIdentity, fmtDate } from "@praman/ui";
+import { db, t, eq, systemDek, mask } from "@applyonce/db";
+import { decryptString } from "@applyonce/crypto";
+import { field, type ApplyOncePayload } from "@applyonce/schema";
+import { PageHeader, FactRow, PartnerIdentity, fmtDate } from "@applyonce/ui";
 import { requireUser, requireProfileAccess, isSteppedUp } from "@/lib/session";
 import { decodeJws } from "@/lib/signing";
 import { RevokeButton, RevealButton } from "@/components/applications/consent-actions";
@@ -19,7 +19,7 @@ export default async function ConsentPage({ params }: { params: Promise<{ consen
   const partner = (await db.query.partners.findFirst({ where: eq(t.partners.id, c.partnerId) }))!;
   const form = c.formId ? await db.query.forms.findFirst({ where: eq(t.forms.id, c.formId) }) : null;
   const share = await db.query.shares.findFirst({ where: eq(t.shares.consentId, c.id) });
-  const payload = share ? decodeJws<PramanPayload>(decryptString(systemDek(), share.payloadEnc, `share:${share.id}`)) : null;
+  const payload = share ? decodeJws<ApplyOncePayload>(decryptString(systemDek(), share.payloadEnc, `share:${share.id}`)) : null;
   const revealed = isSteppedUp(s);
   const locale = (s.user as { locale?: string }).locale === "hi" ? "hi" : "en";
   const st = c.revokedAt ? "revoked" : c.expiresAt.getTime() < Date.now() ? "expired" : "active";

@@ -1,7 +1,7 @@
 /** webhooks queue: webhook.deliver — HMAC POST, DB-tracked retries (5 attempts, exponential via BullMQ opts set by the producer) */
-import { db, eq, systemDek, webhookDeliveries, partnerWebhooks } from "@praman/db";
-import { decryptString, signWebhook } from "@praman/crypto";
-import type { JobMap } from "@praman/jobs";
+import { db, eq, systemDek, webhookDeliveries, partnerWebhooks } from "@applyonce/db";
+import { decryptString, signWebhook } from "@applyonce/crypto";
+import type { JobMap } from "@applyonce/jobs";
 
 const MAX_ATTEMPTS = 5;
 const TIMEOUT_MS = 10_000;
@@ -25,7 +25,7 @@ export async function webhookDeliver(data: JobMap["webhook.deliver"]) {
   try {
     res = await fetch(hook.url, {
       method: "POST",
-      headers: { "content-type": "application/json", "X-Praman-Timestamp": String(ts), "X-Praman-Signature": sig, "X-Praman-Event": delivery.event, "Idempotency-Key": deliveryId },
+      headers: { "content-type": "application/json", "X-ApplyOnce-Timestamp": String(ts), "X-ApplyOnce-Signature": sig, "X-ApplyOnce-Event": delivery.event, "Idempotency-Key": deliveryId },
       body,
       signal: controller.signal,
     });

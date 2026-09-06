@@ -1,4 +1,4 @@
-import { field, ENUM_LABELS, type FactValue, type Source, PURPOSE_LABELS, type Purpose } from "@praman/schema";
+import { field, ENUM_LABELS, type FactValue, type Source, PURPOSE_LABELS, type Purpose } from "@applyonce/schema";
 export type Locale = "en" | "hi";
 
 export const fmtDate = (d?: string | Date | null, locale: Locale = "en") => (d ? new Date(d).toLocaleDateString(locale === "hi" ? "hi-IN" : "en-IN", { day: "numeric", month: "short", year: "numeric" }) : "—");
@@ -11,6 +11,9 @@ export const purposeLabel = (p: Purpose, locale: Locale = "en") => PURPOSE_LABEL
 export function fmtValue(key: string, v: FactValue | undefined, locale: Locale = "en"): string {
   if (v == null || v === "") return "—";
   let d; try { d = field(key); } catch { return String(v); }
+  // Consent previews receive already-masked sensitive values. Never coerce those
+  // placeholders (for example a masked income) back into numbers for display.
+  if (d.sensitive && typeof v === "string" && v.includes("•")) return v;
   switch (d.type) {
     case "date": return fmtDate(String(v), locale);
     case "money": return fmtMoney(Number(v));

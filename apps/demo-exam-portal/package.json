@@ -1,5 +1,5 @@
 {
-  "name": "@praman/demo-exam-portal",
+  "name": "@applyonce/demo-exam-portal",
   "version": "0.1.0",
   "private": true,
   "type": "module",
@@ -10,8 +10,8 @@
     "typecheck": "tsc --noEmit"
   },
   "dependencies": {
-    "@praman/sdk": "workspace:*",
-    "@praman/schema": "workspace:*",
+    "@applyonce/sdk": "workspace:*",
+    "@applyonce/schema": "workspace:*",
     "next": "catalog:",
     "react": "catalog:",
     "react-dom": "catalog:",

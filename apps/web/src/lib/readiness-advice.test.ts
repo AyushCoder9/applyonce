@@ -1,5 +1,5 @@
 import {afterEach,describe,it,expect,vi} from 'vitest';
-import {assessReadiness} from '@praman/schema';
+import {assessReadiness} from '@applyonce/schema';
 import {explainReadiness} from './readiness-advice';
 const report=assessReadiness([],{purpose:'exam_application',requestedFields:[{key:'identity.full_name',required:true}]});
 afterEach(()=>{vi.unstubAllEnvs();vi.unstubAllGlobals();});

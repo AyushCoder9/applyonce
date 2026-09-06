@@ -1,5 +1,5 @@
 {
-  "name": "praman",
+  "name": "applyonce",
   "private": true,
   "packageManager": "pnpm@9.15.9",
   "engines": {
@@ -9,18 +9,23 @@
     "dev": "node scripts/run.mjs turbo dev",
     "build": "node scripts/run.mjs turbo build",
     "test": "node scripts/run.mjs turbo test",
-    "lint": "turbo lint",
+    "lint": "eslint apps packages scripts --max-warnings=0 && pnpm audit:interactions",
     "typecheck": "node scripts/run.mjs turbo typecheck",
-    "db:generate": "node scripts/run.mjs pnpm --filter @praman/db generate",
-    "db:migrate": "node scripts/run.mjs pnpm --filter @praman/db migrate",
-    "db:seed": "node scripts/run.mjs pnpm --filter @praman/db seed",
-    "db:reset": "node scripts/run.mjs pnpm --filter @praman/db reset",
+    "db:generate": "node scripts/run.mjs pnpm --filter @applyonce/db generate",
+    "db:migrate": "node scripts/run.mjs pnpm --filter @applyonce/db migrate",
+    "db:seed": "node scripts/run.mjs pnpm --filter @applyonce/db seed",
+    "db:reset": "node scripts/run.mjs pnpm --filter @applyonce/db reset",
     "graph": "graphify update .",
-    "db:refresh-demo": "node scripts/run.mjs pnpm --filter @praman/db exec tsx src/refresh-demo.ts",
+    "db:refresh-demo": "node scripts/run.mjs pnpm --filter @applyonce/db exec tsx src/refresh-demo.ts",
     "inventory": "node scripts/inventory.mjs",
-    "audit:workflows": "node scripts/run.mjs node scripts/audit.mjs"
+    "audit:workflows": "node scripts/run.mjs node scripts/audit.mjs",
+    "audit:interactions": "node scripts/audit-interactions.mjs"
   },
   "devDependencies": {
+    "@typescript-eslint/parser": "catalog:",
+    "@vercel/config": "catalog:",
+    "eslint": "catalog:",
+    "eslint-plugin-react-hooks": "catalog:",
     "turbo": "catalog:",
     "typescript": "catalog:"
   },

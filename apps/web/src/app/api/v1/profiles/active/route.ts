@@ -1,5 +1,5 @@
 import { z } from "zod";
-import { db, t, eq } from "@praman/db";
+import { db, t, eq } from "@applyonce/db";
 import { handler, citizen, body, ok, log } from "@/lib/api";
 /** POST {profileId} → session.activeProfileId (must be an accessible profile). */
 export const POST = handler(async (req) => {

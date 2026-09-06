@@ -11,9 +11,9 @@ export interface AuthState {
   expiresAt?: string;
 }
 
-/** content script (handshake.ts) -> background, after receiving PRAMAN_EXT_TOKEN from the app page. */
+/** content script (handshake.ts) -> background, after receiving APPLYONCE_EXT_TOKEN from the app page. */
 export interface SetTokenMsg {
-  type: "PRAMAN_SET_TOKEN";
+  type: "APPLYONCE_SET_TOKEN";
   token: string;
   expiresAt: string;
   apiBase: string;
@@ -21,12 +21,12 @@ export interface SetTokenMsg {
   profiles: { id: string; displayName: string; kind: string }[];
 }
 
-export interface DisconnectMsg { type: "PRAMAN_DISCONNECT" }
-export interface AuthStatusMsg { type: "PRAMAN_AUTH_STATUS" }
-export interface SetActiveProfileMsg { type: "PRAMAN_SET_ACTIVE_PROFILE"; profileId: string }
+export interface DisconnectMsg { type: "APPLYONCE_DISCONNECT" }
+export interface AuthStatusMsg { type: "APPLYONCE_AUTH_STATUS" }
+export interface SetActiveProfileMsg { type: "APPLYONCE_SET_ACTIVE_PROFILE"; profileId: string }
 
 export interface FillPlanMsg {
-  type: "PRAMAN_FILL_PLAN";
+  type: "APPLYONCE_FILL_PLAN";
   recipe: string;
   profileId: string;
   keys: string[];
@@ -34,15 +34,15 @@ export interface FillPlanMsg {
 }
 export interface FillPlanResult { ok: true; data: { profile: { id: string; displayName: string; kind: string }; values: Record<string, FillValue>; labels: Record<string, string>; missing: string[] } }
 
-export interface DocumentsMsg { type: "PRAMAN_DOCUMENTS"; profileId: string }
-export interface DocumentUrlMsg { type: "PRAMAN_DOCUMENT_URL"; documentId: string }
+export interface DocumentsMsg { type: "APPLYONCE_DOCUMENTS"; profileId: string }
+export interface DocumentUrlMsg { type: "APPLYONCE_DOCUMENT_URL"; documentId: string }
 export interface CreateApplicationMsg {
-  type: "PRAMAN_CREATE_APPLICATION";
+  type: "APPLYONCE_CREATE_APPLICATION";
   recipe: string; externalRef?: string; portalUrl?: string; title: string; orgName: string; kind?: string;
 }
 
 /** background -> any listener, broadcast whenever auth state changes (connect/disconnect/profile switch). */
-export interface AuthChangedMsg { type: "PRAMAN_AUTH_CHANGED"; state: AuthState }
+export interface AuthChangedMsg { type: "APPLYONCE_AUTH_CHANGED"; state: AuthState }
 
 export type BackgroundRequest =
   | SetTokenMsg | DisconnectMsg | AuthStatusMsg | SetActiveProfileMsg
@@ -59,9 +59,9 @@ export interface PageStatus {
   /** fact keys this page's fields resolve to, for the popup to request a fill-plan with. */
   keys: string[];
 }
-export interface GetStatusMsg { type: "PRAMAN_GET_STATUS" }
+export interface GetStatusMsg { type: "APPLYONCE_GET_STATUS" }
 export interface ApplyFillMsg {
-  type: "PRAMAN_APPLY_FILL";
+  type: "APPLYONCE_APPLY_FILL";
   values: Record<string, FillValue>;
   labels: Record<string, string>;
 }

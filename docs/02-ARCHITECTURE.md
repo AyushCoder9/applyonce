@@ -28,7 +28,7 @@
 
 ## 3. Monorepo layout
 ```
-praman/
+applyonce/
 ├─ apps/
 │  ├─ web/                 Next.js: citizen app + partner console + admin + public site
 │  ├─ worker/              BullMQ workers (OCR, provider polling, reminders, webhooks)
@@ -39,7 +39,7 @@ praman/
 │  ├─ db/                  Drizzle schema, migrations, seed
 │  ├─ providers/           Adapter interfaces + mock/sandbox/live impls (digilocker, aadhaar-offline, pan, abha, aa, esign, ocr, sms)
 │  ├─ crypto/              Envelope encryption, hashing, signed payloads (JWS)
-│  ├─ sdk/                 @praman/sdk — "Apply with Praman" button + verify helper for partners (npm)
+│  ├─ sdk/                 @applyonce/sdk — "Apply with ApplyOnce" button + verify helper for partners (npm)
 │  ├─ ui/                  Design tokens, HeroUI theme, shared composed components
 │  └─ config/              eslint, tsconfig, tailwind presets
 ├─ docs/                   this kit
@@ -80,7 +80,7 @@ Env: `PROVIDER_DIGILOCKER=mock|setu|apisetu`, same per provider. Mock returns de
 - **Encryption**: per-user data key (DEK) generated at signup, wrapped by KMS master key (KEK). Sensitive fact values and documents are encrypted with the DEK (AES-256-GCM). DB search on plaintext is limited to non-sensitive columns + blind indexes (HMAC) for lookups (e.g., phone).
 - **Auth**: passkeys preferred; OTP fallback with rate limits + device binding; step-up (fresh passkey/OTP ≤ 5 min) required before *any* share or export.
 - **Consent invariant**: `shares.consent_id NOT NULL` + trigger validating scope ⊆ consent scope and consent not revoked/expired.
-- **Partner payload**: JWS (ES256) signed by Praman, includes `consent_id`, `fields`, per-field `source/verified_at`, `profile_hash`; partner verifies signature with published JWKS. Payload TTL 10 min; partner must exchange `share_token` server-side (like OAuth code) — never trust the browser.
+- **Partner payload**: JWS (ES256) signed by ApplyOnce, includes `consent_id`, `fields`, per-field `source/verified_at`, `profile_hash`; partner verifies signature with published JWKS. Payload TTL 10 min; partner must exchange `share_token` server-side (like OAuth code) — never trust the browser.
 - **Audit**: append-only, hash-chained rows; citizen can view their own; admin views all.
 - **Delegation**: `relations(guardian_profile_id, ward_profile_id, scope, valid_until, basis: 'minor'|'poa'|'consent')`; ward's own consent required once adult.
 - **DPDP**: purpose per consent; retention per partner form (default 365 d, partner sets); data-principal request endpoints (export JSON/PDF, erase with legal-hold exceptions); DPO contact page; breach runbook in `docs/`.

@@ -50,7 +50,7 @@ const normDate = (d: string) => (/^\d{2}-\d{2}-\d{4}$/.test(d) ? d.split("-").re
 // Setu PAN: POST /api/verify/pan {pan, consent:"Y", reason} → {verification:"success", data:{full_name, category}}
 export const setuPan: PanProvider = {
   async verify(pan, name) {
-    const r = await call<{ verification: string; data?: { full_name?: string } }>("/api/verify/pan", { method: "POST", body: JSON.stringify({ pan, consent: "Y", reason: "Praman identity verification" }) });
+    const r = await call<{ verification: string; data?: { full_name?: string } }>("/api/verify/pan", { method: "POST", body: JSON.stringify({ pan, consent: "Y", reason: "ApplyOnce identity verification" }) });
     const ok = r.verification === "success";
     const nm = r.data?.full_name?.toLowerCase().trim() ?? "";
     return { valid: ok, nameMatch: ok ? (nm === name.toLowerCase().trim() ? 1 : nm.includes(name.toLowerCase().split(" ")[0] ?? "") ? 0.7 : 0.3) : 0, status: r.verification };

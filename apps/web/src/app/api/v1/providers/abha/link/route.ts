@@ -1,8 +1,8 @@
 import { z } from "zod";
 import { NextResponse } from "next/server";
 import { cookies } from "next/headers";
-import { enqueue } from "@praman/jobs";
-import { providers, byPhone } from "@praman/providers";
+import { enqueue } from "@applyonce/jobs";
+import { providers, byPhone } from "@applyonce/providers";
 import { handler, citizen, ApiError, ok, log } from "@/lib/api";
 import { appUrl, createJob, providerRef, withJob } from "../../../profiles/_lib";
 
@@ -14,7 +14,7 @@ export const POST = handler(async (req) => {
   const { url, state } = await providers.abha.startLink(a.user.id, `${appUrl(req)}/api/v1/providers/abha/link`);
   await log(a.session, "provider.start", "provider_link", null, { provider: "abha", profileId: a.profile.id });
   const res = ok({ url });
-  res.cookies.set("praman_abha", JSON.stringify({ state, next: next ?? "/app/verify", profileId: a.profile.id }), { httpOnly: true, sameSite: "lax", path: "/", maxAge: 600 });
+  res.cookies.set("applyonce_abha", JSON.stringify({ state, next: next ?? "/app/verify", profileId: a.profile.id }), { httpOnly: true, sameSite: "lax", path: "/", maxAge: 600 });
   return res;
 });
 
@@ -22,7 +22,7 @@ export const POST = handler(async (req) => {
 export const GET = handler(async (req) => {
   const url = new URL(req.url);
   const state = url.searchParams.get("state") ?? "", code = url.searchParams.get("code") ?? "";
-  const c = (await cookies()).get("praman_abha")?.value;
+  const c = (await cookies()).get("applyonce_abha")?.value;
   const saved = c ? (JSON.parse(c) as { state: string; next: string; profileId: string }) : null;
   const next = saved?.next ?? "/app/verify";
   if (!saved || saved.state !== state || !code) return NextResponse.redirect(new URL(`${next}?error=abha_denied`, appUrl(req)));
@@ -32,6 +32,6 @@ export const GET = handler(async (req) => {
   await enqueue("abha.link", { jobId: job.id, userId: a.ownerUserId, profileId: a.profile.id, providerRef: ref });
   await log(a.session, "provider.link", "provider_link", null, { provider: "abha", jobId: job.id, profileId: a.profile.id });
   const res = NextResponse.redirect(new URL(withJob(next, job.id), appUrl(req)));
-  res.cookies.delete("praman_abha");
+  res.cookies.delete("applyonce_abha");
   return res;
 });

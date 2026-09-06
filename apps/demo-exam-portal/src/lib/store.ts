@@ -1,4 +1,4 @@
-import type { PramanPayload } from "@praman/schema";
+import type { ApplyOncePayload } from "@applyonce/schema";
 /**
  * Ponytail persistence: a single JSON file under `.data/`, read/written synchronously.
  * No DB, no ORM — just enough to survive `next dev` reloads for the demo.
@@ -6,7 +6,7 @@ import type { PramanPayload } from "@praman/schema";
 import { existsSync, mkdirSync, readFileSync, writeFileSync, renameSync } from "node:fs";
 import path from "node:path";
 
-export type AppSource = "manual" | "praman";
+export type AppSource = "manual" | "applyonce";
 
 export interface DocumentRef {
   title: string;
@@ -19,7 +19,7 @@ export interface StatusEvent {
   status: string;
   note?: string;
   at: string;
-  actor: "citizen" | "bta" | "praman" | "system";
+  actor: "citizen" | "bta" | "applyonce" | "system";
 }
 
 export interface ApplicationRecord {
@@ -33,9 +33,9 @@ export interface ApplicationRecord {
   /** flattened field id -> value, for the status/review views */
   fields: Record<string, unknown>;
   documents: DocumentRef[];
-  pramanApplicationId?: string;
-  pramanConsentId?: string;
-  pramanFormId?: string;
+  applyonceApplicationId?: string;
+  applyonceConsentId?: string;
+  applyonceFormId?: string;
   consentRevoked?: boolean;
   history: StatusEvent[];
 }
@@ -54,7 +54,7 @@ interface PendingSession {
   createdAt: number;
 }
 
-export interface Draft {payload:PramanPayload;verified:boolean;offline:boolean;createdAt:number;submittedRef?:string}
+export interface Draft {payload:ApplyOncePayload;verified:boolean;offline:boolean;createdAt:number;submittedRef?:string}
 
 interface StoreShape {
   drafts: Record<string,Draft>;
@@ -107,14 +107,14 @@ export function applicationExists(ref: string): boolean {
   return ref in readStore().applications;
 }
 
-export function findApplicationByPramanId(pramanApplicationId: string): ApplicationRecord | undefined {
+export function findApplicationByApplyOnceId(applyonceApplicationId: string): ApplicationRecord | undefined {
   const store = readStore();
-  return Object.values(store.applications).find((a) => a.pramanApplicationId === pramanApplicationId);
+  return Object.values(store.applications).find((a) => a.applyonceApplicationId === applyonceApplicationId);
 }
 
 export function findApplicationByConsentId(consentId: string): ApplicationRecord | undefined {
   const store = readStore();
-  return Object.values(store.applications).find((a) => a.pramanConsentId === consentId);
+  return Object.values(store.applications).find((a) => a.applyonceConsentId === consentId);
 }
 
 export function appendHistory(ref: string, event: StatusEvent): ApplicationRecord | undefined {
@@ -133,7 +133,7 @@ export function markConsentRevoked(predicate: (a: ApplicationRecord) => boolean)
   for (const app of Object.values(store.applications)) {
     if (predicate(app) && !app.consentRevoked) {
       app.consentRevoked = true;
-      app.history.push({ status: app.status, note: "Consent revoked by citizen on Praman", at: new Date().toISOString(), actor: "praman" });
+      app.history.push({ status: app.status, note: "Consent revoked by citizen on ApplyOnce", at: new Date().toISOString(), actor: "applyonce" });
       touched.push(app);
     }
   }

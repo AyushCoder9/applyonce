@@ -1,9 +1,9 @@
 {
-  "name": "@praman/extension",
+  "name": "@applyonce/extension",
   "version": "0.1.0",
   "private": true,
   "type": "module",
   "scripts": { "dev": "vite build --watch", "build": "vite build", "typecheck": "tsc --noEmit", "test": "vitest run" },
-  "dependencies": { "@praman/schema": "workspace:*", "react": "catalog:", "react-dom": "catalog:" },
+  "dependencies": { "@applyonce/schema": "workspace:*", "react": "catalog:", "react-dom": "catalog:" },
   "devDependencies": { "@crxjs/vite-plugin": "^2.7.1", "vite": "catalog:", "@vitejs/plugin-react": "catalog:", "typescript": "catalog:", "@types/chrome": "catalog:", "@types/react": "catalog:", "@types/react-dom": "catalog:", "vitest": "catalog:", "tailwindcss": "catalog:", "@tailwindcss/vite": "catalog:" }
 }

@@ -1,7 +1,7 @@
 /** Form definition validation + save, shared by `POST /api/v1/partner/forms` and the console builder. */
 import { z } from "zod";
-import { db, t, and, eq, ne } from "@praman/db";
-import { PURPOSES, isFactKey, scopeForPurpose, field } from "@praman/schema";
+import { db, t, and, eq, ne } from "@applyonce/db";
+import { PURPOSES, isFactKey, scopeForPurpose, field } from "@applyonce/schema";
 import { ApiError } from "@/lib/api";
 
 export const APP_KINDS = ["exam", "admission", "scholarship", "job", "kyc", "healthcare", "scheme", "other"] as const;

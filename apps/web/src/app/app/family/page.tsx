@@ -1,5 +1,5 @@
 import type { Metadata } from "next";
-import { PageHeader } from "@praman/ui";
+import { PageHeader } from "@applyonce/ui";
 import { requireUser } from "@/lib/session";
 import { familyList } from "@/components/family/data";
 import { FamilyClient } from "@/components/family/family-client";

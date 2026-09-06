@@ -1,9 +1,10 @@
 import { notFound } from "next/navigation";
-import { db, t, and, eq, count } from "@praman/db";
-import { PageHeader, fmtDate, purposeLabel, Callout } from "@praman/ui";
+import { db, t, and, eq, count } from "@applyonce/db";
+import { PageHeader, fmtDate, purposeLabel, Callout } from "@applyonce/ui";
 import { requirePartnerMember } from "@/components/partner/session";
 import { FormBuilder } from "@/components/partner/form-builder";
 import { FormTools, CopyButton } from "@/components/partner/form-tools";
+import { deploymentAppUrl } from "@/lib/urls";
 
 export default async function FormPage({ params, searchParams }: { params: Promise<{ id: string }>; searchParams: Promise<{ test?: string; tab?: string }> }) {
   const { partner } = await requirePartnerMember();
@@ -12,9 +13,9 @@ export default async function FormPage({ params, searchParams }: { params: Promi
   const f = await db.query.forms.findFirst({ where: and(eq(t.forms.id, id), eq(t.forms.partnerId, partner.id)) });
   if (!f) notFound();
   const [{ n: applicants } = { n: 0 }] = await db.select({ n: count() }).from(t.applications).where(eq(t.applications.formId, f.id));
-  const app = process.env.NEXT_PUBLIC_APP_URL ?? "http://localhost:3300";
-  const html = `<form action="/api/praman/session" method="POST">\n  <button type="submit">Apply with Praman</button>\n</form>\n<!-- Your server creates the session, stores a state nonce,\n     then redirects to share_url with HTTP 303. -->`;
-  const node = `import { createPraman } from "@praman/sdk";\nconst praman = createPraman({ apiKey: process.env.PRAMAN_API_KEY!, baseUrl: "${app}" });\n\n// POST /api/praman/session\nconst { share_url } = await praman.createShareSession({ formSlug: "${f.slug}", returnUrl: "${f.redirectUrl}", state: cartId });\n\n// on ${f.redirectUrl}?share_token=…\nconst { payload, consent_id, application_id } = await praman.exchange(shareToken);`;
+  const app = deploymentAppUrl();
+  const html = `<form action="/api/applyonce/session" method="POST">\n  <button type="submit">Apply with ApplyOnce</button>\n</form>\n<!-- Your server creates the session, stores a state nonce,\n     then redirects to share_url with HTTP 303. -->`;
+  const node = `import { createApplyOnce } from "@applyonce/sdk";\nconst applyonce = createApplyOnce({ apiKey: process.env.APPLYONCE_API_KEY!, baseUrl: "${app}" });\n\n// POST /api/applyonce/session\nconst { share_url } = await applyonce.createShareSession({ formSlug: "${f.slug}", returnUrl: "${f.redirectUrl}", state: cartId });\n\n// on ${f.redirectUrl}?share_token=…\nconst { payload, consent_id, application_id } = await applyonce.exchange(shareToken);`;
   const curl = `curl -X POST ${app}/api/v1/partner/share-sessions \\\n  -H "Authorization: Bearer pk_sandbox_…" -H "Content-Type: application/json" \\\n  -d '{"form_slug":"${f.slug}","return_url":"${f.redirectUrl}","state":"abc"}'`;
   const tabs = [["embed", "Embed"], ["edit", "Edit"], ["versions", "Versions"]] as const;
   const active = tab ?? "embed";

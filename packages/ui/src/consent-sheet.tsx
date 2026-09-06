@@ -1,7 +1,7 @@
 "use client";
 import { BadgeCheck, Building2, CalendarClock, Clock } from "lucide-react";
 import { Button, Chip } from "@heroui/react";
-import { SECTION_META, field, type FieldDiffRow, type Purpose, type Section } from "@praman/schema";
+import { SECTION_META, field, type FieldDiffRow, type Purpose, type Section } from "@applyonce/schema";
 import { FieldDiff } from "./field-diff";
 import { purposeLabel, initials, cx, type Locale } from "./format";
 

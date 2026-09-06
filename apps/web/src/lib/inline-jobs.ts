@@ -1,12 +1,12 @@
 /**
- * Inline job runner (PRAMAN_INLINE_JOBS=1). Mirrors the worker's verification/document handlers using @praman/providers
+ * Inline job runner (APPLYONCE_INLINE_JOBS=1). Mirrors the worker's verification/document handlers using @applyonce/providers
  * so the demo works before/without apps/worker. Fire-and-forget: `enqueue()` returns at once, progress streams via SSE.
  */
-import { db, t, eq, and, getDek, putFact, getFacts } from "@praman/db";
-import type { JobMap, JobName } from "@praman/jobs";
-import { providers, docToFacts } from "@praman/providers";
-import { isFactKey, field } from "@praman/schema";
-import { encrypt, sha256 } from "@praman/crypto";
+import { db, t, eq, and, getDek, putFact, getFacts } from "@applyonce/db";
+import type { JobMap, JobName } from "@applyonce/jobs";
+import { providers, docToFacts } from "@applyonce/providers";
+import { isFactKey, field } from "@applyonce/schema";
+import { encrypt, sha256 } from "@applyonce/crypto";
 import { getBytes, isMockKey } from "./storage";
 
 type Progress = { step: string; pct: number; log: string[] };
@@ -117,7 +117,9 @@ export async function runInline(name: string, data: unknown) {
 }
 
 export function registerInlineJobs() {
-  const g = globalThis as { __pramanInlineJobs?: (n: string, d: unknown) => Promise<void> };
-  g.__pramanInlineJobs = async (name, data) => { void runInline(name, data); };
-  console.log("[inline-jobs] registered (PRAMAN_INLINE_JOBS=1)");
+  const g = globalThis as { __applyonceInlineJobs?: (n: string, d: unknown) => Promise<void> };
+  // Serverless functions can be suspended as soon as a response completes, so
+  // the production fallback must finish its supported work before returning.
+  g.__applyonceInlineJobs = async (name, data) => { await runInline(name, data); };
+  console.log("[inline-jobs] registered (APPLYONCE_INLINE_JOBS=1)");
 }

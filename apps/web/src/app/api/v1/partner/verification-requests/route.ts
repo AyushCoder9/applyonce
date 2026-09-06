@@ -1,5 +1,5 @@
 import { z } from "zod";
-import { isFactKey } from "@praman/schema";
+import { isFactKey } from "@applyonce/schema";
 import { handler, partner, body, ok, idempotent, ApiError } from "@/lib/api";
 import { createVerificationRequest } from "@/lib/webhooks";
 

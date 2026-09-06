@@ -1,7 +1,7 @@
 /** notifications queue: notify (insert + per-channel prefs + provider send) */
-import { db, eq, and, user, notifications, notificationPrefs, notificationDeliveries } from "@praman/db";
-import { providers } from "@praman/providers";
-import type { JobMap } from "@praman/jobs";
+import { db, eq, and, user, notifications, notificationPrefs, notificationDeliveries } from "@applyonce/db";
+import { providers } from "@applyonce/providers";
+import type { JobMap } from "@applyonce/jobs";
 import { logger } from "../logger";
 
 export async function notify(data: JobMap["notify"]) {
@@ -25,7 +25,7 @@ export async function notify(data: JobMap["notify"]) {
         const r = await providers.sms.send(u.phoneNumber, body ? `${title} — ${body}` : title);
         await db.insert(notificationDeliveries).values({ notificationId: row!.id, channel, providerMsgId: r.id, status: "sent" });
       } else if (channel === "email" && u?.email) {
-        const html = `<p>${body ?? title}</p>${link ? `<p><a href="${link}">Open in Praman</a></p>` : ""}`;
+        const html = `<p>${body ?? title}</p>${link ? `<p><a href="${link}">Open in ApplyOnce</a></p>` : ""}`;
         const r = await providers.email.send(u.email, title, html);
         await db.insert(notificationDeliveries).values({ notificationId: row!.id, channel, providerMsgId: r.id, status: "sent" });
       } else {

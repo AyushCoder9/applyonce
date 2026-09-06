@@ -1,7 +1,7 @@
 /** Partner-facing side effects shared by the Bearer API and the console: webhook fan-out, status push, verification requests. */
-import { db, t, and, eq, audit, type Db, type Tx } from "@praman/db";
-import { enqueue } from "@praman/jobs";
-import type { WebhookEvent, ApplicationStatus } from "@praman/schema";
+import { db, t, and, eq, audit, type Db, type Tx } from "@applyonce/db";
+import { enqueue } from "@applyonce/jobs";
+import { isApplicationStatusTransitionAllowed, type WebhookEvent, type ApplicationStatus } from "@applyonce/schema";
 import { ApiError } from "./api";
 
 /** Create one `webhook_deliveries` row per active endpoint subscribed to `event`. Returns ids; call `flushDeliveries` after the tx commits. */
@@ -32,6 +32,9 @@ export async function pushApplicationStatus(partnerId: string, applicationId: st
   if(app.status==="withdrawn")throw new ApiError(409,"APPLICATION_WITHDRAWN");
   const dup = await db.query.partnerStatusPushes.findFirst({ where: eq(t.partnerStatusPushes.idempotencyKey, idempotencyKey) });
   if (dup) return { applicationId, status: dup.status, duplicate: true };
+  if (!isApplicationStatusTransitionAllowed(app.status, p.status)) {
+    throw new ApiError(409, "INVALID_STATUS_TRANSITION", `Application cannot move from ${app.status} to ${p.status}.`);
+  }
   const partner = (await db.query.partners.findFirst({ where: eq(t.partners.id, partnerId) }))!;
   const profile = (await db.query.profiles.findFirst({ where: eq(t.profiles.id, app.profileId) }))!;
   const title = `${partner.name}: ${STATUS_LABEL[p.status] ?? p.status}`;

@@ -32,7 +32,7 @@ export function MockConsent({ provider, redirectUri, state, handle }: { provider
       </header>
       <div className="mx-auto max-w-lg px-5 py-8">
         <div className="rounded-lg border border-[#e5e7eb] bg-white p-6 shadow-sm">
-          <div className="flex items-center gap-3"><img src="/icon.svg" alt="" className="size-10 rounded-lg" /><div><div className="font-semibold">Praman wants to access your {b.name} account</div><div className="text-sm text-[#6b7280]">praman.in · verified partner</div></div></div>
+          <div className="flex items-center gap-3"><img src="/icon.svg" alt="" className="size-10 rounded-lg" /><div><div className="font-semibold">ApplyOnce wants to access your {b.name} account</div><div className="text-sm text-[#6b7280]">applyonce.in · verified partner</div></div></div>
           <ul className="mt-5 grid gap-2 text-sm">{b.scopes.map((s) => <li key={s} className="flex items-start gap-2"><ShieldCheck className="mt-0.5 size-4 shrink-0" style={{ color: b.color }} />{s}</li>)}</ul>
           <fieldset className="mt-6">
             <legend className="text-sm font-semibold">Sign in as (demo)</legend>
@@ -43,7 +43,7 @@ export function MockConsent({ provider, redirectUri, state, handle }: { provider
               </label>
             ))}</div>
           </fieldset>
-          <p className="mt-5 flex items-center gap-2 text-xs text-[#6b7280]"><Lock className="size-3.5" />Praman receives a reference token only. You can revoke this any time from {b.name}.</p>
+          <p className="mt-5 flex items-center gap-2 text-xs text-[#6b7280]"><Lock className="size-3.5" />ApplyOnce receives a reference token only. You can revoke this any time from {b.name}.</p>
           <div className="mt-6 grid gap-2 sm:grid-cols-2">
             <button type="button" onClick={() => go(false)} disabled={busy} className="min-h-11 rounded-md border border-[#d1d5db] bg-white font-medium hover:bg-[#f9fafb]">Deny</button>
             <button type="button" onClick={() => go(true)} disabled={busy} data-testid="mock-allow" className="inline-flex min-h-11 items-center justify-center gap-1 rounded-md font-semibold text-white disabled:opacity-60" style={{ background: b.color }}>{busy ? "Redirecting…" : "Allow"}<ChevronRight className="size-4" /></button>

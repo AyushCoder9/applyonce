@@ -35,8 +35,8 @@ export interface SharedFact {
 }
 
 /** Signed (JWS ES256) payload the partner receives after exchanging a share_token. */
-export interface PramanPayload {
-  iss: "praman";
+export interface ApplyOncePayload {
+  iss: "applyonce";
   sub: string;              // profile hash (stable per profile+partner, not the profile id)
   aud: string;              // partner id
   iat: number;
@@ -65,5 +65,24 @@ export interface FieldDiffRow {
 
 export type ApplicationStatus = "draft" | "submitted" | "under_review" | "shortlisted" | "accepted" | "rejected" | "withdrawn" | "enrolled";
 export const APPLICATION_STATUSES: readonly ApplicationStatus[] = ["draft", "submitted", "under_review", "shortlisted", "accepted", "rejected", "withdrawn", "enrolled"];
+
+/**
+ * Legal forward-only status changes. `withdrawn` is retained because a partner may
+ * mirror a citizen withdrawal, but terminal outcomes cannot be rewritten later.
+ */
+export const APPLICATION_STATUS_TRANSITIONS: Readonly<Record<ApplicationStatus, readonly ApplicationStatus[]>> = {
+  draft: ["submitted", "withdrawn"],
+  submitted: ["under_review", "shortlisted", "accepted", "rejected", "withdrawn"],
+  under_review: ["shortlisted", "accepted", "rejected", "withdrawn"],
+  shortlisted: ["under_review", "accepted", "rejected", "withdrawn"],
+  accepted: ["enrolled", "withdrawn"],
+  rejected: [],
+  withdrawn: [],
+  enrolled: [],
+};
+
+export function isApplicationStatusTransitionAllowed(from: ApplicationStatus, to: ApplicationStatus): boolean {
+  return APPLICATION_STATUS_TRANSITIONS[from].includes(to);
+}
 
 export type WebhookEvent = "share.completed" | "consent.revoked" | "verification.updated" | "application.withdrawn";

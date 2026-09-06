@@ -4,7 +4,7 @@ import { useRouter } from "next/navigation";
 import Link from "next/link";
 import { Button, Chip, Switch, Tabs, toast } from "@heroui/react";
 import { Download, Trash2, KeyRound, Smartphone, Languages, ShieldCheck, Plus } from "lucide-react";
-import { fmtDate, type Locale } from "@praman/ui";
+import { fmtDate, type Locale } from "@applyonce/ui";
 import { authClient } from "@/lib/auth-client";
 import { StepUpDialog } from "@/components/vault/step-up-dialog";
 
@@ -15,7 +15,7 @@ type Passkey = { id: string; name?: string | null; createdAt?: string | Date; de
 
 const T = {
   title: { en: "Settings", hi: "सेटिंग्स" }, profile: { en: "Profile", hi: "प्रोफ़ाइल" }, security: { en: "Security", hi: "सुरक्षा" }, privacy: { en: "Privacy & data", hi: "गोपनीयता व डेटा" }, audit: { en: "Audit log", hi: "ऑडिट लॉग" },
-  name: { en: "Your name", hi: "आपका नाम" }, language: { en: "Language", hi: "भाषा" }, langBlurb: { en: "Labels across Praman switch to Hindi.", hi: "पूरे प्रमाण के लेबल हिंदी में दिखेंगे।" }, save: { en: "Save", hi: "सहेजें" },
+  name: { en: "Your name", hi: "आपका नाम" }, language: { en: "Language", hi: "भाषा" }, langBlurb: { en: "Labels across ApplyOnce switch to Hindi.", hi: "पूरे ApplyOnce के लेबल हिंदी में दिखेंगे।" }, save: { en: "Save", hi: "सहेजें" },
   passkeys: { en: "Passkeys", hi: "पासकी" }, passkeysBlurb: { en: "Face/fingerprint sign-in. Confirm sharing with a passkey or OTP.", hi: "चेहरा/उंगली से लॉगिन। साझा करने के लिए ज़रूरी।" }, addPasskey: { en: "Add passkey", hi: "पासकी जोड़ें" },
   sessions: { en: "Devices & sessions", hi: "डिवाइस व सत्र" }, thisDevice: { en: "This device", hi: "यह डिवाइस" }, revoke: { en: "Sign out", hi: "साइन आउट" },
   download: { en: "Download my data", hi: "मेरा डेटा डाउनलोड करें" }, downloadBlurb: { en: "A compressed JSON export of facts, document metadata, applications and consent records. Download document files separately. Link valid 24 h.", hi: "आपके सभी तथ्य (JSON) और दस्तावेज़ों की ZIP। कुछ मिनट में तैयार; लिंक 24 घंटे वैध।" },
@@ -46,7 +46,7 @@ export function SettingsClient({ locale: l, user, sessions, requests, audit, tab
       <Tabs.Panel id="profile" className="grid gap-4 pt-6">
         <section className="card grid gap-4 p-5">
           <label className="grid gap-1"><span className="text-sm font-medium">{T.name[l]}</span><input className={inp} value={name} onChange={(e) => setName(e.target.value)} data-testid="settings-name" /></label>
-          <div className="grid gap-1 text-sm text-ink-2"><span>{l === "hi" ? "मोबाइल" : "Mobile"}: <b className="text-ink">{user.phone ?? "—"}</b></span>{user.email && !user.email.endsWith("@phone.praman.local") && <span>Email: <b className="text-ink">{user.email}</b></span>}</div>
+          <div className="grid gap-1 text-sm text-ink-2"><span>{l === "hi" ? "मोबाइल" : "Mobile"}: <b className="text-ink">{user.phone ?? "—"}</b></span>{user.email && !user.email.endsWith("@phone.applyonce.local") && <span>Email: <b className="text-ink">{user.email}</b></span>}</div>
           <div><Button className="cta" onPress={saveName} isPending={busy === "name"} isDisabled={name.trim().length < 2 || name === user.name}>{T.save[l]}</Button></div>
         </section>
         <section className="card flex items-center justify-between gap-4 p-5">

@@ -6,7 +6,7 @@ import Link from "next/link";
 import { useRouter } from "next/navigation";
 import { Button, Tabs, toast } from "@heroui/react";
 import { Plus, ScanLine, ShieldCheck, Upload } from "lucide-react";
-import { DocCard, DocUpload, EmptyState, daysUntil, cx } from "@praman/ui";
+import { DocCard, DocUpload, EmptyState, daysUntil, cx } from "@applyonce/ui";
 import { api, tr, type Locale } from "@/components/vault/i18n";
 import { useEvents } from "@/components/vault/use-events";
 import { docTypeLabel, UPLOAD_TYPES } from "./doc-types";

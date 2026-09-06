@@ -3,11 +3,11 @@ services:
     image: postgres:16-alpine
     ports: ["5434:5432"]
     environment:
-      POSTGRES_USER: praman
-      POSTGRES_PASSWORD: praman
-      POSTGRES_DB: praman
+      POSTGRES_USER: applyonce
+      POSTGRES_PASSWORD: applyonce
+      POSTGRES_DB: applyonce
     volumes: [pgdata:/var/lib/postgresql/data]
-    healthcheck: { test: ["CMD-SHELL", "pg_isready -U praman"], interval: 5s, retries: 10 }
+    healthcheck: { test: ["CMD-SHELL", "pg_isready -U applyonce"], interval: 5s, retries: 10 }
   redis:
     image: redis:7-alpine
     ports: ["6380:6379"]
@@ -15,11 +15,11 @@ services:
     image: minio/minio
     command: server /data --console-address ":9001"
     ports: ["9002:9000", "9003:9001"]
-    environment: { MINIO_ROOT_USER: praman, MINIO_ROOT_PASSWORD: praman123 }
+    environment: { MINIO_ROOT_USER: applyonce, MINIO_ROOT_PASSWORD: applyonce123 }
     volumes: [minio:/data]
   minio-init:
     image: minio/mc
     depends_on: [minio]
     entrypoint: >
-      /bin/sh -c "sleep 3; mc alias set local http://minio:9000 praman praman123; mc mb -p local/praman-docs; exit 0"
+      /bin/sh -c "sleep 3; mc alias set local http://minio:9000 applyonce applyonce123; mc mb -p local/applyonce-docs; exit 0"
 volumes: { pgdata: {}, minio: {} }

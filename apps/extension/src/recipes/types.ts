@@ -1,8 +1,8 @@
-/** A recipe field maps one DOM element to one Praman fact key. */
+/** A recipe field maps one DOM element to one ApplyOnce fact key. */
 export interface RecipeField {
   /** CSS selector for the target input/select/textarea/radio-group/checkbox. */
   selector: string;
-  /** `@praman/schema` fact key, e.g. "identity.full_name". */
+  /** `@applyonce/schema` fact key, e.g. "identity.full_name". */
   key: string;
   /** Optional value transform — see `lib/transforms.ts`. */
   transform?: string;

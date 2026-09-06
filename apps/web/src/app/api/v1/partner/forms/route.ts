@@ -1,4 +1,4 @@
-import { db, t, eq, desc } from "@praman/db";
+import { db, t, eq, desc } from "@applyonce/db";
 import { handler, partner, ok, idempotent } from "@/lib/api";
 import { saveForm, publicForm } from "@/components/partner/forms";
 

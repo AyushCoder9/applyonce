@@ -36,7 +36,7 @@ export function OnboardingForm() {
       {step === 1 && (
         <div className="grid gap-4">
           <Select selectedKey={f.regType} onSelectionChange={(k) => set("regType")(String(k))} fullWidth><Label>Registration type</Label><Select.Trigger><Select.Value /><Select.Indicator /></Select.Trigger><Select.Popover><ListBox>{Object.entries(REG).map(([k, v]) => <ListBox.Item key={k} id={k} textValue={v.label}>{v.label}<ListBox.ItemIndicator /></ListBox.Item>)}</ListBox></Select.Popover></Select>
-          <TextField value={f.regNo} onChange={set("regNo")} isRequired isInvalid={!!errs.regNo} autoFocus><Label>{REG[f.regType]!.label}</Label><Input /><Description>{errs.regNo ?? `${REG[f.regType]!.hint}. Praman verifies this before live keys are issued.`}</Description></TextField>
+          <TextField value={f.regNo} onChange={set("regNo")} isRequired isInvalid={!!errs.regNo} autoFocus><Label>{REG[f.regType]!.label}</Label><Input /><Description>{errs.regNo ?? `${REG[f.regType]!.hint}. ApplyOnce verifies this before live keys are issued.`}</Description></TextField>
         </div>
       )}
       {step === 2 && (

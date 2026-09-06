@@ -2,6 +2,7 @@ import { cookies } from "next/headers";
 import { notFound } from "next/navigation";
 import { getApplication } from "@/lib/store";
 import { StatusTimeline } from "@/components/StatusTimeline";
+import { isApplicationStatusTransitionAllowed, type ApplicationStatus } from "@applyonce/schema";
 
 export async function generateMetadata({ params }: { params: Promise<{ ref: string }> }) {
   const { ref } = await params;
@@ -36,6 +37,8 @@ export default async function StatusPage({ params }: { params: Promise<{ ref: st
   if (!app || !app.accessToken || (await cookies()).get("bta_access")?.value !== app.accessToken) notFound();
 
   const badge = STATUS_BADGE[app.status] ?? { bg: "#eceef0", fg: "#4a4a4a", label: app.status };
+  const canPush = (next: ApplicationStatus) => isApplicationStatusTransitionAllowed(app.status as ApplicationStatus, next);
+  const hasNextStatus = canPush("shortlisted") || canPush("accepted") || canPush("rejected");
 
   return (
     <div>
@@ -45,7 +48,7 @@ export default async function StatusPage({ params }: { params: Promise<{ ref: st
             <p style={{ margin: 0, fontSize: 12, color: "var(--color-gov-ink-2)" }}>Application Number</p>
             <h1 data-testid="application-ref" style={{ margin: "2px 0 6px", fontSize: 22, fontFamily: "monospace", letterSpacing: 1 }}>{app.ref}</h1>
             <p style={{ margin: 0, fontSize: 13 }}>
-              {app.applicantName} &middot; submitted {new Date(app.submittedAt).toLocaleDateString("en-IN")} &middot; source: {app.source === "praman" ? "Apply with Praman" : "Manual form"}
+              {app.applicantName} &middot; submitted {new Date(app.submittedAt).toLocaleDateString("en-IN")} &middot; source: {app.source === "applyonce" ? "Apply with ApplyOnce" : "Manual form"}
             </p>
           </div>
           <span className="badge" style={{ background: badge.bg, color: badge.fg, borderColor: badge.fg, fontSize: 13, padding: "5px 14px" }}>
@@ -54,7 +57,7 @@ export default async function StatusPage({ params }: { params: Promise<{ ref: st
         </div>
         {app.consentRevoked && (
           <p style={{ marginTop: 12, marginBottom: 0, padding: "8px 12px", background: "var(--color-gov-error-bg)", color: "var(--color-gov-error)", borderRadius: 3, fontSize: 13, fontWeight: 600 }}>
-            Consent revoked by the citizen on Praman. This application is on hold — no further data may be used.
+            Consent revoked by the citizen on ApplyOnce. This application is on hold — no further data may be used.
           </p>
         )}
       </div>
@@ -81,14 +84,15 @@ export default async function StatusPage({ params }: { params: Promise<{ ref: st
       {(process.env.DEMO_ADMIN_ENABLED === "1" || process.env.NODE_ENV !== "production") && <div className="gov-card" style={{ padding: "16px 20px", borderColor: "var(--color-gov-blue)" }}>
         <h2 style={{ fontSize: 15, margin: "0 0 4px" }}>Sandbox status simulator</h2>
         <p style={{ marginTop: 0, marginBottom: 12, fontSize: 12, color: "var(--color-gov-ink-2)" }}>
-          {app.pramanApplicationId
-            ? "These buttons call Praman's partner status API (with an Idempotency-Key) so the citizen's tracker updates immediately."
-            : "This application did not come through Praman, so status changes only affect this portal."}
+          {app.applyonceApplicationId
+            ? "These buttons call ApplyOnce's partner status API (with an Idempotency-Key) so the citizen's tracker updates immediately."
+            : "This application did not come through ApplyOnce, so status changes only affect this portal."}
         </p>
         <div style={{ display: "flex", gap: 10, flexWrap: "wrap" }}>
-          <AdminButton applicationRef={app.ref} status="shortlisted" note="Sample status event: admit card released. No real exam document is issued in this sandbox." label="Push: Admit card released" variant="primary" />
-          <AdminButton applicationRef={app.ref} status="accepted" note="Congratulations — you have been accepted." label="Push: Accepted" variant="success" />
-          <AdminButton applicationRef={app.ref} status="rejected" note="We regret to inform you that your application was not successful." label="Push: Rejected" variant="danger" />
+          {canPush("shortlisted") && <AdminButton applicationRef={app.ref} status="shortlisted" note="Sample status event: admit card released. No real exam document is issued in this sandbox." label="Push: Admit card released" variant="primary" />}
+          {canPush("accepted") && <AdminButton applicationRef={app.ref} status="accepted" note="Congratulations — you have been accepted." label="Push: Accepted" variant="success" />}
+          {canPush("rejected") && <AdminButton applicationRef={app.ref} status="rejected" note="We regret to inform you that your application was not successful." label="Push: Rejected" variant="danger" />}
+          {!hasNextStatus && <p role="status" style={{ margin: 0, fontSize: 13, fontWeight: 600 }}>This is a final status. No later sandbox status can be pushed.</p>}
         </div>
       </div>}
     </div>

@@ -1,4 +1,4 @@
-import { PageHeader } from "@praman/ui";
+import { PageHeader } from "@applyonce/ui";
 import { requirePartnerMember } from "@/components/partner/session";
 import { FormBuilder } from "@/components/partner/form-builder";
 

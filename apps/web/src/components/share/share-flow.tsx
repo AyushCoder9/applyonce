@@ -7,8 +7,8 @@
 import { useEffect, useMemo, useState } from "react";
 import { Button, Alert, Chip, TextField, Label, Input, Select, ListBox } from "@heroui/react";
 import { ArrowLeft, Users } from "lucide-react";
-import { field, customAnswerErrors, type FieldDiffRow, type FactValue, type Purpose, type CustomField } from "@praman/schema";
-import { PartnerIdentity, ConsentSummaryChips, ConsentFieldList, ConsentActions, ConsentReceipt, FactEditor, type Locale } from "@praman/ui";
+import { field, customAnswerErrors, type FieldDiffRow, type FactValue, type Purpose, type CustomField } from "@applyonce/schema";
+import { PartnerIdentity, ConsentSummaryChips, ConsentFieldList, ConsentActions, ConsentReceipt, FactEditor, type Locale } from "@applyonce/ui";
 import { StepUpDialog } from "@/components/share/step-up-fallback";
 
 type Summary = { requested: number; verified: number; extracted: number; self: number; missing: number; missingRequired: number; blocked: number };
@@ -58,7 +58,7 @@ export function ShareFlow({ token, locale, phone, partner, form, session, profil
     await fetch("/api/v1/profiles/active", { method: "POST", headers: { "content-type": "application/json" }, body: JSON.stringify({ profileId: id }) }).catch(() => undefined);
   }
   const toggle = (key: string) => setSelected((s) => { const n = new Set(s); if (n.has(key)) n.delete(key); else n.add(key); return n; });
-  const deny = async () => { setBusy(true); const response = await fetch(`/api/v1/share/${token}`, { method: "DELETE" }).catch(() => null); if (!response?.ok) { setBusy(false); setErr("Could not cancel. Please try again."); return; } try { const u = new URL(session.returnUrl); u.searchParams.set("praman_error", "denied"); if (session.state) u.searchParams.set("state", session.state); location.assign(u.toString()); } catch { location.assign("/app"); } };
+  const deny = async () => { setBusy(true); const response = await fetch(`/api/v1/share/${token}`, { method: "DELETE" }).catch(() => null); if (!response?.ok) { setBusy(false); setErr("Could not cancel. Please try again."); return; } try { const u = new URL(session.returnUrl); u.searchParams.set("applyonce_error", "denied"); if (session.state) u.searchParams.set("state", session.state); location.assign(u.toString()); } catch { location.assign("/app"); } };
 
   function validateFill() {
     const e: Record<string, string> = {};
@@ -102,7 +102,7 @@ export function ShareFlow({ token, locale, phone, partner, form, session, profil
   return (
     <div className="grid gap-5" data-testid="share-flow" data-step={step}>
       <div>
-        <div className="text-xs font-semibold uppercase tracking-[0.04em] text-ink-3">{t("Apply with Praman", "प्रमाण से आवेदन")}{session.env === "sandbox" && <Chip size="sm" color="warning" className="ml-2 align-middle">sandbox</Chip>}</div>
+        <div className="text-xs font-semibold uppercase tracking-[0.04em] text-ink-3">{t("Apply with ApplyOnce", "ApplyOnce से आवेदन")}{session.env === "sandbox" && <Chip size="sm" color="warning" className="ml-2 align-middle">sandbox</Chip>}</div>
         <h1 className="mt-1 font-display text-2xl font-bold sm:text-3xl">{form.name}</h1>
       </div>
       <PartnerIdentity partner={partner} purpose={form.purpose} retentionDays={form.retentionDays} locale={locale} />

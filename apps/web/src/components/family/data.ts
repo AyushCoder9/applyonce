@@ -1,6 +1,6 @@
 import "server-only";
-import { db, t, eq, getDek, getFacts, completion } from "@praman/db";
-import { fieldsInSection, scopeContains, type Section } from "@praman/schema";
+import { db, t, eq, getDek, getFacts, completion } from "@applyonce/db";
+import { fieldsInSection, scopeContains, type Section } from "@applyonce/schema";
 import { listProfiles } from "@/lib/session";
 import { isHandoverDue, isPending } from "./logic";
 

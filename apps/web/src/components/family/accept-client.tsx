@@ -4,7 +4,7 @@ import { useRouter } from "next/navigation";
 import Link from "next/link";
 import { Button, Alert } from "@heroui/react";
 import { ShieldCheck } from "lucide-react";
-import { SECTION_META } from "@praman/schema";
+import { SECTION_META } from "@applyonce/schema";
 
 /** Shared by /app/family/accept (invite) and /app/family/claim (handover). */
 export function AcceptClient({ token, kind, guardianName, wardName, scope, phoneLast4, until }: { token: string; kind: "invite" | "claim"; guardianName: string; wardName: string; scope: string[]; phoneLast4: string; until: string | null }) {

@@ -1,8 +1,8 @@
 import { z } from "zod";
-import { db, t, eq } from "@praman/db";
+import { db, t, eq } from "@applyonce/db";
 import { handler, citizen, body, ok, log, ApiError } from "@/lib/api";
-import { DOCUMENT_MIMES, MAX_DOCUMENT_BYTES, documentAllowed } from "@praman/schema";
-import { docKey, presignPut } from "@/lib/storage";
+import { DOCUMENT_MIMES, MAX_DOCUMENT_BYTES, documentAllowed } from "@applyonce/schema";
+import { docKey, presignPut, storageDriver } from "@/lib/storage";
 
 export const DOC_TYPES = ["aadhaar", "pan", "marksheet_10", "marksheet_12", "degree", "category_cert", "income_cert", "domicile_cert", "photo", "signature", "passport", "dl", "bank_passbook", "other"] as const;
 /** POST {filename, mime, size, docType} → {documentId, url} (presigned PUT, 10 min). Row starts as status=pending. */
@@ -14,5 +14,6 @@ export const POST = handler(async (req, { params }) => {
   const key = docKey(a.profile.id, doc!.id, b.filename);
   await db.update(t.documents).set({ storageKey: key }).where(eq(t.documents.id, doc!.id));
   await log(a.session, "document.upload_url", "document", doc!.id, { docType: b.docType, size: b.size, profileId: a.profile.id });
-  return ok({ documentId: doc!.id, url: await presignPut(key, b.mime), key });
+  const url = storageDriver() === "blob" ? `/api/v1/documents/${doc!.id}/content` : await presignPut(key, b.mime);
+  return ok({ documentId: doc!.id, url, key });
 });

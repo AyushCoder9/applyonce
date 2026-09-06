@@ -1,10 +1,10 @@
 "use client";
-/** "Track an application" — for applications made outside Praman. POST /api/v1/applications source=manual. */
+/** "Track an application" — for applications made outside ApplyOnce. POST /api/v1/applications source=manual. */
 import { useState } from "react";
 import { useRouter } from "next/navigation";
 import { Button, Drawer, TextField, Label, Input, Select, ListBox, toast, Alert } from "@heroui/react";
 import { Plus } from "lucide-react";
-import { APPLICATION_STATUSES } from "@praman/schema";
+import { APPLICATION_STATUSES } from "@applyonce/schema";
 import { KIND_LABEL, STATUS_META } from "./model";
 
 export function TrackDrawer() {
@@ -30,7 +30,7 @@ export function TrackDrawer() {
       <Drawer.Backdrop><Drawer.Content placement="right"><Drawer.Dialog>
         <Drawer.Header><Drawer.Heading>Track an application</Drawer.Heading></Drawer.Header>
         <Drawer.Body className="grid gap-4">
-          <p className="text-sm text-ink-2">Applied somewhere without Praman? Add it here so deadlines and statuses live in one place.</p>
+          <p className="text-sm text-ink-2">Applied somewhere without ApplyOnce? Add it here so deadlines and statuses live in one place.</p>
           {err && <Alert status="danger"><Alert.Indicator /><Alert.Content><Alert.Title>{err}</Alert.Title></Alert.Content></Alert>}
           <TextField value={f.title} onChange={set("title")} isRequired><Label>What did you apply for?</Label><Input placeholder="e.g. NEET UG 2026" /></TextField>
           <TextField value={f.org_name} onChange={set("org_name")} isRequired><Label>Organisation</Label><Input placeholder="e.g. National Testing Agency" /></TextField>

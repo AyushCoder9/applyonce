@@ -821,13 +821,13 @@
     "ast_hash": "406d23f7daaeeafe1267319378787a77",
     "semantic_hash": "406d23f7daaeeafe1267319378787a77"
   },
-  "apps/demo-exam-portal/src/app/api/praman/session/route.ts": {
+  "apps/demo-exam-portal/src/app/api/applyonce/session/route.ts": {
     "mtime": 1788702234.2130482,
     "seen": 1788703503.280245,
     "ast_hash": "4d491d58a0e8804e8948cf306b217450",
     "semantic_hash": "4d491d58a0e8804e8948cf306b217450"
   },
-  "apps/demo-exam-portal/src/app/api/praman/webhook/route.ts": {
+  "apps/demo-exam-portal/src/app/api/applyonce/webhook/route.ts": {
     "mtime": 1788703351.338076,
     "seen": 1788703503.280246,
     "ast_hash": "101ec3607cc14a1145b833308d046aa5",
@@ -947,7 +947,7 @@
     "ast_hash": "386ff23f890c99169d901c3ad6b7c5f1",
     "semantic_hash": "386ff23f890c99169d901c3ad6b7c5f1"
   },
-  "apps/demo-exam-portal/src/lib/praman.ts": {
+  "apps/demo-exam-portal/src/lib/applyonce.ts": {
     "mtime": 1788702442.6555243,
     "seen": 1788703503.280264,
     "ast_hash": "fb6a9fca22c32dfe1b55053a60147c6b",
@@ -2381,7 +2381,7 @@
     "ast_hash": "7c477a392426cacf85b101fd64246f1f",
     "semantic_hash": ""
   },
-  "apps/demo-exam-portal/src/app/api/praman/callback/route.ts": {
+  "apps/demo-exam-portal/src/app/api/applyonce/callback/route.ts": {
     "mtime": 1788702234.22824,
     "seen": 1788703503.2802439,
     "ast_hash": "fce1963fcb88cd9541eca883ea5f13bb",

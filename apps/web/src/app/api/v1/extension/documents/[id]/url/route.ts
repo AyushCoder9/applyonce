@@ -1,10 +1,12 @@
 import { sampleUrl } from "@/lib/document-preview";
-import { documentAllowed } from "@praman/schema";
-import { db, t, eq } from "@praman/db";
+import { documentAllowed } from "@applyonce/schema";
+import { db, t, eq } from "@applyonce/db";
 import { handler, ok, ApiError } from "@/lib/api";
 import { extensionUser } from "../../../_auth";
+import { storageDriver } from "@/lib/storage";
+import { deploymentAppUrl } from "@/lib/urls";
 
-const appUrl = () => process.env.NEXT_PUBLIC_APP_URL ?? "http://localhost:3300";
+const appUrl = deploymentAppUrl;
 
 /** GET /api/v1/extension/documents/:id/url — presigned S3 URL, or our own mock.pdf streamer for `mock/` keys. */
 export const GET = handler(async (req, { params }) => {
@@ -18,6 +20,7 @@ export const GET = handler(async (req, { params }) => {
   if (!doc.storageKey || doc.storageKey.startsWith("mock/")) {
     return ok({ url: `${appUrl()}${sampleUrl(doc.id,extSession.id)}`, expiresIn: 300 });
   }
+  if (storageDriver() === "blob") return ok({ url: `${appUrl()}/api/v1/documents/${doc.id}/content`, expiresIn: 300 });
 
   const { S3Client, GetObjectCommand } = await import("@aws-sdk/client-s3");
   const { getSignedUrl } = await import("@aws-sdk/s3-request-presigner");

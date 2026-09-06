@@ -1,4 +1,4 @@
-import { db, t, eq, and, isNull, desc } from "@praman/db";
+import { db, t, eq, and, isNull, desc } from "@applyonce/db";
 import { handler, citizen, ok } from "@/lib/api";
 import { scopeAllows } from "@/lib/session";
 import { sectionOf } from "../../_lib";

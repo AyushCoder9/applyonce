@@ -1,4 +1,4 @@
-import type { Locale } from "@praman/ui";
+import type { Locale } from "@applyonce/ui";
 export const DOC_TYPE_LABELS: Record<string, { en: string; hi: string }> = {
   aadhaar: { en: "Aadhaar", hi: "आधार" }, pan: { en: "PAN", hi: "पैन" }, marksheet_10: { en: "Class 10 marksheet", hi: "कक्षा 10 मार्कशीट" }, marksheet_12: { en: "Class 12 marksheet", hi: "कक्षा 12 मार्कशीट" }, degree: { en: "Degree certificate", hi: "डिग्री प्रमाण पत्र" },
   category_cert: { en: "Category certificate", hi: "श्रेणी प्रमाण पत्र" }, income_cert: { en: "Income certificate", hi: "आय प्रमाण पत्र" }, domicile_cert: { en: "Domicile certificate", hi: "अधिवास प्रमाण पत्र" }, photo: { en: "Photograph", hi: "फ़ोटो" }, signature: { en: "Signature", hi: "हस्ताक्षर" },

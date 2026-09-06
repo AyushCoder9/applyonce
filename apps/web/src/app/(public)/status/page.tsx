@@ -1,7 +1,7 @@
 import type { Metadata } from "next";
 import { Container } from "@/components/public/blocks";
 import { pingDb, pingRedis, providerModes, workerHealth } from "@/components/admin/data";
-export const metadata: Metadata = { title: "Status", description: "Live status of Praman services and integration modes." };
+export const metadata: Metadata = { title: "Status", description: "Live status of ApplyOnce services and integration modes." };
 export const dynamic = "force-dynamic";
 export default async function Status() {
   const [db, redis, worker] = await Promise.all([pingDb(), pingRedis(), workerHealth()]);
@@ -17,7 +17,7 @@ export default async function Status() {
       <h2 className="mt-10 font-display text-2xl font-bold">Integrations</h2>
       <p className="mt-1 text-sm text-ink-2">Mode per provider. <code>mock</code> = simulated for demo; <code>setu</code> = sandbox/live via API Setu.</p>
       <ul className="mt-4 grid gap-2 sm:grid-cols-2 lg:grid-cols-4">{providerModes().map((p) => <li key={p.name} className="card flex items-center justify-between px-4 py-3 text-sm"><span className="font-medium">{p.name}</span><span className={`rounded-pill px-2 py-0.5 text-xs font-semibold ${p.mode === "mock" ? "bg-surface-2 text-ink-2" : "bg-verified-50 text-verified-700"}`}>{p.mode}</span></li>)}</ul>
-      <p className="mt-8 text-xs text-ink-3">Checked at {new Date().toLocaleString("en-IN", { timeZone: "Asia/Kolkata" })} IST · v0.9 · Incidents: status@praman.in</p>
+      <p className="mt-8 text-xs text-ink-3">Checked at {new Date().toLocaleString("en-IN", { timeZone: "Asia/Kolkata" })} IST · v0.9 · Incidents: status@applyonce.in</p>
     </Container>
   );
 }

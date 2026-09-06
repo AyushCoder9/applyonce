@@ -5,7 +5,7 @@ Sourced from Anthropic's current Claude Code best-practices page and the graphif
 ## 0. Setup (once)
 ```bash
 # in your existing repo (or a fresh one)
-cp -r praman-kit/ docs/ && mv docs/CLAUDE.md ./CLAUDE.md
+cp -r applyonce-kit/ docs/ && mv docs/CLAUDE.md ./CLAUDE.md
 uv tool install graphifyy            # graphify CLI (note the double y)
 graphify install --project           # writes CLAUDE.md directive + PreToolUse hook
 echo "graphify-out/" >> .claudeignore # keeps prompt cache stable; still commit graphify-out/
@@ -44,10 +44,10 @@ Paste each as the first message of a fresh session. Standing rules live in CLAUD
 > Implement packages/providers interfaces from docs/02 §5 with `mock` implementations returning the seeded fixtures, plus a `setu` sandbox implementation behind env flags (read Setu DigiLocker + Offline Aadhaar docs; do not hardcode secrets). Build the BullMQ worker, verification jobs, SSE `/api/events`. Then the onboarding wizard (docs/05 F1) with the DigiLocker connect step, and Documents (upload → signed URL → AV stub → OCR mock → proposed facts review, F4). Mismatch + expiry jobs (F6).
 
 ### P5 — Consent, share, partner console, SDK
-> Implement consents/shares with the DB-level invariant (trigger + test) that a share cannot exist without a valid, unrevoked, in-scope consent. Build the share flow `/share/[token]` (docs/05 F2) with FieldDiff, missing-fields mini form, step-up, JWS payload signing + JWKS. Build the partner console pages (docs/04 §7 #17), form builder from the schema tree, API keys, webhooks with HMAC + retries, status push. Publish `@praman/sdk` in packages/sdk with the button + Node helper.
+> Implement consents/shares with the DB-level invariant (trigger + test) that a share cannot exist without a valid, unrevoked, in-scope consent. Build the share flow `/share/[token]` (docs/05 F2) with FieldDiff, missing-fields mini form, step-up, JWS payload signing + JWKS. Build the partner console pages (docs/04 §7 #17), form builder from the schema tree, API keys, webhooks with HMAC + retries, status push. Publish `@applyonce/sdk` in packages/sdk with the button + Node helper.
 
 ### P6 — Demo exam portal + applications tracker
-> Build apps/demo-exam-portal ("Bharat Test Agency — BTA-JEE 2026") as a deliberately realistic 6-step, 48-field government-style form with "Fill manually" and "Apply with Praman" using @praman/sdk against local Praman. Implement the applications tracker and timeline, partner status push appearing live via SSE. Golden Playwright flow #2 (full F2 through the demo portal) must pass. Then script the 3-minute demo in docs/05 §4 as a Playwright "demo mode" that runs it.
+> Build apps/demo-exam-portal ("Bharat Test Agency — BTA-JEE 2026") as a deliberately realistic 6-step, 48-field government-style form with "Fill manually" and "Apply with ApplyOnce" using @applyonce/sdk against local ApplyOnce. Implement the applications tracker and timeline, partner status push appearing live via SSE. Golden Playwright flow #2 (full F2 through the demo portal) must pass. Then script the 3-minute demo in docs/05 §4 as a Playwright "demo mode" that runs it.
 
 ### P7 — Extension
 > Build apps/extension (Chrome MV3, Vite + React) per docs/05 F3: web-handshake login, recipe engine, `nta-jee`, `nsp`, and `generic` recipes, sequential fill with highlight sweep, application-ref capture. Add a recipe for the demo portal's "Fill manually" path so both paths demo. Golden flow #3.

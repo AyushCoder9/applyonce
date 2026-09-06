@@ -1,5 +1,5 @@
 import { Check, Minus, ShieldCheck, ScanLine, PenLine, Ban } from "lucide-react";
-import type { FieldDiffRow } from "@praman/schema";
+import type { FieldDiffRow } from "@applyonce/schema";
 import { fmtValue, label, verifierName, cx, type Locale } from "./format";
 
 const STATUS = {

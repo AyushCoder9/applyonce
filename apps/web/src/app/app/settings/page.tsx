@@ -1,6 +1,6 @@
 import type { Metadata } from "next";
-import { db, t, eq, desc } from "@praman/db";
-import { PageHeader } from "@praman/ui";
+import { db, t, eq, desc } from "@applyonce/db";
+import { PageHeader } from "@applyonce/ui";
 import { requireUser } from "@/lib/session";
 import { SettingsClient } from "@/components/settings/settings-client";
 export const metadata: Metadata = { title: "Settings" };

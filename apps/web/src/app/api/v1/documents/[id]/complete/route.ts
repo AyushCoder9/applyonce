@@ -1,7 +1,7 @@
-import { documentAllowed } from "@praman/schema";
+import { documentAllowed } from "@applyonce/schema";
 import { z } from "zod";
-import { db, t, eq } from "@praman/db";
-import { enqueue } from "@praman/jobs";
+import { db, t, eq } from "@applyonce/db";
+import { enqueue } from "@applyonce/jobs";
 import { handler, citizen, ok, ApiError, log } from "@/lib/api";
 /** POST {size?, sha256?} after the PUT succeeded → stays pending; enqueues document.process (AV + OCR). */
 export const POST = handler(async (req, { params }) => {

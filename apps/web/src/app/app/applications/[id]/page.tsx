@@ -1,8 +1,8 @@
 import Link from "next/link";
 import { notFound } from "next/navigation";
 import { CalendarClock, ExternalLink, FileText, ShieldCheck } from "lucide-react";
-import { db, t, eq, asc, desc } from "@praman/db";
-import { PageHeader, ApplicationTimeline, daysUntil, fmtDate } from "@praman/ui";
+import { db, t, eq, asc, desc } from "@applyonce/db";
+import { PageHeader, ApplicationTimeline, daysUntil, fmtDate } from "@applyonce/ui";
 import { requireUser, requireProfileAccess } from "@/lib/session";
 import { STATUS_META, KIND_LABEL } from "@/components/applications/model";
 import { DetailActions } from "@/components/applications/detail-actions";

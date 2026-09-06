@@ -5,14 +5,14 @@ import { mapPayloadToRows } from "@/lib/payload-map";
 import { NextResponse } from "next/server";
 import { FIELDS } from "@/lib/fields";
 import { generateApplicationNumber, generateIdempotencyKey } from "@/lib/id";
-import { loadPramanConfig, pushStatus } from "@/lib/praman";
+import { loadApplyOnceConfig, pushStatus } from "@/lib/applyonce";
 import { applicationExists, saveApplication, type ApplicationRecord, type DocumentRef } from "@/lib/store";
 import { normalizeDateInput, validateValue } from "@/lib/validation";
 
 /**
  * Submit button on `/apply/return`. Builds the BTA-local application record from the
- * (possibly citizen-edited) Praman-sourced values, then immediately pushes
- * `under_review` back to Praman with `externalRef` = our own BTA26 reference, per
+ * (possibly citizen-edited) ApplyOnce-sourced values, then immediately pushes
+ * `under_review` back to ApplyOnce with `externalRef` = our own BTA26 reference, per
  * docs/05-API-AND-FLOWS.md F2 step 6 ("citizen sees application in tracker").
  */
 export async function POST(request: Request) {
@@ -28,9 +28,9 @@ export async function POST(request: Request) {
     response.cookies.set("bta_access",existing.accessToken,{httpOnly:true,sameSite:"lax",secure:new URL(request.url).protocol === "https:",path:"/",maxAge:86400});
     return response;
   }
-  const pramanApplicationId = draft.payload.application_id;
-  const pramanConsentId = draft.payload.consent_id;
-  const pramanFormId = draft.payload.form_id;
+  const applyonceApplicationId = draft.payload.application_id;
+  const applyonceConsentId = draft.payload.consent_id;
+  const applyonceFormId = draft.payload.form_id;
   const mapped = mapPayloadToRows(draft.payload);
   const documents: DocumentRef[] = mapped.documents;
 
@@ -65,7 +65,7 @@ export async function POST(request: Request) {
   const now = new Date().toISOString();
   const record: ApplicationRecord = {
     ref,
-    source: "praman",
+    source: "applyonce",
     accessToken: randomUUID(),
     status: "submitted",
     createdAt: now,
@@ -73,25 +73,25 @@ export async function POST(request: Request) {
     applicantName: String(fields["candidate_name"] ?? "Candidate"),
     fields,
     documents,
-    pramanApplicationId,
-    pramanConsentId,
-    pramanFormId,
-    history: [{ status: "submitted", note: "Application received via Apply with Praman", at: now, actor: "citizen" }],
+    applyonceApplicationId,
+    applyonceConsentId,
+    applyonceFormId,
+    history: [{ status: "submitted", note: "Application received via Apply with ApplyOnce", at: now, actor: "citizen" }],
   };
   saveApplication(record);
   completeDraft(draftToken,ref);
 
-  const cfg = loadPramanConfig();
+  const cfg = loadApplyOnceConfig();
   const idempotencyKey = generateIdempotencyKey();
   try {
-    await pushStatus(cfg, pramanApplicationId, { status: "under_review", note: "Received by BTA", externalRef: ref }, idempotencyKey);
+    await pushStatus(cfg, applyonceApplicationId, { status: "under_review", note: "Received by BTA", externalRef: ref }, idempotencyKey);
     const afterPush = new Date().toISOString();
     record.history.push({ status: "under_review", note: "Received by BTA", at: afterPush, actor: "bta" });
     record.status = "under_review";
     saveApplication(record);
   } catch (err) {
-    // Application is still recorded locally even if the push to Praman failed.
-    record.history.push({ status: record.status, note: `Could not notify Praman tracker: ${(err as Error).message}`, at: new Date().toISOString(), actor: "system" });
+    // Application is still recorded locally even if the push to ApplyOnce failed.
+    record.history.push({ status: record.status, note: `Could not notify ApplyOnce tracker: ${(err as Error).message}`, at: new Date().toISOString(), actor: "system" });
     saveApplication(record);
   }
 

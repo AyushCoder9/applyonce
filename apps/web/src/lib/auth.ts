@@ -3,17 +3,18 @@ import { drizzleAdapter } from "@better-auth/drizzle-adapter";
 import { phoneNumber } from "better-auth/plugins";
 import { nextCookies } from "better-auth/next-js";
 import { passkey } from "@better-auth/passkey";
-import { db, t, eq, getDek, putFact, audit } from "@praman/db";
-import { providers, MOCK_OTP } from "@praman/providers";
+import { db, t, eq, getDek, putFact, audit } from "@applyonce/db";
+import { providers, MOCK_OTP } from "@applyonce/providers";
+import { demoPortalUrl, deploymentAppUrl } from "./urls";
 
 const mockSms = (process.env.PROVIDER_SMS ?? "mock") === "mock";
-const url = process.env.BETTER_AUTH_URL ?? "http://localhost:3300";
+const url = process.env.BETTER_AUTH_URL ?? deploymentAppUrl();
 
 export const auth = betterAuth({
   baseURL: url,
   secret: process.env.BETTER_AUTH_SECRET ?? "dev-secret-change-me-dev-secret-change-me",
   database: drizzleAdapter(db, { provider: "pg", schema: { user: t.user, session: t.session, account: t.account, verification: t.verification, passkey: t.passkey } }),
-  trustedOrigins: [url, process.env.NEXT_PUBLIC_DEMO_PORTAL_URL ?? "http://localhost:3301", "chrome-extension://*"],
+  trustedOrigins: [url, demoPortalUrl(), "chrome-extension://*"].filter((origin): origin is string => Boolean(origin)),
   user: { additionalFields: { locale: { type: "string", required: false, defaultValue: "en" }, role: { type: "string", required: false, defaultValue: "citizen", input: false } } },
   session: {
     additionalFields: { steppedUpAt: { type: "date", required: false, input: false }, activeProfileId: { type: "string", required: false, input: false } },
@@ -24,11 +25,11 @@ export const auth = betterAuth({
     phoneNumber({
       otpLength: 6, expiresIn: 300, allowedAttempts: 5,
       phoneNumberValidator: (p) => /^\+91[6-9]\d{9}$/.test(p),
-      sendOTP: async ({ phoneNumber: to, code }) => { await providers.sms.send(to, `${code} is your Praman OTP. Valid 5 min. Never share it.`, "otp"); },
+      sendOTP: async ({ phoneNumber: to, code }) => { await providers.sms.send(to, `${code} is your ApplyOnce OTP. Valid 5 min. Never share it.`, "otp"); },
       ...(mockSms ? { verifyOTP: async ({ code }) => code === MOCK_OTP } : {}), // ponytail: fixed demo OTP in mock; real check in live
-      signUpOnVerification: { getTempEmail: (p) => `${p.replace(/\D/g, "")}@phone.praman.local`, getTempName: () => "New user" },
+      signUpOnVerification: { getTempEmail: (p) => `${p.replace(/\D/g, "")}@phone.applyonce.local`, getTempName: () => "New user" },
     }),
-    passkey({ rpID: process.env.PRAMAN_RP_ID ?? "localhost", rpName: process.env.PRAMAN_RP_NAME ?? "Praman", origin: url, authenticatorSelection: { residentKey: "preferred", userVerification: "preferred" } }),
+    passkey({ rpID: process.env.APPLYONCE_RP_ID ?? "localhost", rpName: process.env.APPLYONCE_RP_NAME ?? "ApplyOnce", origin: url, authenticatorSelection: { residentKey: "preferred", userVerification: "preferred" } }),
     nextCookies(),
   ],
   databaseHooks: {

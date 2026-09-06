@@ -19,7 +19,7 @@ export function TeamForm({ members, me, canManage }: { members: { userId: string
         <form className="card grid gap-4 p-5" onSubmit={async (e) => { e.preventDefault(); setBusy(true); setErr(null); const r = await addMember({ phone, role }); setBusy(false); if (!r.ok) return setErr(r.fields?.phone ?? r.error); toast.success(`${r.data.name} added`); setPhone(""); }}>
           <h2 className="font-display text-lg font-bold">Add a team member</h2>
           <div className="grid gap-4 sm:grid-cols-[1fr_260px_auto] sm:items-end">
-            <TextField value={phone} onChange={(v) => setPhone(v.replace(/\D/g, "").slice(0, 10))} type="tel" isInvalid={!!err}><Label>Mobile number</Label><Input placeholder="10-digit mobile" /><Description>{err ?? "They need a Praman account with this number."}</Description></TextField>
+            <TextField value={phone} onChange={(v) => setPhone(v.replace(/\D/g, "").slice(0, 10))} type="tel" isInvalid={!!err}><Label>Mobile number</Label><Input placeholder="10-digit mobile" /><Description>{err ?? "They need a ApplyOnce account with this number."}</Description></TextField>
             <Select selectedKey={role} onSelectionChange={(k) => setRole(String(k) as typeof role)}><Label>Role</Label><Select.Trigger><Select.Value /><Select.Indicator /></Select.Trigger><Select.Popover><ListBox>{(["admin", "developer", "reviewer"] as const).map((r) => <ListBox.Item key={r} id={r} textValue={r}>{ROLES[r]}<ListBox.ItemIndicator /></ListBox.Item>)}</ListBox></Select.Popover></Select>
             <Button type="submit" className="cta" isDisabled={phone.length !== 10 || busy} isPending={busy}>Add</Button>
           </div>

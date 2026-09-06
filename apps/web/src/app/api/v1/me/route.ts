@@ -1,5 +1,5 @@
 import { z } from "zod";
-import { db, t, eq } from "@praman/db";
+import { db, t, eq } from "@applyonce/db";
 import { handler, citizen, ok, body, log } from "@/lib/api";
 const Patch = z.object({ locale: z.enum(["en", "hi"]).optional(), name: z.string().trim().min(2).max(120).optional() });
 /** Profile settings: display language + name. */

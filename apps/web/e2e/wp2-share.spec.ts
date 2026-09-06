@@ -6,7 +6,7 @@ import { test, expect, type APIRequestContext } from "@playwright/test";
 import { jwtVerify, createLocalJWKSet } from "jose";
 
 const BASE = process.env.PLAYWRIGHT_BASE_URL ?? "http://localhost:3300";
-const KEY = process.env.BTA_PRAMAN_API_KEY ?? "pk_sandbox_bta_demo_key_0001";
+const KEY = process.env.BTA_APPLYONCE_API_KEY ?? "pk_sandbox_bta_demo_key_0001";
 const PHONE = "+919876543210";
 const OTP = "123456";
 const partnerHeaders = { authorization: `Bearer ${KEY}`, "content-type": "application/json" };
@@ -86,7 +86,7 @@ test("partner session → consent → exchange → replay 409 → revoke", async
   const { data } = await ex.json();
   expect(data.consent_id).toBe(consentId);
   const jwks = await (await request.get(`${BASE}/api/v1/jwks`, { timeout: 600_000 })).json();
-  const { payload } = await jwtVerify(data.payload_jws, createLocalJWKSet(jwks), { issuer: "praman" });
+  const { payload } = await jwtVerify(data.payload_jws, createLocalJWKSet(jwks), { issuer: "applyonce" });
   expect(payload.consent_id).toBe(consentId);
   expect(payload.application_id).toBe(data.application_id);
   const facts = payload.facts as { key: string; source: string; value: unknown }[];

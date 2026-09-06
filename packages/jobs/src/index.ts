@@ -6,8 +6,8 @@ import { Queue, type JobsOptions } from "bullmq";
 import IORedis from "ioredis";
 
 export const redisUrl = () => process.env.REDIS_URL ?? "redis://localhost:6380";
-const g = globalThis as unknown as { __pramanRedis?: IORedis; __pramanQueues?: Record<string, Queue> };
-export const redis = () => (g.__pramanRedis ??= new IORedis(redisUrl(), { maxRetriesPerRequest: null, lazyConnect: true }));
+const g = globalThis as unknown as { __applyonceRedis?: IORedis; __applyonceQueues?: Record<string, Queue> };
+export const redis = () => (g.__applyonceRedis ??= new IORedis(redisUrl(), { maxRetriesPerRequest: null, lazyConnect: true }));
 
 export type JobMap = {
   // verification
@@ -43,13 +43,13 @@ const QUEUE_OF: Record<JobName, QueueName> = {
 export const queueFor = (name: JobName) => QUEUE_OF[name];
 
 export function queue(name: QueueName): Queue {
-  g.__pramanQueues ??= {};
-  return (g.__pramanQueues[name] ??= new Queue(name, { connection: redis(), defaultJobOptions: { attempts: 3, backoff: { type: "exponential", delay: 2000 }, removeOnComplete: { age: 3600, count: 1000 }, removeOnFail: { age: 86400 } } }));
+  g.__applyonceQueues ??= {};
+  return (g.__applyonceQueues[name] ??= new Queue(name, { connection: redis(), defaultJobOptions: { attempts: 3, backoff: { type: "exponential", delay: 2000 }, removeOnComplete: { age: 3600, count: 1000 }, removeOnFail: { age: 86400 } } }));
 }
 
-/** Producer. Falls back to inline `process.env.PRAMAN_INLINE_JOBS` runner in tests (worker registers it). */
+/** Producer. Falls back to inline `process.env.APPLYONCE_INLINE_JOBS` runner in tests (worker registers it). */
 export async function enqueue<N extends JobName>(name: N, data: JobMap[N], opts: JobsOptions = {}) {
-  const inline = (globalThis as { __pramanInlineJobs?: (n: string, d: unknown) => Promise<void> }).__pramanInlineJobs;
+  const inline = (globalThis as { __applyonceInlineJobs?: (n: string, d: unknown) => Promise<void> }).__applyonceInlineJobs;
   if (inline) { await inline(name, data); return { id: `inline-${Date.now()}` }; }
   const job = await queue(queueFor(name)).add(name, data, opts);
   return { id: job.id! };

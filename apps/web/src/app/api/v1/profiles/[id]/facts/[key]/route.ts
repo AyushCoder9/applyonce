@@ -1,6 +1,6 @@
 import { z } from "zod";
-import { db, t, eq, and, desc, getDek, putFact, deleteFact } from "@praman/db";
-import { isFactKey, field, zodFor } from "@praman/schema";
+import { db, t, eq, and, desc, getDek, putFact, deleteFact } from "@applyonce/db";
+import { isFactKey, field, zodFor } from "@applyonce/schema";
 import { handler, citizen, body, ok, ApiError, log } from "@/lib/api";
 import { scopeAllows } from "@/lib/session";
 import { loadFacts, sectionOf } from "../../../_lib";

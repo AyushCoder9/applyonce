@@ -1,7 +1,7 @@
-import { db, t, eq, desc, inArray, systemDek } from "@praman/db";
-import { decryptString } from "@praman/crypto";
-import type { PramanPayload } from "@praman/schema";
-import { PageHeader } from "@praman/ui";
+import { db, t, eq, desc, inArray, systemDek } from "@applyonce/db";
+import { decryptString } from "@applyonce/crypto";
+import type { ApplyOncePayload } from "@applyonce/schema";
+import { PageHeader } from "@applyonce/ui";
 import { requirePartnerMember } from "@/components/partner/session";
 import { decodeJws } from "@/lib/signing";
 import { ApplicantsTable, type ApplicantRow } from "@/components/partner/applicants-table";
@@ -19,7 +19,7 @@ export default async function ApplicantsPage() {
     const consent=consents.find(c=>c.id===s?.consentId);
     const active=!!consent && !consent.revokedAt && consent.expiresAt.getTime()>Date.now();
     if (!active && s) applicant="Access ended";
-    if (s && active) { try { const p = decodeJws<PramanPayload>(decryptString(systemDek(), s.payloadEnc, `share:${s.id}`)); total = p.facts.length; verified = p.facts.filter((f) => f.source === "issuer_verified" || f.source === "provider_verified").length; self = p.facts.filter((f) => f.source === "self_declared").length; guardian = !!p.profile.guardian_acting; applicant = p.profile.display_name; } catch { /* undecodable */ } }
+    if (s && active) { try { const p = decodeJws<ApplyOncePayload>(decryptString(systemDek(), s.payloadEnc, `share:${s.id}`)); total = p.facts.length; verified = p.facts.filter((f) => f.source === "issuer_verified" || f.source === "provider_verified").length; self = p.facts.filter((f) => f.source === "self_declared").length; guardian = !!p.profile.guardian_acting; applicant = p.profile.display_name; } catch { /* undecodable */ } }
     return { id: a.id, applicant, form: form ?? a.title, status: a.status, externalRef: a.externalRef, submittedAt: (a.submittedAt ?? a.createdAt).toISOString(), verified, self, total, hasPayload: !!s, guardian };
   });
   return (

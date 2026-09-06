@@ -1,5 +1,5 @@
-import { db, t, asc } from "@praman/db";
-import { PageHeader } from "@praman/ui";
+import { db, t, asc } from "@applyonce/db";
+import { PageHeader } from "@applyonce/ui";
 import { FlagToggle, NewFlag } from "@/components/admin/actions";
 export const dynamic = "force-dynamic";
 export default async function FlagsAdmin() {

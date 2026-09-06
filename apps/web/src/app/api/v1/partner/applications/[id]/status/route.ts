@@ -1,6 +1,6 @@
 import { z } from "zod";
 import { randomUUID } from "node:crypto";
-import { APPLICATION_STATUSES } from "@praman/schema";
+import { APPLICATION_STATUSES } from "@applyonce/schema";
 import { handler, partner, body, ok } from "@/lib/api";
 import { pushApplicationStatus } from "@/lib/webhooks";
 

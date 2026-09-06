@@ -1,4 +1,4 @@
-import type { Locale } from "@praman/ui";
+import type { Locale } from "@applyonce/ui";
 export type { Locale };
 /** user.locale → "en" | "hi" */
 export const localeOf = (u: { locale?: string | null } | null | undefined): Locale => (u?.locale === "hi" ? "hi" : "en");

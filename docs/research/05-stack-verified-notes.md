@@ -378,15 +378,15 @@ databaseHooks: { user: { create: { after: async (user) => { /* welcome email */ 
 import { generateRegistrationOptions, verifyRegistrationResponse, generateAuthenticationOptions, verifyAuthenticationResponse } from '@simplewebauthn/server'
 
 const options = await generateRegistrationOptions({
-  rpName: 'Praman', rpID: 'praman.app', userName: user.email, attestationType: 'none',
+  rpName: 'ApplyOnce', rpID: 'applyonce.app', userName: user.email, attestationType: 'none',
   authenticatorSelection: { residentKey: 'preferred', userVerification: 'preferred' },
 })
 const verification = await verifyRegistrationResponse({
-  response, expectedChallenge, expectedOrigin: 'https://praman.app', expectedRPID: 'praman.app',
+  response, expectedChallenge, expectedOrigin: 'https://applyonce.app', expectedRPID: 'applyonce.app',
 })
 // { verified, registrationInfo: { credential, credentialDeviceType, credentialBackedUp } }
 
-const authOpts = await generateAuthenticationOptions({ rpID: 'praman.app', allowCredentials: [{ id, transports }] })
+const authOpts = await generateAuthenticationOptions({ rpID: 'applyonce.app', allowCredentials: [{ id, transports }] })
 const authVerification = await verifyAuthenticationResponse({
   response, expectedChallenge, expectedOrigin, expectedRPID,
   credential: { id, publicKey, counter, transports },
@@ -457,7 +457,7 @@ const { payload } = await jwtVerify(jwt, publicKey)
 const jwk = await exportJWK(publicKey)
 const JWKS_local = createLocalJWKSet({ keys: [jwk] })
 const JWKS_remote = createRemoteJWKSet(new URL('https://auth.example.com/.well-known/jwks.json'))
-await jwtVerify(jwt, JWKS_remote, { issuer: 'urn:praman', audience: 'urn:praman:api' })
+await jwtVerify(jwt, JWKS_remote, { issuer: 'urn:applyonce', audience: 'urn:applyonce:api' })
 ```
 Raw JWS (not a JWT claims set): `await new CompactSign(new TextEncoder().encode(payload)).setProtectedHeader({ alg: 'ES256' }).sign(privateKey)`.
 
@@ -627,9 +627,9 @@ export default defineConfig({ plugins: [react(), crx({ manifest })] })
   "background": { "service_worker": "service-worker.js", "type": "module" },
   "action": { "default_popup": "popup.html" },
   "permissions": ["storage", "scripting"],
-  "host_permissions": ["https://praman.app/*"],
+  "host_permissions": ["https://applyonce.app/*"],
   "content_scripts": [{ "matches": ["https://*.example.com/*"], "js": ["content-script.js"], "run_at": "document_idle" }],
-  "externally_connectable": { "matches": ["https://praman.app/*"] }
+  "externally_connectable": { "matches": ["https://applyonce.app/*"] }
 }
 ```
 Web↔extension handshake: a page on an `externally_connectable`-matched origin can call `chrome.runtime.sendMessage(extensionId, msg)` directly, no content-script relay. `chrome.storage.session` is in-memory-only (cleared on restart/reload), **not exposed to content scripts by default** (needs `setAccessLevel({accessLevel:'TRUSTED_AND_UNTRUSTED_CONTEXTS'})`), unlike `chrome.storage.local`.
@@ -723,7 +723,7 @@ export const onRequestError = Sentry.captureRequestError
 ```ts
 // next.config.ts
 import { withSentryConfig } from "@sentry/nextjs"
-export default withSentryConfig(nextConfig, { org: "acme", project: "praman", authToken: process.env.SENTRY_AUTH_TOKEN })
+export default withSentryConfig(nextConfig, { org: "acme", project: "applyonce", authToken: process.env.SENTRY_AUTH_TOKEN })
 ```
 
 ---

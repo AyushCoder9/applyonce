@@ -1,6 +1,6 @@
-import { scopeContains } from "@praman/schema";
+import { scopeContains } from "@applyonce/schema";
 import { z } from "zod";
-import { db, t, eq, and } from "@praman/db";
+import { db, t, eq, and } from "@applyonce/db";
 import { handler, citizen, body, ok, ApiError, log } from "@/lib/api";
 /** POST {keep:'a'|'b'} — a = keep the verified value; b = keep mine, flagged for re-verification. */
 export const POST = handler(async (req, { params }) => {

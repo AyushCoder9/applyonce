@@ -13,9 +13,9 @@ Web runs on 3300, BTA on 3301 and the worker consumes the configured Redis queue
 ```bash
 pnpm build
 # Separate terminals, repository root:
-node scripts/run.mjs pnpm --filter @praman/web start
-DEMO_ADMIN_ENABLED=1 node scripts/run.mjs pnpm --filter @praman/demo-exam-portal start
-node scripts/run.mjs pnpm --filter @praman/worker start
+node scripts/run.mjs pnpm --filter @applyonce/web start
+DEMO_ADMIN_ENABLED=1 node scripts/run.mjs pnpm --filter @applyonce/demo-exam-portal start
+node scripts/run.mjs pnpm --filter @applyonce/worker start
 ```
 
 Keep provider values in `mock`. Production mode controls Next's build/runtime behavior; it does not turn sample providers into live verification. `DEMO_ADMIN_ENABLED=1` exposes BTA's sandbox status buttons. Normal integrated mode is `DEMO_OFFLINE=0`; enable offline fixtures only deliberately. BTA stores drafts/applications in a local `.data` directory or `DEMO_DATA_DIR`. Use one process and a persistent directory. A serverless ephemeral filesystem is unsuitable for this store.
@@ -23,20 +23,20 @@ Keep provider values in `mock`. Production mode controls Next's build/runtime be
 If Next's default Turbopack build is unsuitable for the host, the verified webpack commands are:
 
 ```bash
-node scripts/run.mjs pnpm --filter @praman/web exec next build --webpack
-node scripts/run.mjs pnpm --filter @praman/demo-exam-portal exec next build --webpack
+node scripts/run.mjs pnpm --filter @applyonce/web exec next build --webpack
+node scripts/run.mjs pnpm --filter @applyonce/demo-exam-portal exec next build --webpack
 ```
 
 ## Isolated audit ports and data
 
-Create a separate Postgres database, Redis database index and S3 bucket. Set `DATABASE_URL`, `REDIS_URL`, `S3_BUCKET` in a private environment file. For ports 3400/3401 set `NEXT_PUBLIC_APP_URL`, `BETTER_AUTH_URL`, `PRAMAN_API_URL` to 3400 and `NEXT_PUBLIC_DEMO_PORTAL_URL` to 3401 **before building**. Start using `next start -p 3400` and `next start -p 3401` through the environment loader. The seeded BTA webhook and redirect origins follow these values.
+Create a separate Postgres database, Redis database index and S3 bucket. Set `DATABASE_URL`, `REDIS_URL`, `S3_BUCKET` in a private environment file. For ports 3400/3401 set `NEXT_PUBLIC_APP_URL`, `BETTER_AUTH_URL`, `APPLYONCE_API_URL` to 3400 and `NEXT_PUBLIC_DEMO_PORTAL_URL` to 3401 **before building**. Start using `next start -p 3400` and `next start -p 3401` through the environment loader. The seeded BTA webhook and redirect origins follow these values.
 
 ```bash
 AUDIT_BASE_URL=http://localhost:3400 AUDIT_PORTAL_URL=http://localhost:3401 pnpm audit:workflows
-PLAYWRIGHT_BASE_URL=http://localhost:3400 AUDIT_PORTAL_URL=http://localhost:3401 node scripts/run.mjs pnpm --filter @praman/web test:e2e --workers=1
+PLAYWRIGHT_BASE_URL=http://localhost:3400 AUDIT_PORTAL_URL=http://localhost:3401 node scripts/run.mjs pnpm --filter @applyonce/web test:e2e --workers=1
 ```
 
-The audit is local-only and mutates sample records. It creates sample uploads/applications, checks hostile requests, requests an export, and schedules then cancels erasure. Do not run it against a live citizen database. Native browser tests require `pnpm --filter @praman/web exec playwright install chromium` once on the host.
+The audit is local-only and mutates sample records. It creates sample uploads/applications, checks hostile requests, requests an export, and schedules then cancels erasure. Do not run it against a live citizen database. Native browser tests require `pnpm --filter @applyonce/web exec playwright install chromium` once on the host.
 
 ## Fixture maintenance
 

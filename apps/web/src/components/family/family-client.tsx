@@ -4,8 +4,8 @@ import { useRouter } from "next/navigation";
 import Link from "next/link";
 import { Avatar, Button, Chip, Drawer, Modal, Tabs, toast } from "@heroui/react";
 import { Plus, ShieldCheck, Users, Trash2, ArrowRightLeft, PencilLine, Send } from "lucide-react";
-import { SECTION_META, SECTIONS, GENDER, RELATION, ENUM_LABELS } from "@praman/schema";
-import { EmptyState, ProgressRing, Callout, fmtDate, type Locale } from "@praman/ui";
+import { SECTION_META, SECTIONS, GENDER, RELATION, ENUM_LABELS } from "@applyonce/schema";
+import { EmptyState, ProgressRing, Callout, fmtDate, type Locale } from "@applyonce/ui";
 import type { FamilyMember } from "./data";
 
 const T = {

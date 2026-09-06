@@ -1,10 +1,10 @@
-# Praman: current project context
+# ApplyOnce: current project context
 
 Updated: 6 September 2026. This document describes the implementation after the audit. Earlier PRDs and plans describe intent and history, and may contain unimplemented production claims.
 
 ## Product and problem
 
-Praman reduces repeated entry of identity, education, family, address and application information. A citizen maintains a reusable vault. Each fact records its source. A partner requests a purpose-bound subset; the citizen reviews it, confirms with OTP or a passkey, and receives a consent receipt. The institution receives a signed payload. A tracker and signed webhook events connect later application status changes and revocation.
+ApplyOnce reduces repeated entry of identity, education, family, address and application information. A citizen maintains a reusable vault. Each fact records its source. A partner requests a purpose-bound subset; the citizen reviews it, confirms with OTP or a passkey, and receives a consent receipt. The institution receives a signed payload. A tracker and signed webhook events connect later application status changes and revocation.
 
 The repository is the successor to ApplyOnce. It is a functional sandbox, not a live government identity service or a certified consent manager. The BTA examination and other seeded institutions are examples.
 
@@ -18,7 +18,7 @@ The repository is the successor to ApplyOnce. It is a functional sandbox, not a 
 | Share | `/share/:token` | Exact field review, optional choices, missing answers, confirmation and receipt |
 | Partner | `/partner` | Organization switcher, forms, applicants, API keys, webhooks, team and settings |
 | Operations | `/admin` | Partner approval, provider jobs, queues, flags, audit and data requests |
-| BTA portal | Separate Next app, default `:3301` | Manual exam form and integrated Praman workflow |
+| BTA portal | Separate Next app, default `:3301` | Manual exam form and integrated ApplyOnce workflow |
 | Extension | `apps/extension` | MV3 service worker, local portal recipes, consent UI and autofill |
 | Workers | `apps/worker` | Provider jobs, uploads, webhooks, notifications, expiry/deadline scans and data requests |
 
@@ -64,20 +64,20 @@ Facts retain `source`, verification metadata, optional expiry, repeat index and 
 ## End-to-end application path
 
 1. Open a form in Apply. A read-only request calculates evidence readiness; visiting or prefetching the page does not create a share session.
-2. Continue to the BTA session endpoint, or create a Praman-hosted sandbox session for the other catalog institutions.
+2. Continue to the BTA session endpoint, or create a ApplyOnce-hosted sandbox session for the other catalog institutions.
 3. The share screen shows partner, purpose, retention, required facts, optional facts and form-specific questions.
 4. Fill missing values and choose appropriate documents. Confirm with a fresh OTP/passkey.
 5. A transaction claims the open session and writes consent, application, signed share, event, audit and queued webhook rows.
 6. BTA validates the callback state cookie, exchanges the short-lived token with the shared SDK and saves a browser-bound draft.
 7. The review page can refresh without reusing the single-use token. Edited fields remain edited when the view mode changes.
-8. Submission uses identifiers and document references from the server draft. BTA creates a local application and sends `under_review` to Praman.
-9. Sandbox status controls require the application access cookie and an explicit production-build flag. Praman receives status events; revocation blocks further access and notifies BTA.
+8. Submission uses identifiers and document references from the server draft. BTA creates a local application and sends `under_review` to ApplyOnce.
+9. Sandbox status controls require the application access cookie and an explicit production-build flag. ApplyOnce receives status events; revocation blocks further access and notifies BTA.
 
 ## New differentiator: evidence readiness
 
 Readiness asks whether required answers are present and usable. It checks purpose, profile scope, source, expiry and unresolved mismatch. It does not infer eligibility, admission probability or legal validity. Boolean false can be a complete answer; a required declaration must be affirmatively confirmed.
 
-The page shows a percentage, ordered gaps, direct repair links, source detail and approaching expiry. Ask Praman explains next steps, sharing or provenance. Without external credentials it uses deterministic English/Hindi guidance. Optional model output is explanatory only and cannot mutate facts, change the score or submit applications.
+The page shows a percentage, ordered gaps, direct repair links, source detail and approaching expiry. Ask ApplyOnce explains next steps, sharing or provenance. Without external credentials it uses deterministic English/Hindi guidance. Optional model output is explanatory only and cannot mutate facts, change the score or submit applications.
 
 ## Family and access
 

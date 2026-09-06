@@ -22,7 +22,7 @@ Screen names are taken from the page list in `docs/04-DESIGN-SYSTEM.md` §7. Eve
 - Step 2 title — EN: "Connect DigiLocker to verify your identity in seconds." HI: "सेकंडों में पहचान सत्यापित करने के लिए डिजिलॉकर जोड़ें।"
 - Done screen — EN: "Your profile is 62% complete. Add your category certificate to unlock scholarships." HI: "आपकी प्रोफ़ाइल 62% पूरी है। छात्रवृत्ति के लिए श्रेणी प्रमाण पत्र जोड़ें।"
 
-**Events logged**: `audit_log(action='user.registered')`, `audit_log(action='profile.created')`, `audit_log(action='passkey.registered')`, `notifications(category='system', title='Welcome to Praman')`.
+**Events logged**: `audit_log(action='user.registered')`, `audit_log(action='profile.created')`, `audit_log(action='passkey.registered')`, `notifications(category='system', title='Welcome to ApplyOnce')`.
 
 ## F2 — DigiLocker connect
 **Happy path**
@@ -61,9 +61,9 @@ Screen names are taken from the page list in `docs/04-DESIGN-SYSTEM.md` §7. Eve
 
 **Events logged**: `documents(status)` transitions pending→ready/rejected, `document_extractions(reviewed_at, reviewed_by)`, `mismatches` insert, `notifications(category='verification')`.
 
-## F4 — Apply with Praman (partner-initiated)
+## F4 — Apply with ApplyOnce (partner-initiated)
 **Happy path**
-1. Partner site: citizen clicks the `@praman/sdk` button → partner server calls `POST /partner/share-sessions` → opens `share_url`.
+1. Partner site: citizen clicks the `@applyonce/sdk` button → partner server calls `POST /partner/share-sessions` → opens `share_url`.
 2. `/share/[token]` — partner identity card (verified-org badge) → purpose statement → profile selector (self or a dependent) → `FieldDiff`: "44 requested · 39 available (36 verified) · 5 missing."
 3. Missing fields shown as an inline mini-form; optional custom questions from the partner's `customFields`.
 4. Step-up (passkey) → `POST /share/:token/consent` writes `consents` → `applications(status='submitted', source='sdk')` → `shares` (JWS stored encrypted) → returns `return_url?share_token=…`.
@@ -84,18 +84,18 @@ Screen names are taken from the page list in `docs/04-DESIGN-SYSTEM.md` §7. Eve
 ## F5 — Extension autofill
 **Happy path**
 1. Extension installed, logged in via web-page handshake (short-lived extension token, passkey confirmed on the web page — never re-entered in the popup).
-2. On a recipe-matched portal (URL + DOM fingerprint) — badge: "Praman can fill 38 fields."
+2. On a recipe-matched portal (URL + DOM fingerprint) — badge: "ApplyOnce can fill 38 fields."
 3. Click → step-up in the popup → `GET /extension/fill-plan?recipe=nta-jee&profile=…` returns a field→value map (decrypted server-side, sent over TLS, never cached to disk).
-4. Content script fills inputs/selects/radios sequentially with a highlight sweep (40ms/field, <2s for 40 fields); skips captcha/file inputs; shows an "attach from Praman" helper for document uploads.
+4. Content script fills inputs/selects/radios sequentially with a highlight sweep (40ms/field, <2s for 40 fields); skips captcha/file inputs; shows an "attach from ApplyOnce" helper for document uploads.
 5. After submit, the recipe captures the application/reference number → `POST /applications(source='extension')`.
 
 **Failure/edge paths**
-- No recipe for this portal → falls back to the `generic` label-text-heuristic recipe; badge reads "Praman can fill some fields (best guess)" rather than an exact count.
+- No recipe for this portal → falls back to the `generic` label-text-heuristic recipe; badge reads "ApplyOnce can fill some fields (best guess)" rather than an exact count.
 - A field's stored value fails the portal's own validation (e.g., a stricter PIN-code format) → that single field is skipped and highlighted red with a tooltip, the rest of the fill continues.
 - Extension token expired mid-session → fill is blocked, popup re-prompts the web-page handshake rather than silently failing.
 
 **Copy**
-- Badge — EN: "Praman can fill 38 of 48 fields here." HI: "प्रामाण यहाँ 48 में से 38 जानकारियाँ भर सकता है।"
+- Badge — EN: "ApplyOnce can fill 38 of 48 fields here." HI: "प्रामाण यहाँ 48 में से 38 जानकारियाँ भर सकता है।"
 - Post-fill toast — EN: "Filled in 1.8 seconds. Review before you submit." HI: "1.8 सेकंड में भरा गया। सबमिट करने से पहले जाँच लें।"
 
 **Events logged**: `applications(source='extension', external_ref)`, `audit_log(action='extension.fill_completed', meta={fields_filled, portal})`.
@@ -110,7 +110,7 @@ Screen names are taken from the page list in `docs/04-DESIGN-SYSTEM.md` §7. Eve
 2. `relations(basis='elder_consent', scope=[...], valid_until=...)` created only after the elder's own OTP approval — never accepted from the inviting delegate's device alone.
 
 **Handover at 18 — happy path**
-1. Nightly job finds wards approaching 18 → SMS: "You're turning 18 — claim your Praman profile."
+1. Nightly job finds wards approaching 18 → SMS: "You're turning 18 — claim your ApplyOnce profile."
 2. Ward sets up their own phone/passkey → `profiles.claimed_by_user_id` set → `relations` for that pair either ends or converts to a narrower `elder_consent`-style scope if the (former) guardian still needs limited access.
 
 **Failure/edge paths**
@@ -120,7 +120,7 @@ Screen names are taken from the page list in `docs/04-DESIGN-SYSTEM.md` §7. Eve
 
 **Copy**
 - Add elder invite — EN: "Ask Kamla Devi to approve this from her own phone." HI: "कमला देवी से अपने फ़ोन से इसे स्वीकृत करने के लिए कहें।"
-- Handover SMS — EN: "You're turning 18 soon. Claim your Praman profile before your parent's access ends." HI: "आप जल्द ही 18 के होने वाले हैं। अपने माता-पिता की पहुँच समाप्त होने से पहले अपनी प्रामाण प्रोफ़ाइल पर दावा करें।"
+- Handover SMS — EN: "You're turning 18 soon. Claim your ApplyOnce profile before your parent's access ends." HI: "आप जल्द ही 18 के होने वाले हैं। अपने माता-पिता की पहुँच समाप्त होने से पहले अपनी प्रामाण प्रोफ़ाइल पर दावा करें।"
 
 **Events logged**: `audit_log(action='relation.created', meta={basis})`, `audit_log(action='profile.claimed')`, `notifications(category='family')`.
 
@@ -130,7 +130,7 @@ Screen names are taken from the page list in `docs/04-DESIGN-SYSTEM.md` §7. Eve
 2. "Revoke" → `POST /consents/:id/revoke` sets `revoked_at` → fires `webhook_deliveries(event='consent.revoked')` to the partner.
 
 **Failure/edge paths**
-- Partner webhook endpoint is down → delivery retried 5× exponential backoff; consent is revoked on Praman's side immediately regardless of webhook delivery success (revocation is never gated on the partner acknowledging it).
+- Partner webhook endpoint is down → delivery retried 5× exponential backoff; consent is revoked on ApplyOnce's side immediately regardless of webhook delivery success (revocation is never gated on the partner acknowledging it).
 - Revoking a consent tied to an in-progress application → the application stays visible in the tracker (history is never deleted) but is flagged "Consent withdrawn — the institution has been notified."
 
 **Copy**
@@ -176,7 +176,7 @@ Screen names are taken from the page list in `docs/04-DESIGN-SYSTEM.md` §7. Eve
 1. `/partner/onboarding` — org verification wizard (CIN/UDISE/AISHE/GSTIN self-serve + manual review) → `partners(status='pending')` → approved → `status='verified'`.
 2. `/partner/developers` — sandbox API key issued immediately on registration; live key gated on verification.
 3. `/partner/forms/new` — form builder: pick purpose, select fields from the schema tree (only `SHAREABLE_KEYS`, auto-filtered by `canShare(key, purpose)`), add custom fields, set retention/redirect/webhook, preview.
-4. `/partner/forms/[id]` — embed snippet (`@praman/sdk` button) and a "test with sandbox citizen" button.
+4. `/partner/forms/[id]` — embed snippet (`@applyonce/sdk` button) and a "test with sandbox citizen" button.
 5. First real share completes via F4 → appears in `/partner/applicants` with per-field verified badges.
 6. `/partner/applicants` → drawer → "Push status" → `POST /partner/applications/:id/status` → appears in the citizen's tracker live (F4 step 6).
 

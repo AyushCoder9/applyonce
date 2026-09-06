@@ -1,8 +1,8 @@
-import { documentAllowed } from "@praman/schema";
+import { documentAllowed } from "@applyonce/schema";
 import Link from "next/link";
 import { LinkButton } from "@/components/vault/link-button";
-import { db, t, eq, desc, inArray } from "@praman/db";
-import { PageHeader } from "@praman/ui";
+import { db, t, eq, desc, inArray } from "@applyonce/db";
+import { PageHeader } from "@applyonce/ui";
 import { requireUser, requireProfileAccess } from "@/lib/session";
 import { localeOf, tr } from "@/components/vault/i18n";
 import { DocumentsView, type DocItem } from "@/components/documents/documents-view";

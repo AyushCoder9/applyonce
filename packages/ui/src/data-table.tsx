@@ -16,22 +16,25 @@ export interface DataColumn<T> {
   width?: string;
 }
 
+const plainValue = <T,>(column: DataColumn<T>, row: T) => {
+  const value = column.value ? column.value(row) : column.cell(row);
+  return value == null ? "" : typeof value === "object" ? "" : value;
+};
+
 /** Sticky header · per-column filter · sort · density toggle · CSV export. HeroUI Table underneath; no TanStack (not resolvable from this package). */
 export function DataTable<T>({ rows, columns, rowId, onRowClick, csvName, empty, className, ariaLabel = "Table" }: { rows: T[]; columns: DataColumn<T>[]; rowId: (row: T) => string; onRowClick?: (row: T) => void; csvName?: string; empty?: React.ReactNode; className?: string; ariaLabel?: string }) {
   const [sort, setSort] = useState<{ id: string; dir: "asc" | "desc" } | null>(null);
   const [filters, setFilters] = useState<Record<string, string>>({});
   const [dense, setDense] = useState(false);
-  const val = (c: DataColumn<T>, r: T) => { const v = c.value ? c.value(r) : c.cell(r); return v == null ? "" : typeof v === "object" ? "" : v; };
-
   const shown = useMemo(() => {
-    let out = rows.filter((r) => columns.every((c) => { const f = filters[c.id]?.trim().toLowerCase(); return !f || String(val(c, r)).toLowerCase().includes(f); }));
-    if (sort) { const c = columns.find((x) => x.id === sort.id); if (c) out = [...out].sort((a, b) => { const x = val(c, a), y = val(c, b); const n = typeof x === "number" && typeof y === "number" ? x - y : String(x).localeCompare(String(y)); return sort.dir === "asc" ? n : -n; }); }
+    let out = rows.filter((r) => columns.every((c) => { const f = filters[c.id]?.trim().toLowerCase(); return !f || String(plainValue(c, r)).toLowerCase().includes(f); }));
+    if (sort) { const c = columns.find((x) => x.id === sort.id); if (c) out = [...out].sort((a, b) => { const x = plainValue(c, a), y = plainValue(c, b); const n = typeof x === "number" && typeof y === "number" ? x - y : String(x).localeCompare(String(y)); return sort.dir === "asc" ? n : -n; }); }
     return out;
   }, [rows, columns, filters, sort]);
 
   const csv = () => {
     const esc = (s: unknown) => `"${String(s ?? "").replace(/"/g, '""')}"`;
-    const text = [columns.map((c) => esc(c.header)).join(","), ...shown.map((r) => columns.map((c) => esc(val(c, r))).join(","))].join("\n");
+    const text = [columns.map((c) => esc(c.header)).join(","), ...shown.map((r) => columns.map((c) => esc(plainValue(c, r))).join(","))].join("\n");
     const a = document.createElement("a"); a.href = URL.createObjectURL(new Blob([text], { type: "text/csv" })); a.download = `${csvName ?? "export"}.csv`; a.click(); URL.revokeObjectURL(a.href);
   };
   const hasFilters = columns.some((c) => c.filter);

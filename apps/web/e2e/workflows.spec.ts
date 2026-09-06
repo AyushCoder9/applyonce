@@ -31,7 +31,7 @@ test('readiness guide and mobile navigation',async({page},testInfo)=>{
  await page.setViewportSize({width:320,height:720});expect(await page.evaluate(()=>document.documentElement.scrollWidth<=window.innerWidth)).toBe(true);
 });
 test('BTA consent → refreshable review → preserved edit → submit → status callback',async({page},testInfo)=>{
- await login(page);await page.goto(`${PORTAL}/`);await page.getByRole('button',{name:/Apply with Praman/}).click();await expect(page.getByTestId('share-flow')).toBeVisible();
+ await login(page);await page.goto(`${PORTAL}/`);await page.getByRole('button',{name:/Apply with ApplyOnce/}).click();await expect(page.getByTestId('share-flow')).toBeVisible();
  await fillConsent(page);await page.getByTestId('return-now').click();await expect(page.getByRole('heading',{name:'Confirm your BTA-JEE 2026 application'})).toBeVisible();
  await page.reload();await expect(page.getByRole('button',{name:'Submit to BTA'})).toBeVisible();
  await page.getByRole('button',{name:'Edit before submitting'}).click();await page.getByLabel(/Candidate.*Name/i).fill('AARAV DEMO SHARMA');await page.getByRole('button',{name:'Done editing'}).click();await expect(page.getByText('AARAV DEMO SHARMA',{exact:true})).toBeVisible();
@@ -74,7 +74,7 @@ test('partner creates, edits, publishes and archives a form',async({page})=>{
  await login(page,'9000000001');await page.goto('/partner/forms/new');
  const name=`Audit form ${Date.now()}`;
  await page.getByLabel('Form name',{exact:true}).fill(name);
- await page.getByLabel('Return URL',{exact:true}).fill(`${PORTAL}/api/praman/callback`);
+ await page.getByLabel('Return URL',{exact:true}).fill(`${PORTAL}/api/applyonce/callback`);
  await page.locator('summary').filter({hasText:/^Identity/}).click();
  const fullName=page.getByRole('checkbox',{name:'Full name (as on Aadhaar)',exact:true});
  await page.locator('[data-slot="checkbox-content"]').filter({has:fullName}).click();await expect(fullName).toBeChecked();

@@ -1,4 +1,4 @@
-import { db, t, and, eq, desc } from "@praman/db";
+import { db, t, and, eq, desc } from "@applyonce/db";
 import { handler, citizen, ok } from "@/lib/api";
 export const GET = handler(async (req) => {
   const { user } = await citizen(req);

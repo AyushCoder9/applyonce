@@ -1,5 +1,5 @@
 import { describe, it, expect } from "vitest";
-import { isFactKey } from "@praman/schema";
+import { isFactKey } from "@applyonce/schema";
 import { RECIPES, matchRecipe, resolveFields, matchGenericLabel } from "../src/recipes";
 import type { DocLike } from "../src/recipes/types";
 
@@ -53,7 +53,7 @@ describe("resolveFields", () => {
   });
 });
 
-describe("every recipe field key is a real @praman/schema fact key", () => {
+describe("every recipe field key is a real @applyonce/schema fact key", () => {
   for (const recipe of RECIPES) {
     it(`${recipe.id}`, () => {
       for (const field of recipe.fields) expect(isFactKey(field.key)).toBe(true);

@@ -1,4 +1,4 @@
-# 04 — Design system ("Praman Bright")
+# 04 — Design system ("ApplyOnce Bright")
 
 Save this as `apps/web/DESIGN.md` too — agents read it before touching UI.
 
@@ -95,7 +95,7 @@ Accessibility: keyboard-complete, visible focus (2 px brand ring, 2 px offset), 
 8. `/app/vault` — section grid with completion; `/app/vault/[section]` (identity, contact, addresses, family, category, education, employment, health, bank, preferences) — list of `FactRow`s, add/edit sheet, history drawer.
 9. `/app/documents` — grid/list, filters (issuer, type, validity), upload (drag-drop → OCR → "We found 6 facts, review?") ; `/app/documents/[id]` — viewer, metadata, linked facts, hash-verified badge, share/download (step-up).
 10. `/app/verify` — Verifications hub: provider cards (DigiLocker, PAN, ABHA, Account Aggregator, e-Sign) with status; mismatch list with "fix" flows; expiry calendar.
-11. `/app/apply` — "Apply with Praman" catalog: partner forms available (search by exam/college), plus "Open a portal with the extension" guide; `/app/apply/[formSlug]` starts the share flow (see 05).
+11. `/app/apply` — "Apply with ApplyOnce" catalog: partner forms available (search by exam/college), plus "Open a portal with the extension" guide; `/app/apply/[formSlug]` starts the share flow (see 05).
 12. `/app/applications` — tracker table/cards; filters by status/kind; `/app/applications/[id]` — timeline, documents, deadline, partner messages, withdraw.
 13. `/app/connections` — consent ledger: partners, scopes, dates, revoke; `/app/connections/[consentId]` — exact payload shared (decrypted view after step-up).
 14. `/app/family` — dependents & delegates; add minor (creates ward profile), add elder (invite + consent), scopes, handover at 18 banner.
@@ -111,7 +111,7 @@ Accessibility: keyboard-complete, visible focus (2 px brand ring, 2 px offset), 
 18. Partner approvals, provider health, job queues, flags, abuse reports, audit search, data-principal requests queue.
 
 ### Demo exam portal (`apps/demo-exam-portal`, `bta.demo`)
-19. `/` "Bharat Test Agency — BTA-JEE 2026 Registration" (deliberately looks like a real government exam form: 6 steps, 48 fields) with two buttons: **Fill manually** (the pain) and **Apply with Praman** (the magic). `/status/[ref]` shows application status and lets the demo admin push "Admit card released" which appears in Praman's tracker.
+19. `/` "Bharat Test Agency — BTA-JEE 2026 Registration" (deliberately looks like a real government exam form: 6 steps, 48 fields) with two buttons: **Fill manually** (the pain) and **Apply with ApplyOnce** (the magic). `/status/[ref]` shows application status and lets the demo admin push "Admit card released" which appears in ApplyOnce's tracker.
 
 ## 8. Copy voice
 Short, direct, Hindi-friendly English ("Your Class 12 marks are verified by CBSE." not "Educational credentials have been validated"). Every empty state tells the user the *next* action. Error messages say what to do.

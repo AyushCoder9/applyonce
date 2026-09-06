@@ -1,5 +1,5 @@
 import { z } from "zod";
-import { db, t, eq } from "@praman/db";
+import { db, t, eq } from "@applyonce/db";
 import { handler, citizen, ok, body, log } from "@/lib/api";
 import { mergePrefs, toRows, CHANNELS, CATEGORIES, type PrefMatrix } from "@/components/settings/prefs";
 

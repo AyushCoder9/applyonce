@@ -2,9 +2,10 @@ import type { Metadata } from "next";
 import Link from "next/link";
 import { Chip } from "@/components/client-ui";
 import { Globe, Plug, ShieldCheck, Sparkles } from "lucide-react";
-import { db, t, eq } from "@praman/db";
-import { PageHeader, Callout } from "@praman/ui";
+import { db, t, eq } from "@applyonce/db";
+import { PageHeader, Callout } from "@applyonce/ui";
 import { requireUser } from "@/lib/session";
+import { demoPortalUrl } from "@/lib/urls";
 export const metadata: Metadata = { title: "Browser extension" };
 
 const PORTALS = [
@@ -15,10 +16,10 @@ export default async function ExtensionPage() {
   const s = await requireUser("/app/extension");
   const hi = (s.user as { locale?: string }).locale === "hi";
   const flag = await db.query.flags.findFirst({ where: eq(t.flags.key, "extension") });
-  const demo = process.env.NEXT_PUBLIC_DEMO_PORTAL_URL ?? "http://localhost:3301";
+  const demo = demoPortalUrl() ?? "/app/apply/bta-jee-2026";
   return (
     <>
-      <PageHeader title={hi ? "ब्राउज़र एक्सटेंशन" : "Browser extension"} subtitle={hi ? "जिन पोर्टलों पर 'Apply with Praman' नहीं है, वहाँ भी फ़ॉर्म एक क्लिक में भरें।" : "Fill forms on portals that don't have an Apply-with-Praman button yet. Sequential fill, verified values, nothing typed twice."}
+      <PageHeader title={hi ? "ब्राउज़र एक्सटेंशन" : "Browser extension"} subtitle={hi ? "जिन पोर्टलों पर 'Apply with ApplyOnce' नहीं है, वहाँ भी फ़ॉर्म एक क्लिक में भरें।" : "Fill forms on portals that don't have an Apply-with-ApplyOnce button yet. Sequential fill, verified values, nothing typed twice."}
         actions={<Link href="/app/extension/connect" className="cta inline-flex items-center gap-2 px-4 py-2.5 text-sm"><Plug className="size-4" />{hi ? "एक्सटेंशन जोड़ें" : "Connect extension"}</Link>} />
       {flag && !flag.enabled && <Callout tone="warning" title={hi ? "एक्सटेंशन अभी बंद है" : "Extension is switched off right now"}>{hi ? "जल्द ही वापस।" : "Back soon."}</Callout>}
       <div className="grid gap-4 lg:grid-cols-[1.2fr_1fr]">
@@ -26,14 +27,14 @@ export default async function ExtensionPage() {
           <h2 className="flex items-center gap-2 font-display text-lg font-bold"><Globe className="size-5 text-brand-600" />{hi ? "इंस्टॉल (डेवलपर बिल्ड)" : "Install (developer build)"}</h2>
           <ol className="mt-3 grid gap-2 text-sm text-ink-2 [counter-reset:s]">
             {[
-              [hi ? "बिल्ड करें" : "Build it", "pnpm --filter @praman/extension build  →  apps/extension/dist"],
+              [hi ? "बिल्ड करें" : "Build it", "pnpm --filter @applyonce/extension build  →  apps/extension/dist"],
               [hi ? "Chrome खोलें" : "Open Chrome", "chrome://extensions → turn on Developer mode (top right)"],
               [hi ? "अनपैक्ड लोड करें" : "Load unpacked", "Load unpacked → pick apps/extension/dist"],
               [hi ? "कनेक्ट करें" : "Connect", hi ? "ऊपर 'एक्सटेंशन जोड़ें' दबाएँ — 30-दिन का टोकन इस खाते से जुड़ता है।" : "Press Connect above — a 30-day token is bound to this account."],
-              [hi ? "भरें" : "Fill", hi ? "किसी पोर्टल पर एक्सटेंशन आइकन → 'Praman can fill N fields' → OTP → हो गया।" : "On a portal, click the icon → 'Praman can fill N fields' → OTP → done."],
+              [hi ? "भरें" : "Fill", hi ? "किसी पोर्टल पर एक्सटेंशन आइकन → 'ApplyOnce can fill N fields' → OTP → हो गया।" : "On a portal, click the icon → 'ApplyOnce can fill N fields' → OTP → done."],
             ].map(([t, d], i) => <li key={i} className="flex gap-3"><span className="grid size-6 shrink-0 place-items-center rounded-pill bg-brand-50 text-xs font-bold text-brand-700">{i + 1}</span><div><div className="font-medium text-ink">{t}</div><code className="text-xs">{d}</code></div></li>)}
           </ol>
-          <p className="mt-4 text-sm"><a href={demo} target="_blank" rel="noreferrer" className="text-brand-600 underline">{hi ? "डेमो पोर्टल पर आज़माएँ" : "Try it on the demo exam portal"}</a> · <Link href="/app/extension/connect" className="text-brand-600 underline">{hi ? "कनेक्शन स्थिति" : "Connection status"}</Link></p>
+          <p className="mt-4 text-sm"><Link href={demo} target={demo.startsWith("http") ? "_blank" : undefined} rel={demo.startsWith("http") ? "noreferrer" : undefined} className="text-brand-600 underline">{hi ? "डेमो आवेदन पर आज़माएँ" : "Try the demo application"}</Link> · <Link href="/app/extension/connect" className="text-brand-600 underline">{hi ? "कनेक्शन स्थिति" : "Connection status"}</Link></p>
         </section>
         <section className="card p-5">
           <h2 className="flex items-center gap-2 font-display text-lg font-bold"><Sparkles className="size-5 text-brand-600" />{hi ? "समर्थित पोर्टल" : "Supported portals"}</h2>

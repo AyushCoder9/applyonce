@@ -1,10 +1,10 @@
 {
-  "name": "@praman/sdk",
+  "name": "@applyonce/sdk",
   "version": "0.1.0",
-  "description": "Apply with Praman — partner SDK (button + Node helper)",
+  "description": "Apply with ApplyOnce — partner SDK (button + Node helper)",
   "type": "module",
   "exports": { ".": "./src/index.ts", "./browser": "./src/browser.ts" },
   "scripts": { "typecheck": "tsc --noEmit", "test": "vitest run" },
-  "dependencies": { "@praman/schema": "workspace:*", "jose": "catalog:" },
+  "dependencies": { "@applyonce/schema": "workspace:*", "jose": "catalog:" },
   "devDependencies": { "typescript": "catalog:", "@types/node": "catalog:", "vitest": "catalog:" }
 }

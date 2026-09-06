@@ -1,7 +1,7 @@
 "use client";
 import { useState } from "react";
 import { Button, Switch, toast } from "@heroui/react";
-import type { Locale } from "@praman/ui";
+import type { Locale } from "@applyonce/ui";
 import { CHANNELS, CATEGORIES, type PrefMatrix } from "./prefs";
 const CH: Record<string, { en: string; hi: string }> = { inapp: { en: "In-app", hi: "ऐप में" }, sms: { en: "SMS", hi: "एसएमएस" }, email: { en: "Email", hi: "ईमेल" }, whatsapp: { en: "WhatsApp", hi: "व्हाट्सऐप" } };
 const CAT: Record<string, { en: string; hi: string; blurb: { en: string; hi: string } }> = {

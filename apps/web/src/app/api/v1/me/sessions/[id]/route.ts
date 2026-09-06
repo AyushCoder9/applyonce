@@ -1,4 +1,4 @@
-import { db, t, and, eq } from "@praman/db";
+import { db, t, and, eq } from "@applyonce/db";
 import { handler, citizen, ok, log, ApiError } from "@/lib/api";
 /** Revoke one of my sessions (fallback for WP1's DELETE auth/sessions/:id). */
 export const DELETE = handler(async (req, { params }) => {

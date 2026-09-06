@@ -1,9 +1,9 @@
-import { documentAllowed } from "@praman/schema";
-import { db, t, eq } from "@praman/db";
+import { documentAllowed } from "@applyonce/schema";
+import { db, t, eq } from "@applyonce/db";
 import { handler, ok } from "@/lib/api";
 import { extensionUser } from "../_auth";
 
-/** GET /api/v1/extension/documents?profile= — list for the "attach from Praman" popup panel. */
+/** GET /api/v1/extension/documents?profile= — list for the "attach from ApplyOnce" popup panel. */
 export const GET = handler(async (req) => {
   const { profile } = await extensionUser(req);
   const rows = await db.select({ id: t.documents.id, title: t.documents.title, docType: t.documents.docType, mime: t.documents.mime, status:t.documents.status })

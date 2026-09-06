@@ -1,8 +1,8 @@
 import "server-only";
 import { NextResponse } from "next/server";
 import { z } from "zod";
-import { db, t, eq, and, isNull, audit } from "@praman/db";
-import { sha256 } from "@praman/crypto";
+import { db, t, eq, and, isNull, audit } from "@applyonce/db";
+import { sha256 } from "@applyonce/crypto";
 import { getSession, requireProfileAccess, AccessError, isSteppedUp, type Session } from "./session";
 
 export class ApiError extends Error { constructor(public status: number, public code: string, message?: string, public fields?: Record<string, string>) { super(message ?? code); } }

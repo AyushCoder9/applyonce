@@ -5,7 +5,7 @@ import { safeEqual } from "./envelope";
 
 export interface SigningKey { kid: string; privateJwk: JWK; publicJwk: JWK }
 
-export async function generateSigningKey(kid = `praman-${Date.now().toString(36)}`): Promise<SigningKey> {
+export async function generateSigningKey(kid = `applyonce-${Date.now().toString(36)}`): Promise<SigningKey> {
   const { privateKey, publicKey } = await generateKeyPair("ES256", { extractable: true });
   const privateJwk = { ...(await exportJWK(privateKey)), kid, alg: "ES256", use: "sig" };
   const publicJwk = { ...(await exportJWK(publicKey)), kid, alg: "ES256", use: "sig" };
@@ -19,7 +19,7 @@ export async function signPayload(key: SigningKey, payload: JWTPayload, ttlSecon
 
 export async function verifyPayload<T extends JWTPayload>(jws: string, jwks: { keys: JWK[] }, opts: { audience?: string; issuer?: string } = {}): Promise<T> {
   const set = createLocalJWKSet(jwks);
-  const { payload } = await jwtVerify(jws, set, { issuer: opts.issuer ?? "praman", audience: opts.audience });
+  const { payload } = await jwtVerify(jws, set, { issuer: opts.issuer ?? "applyonce", audience: opts.audience });
   return payload as T;
 }
 

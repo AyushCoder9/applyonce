@@ -6,6 +6,6 @@ COPY . .
 RUN pnpm install --frozen-lockfile
 ARG APP=web
 ENV APP=$APP
-RUN if [ "$APP" != "worker" ]; then pnpm --filter @praman/$APP build; fi
+RUN if [ "$APP" != "worker" ]; then pnpm --filter @applyonce/$APP build; fi
 EXPOSE 3300 3301
-CMD if [ "$APP" = "worker" ]; then pnpm --filter @praman/worker start; else pnpm --filter @praman/$APP start; fi
+CMD if [ "$APP" = "worker" ]; then pnpm --filter @applyonce/worker start; else pnpm --filter @applyonce/$APP start; fi

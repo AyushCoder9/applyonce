@@ -1,6 +1,6 @@
 # Current progress and handoff
 
-Updated 6 September 2026. Repository: AyushCoder9/test-applyonce-aks. This update continues the Praman monorepo already on main; it preserves the ApplyOnce history.
+Updated 6 September 2026. Repository: AyushCoder9/test-applyonce-aks. This update continues the ApplyOnce monorepo already on main; it preserves the ApplyOnce history.
 
 ## Delivered in this audit
 

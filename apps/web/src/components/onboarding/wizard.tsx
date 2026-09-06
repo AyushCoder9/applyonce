@@ -6,8 +6,8 @@ import Link from "next/link";
 import { useRouter } from "next/navigation";
 import { Button, TextField, Label, Input, Description, FieldError, ProgressBar, toast, Alert } from "@heroui/react";
 import { ShieldCheck, Fingerprint, Sparkles, Loader2, Check, ExternalLink, Upload } from "lucide-react";
-import { field, type Fact, type FactValue } from "@praman/schema";
-import { WizardShell, FactRow, FactEditor, ProgressRing, cx } from "@praman/ui";
+import { field, type Fact, type FactValue } from "@applyonce/schema";
+import { WizardShell, FactRow, FactEditor, ProgressRing, cx } from "@applyonce/ui";
 import { authClient } from "@/lib/auth-client";
 import { api, tr, type Locale } from "@/components/vault/i18n";
 import { useEvents, type JobEvent } from "@/components/vault/use-events";
@@ -85,7 +85,7 @@ export function OnboardingWizard({ profileId, locale: initialLocale, initialName
   };
   const finish = async () => { go(6); api<{ overall: { filled: number; total: number; verified: number; pct: number } }>(`/profiles/${profileId}/summary`).then(setSummary).catch(() => {}); };
 
-  const brand = <Link href="/app" className="flex items-center gap-2"><img src="/icon.svg" alt="" className="size-7 rounded-md" /><span className="font-display font-bold">Praman</span></Link>;
+  const brand = <Link href="/app" className="flex items-center gap-2"><img src="/icon.svg" alt="" className="size-7 rounded-md" /><span className="font-display font-bold">ApplyOnce</span></Link>;
   const review = (sections: string[], emptyEn: string, emptyHi: string) => {
     const rows = facts.filter((f) => sections.includes(f.key.split(".")[0]!) && !field(f.key).derived);
     return (
@@ -105,11 +105,11 @@ export function OnboardingWizard({ profileId, locale: initialLocale, initialName
       <main className="grid min-h-dvh place-items-center bg-bg px-4 py-10">
         <div className="w-full max-w-[640px] text-center">
           <span className="mx-auto grid size-16 place-items-center rounded-pill bg-verified-50 text-verified-700 stamp"><Check className="size-8" strokeWidth={2.5} /></span>
-          <h1 className="mt-5 font-display text-4xl font-bold">{tr(locale, "Your Praman is ready", "आपका प्रमाण तैयार है")}</h1>
+          <h1 className="mt-5 font-display text-4xl font-bold">{tr(locale, "Your ApplyOnce is ready", "आपका ApplyOnce तैयार है")}</h1>
           <p className="mt-2 text-ink-2">{tr(locale, "Verify once, apply anywhere. Here’s where you stand.", "एक बार सत्यापित, कहीं भी आवेदन। आपकी स्थिति:")}</p>
           <div className="card mx-auto mt-6 flex items-center justify-center gap-6 p-6">{o ? <ProgressRing value={o.filled} max={o.total} size="lg" label={tr(locale, `core fields · ${o.verified} verified`, `मुख्य फ़ील्ड · ${o.verified} सत्यापित`)} /> : <Loader2 className="size-6 animate-spin text-brand-600" />}</div>
           <div className="mt-6 grid gap-3 sm:grid-cols-2">
-            <LinkButton size="lg" className="cta" href={demoUrl} external><Sparkles className="size-5" />{tr(locale, "Try the demo exam form", "डेमो परीक्षा फ़ॉर्म आज़माएँ")}<ExternalLink className="size-4" /></LinkButton>
+            <LinkButton size="lg" className="cta" href={demoUrl} external={demoUrl.startsWith("http")}><Sparkles className="size-5" />{tr(locale, "Try the demo exam form", "डेमो परीक्षा फ़ॉर्म आज़माएँ")}{demoUrl.startsWith("http") && <ExternalLink className="size-4" />}</LinkButton>
             <LinkButton size="lg" variant="outline" href="/app" data-testid="go-home">{tr(locale, "Go to Home", "होम पर जाएँ")}</LinkButton>
           </div>
         </div>
@@ -157,7 +157,7 @@ export function OnboardingWizard({ profileId, locale: initialLocale, initialName
   return (
     <WizardShell {...common} title={tr(locale, "Create a passkey", "पासकी बनाएँ")} subtitle={tr(locale, "Face / fingerprint replaces OTPs — and confirms every share. Optional but recommended.", "चेहरा/उँगली OTP की जगह — हर साझा की पुष्टि। वैकल्पिक पर अनुशंसित।")} onBack={() => go(4)} onNext={hasPasskey ? finish : undefined} secondary={!hasPasskey ? <Button variant="ghost" onPress={finish} isDisabled={busy}>{tr(locale, "Skip for now", "अभी छोड़ें")}</Button> : undefined}>
       <div className="card grid gap-5 p-6">
-        <div className="flex items-start gap-4"><span className="grid size-14 shrink-0 place-items-center rounded-lg bg-brand-50 text-brand-600"><Fingerprint className="size-8" strokeWidth={1.5} /></span><p className="text-ink-2">{tr(locale, "Stored on this device’s secure chip. Praman never sees your biometrics. Works on iPhone, Android and laptops.", "इस डिवाइस की सुरक्षित चिप में। प्रमाण कभी बायोमेट्रिक नहीं देखता। iPhone, Android और लैपटॉप पर चलता है।")}</p></div>
+        <div className="flex items-start gap-4"><span className="grid size-14 shrink-0 place-items-center rounded-lg bg-brand-50 text-brand-600"><Fingerprint className="size-8" strokeWidth={1.5} /></span><p className="text-ink-2">{tr(locale, "Stored on this device’s secure chip. ApplyOnce never sees your biometrics. Works on iPhone, Android and laptops.", "इस डिवाइस की सुरक्षित चिप में। ApplyOnce कभी बायोमेट्रिक नहीं देखता। iPhone, Android और लैपटॉप पर चलता है।")}</p></div>
         {hasPasskey ? <Alert status="success"><Alert.Indicator /><Alert.Content><Alert.Title>{tr(locale, "You already have a passkey", "आपके पास पासकी है")}</Alert.Title></Alert.Content></Alert>
           : <Button size="lg" className="cta" onPress={addPasskey} isPending={busy} data-testid="add-passkey"><Fingerprint className="size-5" />{tr(locale, "Create passkey", "पासकी बनाएँ")}</Button>}
       </div>

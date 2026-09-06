@@ -48,12 +48,12 @@ export default function HomePage() {
           <a href="/apply/manual" className="btn btn-secondary">Fill manually &rarr;</a>
         </div>
         <div className="gov-card" style={{ padding: 20, borderColor: "var(--color-gov-blue)" }}>
-          <h2 style={{ fontSize: 16, margin: "0 0 8px" }}>Have a Praman account?</h2>
+          <h2 style={{ fontSize: 16, margin: "0 0 8px" }}>Have a ApplyOnce account?</h2>
           <p style={{ marginTop: 0, color: "var(--color-gov-ink-2)" }}>
             Reuse your saved name, address, marks and documents. Review each source and approve the share. This sandbox uses clearly labeled sample provider records.
           </p>
-          <form action="/api/praman/session" method="POST">
-            <button type="submit" className="btn btn-primary">Apply with Praman &rarr;</button>
+          <form action="/api/applyonce/session" method="POST">
+            <button type="submit" className="btn btn-primary">Apply with ApplyOnce &rarr;</button>
           </form>
         </div>
       </section>
@@ -63,7 +63,7 @@ export default function HomePage() {
         <ul style={{ marginTop: 0, paddingLeft: 18 }}>
           <li>Candidates are advised to keep scanned copies of photograph, signature, Class 10/12 marksheets and category certificate ready before starting the application.</li>
           <li>Mobile number, email and photograph cannot be changed after final submission.</li>
-          <li>This is a demonstration portal built for the Praman project. No real examination is being conducted.</li>
+          <li>This is a demonstration portal built for the ApplyOnce project. No real examination is being conducted.</li>
         </ul>
       </section>
     </div>

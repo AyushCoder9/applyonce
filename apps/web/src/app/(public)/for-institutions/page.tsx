@@ -2,10 +2,10 @@ import type { Metadata } from "next";
 import Link from "next/link";
 import { Check, Webhook, KeyRound, FileJson2 } from "lucide-react";
 import { Container, Section, CtaLink } from "@/components/public/blocks";
-export const metadata: Metadata = { title: "For institutions", description: "Add 'Apply with Praman' to any exam, admission, scholarship or KYC form. Verified applicant data, signed payloads, consent receipts. Free for public bodies." };
+export const metadata: Metadata = { title: "For institutions", description: "Add 'Apply with ApplyOnce' to any exam, admission, scholarship or KYC form. Verified applicant data, signed payloads, consent receipts. Free for public bodies." };
 
-const SNIPPET = `<form action="/api/praman/session" method="POST">\n  <button>Apply with Praman</button>\n</form>\n// Your server creates a session and redirects with HTTP 303.`;
-const SERVER = `import { createPraman } from "@praman/sdk";\nconst praman = createPraman({\n  apiKey: process.env.PRAMAN_API_KEY,\n  baseUrl: process.env.PRAMAN_API_URL\n});\n// Store a random state nonce in a server session first.\nconst session = await praman.createShareSession({\n  formSlug: "bta-jee-2026",\n  returnUrl: "https://your-portal.example/api/praman/callback",\n  state: savedNonce\n});\n// In your callback, validate state before exchanging:\nconst { payload, consent_id } = await praman.exchange(shareToken);`;
+const SNIPPET = `<form action="/api/applyonce/session" method="POST">\n  <button>Apply with ApplyOnce</button>\n</form>\n// Your server creates a session and redirects with HTTP 303.`;
+const SERVER = `import { createApplyOnce } from "@applyonce/sdk";\nconst applyonce = createApplyOnce({\n  apiKey: process.env.APPLYONCE_API_KEY,\n  baseUrl: process.env.APPLYONCE_API_URL\n});\n// Store a random state nonce in a server session first.\nconst session = await applyonce.createShareSession({\n  formSlug: "bta-jee-2026",\n  returnUrl: "https://your-portal.example/api/applyonce/callback",\n  state: savedNonce\n});\n// In your callback, validate state before exchanging:\nconst { payload, consent_id } = await applyonce.exchange(shareToken);`;
 
 export default function ForInstitutions() {
   return (
@@ -26,7 +26,7 @@ export default function ForInstitutions() {
           <pre className="overflow-x-auto rounded-lg bg-ink p-5 text-xs leading-relaxed text-white"><code>{SERVER}</code></pre>
         </div>
         <div className="mt-8 grid gap-4 sm:grid-cols-3">
-          {[{ I: KeyRound, t: "Bearer keys, sandbox & live", d: "pk_sandbox_… works against seeded demo citizens today." }, { I: FileJson2, t: "Signed JWS payloads", d: "ES256, verify against /api/v1/jwks. Typed schema in @praman/schema." }, { I: Webhook, t: "Webhooks, HMAC-signed", d: "share.completed, consent.revoked, verification.updated, application.withdrawn." }].map((x) => <div key={x.t} className="card p-5"><x.I className="size-5 text-brand-600" /><h3 className="mt-3 font-semibold">{x.t}</h3><p className="mt-1 text-sm text-ink-2">{x.d}</p></div>)}
+          {[{ I: KeyRound, t: "Bearer keys, sandbox & live", d: "pk_sandbox_… works against seeded demo citizens today." }, { I: FileJson2, t: "Signed JWS payloads", d: "ES256, verify against /api/v1/jwks. Typed schema in @applyonce/schema." }, { I: Webhook, t: "Webhooks, HMAC-signed", d: "share.completed, consent.revoked, verification.updated, application.withdrawn." }].map((x) => <div key={x.t} className="card p-5"><x.I className="size-5 text-brand-600" /><h3 className="mt-3 font-semibold">{x.t}</h3><p className="mt-1 text-sm text-ink-2">{x.d}</p></div>)}
         </div>
       </Section>
 

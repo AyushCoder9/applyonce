@@ -3,8 +3,8 @@
 import { useEffect, useState } from "react";
 import { Button, Drawer, Alert, toast, useMediaQuery } from "@heroui/react";
 import { Trash2 } from "lucide-react";
-import { zodFor, field, isFactKey, type FieldDef, type FactValue, type Fact } from "@praman/schema";
-import { FactEditor, SourceChip } from "@praman/ui";
+import { zodFor, field, isFactKey, type FieldDef, type FactValue, type Fact } from "@applyonce/schema";
+import { FactEditor, SourceChip } from "@applyonce/ui";
 import { api, tr, type ApiErr, type Locale } from "./i18n";
 
 export interface FactSheetProps {

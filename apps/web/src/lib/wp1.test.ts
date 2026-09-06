@@ -1,5 +1,5 @@
 import { describe, it, expect } from "vitest";
-import { field } from "@praman/schema";
+import { field } from "@applyonce/schema";
 import { formatSse } from "./sse";
 import { coerceInput, rawFor } from "../../../../packages/ui/src/fact-editor";
 

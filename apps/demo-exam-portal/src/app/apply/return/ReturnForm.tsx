@@ -1,13 +1,13 @@
 "use client";
 import { useState } from "react";
-import type { PramanPayload } from "@praman/schema";
+import type { ApplyOncePayload } from "@applyonce/schema";
 import { STEPS, FIELDS_BY_STEP } from "@/lib/fields";
 import type { MappedPayload } from "@/lib/payload-map";
 import { FieldInput } from "@/components/FieldInput";
 import { SourceBadge } from "@/components/SourceBadge";
 import { formatDMY } from "@/lib/validation";
 
-export function ReturnForm({ payload, mapped, verified, offline, draftToken }: { draftToken: string; payload: PramanPayload; mapped: MappedPayload; verified: boolean; offline: boolean }) {
+export function ReturnForm({ payload, mapped, verified, offline, draftToken }: { draftToken: string; payload: ApplyOncePayload; mapped: MappedPayload; verified: boolean; offline: boolean }) {
   const [editing, setEditing] = useState(mapped.missingRequired.length > 0);
   const [edits, setEdits] = useState<Record<string,string>>({});
   const [submitting, setSubmitting] = useState(false);
@@ -15,7 +15,7 @@ export function ReturnForm({ payload, mapped, verified, offline, draftToken }: {
   const rowById = new Map(mapped.rows.map((r) => [r.spec.id, r]));
 
   return (
-    <form action="/api/return/submit" method="POST" onChange={(event) => { const input = event.target as unknown as HTMLInputElement; if(input.name && !input.name.startsWith("praman_")) setEdits(prev=>({...prev,[input.name]:input.type==="checkbox"?String(input.checked):input.value})); }} onSubmit={async (event) => {
+    <form action="/api/return/submit" method="POST" onChange={(event) => { const input = event.target as unknown as HTMLInputElement; if(input.name && !input.name.startsWith("applyonce_")) setEdits(prev=>({...prev,[input.name]:input.type==="checkbox"?String(input.checked):input.value})); }} onSubmit={async (event) => {
       event.preventDefault(); setSubmitting(true); setError(null);
       try {
         const response = await fetch("/api/return/submit", {method: "POST", body: new FormData(event.currentTarget)});
@@ -26,16 +26,16 @@ export function ReturnForm({ payload, mapped, verified, offline, draftToken }: {
       setSubmitting(false);
     }}>
       <input type="hidden" name="draft_token" value={draftToken} />
-      <input type="hidden" name="praman_application_id" value={payload.application_id} />
-      <input type="hidden" name="praman_consent_id" value={payload.consent_id} />
-      <input type="hidden" name="praman_form_id" value={payload.form_id} />
-      <input type="hidden" name="praman_offline" value={offline ? "1" : "0"} />
-      <input type="hidden" name="praman_documents" value={JSON.stringify(mapped.documents)} />
+      <input type="hidden" name="applyonce_application_id" value={payload.application_id} />
+      <input type="hidden" name="applyonce_consent_id" value={payload.consent_id} />
+      <input type="hidden" name="applyonce_form_id" value={payload.form_id} />
+      <input type="hidden" name="applyonce_offline" value={offline ? "1" : "0"} />
+      <input type="hidden" name="applyonce_documents" value={JSON.stringify(mapped.documents)} />
 
       <div className="gov-card" style={{ padding: "14px 18px", marginBottom: 18 }}>
         <div style={{ display: "flex", justifyContent: "space-between", flexWrap: "wrap", gap: 10, alignItems: "center" }}>
           <div>
-            <strong style={{ fontSize: 14 }}>Application pre-filled by Praman</strong>
+            <strong style={{ fontSize: 14 }}>Application pre-filled by ApplyOnce</strong>
             <p style={{ margin: "4px 0 0", fontSize: 13, color: "var(--color-gov-ink-2)" }}>
               {payload.profile.display_name} &middot; {mapped.verifiedCount} of {mapped.totalCount} fields verified by an issuer &middot;{" "}
               {mapped.documents.length} document(s) attached
@@ -47,7 +47,7 @@ export function ReturnForm({ payload, mapped, verified, offline, draftToken }: {
         </div>
         {!verified && (
           <p style={{ margin: "10px 0 0", fontSize: 12, color: "var(--color-gov-self)", background: "var(--color-gov-self-bg)", padding: "6px 10px", borderRadius: 3 }}>
-            DEMO_OFFLINE mode: this payload is a local fixture and was not cryptographically verified against Praman&apos;s JWKS. This explicitly enabled sandbox contains sample data.
+            DEMO_OFFLINE mode: this payload is a local fixture and was not cryptographically verified against ApplyOnce&apos;s JWKS. This explicitly enabled sandbox contains sample data.
           </p>
         )}
       </div>

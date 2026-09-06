@@ -1,4 +1,4 @@
-import { db, t, and, eq, lt, desc } from "@praman/db";
+import { db, t, and, eq, lt, desc } from "@applyonce/db";
 import { handler, citizen, ok } from "@/lib/api";
 /** My audit trail, newest first. Cursor = last id. */
 export const GET = handler(async (req) => {

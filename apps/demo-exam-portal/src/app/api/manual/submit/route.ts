@@ -9,7 +9,7 @@ import { validateFileMeta, validateValue } from "@/lib/validation";
  * The "pain" flow: a real multipart form POST (native, no fetch/JS) from ManualWizard's
  * final Submit button. Re-validates server-side (defense in depth — the client already
  * validated per-step), hashes uploaded files, and stores a plain BTA-only application
- * record (no Praman involvement at all for this path).
+ * record (no ApplyOnce involvement at all for this path).
  */
 export async function POST(request: Request) {
   const form = await request.formData();

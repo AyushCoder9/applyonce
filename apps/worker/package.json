@@ -1,11 +1,11 @@
 {
-  "name": "@praman/worker",
+  "name": "@applyonce/worker",
   "version": "0.1.0",
   "private": true,
   "type": "module",
   "scripts": { "dev": "tsx watch src/index.ts", "start": "tsx src/index.ts", "typecheck": "tsc --noEmit", "test": "vitest run" },
   "dependencies": {
-    "@praman/schema": "workspace:*", "@praman/db": "workspace:*", "@praman/crypto": "workspace:*", "@praman/providers": "workspace:*", "@praman/jobs": "workspace:*",
+    "@applyonce/schema": "workspace:*", "@applyonce/db": "workspace:*", "@applyonce/crypto": "workspace:*", "@applyonce/providers": "workspace:*", "@applyonce/jobs": "workspace:*",
     "bullmq": "catalog:", "ioredis": "catalog:", "pino": "catalog:", "pino-pretty": "catalog:", "@aws-sdk/client-s3": "catalog:", "@aws-sdk/s3-request-presigner": "catalog:"
   },
   "devDependencies": { "tsx": "catalog:", "typescript": "catalog:", "@types/node": "catalog:", "vitest": "catalog:" }

@@ -1,10 +1,10 @@
-import type { Source } from "@praman/schema";
+import type { Source } from "@applyonce/schema";
 
 /**
  * The badge shown next to every pre-filled field on `/apply/return`:
  * green "Verified by X" (issuer_verified/provider_verified), blue "From document"
  * (document_extracted), amber "Self-declared" (self_declared), grey "You entered"
- * (BTA's own custom questions, which have no Praman `source` at all).
+ * (BTA's own custom questions, which have no ApplyOnce `source` at all).
  */
 export function SourceBadge({ source, verifiedBy }: { source: Source | "custom"; verifiedBy?: string | null }) {
   if (source === "custom") return <span className="badge badge-entered">You entered</span>;
@@ -36,6 +36,6 @@ const VERIFIER_LABELS: Record<string, string> = {
 };
 
 function formatVerifier(v?: string | null): string {
-  if (!v) return "Praman";
+  if (!v) return "ApplyOnce";
   return VERIFIER_LABELS[v] ?? v.toUpperCase();
 }

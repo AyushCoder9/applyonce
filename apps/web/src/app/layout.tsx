@@ -9,7 +9,7 @@ const devanagari = Noto_Sans_Devanagari({ subsets: ["devanagari"], display: "swa
 const mono = JetBrains_Mono({ subsets: ["latin"], display: "swap", variable: "--font-mono-jb" });
 
 export const metadata: Metadata = {
-  title: { default: "Praman — Verify once. Apply anywhere.", template: "%s · Praman" },
+  title: { default: "ApplyOnce — Verify once. Apply anywhere.", template: "%s · ApplyOnce" },
   description: "Enter your details once, verify them against the issuer, and apply to any exam, college, scholarship, job or KYC with one consent tap.",
   manifest: "/manifest.webmanifest",
 };

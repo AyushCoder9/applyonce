@@ -1,5 +1,5 @@
 "use server";
-import { db, t } from "@praman/db";
+import { db, t } from "@applyonce/db";
 import { getSession } from "@/lib/session";
 import { log } from "@/lib/api";
 export type DpoState = { ok: boolean; id?: string; error?: string };

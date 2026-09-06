@@ -1,9 +1,9 @@
-import { sha256 } from "@praman/crypto";
+import { sha256 } from "@applyonce/crypto";
 /** documents queue: document.process (AV stub + OCR -> proposed facts) */
-import { db, eq, documents, documentExtractions } from "@praman/db";
-import { isFactKey, coerce, validateFact, DOCUMENT_MIMES, MAX_DOCUMENT_BYTES, detectedMime } from "@praman/schema";
-import { providers } from "@praman/providers";
-import { enqueue, type JobMap } from "@praman/jobs";
+import { db, eq, documents, documentExtractions } from "@applyonce/db";
+import { isFactKey, coerce, validateFact, DOCUMENT_MIMES, MAX_DOCUMENT_BYTES, detectedMime } from "@applyonce/schema";
+import { providers } from "@applyonce/providers";
+import { enqueue, type JobMap } from "@applyonce/jobs";
 import { getObject } from "../s3";
 
 const ALLOWED_MIME: readonly string[] = DOCUMENT_MIMES;

@@ -2,7 +2,7 @@ import type { Providers, DigiLockerProvider, IssuedDoc } from "../types";
 import { byPhone, byRef, DEMO_PEOPLE, MOCK_OTP } from "../fixtures";
 
 const sleep = (ms: number) => new Promise((r) => setTimeout(r, ms));
-const pdfStub = (title: string) => new TextEncoder().encode(`%PDF-1.4\n% Praman mock document: ${title}\n%%EOF`);
+const pdfStub = (title: string) => new TextEncoder().encode(`%PDF-1.4\n% ApplyOnce mock document: ${title}\n%%EOF`);
 
 /** Mock DigiLocker: auth URL points to our own fake consent page; `code` = phone of the demo person. */
 const digilocker: DigiLockerProvider = {

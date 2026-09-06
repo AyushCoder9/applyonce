@@ -1,14 +1,14 @@
 /** ES256 signing key for partner payloads. Lives in `system_keys` (private JWK encrypted with the system DEK); generated on first use. */
 import type { JWK } from "jose";
-import { db, t, and, eq, systemDek } from "@praman/db";
-import { generateSigningKey, signPayload, encryptJson, decryptJson, type SigningKey } from "@praman/crypto";
-import type { PramanPayload } from "@praman/schema";
+import { db, t, and, eq, systemDek } from "@applyonce/db";
+import { generateSigningKey, signPayload, encryptJson, decryptJson, type SigningKey } from "@applyonce/crypto";
+import type { ApplyOncePayload } from "@applyonce/schema";
 
-const g = globalThis as unknown as { __pramanSigningKey?: SigningKey };
+const g = globalThis as unknown as { __applyonceSigningKey?: SigningKey };
 const aad = (kid: string) => `syskey:${kid}`;
 
 export async function getSigningKey(): Promise<SigningKey> {
-  if (g.__pramanSigningKey) return g.__pramanSigningKey;
+  if (g.__applyonceSigningKey) return g.__applyonceSigningKey;
   const dek = systemDek();
   let row = await db.query.systemKeys.findFirst({ where: and(eq(t.systemKeys.kind, "jws_es256"), eq(t.systemKeys.active, true)) });
   if (!row) {
@@ -17,12 +17,12 @@ export async function getSigningKey(): Promise<SigningKey> {
     row = await db.query.systemKeys.findFirst({ where: and(eq(t.systemKeys.kind, "jws_es256"), eq(t.systemKeys.active, true)) });
   }
   const key: SigningKey = { kid: row!.kid, privateJwk: decryptJson<JWK>(dek, row!.privateJwkEnc, aad(row!.kid)), publicJwk: row!.publicJwk as JWK };
-  g.__pramanSigningKey = key;
+  g.__applyonceSigningKey = key;
   return key;
 }
 
 /** JWS (JWT compact) over the payload; exchange TTL 10 min. `iat`/`exp` are set by the signer. */
-export const signSharePayload = async (payload: PramanPayload, ttlSeconds = 600) => signPayload(await getSigningKey(), payload as unknown as Record<string, unknown>, ttlSeconds);
+export const signSharePayload = async (payload: ApplyOncePayload, ttlSeconds = 600) => signPayload(await getSigningKey(), payload as unknown as Record<string, unknown>, ttlSeconds);
 
 /** Every active public key (rotation-safe). */
 export async function publicJwks(): Promise<{ keys: JWK[] }> {
@@ -32,4 +32,4 @@ export async function publicJwks(): Promise<{ keys: JWK[] }> {
 }
 
 /** Decode a JWS payload without verifying (we signed it; used for console views). */
-export const decodeJws = <T = PramanPayload>(jws: string): T => JSON.parse(Buffer.from(jws.split(".")[1]!, "base64url").toString("utf8")) as T;
+export const decodeJws = <T = ApplyOncePayload>(jws: string): T => JSON.parse(Buffer.from(jws.split(".")[1]!, "base64url").toString("utf8")) as T;

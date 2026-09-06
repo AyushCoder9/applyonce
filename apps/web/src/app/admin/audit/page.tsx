@@ -1,6 +1,6 @@
 import { Chip } from "@/components/client-ui";
-import { db, t, desc, and, eq, or, dsql } from "@praman/db";
-import { PageHeader } from "@praman/ui";
+import { db, t, desc, and, eq, or, dsql } from "@applyonce/db";
+import { PageHeader } from "@applyonce/ui";
 export const dynamic = "force-dynamic";
 export default async function AuditAdmin({ searchParams }: { searchParams: Promise<{ actor?: string; action?: string; target?: string }> }) {
   const q = await searchParams;

@@ -1,6 +1,6 @@
-# UI Component Libraries & Design Direction — Praman (Sept 2026)
+# UI Component Libraries & Design Direction — ApplyOnce (Sept 2026)
 
-Research date: 2026-09-02. Praman is a Next.js 16 (App Router) + React 19 + Tailwind v4 + TypeScript civic-tech app. This doc answers: which component library beats "basic shadcn," exactly how to wire it up, what to borrow visually, and how to handle India-specific consent/verification/accessibility patterns.
+Research date: 2026-09-02. ApplyOnce is a Next.js 16 (App Router) + React 19 + Tailwind v4 + TypeScript civic-tech app. This doc answers: which component library beats "basic shadcn," exactly how to wire it up, what to borrow visually, and how to handle India-specific consent/verification/accessibility patterns.
 
 ---
 
@@ -72,7 +72,7 @@ This matters for the user's framing ("shadcn is very basic"): shadcn was never r
 | MUI v9 | 5 | 4 | 1 | 3 | 3 | 5 | 4 | 5 (MUI X) | 5 (MUI X) | 4 | 4 | 2 | 4 | 4 |
 | Tremor | 1 (stale) | 3 | 3 | 3 | 3 | 2 | 2 | 3 | 2 | 1 | 1 | 0 | 2 | 0 |
 
-### Recommendation for Praman: **HeroUI v3** (`@heroui/react` + `@heroui/styles`)
+### Recommendation for ApplyOnce: **HeroUI v3** (`@heroui/react` + `@heroui/styles`)
 
 Justification, weighed against the project's actual constraints (bright/warm/friendly, App Router + React 19, Tailwind v4, "trustworthy but not corporate," Hindi-friendly, ponytail/simplest-solution rule):
 
@@ -80,7 +80,7 @@ Justification, weighed against the project's actual constraints (bright/warm/fri
 2. **Accessibility is inherited, not reinvented** — React Aria Components underneath means keyboard nav, focus management, and screen-reader semantics for free, which matters directly for the "older users / WCAG 2.2 AA" requirement in Part D.
 3. **Token model matches the "verified vs self-declared" and consent-screen needs out of the box**: real CSS variables (`--accent`, `--success`, `--warning`, `--danger`, `--surface`, `--field-*`) map cleanly onto trust badges (verified=success token, self-declared=warning/muted token) without inventing a new palette.
 4. **It is GA, not beta**, contra the stale advice about `@beta` tags — 3.2.4 is a normal patch release with an active, low-noise issue tracker.
-5. **Honest caveat**: it's younger than Mantine/AntD/MUI, has no native DataGrid, command palette, or stepper — for Praman's admin/partner surfaces (Domain: partners, applications) plan to pair it with `cmdk` for a command palette and build a Stepper by composing `Progress`/`Tabs`, and if a genuinely complex data grid is ever needed, drop to TanStack Table headless + HeroUI's `Table` primitives for the chrome. This is a one-line justification for the only "new dependency": `cmdk` for command palette (HeroUI has no equivalent).
+5. **Honest caveat**: it's younger than Mantine/AntD/MUI, has no native DataGrid, command palette, or stepper — for ApplyOnce's admin/partner surfaces (Domain: partners, applications) plan to pair it with `cmdk` for a command palette and build a Stepper by composing `Progress`/`Tabs`, and if a genuinely complex data grid is ever needed, drop to TanStack Table headless + HeroUI's `Table` primitives for the chrome. This is a one-line justification for the only "new dependency": `cmdk` for command palette (HeroUI has no equivalent).
 
 ---
 
@@ -138,7 +138,7 @@ These map into Tailwind's `@theme inline` layer as `--color-accent`, `--color-su
 ```tsx
 <html lang="en" data-theme={theme /* "light" | "dark" */}>
 ```
-There's also an opt-in `[data-vibrant-palette="true"]` attribute that boosts saturation on "soft" foreground tones (`--accent-soft-foreground`, etc.) — worth turning on given Praman's "vibrant, bright" brief.
+There's also an opt-in `[data-vibrant-palette="true"]` attribute that boosts saturation on "soft" foreground tones (`--accent-soft-foreground`, etc.) — worth turning on given ApplyOnce's "vibrant, bright" brief.
 
 **To customize brand colors**: override the CSS variables in your own stylesheet after the `@heroui/styles` import (e.g. redefine `--accent` to your orange/saffron brand token) — no theme-object/JS config needed, it's just CSS custom properties.
 
@@ -299,18 +299,18 @@ import {Button, toast} from "@heroui/react";
 
 1. **Linear** — near-perfect type/spacing rhythm at small sizes, near-monochrome UI with a single saturated accent used sparingly, sub-150ms motion on everything. Borrow: restraint — one accent color doing all the "vibrant" work, not five.
 2. **Stripe Dashboard** — dense financial data stays legible via strict 8px grid, tabular figures (`font-variant-numeric: tabular-nums`), and color used only for state (green=success, never decoration). Borrow: numeric tables that don't jitter, muted neutrals + one alert color.
-3. **Notion** — best-in-class empty states (one-line description + one primary action, never a wall of text) and friendly line-art illustrations that don't infantilize. Borrow: empty-state formula for Praman's "no documents yet" / "no applications yet" screens.
+3. **Notion** — best-in-class empty states (one-line description + one primary action, never a wall of text) and friendly line-art illustrations that don't infantilize. Borrow: empty-state formula for ApplyOnce's "no documents yet" / "no applications yet" screens.
 4. **CRED** — proof that "vibrant Indian fintech" doesn't have to feel cheap: dark-canvas-plus-neon-accent, big confident typography, reward-forward micro-copy. Borrow: confidence in typographic scale and generous whitespace even in a "serious" (credit-score) product.
-5. **Zerodha Kite/Coin** — data-dense, zero-frills, and *still* feels trustworthy because information hierarchy is airtight (numbers right-aligned, labels muted, no gradients near real money). Borrow: for Praman's document/application list, prioritize scan-ability over decoration.
+5. **Zerodha Kite/Coin** — data-dense, zero-frills, and *still* feels trustworthy because information hierarchy is airtight (numbers right-aligned, labels muted, no gradients near real money). Borrow: for ApplyOnce's document/application list, prioritize scan-ability over decoration.
 6. **Groww** — soft pastel palette, rounded cards, big friendly illustrations for onboarding, yet KYC/consent screens go flat and serious the moment money/identity is involved. Borrow: the palette *shift* rule — playful for discovery, sober for anything touching consent or verification.
 7. **Jupiter** — onboarding as a single continuous scroll with progress always visible at the top, plain-language copy ("Add money" not "Initiate fund transfer"). Borrow: progress-visible onboarding, Hindi-friendly plain copy tone.
 8. **Fi Money** — illustrated verified-badge system (little colored dots/icons next to synced accounts) that reads instantly without needing a legend. Borrow: iconography for verified vs pending vs failed sync states.
-9. **Singpass / MyInfo (Singapore)** — the closest real-world analog to Praman's core flow: a single consent screen listing *exactly* which fields (name, NRIC, address) an app is requesting, each with a "why" tooltip, and a hard Allow/Deny with no dark patterns. Borrow directly: field-by-field consent listing + purpose string per field.
-10. **EU Digital Identity Wallet (EUDI)** — pioneering the "verifiable credential card" visual metaphor: each credential (ID, diploma, license) renders as a physical-card-like component with an issuer logo, a tamper-evident visual seal, and expiry countdown. Borrow: the credential-as-card metaphor for Praman's document vault.
-11. **GOV.UK Design System** — the accessibility gold standard: one typeface (GDS Transport-alike, but Google-Fonts-safe equivalents work fine), an error-summary pattern at the top of every form linking down to each field, and a strict black/white/one-accent palette so error red (`#d4351c`) always reads as urgent. Borrow: the error-summary-at-top pattern for every multi-field Praman form ([design-system.service.gov.uk](https://design-system.service.gov.uk/)).
-12. **DigiLocker (new UI)** — India's own precedent: document tiles show an issuer badge + "e-signed" trust mark directly on the thumbnail, and a persistent "Issued documents" vs "Uploaded documents" split so self-declared never visually mixes with government-verified. Borrow this split directly for Praman's `documents` domain.
+9. **Singpass / MyInfo (Singapore)** — the closest real-world analog to ApplyOnce's core flow: a single consent screen listing *exactly* which fields (name, NRIC, address) an app is requesting, each with a "why" tooltip, and a hard Allow/Deny with no dark patterns. Borrow directly: field-by-field consent listing + purpose string per field.
+10. **EU Digital Identity Wallet (EUDI)** — pioneering the "verifiable credential card" visual metaphor: each credential (ID, diploma, license) renders as a physical-card-like component with an issuer logo, a tamper-evident visual seal, and expiry countdown. Borrow: the credential-as-card metaphor for ApplyOnce's document vault.
+11. **GOV.UK Design System** — the accessibility gold standard: one typeface (GDS Transport-alike, but Google-Fonts-safe equivalents work fine), an error-summary pattern at the top of every form linking down to each field, and a strict black/white/one-accent palette so error red (`#d4351c`) always reads as urgent. Borrow: the error-summary-at-top pattern for every multi-field ApplyOnce form ([design-system.service.gov.uk](https://design-system.service.gov.uk/)).
+12. **DigiLocker (new UI)** — India's own precedent: document tiles show an issuer badge + "e-signed" trust mark directly on the thumbnail, and a persistent "Issued documents" vs "Uploaded documents" split so self-declared never visually mixes with government-verified. Borrow this split directly for ApplyOnce's `documents` domain.
 
-**Honorable mentions** (borrow narrowly, don't clone): **Cal.com** — for booking-flow-style step transitions and dark-mode parity; **Raycast** — for command-palette (`⌘K`) interaction quality and keyboard-first micro-copy; **Vercel dashboard** — for monochrome-plus-one-accent restraint at scale; **Arc browser** — for playful onboarding motion that never blocks usage; **Australia myGov** and **ID.me** — both good "what not to do" references (dense, low-contrast, jargon-heavy) that justify keeping Praman's copy short and its layout airy.
+**Honorable mentions** (borrow narrowly, don't clone): **Cal.com** — for booking-flow-style step transitions and dark-mode parity; **Raycast** — for command-palette (`⌘K`) interaction quality and keyboard-first micro-copy; **Vercel dashboard** — for monochrome-plus-one-accent restraint at scale; **Arc browser** — for playful onboarding motion that never blocks usage; **Australia myGov** and **ID.me** — both good "what not to do" references (dense, low-contrast, jargon-heavy) that justify keeping ApplyOnce's copy short and its layout airy.
 
 ### Font pairings (EN + Devanagari)
 
@@ -322,7 +322,7 @@ import {Button, toast} from "@heroui/react";
 | **Plus Jakarta Sans** | Yes | **Baloo 2** | Yes | Baloo 2 is rounder/friendlier — good for a "warm, consumer" brand voice; pair for display/headline sizes only, not body. |
 | **Bricolage Grotesque** | Yes | **Tiro Devanagari Hindi** | Yes | More editorial/characterful; use sparingly (marketing/landing only), not form UI. |
 
-Important correction: **Poppins does not natively support Devanagari** on Google Fonts (Latin/Latin-ext/Vietnamese only) — a common mistaken assumption; don't rely on Poppins for any Hindi string. Recommended default for Praman: **Geist + Noto Sans Devanagari**, loaded via `next/font/google`:
+Important correction: **Poppins does not natively support Devanagari** on Google Fonts (Latin/Latin-ext/Vietnamese only) — a common mistaken assumption; don't rely on Poppins for any Hindi string. Recommended default for ApplyOnce: **Geist + Noto Sans Devanagari**, loaded via `next/font/google`:
 
 ```tsx
 import { Geist } from "next/font/google";
@@ -347,7 +347,7 @@ Then in CSS: `font-family: var(--font-sans), var(--font-devanagari), system-ui, 
 - List fields being shared **one row per field**, not a paragraph — Singpass/MyInfo pattern. Each row: field name, current value (or masked value), a one-line "why" (purpose string), and its own could-be-excluded toggle if the field is optional.
 - State the requesting party's verified identity prominently at the top (logo + verified badge), matching Google/Apple OAuth consent conventions — never bury who's asking.
 - Show validity/duration explicitly ("This access is valid for 24 hours" or "until you revoke it") — required in India's Account Aggregator consent-artefact spec (FIU, purpose, data types, frequency, consent life) and good practice generally.
-- Every consent action must produce and display a `consent_id` reference the user can look up later — this is already a stated Praman invariant; surface it in the confirmation toast/receipt, not just the database.
+- Every consent action must produce and display a `consent_id` reference the user can look up later — this is already a stated ApplyOnce invariant; surface it in the confirmation toast/receipt, not just the database.
 - Two buttons only: primary "Allow"/"Share" and a clearly-visible secondary "Deny"/"Cancel" — never gray out or visually de-emphasize the deny path (Plaid Link and Apple Sign-In both keep decline fully legible, avoiding the dark-pattern of a ghost/disabled-looking cancel button).
 
 **Autofill animations**
@@ -399,7 +399,7 @@ Key APIs:
     {show && <motion.div key="card" exit={{ opacity: 0, y: -8 }} />}
   </AnimatePresence>
   ```
-- **`layout` prop** — automatic FLIP-style transitions when an element's size/position changes (great for the completion-ring or accordion expand in Praman's document checklist): `<motion.div layout />`.
+- **`layout` prop** — automatic FLIP-style transitions when an element's size/position changes (great for the completion-ring or accordion expand in ApplyOnce's document checklist): `<motion.div layout />`.
 - **`useReducedMotion()`** — returns `true` when the OS has "reduce motion" set; gate every non-essential animation (the autofill sweep, drawer slide distance, etc.) behind it — required for the WCAG 2.2/older-user accessibility rules in Part D. It's a ~1kb standalone import, so it's cheap even if you use nothing else from the library.
 - **`stagger()`** — used inside a variants `transition` to space out children:
   ```tsx

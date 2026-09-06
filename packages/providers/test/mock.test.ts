@@ -1,6 +1,6 @@
 import { describe, it, expect } from "vitest";
 import { mockProviders, docToFacts, AARAV, getProviders } from "../src";
-import { isFactKey, validateFact } from "@praman/schema";
+import { isFactKey, validateFact } from "@applyonce/schema";
 
 describe("mock providers + fixtures", () => {
   it("digilocker round trip", async () => {

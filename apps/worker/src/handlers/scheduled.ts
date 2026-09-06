@@ -1,7 +1,7 @@
 /** scheduled queue: nightly scans registered via upsertJobScheduler at boot. */
-import { db, eq, and, isNull, isNotNull, lte, gte, getDek, getFacts, facts, profiles, documents, mismatches, relations, applications } from "@praman/db";
-import { field, isFactKey } from "@praman/schema";
-import { redis, enqueue, queue } from "@praman/jobs";
+import { db, eq, and, isNull, isNotNull, lte, gte, getDek, getFacts, facts, profiles, documents, mismatches, relations, applications } from "@applyonce/db";
+import { field, isFactKey } from "@applyonce/schema";
+import { redis, enqueue, queue } from "@applyonce/jobs";
 
 const DAY_MS = 86_400_000;
 const dedupe = async (key: string, ttlSeconds: number) => (await redis().set(key, "1", "EX", ttlSeconds, "NX")) === "OK";
@@ -15,7 +15,7 @@ export async function scanExpiries() {
   for (const row of rows) {
     const daysLeft = Math.ceil((row.expiresAt!.getTime() - now) / DAY_MS);
     const win = daysLeft <= 0 ? "expired" : daysLeft <= 7 ? "7d" : daysLeft <= 30 ? "30d" : "60d";
-    if (!(await dedupe(`praman:scan:expiry:${row.id}:${win}`, 90 * 86400))) continue;
+    if (!(await dedupe(`applyonce:scan:expiry:${row.id}:${win}`, 90 * 86400))) continue;
     const profile = await db.query.profiles.findFirst({ where: eq(profiles.id, row.profileId) });
     if (!profile) continue;
     const label = isFactKey(row.factKey) ? field(row.factKey).label.en : row.factKey;
@@ -59,7 +59,7 @@ export async function scanHandover18() {
   for (const rel of rels) {
     const ward = await db.query.profiles.findFirst({ where: eq(profiles.id, rel.wardProfileId) });
     if (!ward?.dobYear || currentYear - ward.dobYear < 18) continue;
-    if (!(await dedupe(`praman:scan:handover18:${rel.id}`, 365 * 86400))) continue;
+    if (!(await dedupe(`applyonce:scan:handover18:${rel.id}`, 365 * 86400))) continue;
     const guardian = await db.query.profiles.findFirst({ where: eq(profiles.id, rel.guardianProfileId) });
     if (!guardian) continue;
     const firstName = ward.displayName.split(" ")[0];
@@ -78,7 +78,7 @@ export async function scanDeadlines() {
   for (const app of apps) {
     const daysLeft = Math.ceil((app.deadlineAt!.getTime() - now) / DAY_MS);
     const win = daysLeft <= 1 ? "1d" : daysLeft <= 3 ? "3d" : "7d";
-    if (!(await dedupe(`praman:scan:deadline:${app.id}:${win}`, 30 * 86400))) continue;
+    if (!(await dedupe(`applyonce:scan:deadline:${app.id}:${win}`, 30 * 86400))) continue;
     const profile = await db.query.profiles.findFirst({ where: eq(profiles.id, app.profileId) });
     if (!profile) continue;
     await enqueue("notify", { userId: profile.ownerUserId, category: "application", title: `${app.title}: deadline in ${daysLeft} day${daysLeft === 1 ? "" : "s"}`, link: `/app/applications/${app.id}` });

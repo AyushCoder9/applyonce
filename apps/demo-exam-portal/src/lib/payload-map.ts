@@ -1,4 +1,4 @@
-import type { PramanPayload, SharedFact, Source } from "@praman/schema";
+import type { ApplyOncePayload, SharedFact, Source } from "@applyonce/schema";
 import { CUSTOM_FIELDS, FIELD_BY_REGISTRY_KEY, FIELDS, type FieldSpec } from "./fields";
 import { formatDMY } from "./validation";
 
@@ -40,8 +40,8 @@ export interface MappedPayload {
   totalCount: number;
 }
 
-/** Turns a verified PramanPayload into rows keyed by our local FieldSpec, in form order. */
-export function mapPayloadToRows(payload: PramanPayload): MappedPayload {
+/** Turns a verified ApplyOncePayload into rows keyed by our local FieldSpec, in form order. */
+export function mapPayloadToRows(payload: ApplyOncePayload): MappedPayload {
   const factByKey = new Map(payload.facts.map((f) => [f.key, f]));
   const rows: FieldRow[] = [];
   const missingRequired: FieldSpec[] = [];

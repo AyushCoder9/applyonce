@@ -25,7 +25,7 @@
 - compilerOptions
 - scripts
 - sdk/package.json
-- 01 — Product Requirements Document: Praman
+- 01 — Product Requirements Document: ApplyOnce
 - Part B — HeroUI v3 integration notes (verified against the published npm packages, 2026-09-02)
 - Stack Verified Notes (2026-09-02)
 - 1. API surface (Next.js route handlers, `/api/v1`)
@@ -33,14 +33,14 @@
 - enums.ts
 - crypto/package.json
 - schema/package.json
-- 04 — Design system ("Praman Bright")
+- 04 — Design system ("ApplyOnce Bright")
 - jobs/package.json
 - web/tsconfig.json
 - 2. Phase prompts
 - demo-exam-portal/tsconfig.json
 - 1. Canonical Citizen Schema (`packages/schema`)
 - 10 — PRD v2 (supersedes 01-PRD.md, kept consistent with it)
-- India DPI & KYC Integration Landscape for Praman (2026)
+- India DPI & KYC Integration Landscape for ApplyOnce (2026)
 - Part A — Life-stage use-case map (150+ application types)
 - schema/src/index.ts
 - registry.ts
@@ -55,7 +55,7 @@
 - src/app/layout.tsx
 - 02 — Architecture
 - dependencies
-- Praman — Market, Competitors, Business Model & GTM Research
+- ApplyOnce — Market, Competitors, Business Model & GTM Research
 - compilerOptions
 - config/package.json
 - include
@@ -65,10 +65,10 @@
 - providers/tsconfig.json
 - schema/tsconfig.json
 - sdk/tsconfig.json
-- Praman — agent instructions
+- ApplyOnce — agent instructions
 - 08 — Integrations Plan
 - jobs/tsconfig.json
-- Praman — build kit
+- ApplyOnce — build kit
 - proxy.ts
 - demo-exam-portal/next.config.ts
 - AGENTS.md
@@ -88,12 +88,12 @@
 - motion
 - next
 - pino
-- @praman/crypto
-- @praman/db
-- @praman/jobs
-- @praman/providers
-- @praman/schema
-- @praman/ui
+- @applyonce/crypto
+- @applyonce/db
+- @applyonce/jobs
+- @applyonce/providers
+- @applyonce/schema
+- @applyonce/ui
 - react
 - react-aria
 - react-aria-components
@@ -107,7 +107,7 @@
 3. `field()` - 18 edges
 4. `putFact` - 17 edges
 5. `compilerOptions` - 15 edges
-6. `India DPI & KYC Integration Landscape for Praman (2026)` - 15 edges
+6. `India DPI & KYC Integration Landscape for ApplyOnce (2026)` - 15 edges
 7. `Db` - 12 edges
 8. `scripts` - 11 edges
 9. `getDek()` - 11 edges
@@ -148,27 +148,27 @@ Nodes (43): appKind, applicationDocuments, applicationEvents, applications, appS
 
 ### Community 4 - "dependencies"
 Cohesion: 0.05
-Nodes (41): dependencies, @aws-sdk/client-s3, @aws-sdk/s3-request-presigner, bullmq, ioredis, pino, pino-pretty, @praman/crypto (+33 more)
+Nodes (41): dependencies, @aws-sdk/client-s3, @aws-sdk/s3-request-presigner, bullmq, ioredis, pino, pino-pretty, @applyonce/crypto (+33 more)
 
 ### Community 5 - "devDependencies"
 Cohesion: 0.06
-Nodes (39): dependencies, next, @praman/schema, devDependencies, @heroui/react, lucide-react, motion, next (+31 more)
+Nodes (39): dependencies, next, @applyonce/schema, devDependencies, @heroui/react, lucide-react, motion, next (+31 more)
 
 ### Community 6 - "devDependencies"
 Cohesion: 0.05
-Nodes (37): dependencies, next, @praman/schema, @praman/sdk, react, react-dom, zod, devDependencies (+29 more)
+Nodes (37): dependencies, next, @applyonce/schema, @applyonce/sdk, react, react-dom, zod, devDependencies (+29 more)
 
 ### Community 7 - "devDependencies"
 Cohesion: 0.05
-Nodes (37): dependencies, @praman/schema, react, react-dom, devDependencies, @crxjs/vite-plugin, tailwindcss, @tailwindcss/vite (+29 more)
+Nodes (37): dependencies, @applyonce/schema, react, react-dom, devDependencies, @crxjs/vite-plugin, tailwindcss, @tailwindcss/vite (+29 more)
 
 ### Community 8 - "db/package.json"
 Cohesion: 0.05
-Nodes (36): drizzle-kit, drizzle-orm, dependencies, drizzle-orm, postgres, @praman/crypto, @praman/providers, @praman/schema (+28 more)
+Nodes (36): drizzle-kit, drizzle-orm, dependencies, drizzle-orm, postgres, @applyonce/crypto, @applyonce/providers, @applyonce/schema (+28 more)
 
 ### Community 9 - "devDependencies"
 Cohesion: 0.06
-Nodes (34): devDependencies, pino-pretty, @playwright/test, postcss, @praman/config, tailwindcss, @tailwindcss/postcss, @types/node (+26 more)
+Nodes (34): devDependencies, pino-pretty, @playwright/test, postcss, @applyonce/config, tailwindcss, @tailwindcss/postcss, @types/node (+26 more)
 
 ### Community 10 - "format.ts"
 Cohesion: 0.12
@@ -176,7 +176,7 @@ Nodes (19): PURPOSE_LABELS, ENUM_LABELS, DocCard(), DocCardData, EmptyState(), c
 
 ### Community 11 - "globalEnv"
 Cohesion: 0.07
-Nodes (30): BETTER_AUTH_*, ^build, DATABASE_URL, !.next/cache/**, NEXT_PUBLIC_*, NODE_ENV, PRAMAN_*, PROVIDER_* (+22 more)
+Nodes (30): BETTER_AUTH_*, ^build, DATABASE_URL, !.next/cache/**, NEXT_PUBLIC_*, NODE_ENV, APPLYONCE_*, PROVIDER_* (+22 more)
 
 ### Community 12 - "compilerOptions"
 Cohesion: 0.08
@@ -188,11 +188,11 @@ Nodes (21): devDependencies, turbo, typescript, engines, node, turbo, typescript
 
 ### Community 14 - "sdk/package.json"
 Cohesion: 0.09
-Nodes (21): dependencies, jose, @praman/schema, description, devDependencies, @types/node, typescript, vitest (+13 more)
+Nodes (21): dependencies, jose, @applyonce/schema, description, devDependencies, @types/node, typescript, vitest (+13 more)
 
-### Community 15 - "01 — Product Requirements Document: Praman"
+### Community 15 - "01 — Product Requirements Document: ApplyOnce"
 Cohesion: 0.10
-Nodes (20): 01 — Product Requirements Document: Praman, 1. Problem, 2. Vision, 3. Personas, 4.1 Education, 4.2 Identity & civic, 4.3 Financial & KYC, 4.4 Health (+12 more)
+Nodes (20): 01 — Product Requirements Document: ApplyOnce, 1. Problem, 2. Vision, 3. Personas, 4.1 Education, 4.2 Identity & civic, 4.3 Financial & KYC, 4.4 Health (+12 more)
 
 ### Community 16 - "Part B — HeroUI v3 integration notes (verified against the published npm packages, 2026-09-02)"
 Cohesion: 0.10
@@ -204,11 +204,11 @@ Nodes (20): 10. turbo 2.10 + pnpm workspaces, 11. motion 13, 12. @tanstack/react
 
 ### Community 18 - "1. API surface (Next.js route handlers, `/api/v1`)"
 Cohesion: 0.10
-Nodes (19): 05 — API, user flows, partner protocol, extension, 1. API surface (Next.js route handlers, `/api/v1`), 2. End-to-end flows, 3. `@praman/sdk` (partner-facing, tiny), 4. Demo exam portal script (what judges see, ~3 min), Applications, Auth, Consent & share (citizen side) (+11 more)
+Nodes (19): 05 — API, user flows, partner protocol, extension, 1. API surface (Next.js route handlers, `/api/v1`), 2. End-to-end flows, 3. `@applyonce/sdk` (partner-facing, tiny), 4. Demo exam portal script (what judges see, ~3 min), Applications, Auth, Consent & share (citizen side) (+11 more)
 
 ### Community 19 - "providers/package.json"
 Cohesion: 0.10
-Nodes (19): dependencies, @praman/schema, devDependencies, @types/node, typescript, vitest, exports, ./fixtures (+11 more)
+Nodes (19): dependencies, @applyonce/schema, devDependencies, @types/node, typescript, vitest, exports, ./fixtures (+11 more)
 
 ### Community 20 - "enums.ts"
 Cohesion: 0.10
@@ -222,9 +222,9 @@ Nodes (18): dependencies, jose, devDependencies, @types/node, typescript, vitest
 Cohesion: 0.11
 Nodes (18): dependencies, zod, devDependencies, @types/node, typescript, vitest, exports, @types/node (+10 more)
 
-### Community 23 - "04 — Design system ("Praman Bright")"
+### Community 23 - "04 — Design system ("ApplyOnce Bright")"
 Cohesion: 0.11
-Nodes (17): 04 — Design system ("Praman Bright"), 1. Personality, 2. Tokens (Tailwind v4 `@theme` + HeroUI theme), 3. Colour usage rules, 4. Motion, 5. Components (HeroUI v3 base → composed in `packages/ui`), 6. Layouts, 7. Complete page list (+9 more)
+Nodes (17): 04 — Design system ("ApplyOnce Bright"), 1. Personality, 2. Tokens (Tailwind v4 `@theme` + HeroUI theme), 3. Colour usage rules, 4. Motion, 5. Components (HeroUI v3 base → composed in `packages/ui`), 6. Layouts, 7. Complete page list (+9 more)
 
 ### Community 24 - "jobs/package.json"
 Cohesion: 0.11
@@ -250,7 +250,7 @@ Nodes (15): 03 — Data model, 1. Canonical Citizen Schema (`packages/schema`), 
 Cohesion: 0.12
 Nodes (15): 10 — PRD v2 (supersedes 01-PRD.md, kept consistent with it), 1. Problem, 2. Vision, 3. Personas & jobs-to-be-done, 4.1 Citizen web/PWA, 4.2 Partner console, 4.3 Admin, 4.4 Demo exam portal (`apps/demo-exam-portal`) (+7 more)
 
-### Community 30 - "India DPI & KYC Integration Landscape for Praman (2026)"
+### Community 30 - "India DPI & KYC Integration Landscape for ApplyOnce (2026)"
 Cohesion: 0.12
 Nodes (15): 10. Exam & Admission Bodies, 11. KYC/Identity Aggregators (2026 comparison), 12. Legal — DPDP Act 2023 + DPDP Rules 2025, 13. Auth Tech for Citizens, 1. DigiLocker — API Setu, Entity Locker, MeriPehchaan, 2. Aadhaar — Offline XML, Online OTP eKYC, Vault, Legal Boundaries, 3. PAN Verification, 4. ABHA / ABDM (Ayushman Bharat Digital Mission) (+7 more)
 
@@ -296,7 +296,7 @@ Nodes (11): enqueue(), g, JobMap, JobName, queue(), QUEUE_OF, queueFor(), QueueN
 
 ### Community 41 - "payload.ts"
 Cohesion: 0.26
-Nodes (11): APPLICATION_STATUSES, ApplicationStatus, CustomField, FieldDiffRow, FormDef, PramanPayload, SharedFact, WebhookEvent (+3 more)
+Nodes (11): APPLICATION_STATUSES, ApplicationStatus, CustomField, FieldDiffRow, FormDef, ApplyOncePayload, SharedFact, WebhookEvent (+3 more)
 
 ### Community 42 - "src/app/layout.tsx"
 Cohesion: 0.22
@@ -310,9 +310,9 @@ Nodes (9): 02 — Architecture, 1. Principles, 2. Stack (decided), 3. Monorepo l
 Cohesion: 0.22
 Nodes (9): dependencies, @aws-sdk/client-s3, react-dom, @tanstack/react-query, @tanstack/react-table, @aws-sdk/client-s3, react-dom, @tanstack/react-query (+1 more)
 
-### Community 45 - "Praman — Market, Competitors, Business Model & GTM Research"
+### Community 45 - "ApplyOnce — Market, Competitors, Business Model & GTM Research"
 Cohesion: 0.22
-Nodes (8): A. Global analogs, B. India landscape, C. Private competitors and adjacents, D. Business model options and TAM/SAM/SOM, E. Regulatory sequencing and GTM enablers, F. Risks and moats, G. Recommended 12-month GTM plan, Praman — Market, Competitors, Business Model & GTM Research
+Nodes (8): A. Global analogs, B. India landscape, C. Private competitors and adjacents, D. Business model options and TAM/SAM/SOM, E. Regulatory sequencing and GTM enablers, F. Risks and moats, G. Recommended 12-month GTM plan, ApplyOnce — Market, Competitors, Business Model & GTM Research
 
 ### Community 46 - "compilerOptions"
 Cohesion: 0.25
@@ -350,9 +350,9 @@ Nodes (5): extends, include, ../config/tsconfig.base.json, src, test
 Cohesion: 0.33
 Nodes (5): extends, include, ../config/tsconfig.base.json, src, test
 
-### Community 55 - "Praman — agent instructions"
+### Community 55 - "ApplyOnce — agent instructions"
 Cohesion: 0.40
-Nodes (4): Commands, Praman — agent instructions, Standing rules (stated once), Structure
+Nodes (4): Commands, ApplyOnce — agent instructions, Standing rules (stated once), Structure
 
 ### Community 56 - "08 — Integrations Plan"
 Cohesion: 0.40
@@ -362,9 +362,9 @@ Nodes (4): 08 — Integrations Plan, 1. Provider-by-provider plan, 2. DPDP Act 2
 Cohesion: 0.40
 Nodes (4): extends, include, ../config/tsconfig.base.json, src
 
-### Community 58 - "Praman — build kit"
+### Community 58 - "ApplyOnce — build kit"
 Cohesion: 0.50
-Nodes (3): Honest constraints baked into the plan, Praman — build kit, The one-paragraph pitch
+Nodes (3): Honest constraints baked into the plan, ApplyOnce — build kit, The one-paragraph pitch
 
 ## Knowledge Gaps
 - **644 isolated node(s):** `config`, `name`, `version`, `private`, `type` (+639 more)

@@ -1,5 +1,5 @@
-import { db, t, eq } from "@praman/db";
-import { PageHeader } from "@praman/ui";
+import { db, t, eq } from "@applyonce/db";
+import { PageHeader } from "@applyonce/ui";
 import { requirePartnerMember, canManage } from "@/components/partner/session";
 import { TeamForm } from "@/components/partner/team-form";
 

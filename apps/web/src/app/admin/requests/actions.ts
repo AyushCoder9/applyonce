@@ -1,6 +1,6 @@
 "use server";
 import { revalidatePath } from "next/cache";
-import { db, t, eq } from "@praman/db";
+import { db, t, eq } from "@applyonce/db";
 import { requireAdmin } from "@/lib/session";
 import { log } from "@/lib/api";
 /** Fulfil / annotate a data-principal request (admin only). Server action keeps the §3 API surface exact. */

@@ -5,7 +5,7 @@ import "./globals.css";
 
 export const metadata: Metadata = {
   title: "Bharat Test Agency — BTA-JEE 2026 Registration",
-  description: "Demo exam portal for the Praman project — deliberately painful manual form vs. one-click Apply with Praman.",
+  description: "Demo exam portal for the ApplyOnce project — deliberately painful manual form vs. one-click Apply with ApplyOnce.",
 };
 
 export default function RootLayout({ children }: { children: React.ReactNode }) {

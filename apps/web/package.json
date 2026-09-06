@@ -1,5 +1,5 @@
 {
-  "name": "@praman/web",
+  "name": "@applyonce/web",
   "version": "0.1.0",
   "private": true,
   "type": "module",
@@ -12,11 +12,11 @@
     "test:e2e": "playwright test"
   },
   "dependencies": {
-    "@praman/schema": "workspace:*",
-    "@praman/db": "workspace:*",
-    "@praman/crypto": "workspace:*",
-    "@praman/providers": "workspace:*",
-    "@praman/ui": "workspace:*",
+    "@applyonce/schema": "workspace:*",
+    "@applyonce/db": "workspace:*",
+    "@applyonce/crypto": "workspace:*",
+    "@applyonce/providers": "workspace:*",
+    "@applyonce/ui": "workspace:*",
     "next": "catalog:",
     "react": "catalog:",
     "react-dom": "catalog:",
@@ -40,10 +40,11 @@
     "pino": "catalog:",
     "@aws-sdk/client-s3": "catalog:",
     "@aws-sdk/s3-request-presigner": "catalog:",
-    "@praman/jobs": "workspace:*"
+    "@vercel/blob": "catalog:",
+    "@applyonce/jobs": "workspace:*"
   },
   "devDependencies": {
-    "@praman/config": "workspace:*",
+    "@applyonce/config": "workspace:*",
     "typescript": "catalog:",
     "@types/node": "catalog:",
     "@types/react": "catalog:",

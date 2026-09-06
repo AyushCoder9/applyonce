@@ -1,5 +1,5 @@
 import { z } from 'zod';
-import type { assessReadiness } from '@praman/schema';
+import type { assessReadiness } from '@applyonce/schema';
 type Report = ReturnType<typeof assessReadiness>;
 const output = z.object({summary:z.string().min(1).max(700),steps:z.array(z.string().min(1).max(250)).max(4)});
 

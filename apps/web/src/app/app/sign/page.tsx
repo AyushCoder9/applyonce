@@ -1,4 +1,4 @@
-import { PageHeader } from "@praman/ui";
+import { PageHeader } from "@applyonce/ui";
 import { requireUser } from "@/lib/session";
 import { DeclarationForm } from "@/components/declaration-form";
 export const metadata={title:"Declaration receipt"};

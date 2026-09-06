@@ -1,5 +1,5 @@
 import { z } from "zod";
-import { db, t } from "@praman/db";
+import { db, t } from "@applyonce/db";
 import { handler, ok, body } from "@/lib/api";
 import { extensionUser } from "../_auth";
 

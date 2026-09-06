@@ -2,9 +2,9 @@ import Link from "next/link";
 import { LinkButton } from "@/components/vault/link-button";
 import { redirect } from "next/navigation";
 import { Send, Upload, BadgeCheck, AlertTriangle, CalendarClock, ScanLine, ArrowRight, Sparkles } from "lucide-react";
-import { db, t, eq, and, isNull, desc, inArray, getDek, getFacts, completion } from "@praman/db";
-import { fieldsInSection, field, scopeContains, documentAllowed } from "@praman/schema";
-import { ProgressRing, SourceChip, fmtDate, daysUntil, label, EmptyState } from "@praman/ui";
+import { db, t, eq, and, isNull, desc, inArray, getDek, getFacts, completion } from "@applyonce/db";
+import { fieldsInSection, field, scopeContains, documentAllowed } from "@applyonce/schema";
+import { ProgressRing, SourceChip, fmtDate, daysUntil, label, EmptyState } from "@applyonce/ui";
 import { requireUser, requireProfileAccess, scopeAllows } from "@/lib/session";
 import { localeOf, tr } from "@/components/vault/i18n";
 
@@ -24,14 +24,16 @@ export default async function Home() {
   const coreKeys = CORE.filter((sec) => scopeAllows(a.scope, sec)).flatMap((sec) => fieldsInSection(sec).map((d) => d.key));
   const comp = completion(facts, coreKeys);
   const expiring = facts.filter((f) => f.expiresAt && (daysUntil(f.expiresAt) ?? 999) <= 60).sort((x, y) => (daysUntil(x.expiresAt) ?? 0) - (daysUntil(y.expiresAt) ?? 0));
-  const mismatches = await db.select().from(t.mismatches).where(and(eq(t.mismatches.profileId, a.profile.id), isNull(t.mismatches.resolvedAt)));
-  const apps = await db.select().from(t.applications).where(eq(t.applications.profileId, a.profile.id)).orderBy(desc(t.applications.updatedAt)).limit(8);
+  const [mismatches, apps, docs, running] = await Promise.all([
+    db.select().from(t.mismatches).where(and(eq(t.mismatches.profileId, a.profile.id), isNull(t.mismatches.resolvedAt))),
+    db.select().from(t.applications).where(eq(t.applications.profileId, a.profile.id)).orderBy(desc(t.applications.updatedAt)).limit(8),
+    db.select({ id: t.documents.id, title: t.documents.title, docType:t.documents.docType }).from(t.documents).where(eq(t.documents.profileId, a.profile.id)),
+    db.select({ id: t.verificationJobs.id }).from(t.verificationJobs).where(and(eq(t.verificationJobs.profileId, a.profile.id), inArray(t.verificationJobs.status, ["queued", "running"]))),
+  ]);
   const open = apps.filter((x) => !DONE.includes(x.status));
   const soon = open.filter((x) => x.deadlineAt && (daysUntil(x.deadlineAt) ?? 99) <= 7);
   const upcoming = open.filter((x) => x.deadlineAt && (daysUntil(x.deadlineAt) ?? -1) >= 0).sort((x, y) => +new Date(x.deadlineAt!) - +new Date(y.deadlineAt!)).slice(0, 5);
-  const docs = await db.select({ id: t.documents.id, title: t.documents.title, docType:t.documents.docType }).from(t.documents).where(eq(t.documents.profileId, a.profile.id));
   const toReview = docs.length ? await db.select({ documentId: t.documentExtractions.documentId }).from(t.documentExtractions).where(and(inArray(t.documentExtractions.documentId, docs.filter(d=>documentAllowed(a.scope,d.docType)).map((d) => d.id)), isNull(t.documentExtractions.reviewedAt))) : [];
-  const running = await db.select({ id: t.verificationJobs.id }).from(t.verificationJobs).where(and(eq(t.verificationJobs.profileId, a.profile.id), inArray(t.verificationJobs.status, ["queued", "running"])));
 
   const name = String(facts.find((f) => f.key === "identity.first_name")?.value ?? a.profile.displayName.split(" ")[0]);
   const h = new Date().getHours();

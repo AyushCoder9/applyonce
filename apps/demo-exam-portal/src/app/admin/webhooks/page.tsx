@@ -8,15 +8,15 @@ export default function WebhooksAdminPage() {
 
   return (
     <div>
-      <h1 style={{ fontSize: 20, marginBottom: 4 }}>Praman webhook log</h1>
+      <h1 style={{ fontSize: 20, marginBottom: 4 }}>ApplyOnce webhook log</h1>
       <p style={{ marginTop: 0, marginBottom: 18, color: "var(--color-gov-ink-2)", fontSize: 13 }}>
-        Last {events.length} event(s) received at <code>/api/praman/webhook</code>, newest first. HMAC-verified requests are marked{" "}
+        Last {events.length} event(s) received at <code>/api/applyonce/webhook</code>, newest first. HMAC-verified requests are marked{" "}
         <span className="badge badge-verified">verified</span>; rejected ones are kept for debugging.
       </p>
 
       {events.length === 0 && (
         <div className="gov-card" style={{ padding: 20, textAlign: "center", color: "var(--color-gov-ink-2)" }}>
-          No webhook events received yet. Trigger one from Praman (e.g. revoke a consent) or POST to <code>/api/praman/webhook</code> directly.
+          No webhook events received yet. Trigger one from ApplyOnce (e.g. revoke a consent) or POST to <code>/api/applyonce/webhook</code> directly.
         </div>
       )}
 

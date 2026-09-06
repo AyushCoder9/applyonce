@@ -1,5 +1,5 @@
-import { documentAllowed } from "@praman/schema";
-import { db, t, eq, desc } from "@praman/db";
+import { documentAllowed } from "@applyonce/schema";
+import { db, t, eq, desc } from "@applyonce/db";
 import { handler, citizen, ok, ApiError } from "@/lib/api";
 import { loadFacts } from "../../profiles/_lib";
 /** GET → document + extractions + linked facts (facts whose evidence is this document). */

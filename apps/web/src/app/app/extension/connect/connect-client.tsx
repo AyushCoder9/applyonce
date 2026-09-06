@@ -8,7 +8,7 @@ type Status = "idle" | "minting" | "waiting" | "connected" | "error";
 /**
  * Mints a 30-day extension token and hands it to the extension via `postMessage` —
  * the content script's handshake listener (matched to this origin) picks it up,
- * forwards it to the background service worker, and replies PRAMAN_EXT_CONNECTED.
+ * forwards it to the background service worker, and replies APPLYONCE_EXT_CONNECTED.
  * The token is also shown with a copy button as a fallback for pasting into the popup.
  */
 export function ConnectExtension() {
@@ -22,7 +22,7 @@ export function ConnectExtension() {
   useEffect(() => {
     function onMessage(e: MessageEvent) {
       if (e.source !== window || e.origin !== window.location.origin) return;
-      if (e.data?.type === "PRAMAN_EXT_CONNECTED") {
+      if (e.data?.type === "APPLYONCE_EXT_CONNECTED") {
         setStatus("connected");
         if (timeoutRef.current) clearTimeout(timeoutRef.current);
       }
@@ -44,7 +44,7 @@ export function ConnectExtension() {
       // packed into one opaque code — the popup never has to guess the app's URL.
       setConnectionCode(btoa(JSON.stringify({ token, expiresAt: exp, apiBase: window.location.origin, user, profiles })));
       setStatus("waiting");
-      window.postMessage({ type: "PRAMAN_EXT_TOKEN", token, expiresAt: exp, user, profiles }, window.location.origin);
+      window.postMessage({ type: "APPLYONCE_EXT_TOKEN", token, expiresAt: exp, user, profiles }, window.location.origin);
       timeoutRef.current = setTimeout(() => setStatus((s) => (s === "waiting" ? "idle" : s)), 15000);
     } catch (e) {
       setStatus("error");
@@ -65,7 +65,7 @@ export function ConnectExtension() {
         <div className="flex size-11 shrink-0 items-center justify-center rounded-md bg-brand-50 text-brand-600"><Puzzle className="size-6" /></div>
         <div>
           <h1 className="font-display text-xl font-bold">Connect this browser&apos;s extension</h1>
-          <p className="mt-1 text-sm text-ink-2">Praman Autofill fills exam and scholarship forms for you. One click here connects the extension installed in this browser.</p>
+          <p className="mt-1 text-sm text-ink-2">ApplyOnce Autofill fills exam and scholarship forms for you. One click here connects the extension installed in this browser.</p>
         </div>
       </div>
 

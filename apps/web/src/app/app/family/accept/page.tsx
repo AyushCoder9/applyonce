@@ -1,8 +1,8 @@
-import { db, t, eq } from "@praman/db";
+import { db, t, eq } from "@applyonce/db";
 import { requireUser } from "@/lib/session";
 import { verifyFamilyToken } from "@/app/api/v1/family/_tokens";
 import { AcceptClient } from "@/components/family/accept-client";
-import { EmptyState } from "@praman/ui";
+import { EmptyState } from "@applyonce/ui";
 import Link from "next/link";
 
 export const metadata = { title: "Accept access" };

@@ -1,4 +1,4 @@
-/** Hand-rolled minimal single-page PDF — no library, just enough for a demo "attach from Praman" preview. */
+/** Hand-rolled minimal single-page PDF — no library, just enough for a demo "attach from ApplyOnce" preview. */
 export function tinyPdf(title: string, subtitle = "SAMPLE ONLY - NOT AN ISSUER DOCUMENT"): Buffer {
   const esc = (s: string) => s.replace(/([()\\])/g, "\\$1");
   const line1 = esc(title).slice(0, 70);

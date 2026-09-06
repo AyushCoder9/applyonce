@@ -1,4 +1,4 @@
-import { PageHeader } from "@praman/ui";
+import { PageHeader } from "@applyonce/ui";
 import { requirePartnerMember, canManage } from "@/components/partner/session";
 import { SettingsForm } from "@/components/partner/settings-form";
 

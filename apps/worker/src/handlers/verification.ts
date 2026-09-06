@@ -1,9 +1,9 @@
 /** verification queue: digilocker.sync, pan.verify, aa.income, abha.link */
 import { randomUUID } from "node:crypto";
-import { db, eq, and, getDek, putFact, getFacts, documents, providerLinks, verificationJobs, mismatches } from "@praman/db";
-import { decryptString, sha256 } from "@praman/crypto";
-import { providers, docToFacts, type AadhaarOfflineKyc } from "@praman/providers";
-import { enqueue, type JobMap } from "@praman/jobs";
+import { db, eq, and, getDek, putFact, getFacts, documents, providerLinks, verificationJobs, mismatches } from "@applyonce/db";
+import { decryptString, sha256 } from "@applyonce/crypto";
+import { providers, docToFacts, type AadhaarOfflineKyc } from "@applyonce/providers";
+import { enqueue, type JobMap } from "@applyonce/jobs";
 import { putObject } from "../s3";
 import { logger } from "../logger";
 

@@ -1,4 +1,4 @@
-# Praman — agent instructions
+# ApplyOnce — agent instructions
 
 Read `docs/` before planning. `docs/03-DATA-MODEL.md` + `packages/schema/src/registry.ts` are the source of truth for every field name; never invent a `fact_key`. Current build contract: `docs/plans/2026-09-02-build-plan.md`.
 
@@ -17,7 +17,7 @@ Read `docs/` before planning. `docs/03-DATA-MODEL.md` + `packages/schema/src/reg
 ## Commands
 `docker compose up -d` (postgres :5434, redis :6380, minio :9002) · `cp .env.example .env` · `pnpm db:reset` (drop + migrate + seed) · `pnpm dev` (web :3300, worker, demo portal :3301) · `pnpm test` · `pnpm typecheck` · `pnpm graph`
 
-Demo logins (mock SMS, OTP **123456**): 9876543210 Aarav (student) · 9876500002 Sunita (parent, guardian of Riya + Kamla) · 9123456780 Vikram (job seeker) · 9000000001 BTA partner admin · 9000000000 Praman admin.
+Demo logins (mock SMS, OTP **123456**): 9876543210 Aarav (student) · 9876500002 Sunita (parent, guardian of Riya + Kamla) · 9123456780 Vikram (job seeker) · 9000000001 BTA partner admin · 9000000000 ApplyOnce admin.
 
 ## Structure
 `apps/web` (Next 16: citizen app, partner console, admin, public, share flow) · `apps/worker` (BullMQ) · `apps/demo-exam-portal` (Bharat Test Agency) · `apps/extension` (Chrome MV3) · `packages/schema` (registry) · `packages/db` (Drizzle) · `packages/crypto` · `packages/providers` · `packages/jobs` · `packages/sdk` · `packages/ui` · `packages/config`. Domains: identity · profiles · documents · verification · consent · applications · partners · notifications · audit.

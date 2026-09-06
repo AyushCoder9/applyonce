@@ -3,7 +3,7 @@ import { useState } from "react";
 import { useRouter } from "next/navigation";
 import { Button, TextField, Label, Input, Select, ListBox, Checkbox, Alert, Switch, toast } from "@heroui/react";
 import { KeyRound, Webhook, Trash2, Send } from "lucide-react";
-import { fmtDate } from "@praman/ui";
+import { fmtDate } from "@applyonce/ui";
 import { createApiKey, revokeApiKey, createWebhook, updateWebhook, deleteWebhook, testWebhook } from "./actions";
 import { CopyButton } from "./form-tools";
 
@@ -42,7 +42,7 @@ export function DevelopersPanel({ keys, hooks, deliveries, canManage, verified, 
       </section>
 
       <section className="card p-5">
-        <div className="mb-3 flex items-center gap-2"><Webhook className="size-5 text-brand-600" /><h2 className="font-display text-lg font-bold">Webhooks</h2><span className="ml-auto text-xs text-ink-3">HMAC-SHA256 · X-Praman-Signature · retried 5×</span></div>
+        <div className="mb-3 flex items-center gap-2"><Webhook className="size-5 text-brand-600" /><h2 className="font-display text-lg font-bold">Webhooks</h2><span className="ml-auto text-xs text-ink-3">HMAC-SHA256 · X-ApplyOnce-Signature · retried 5×</span></div>
         <ul className="grid gap-2 text-sm">
           {hooks.map((h) => (
             <li key={h.id} className="flex flex-wrap items-center gap-3 rounded-md border border-line p-3">
@@ -57,7 +57,7 @@ export function DevelopersPanel({ keys, hooks, deliveries, canManage, verified, 
         </ul>
         {canManage && (
           <div className="mt-4 grid gap-3 border-t border-line pt-4">
-            <TextField value={url} onChange={setUrl} type="url"><Label>Endpoint URL</Label><Input placeholder="https://portal.example/api/praman/webhook" /></TextField>
+            <TextField value={url} onChange={setUrl} type="url"><Label>Endpoint URL</Label><Input placeholder="https://portal.example/api/applyonce/webhook" /></TextField>
             <div className="flex flex-wrap gap-4">{EVENTS.map((e) => <Checkbox key={e} isSelected={events.has(e)} onChange={(v) => setEvents((s) => { const n = new Set(s); if (v) n.add(e); else n.delete(e); return n; })}><Checkbox.Content><Checkbox.Control><Checkbox.Indicator /></Checkbox.Control><code className="font-mono text-xs">{e}</code></Checkbox.Content></Checkbox>)}</div>
             <div><Button className="cta" isDisabled={!url || !events.size} isPending={busy} onPress={() => run(createWebhook({ url, events: [...events] }), (d) => { setShown({ kind: "secret", value: d.secret }); setUrl(""); })} data-testid="create-webhook">Add endpoint</Button></div>
           </div>
@@ -66,7 +66,7 @@ export function DevelopersPanel({ keys, hooks, deliveries, canManage, verified, 
 
       <section className="card p-5">
         <h2 className="mb-2 font-display text-lg font-bold">Verify payloads</h2>
-        <p className="text-sm text-ink-2">Every payload is an ES256 JWS. Public keys: <a className="text-brand-600 underline" href={`${appUrl}/api/v1/jwks`} target="_blank" rel="noreferrer"><code className="font-mono">{appUrl}/api/v1/jwks</code></a>. Use <code className="font-mono">@praman/sdk</code> `exchange()` or jose `createRemoteJWKSet`.</p>
+        <p className="text-sm text-ink-2">Every payload is an ES256 JWS. Public keys: <a className="text-brand-600 underline" href={`${appUrl}/api/v1/jwks`} target="_blank" rel="noreferrer"><code className="font-mono">{appUrl}/api/v1/jwks</code></a>. Use <code className="font-mono">@applyonce/sdk</code> `exchange()` or jose `createRemoteJWKSet`.</p>
       </section>
 
       <section className="card p-5">

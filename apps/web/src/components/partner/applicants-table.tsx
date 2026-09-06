@@ -2,8 +2,8 @@
 import { useState } from "react";
 import { useRouter } from "next/navigation";
 import { Button, Drawer, Select, ListBox, Label, TextField, Input, Checkbox, toast, Chip } from "@heroui/react";
-import { APPLICATION_STATUSES, type PramanPayload } from "@praman/schema";
-import { DataTable, SourceChip, fmtValue, fmtDate, label as keyLabel, type DataColumn } from "@praman/ui";
+import { APPLICATION_STATUS_TRANSITIONS, type ApplicationStatus, type ApplyOncePayload } from "@applyonce/schema";
+import { DataTable, SourceChip, fmtValue, fmtDate, label as keyLabel, type DataColumn } from "@applyonce/ui";
 import { STATUS_META } from "@/components/applications/model";
 import { getApplicantPayload, pushStatusAction, requestVerificationAction } from "./actions";
 
@@ -12,7 +12,7 @@ export interface ApplicantRow { id: string; applicant: string; form: string; sta
 export function ApplicantsTable({ rows }: { rows: ApplicantRow[] }) {
   const router = useRouter();
   const [open, setOpen] = useState<ApplicantRow | null>(null);
-  const [data, setData] = useState<{ payload: PramanPayload; exchanged_at: string | null; consent_status: string } | null>(null);
+  const [data, setData] = useState<{ payload: ApplyOncePayload; exchanged_at: string | null; consent_status: string } | null>(null);
   const [payloadError, setPayloadError] = useState<string | null>(null);
   const [status, setStatus] = useState("under_review");
   const [note, setNote] = useState("");
@@ -20,6 +20,8 @@ export function ApplicantsTable({ rows }: { rows: ApplicantRow[] }) {
   const [pick, setPick] = useState<Set<string>>(new Set());
   const [reason, setReason] = useState("");
   const [busy, setBusy] = useState(false);
+
+  const availableStatuses = open ? APPLICATION_STATUS_TRANSITIONS[open.status as ApplicationStatus] : [];
 
   const openRow = async (r: ApplicantRow) => {
     setOpen(r); setData(null); setPayloadError(null); setPick(new Set()); setStatus(r.status === "submitted" ? "under_review" : r.status); setRef(r.externalRef ?? "");
@@ -33,7 +35,10 @@ export function ApplicantsTable({ rows }: { rows: ApplicantRow[] }) {
     const r = await pushStatusAction(open.id, { status, note: note || undefined, externalRef: ref || undefined });
     setBusy(false);
     if (!r.ok) return toast.danger(r.error);
-    toast.success(`Status pushed: ${STATUS_META[status as keyof typeof STATUS_META]?.label ?? status}`); setNote(""); router.refresh();
+    toast.success(`Status pushed: ${STATUS_META[status as keyof typeof STATUS_META]?.label ?? status}`);
+    setOpen({ ...open, status: r.data.status });
+    setStatus(APPLICATION_STATUS_TRANSITIONS[r.data.status as ApplicationStatus][0] ?? r.data.status);
+    setNote(""); router.refresh();
   };
   const reverify = async () => {
     if (!open || !pick.size) return; setBusy(true);
@@ -62,13 +67,18 @@ export function ApplicantsTable({ rows }: { rows: ApplicantRow[] }) {
                 <section className="grid gap-3 rounded-md border border-line p-3">
                   <h3 className="font-display font-bold">Push status</h3>
                   <div className="grid gap-3 sm:grid-cols-2">
-                    <Select selectedKey={status} onSelectionChange={(k) => setStatus(String(k))} fullWidth><Label>Status</Label><Select.Trigger><Select.Value /><Select.Indicator /></Select.Trigger><Select.Popover><ListBox>{APPLICATION_STATUSES.map((s) => <ListBox.Item key={s} id={s} textValue={STATUS_META[s].label}>{STATUS_META[s].label}<ListBox.ItemIndicator /></ListBox.Item>)}</ListBox></Select.Popover></Select>
+                    <Select selectedKey={availableStatuses.includes(status as ApplicationStatus) ? status : null} onSelectionChange={(k) => setStatus(String(k))} isDisabled={!availableStatuses.length} fullWidth>
+                      <Label>Next status</Label>
+                      <Select.Trigger><Select.Value /><Select.Indicator /></Select.Trigger>
+                      <Select.Popover><ListBox>{availableStatuses.map((s) => <ListBox.Item key={s} id={s} textValue={STATUS_META[s].label}>{STATUS_META[s].label}<ListBox.ItemIndicator /></ListBox.Item>)}</ListBox></Select.Popover>
+                    </Select>
                     <TextField value={ref} onChange={setRef}><Label>Your reference</Label><Input placeholder="e.g. BTA-2026-001742" /></TextField>
                   </div>
                   <TextField value={note} onChange={setNote}><Label>Note to the applicant</Label><Input placeholder="e.g. Admit card released — download from the portal" /></TextField>
-                  <div className="flex justify-end"><Button className="cta" onPress={push} isPending={busy} data-testid="push-status">Push status</Button></div>
+                  {!availableStatuses.length && <p role="status" className="text-sm text-ink-2">This application has reached a final status. No later status can be pushed.</p>}
+                  <div className="flex justify-end"><Button className="cta" onPress={push} isDisabled={!availableStatuses.length || busy} isPending={busy} data-testid="push-status">Push status</Button></div>
                 </section>
-                {!open.hasPayload ? <p className="text-sm text-ink-2">No Praman payload for this application.</p> : payloadError ? <p role="status" className="rounded-md bg-pending-50 p-3 text-sm text-pending-700">{payloadError}</p> : !data ? <p className="text-sm text-ink-2">Decrypting payload…</p> : (
+                {!open.hasPayload ? <p className="text-sm text-ink-2">No ApplyOnce payload for this application.</p> : payloadError ? <p role="status" className="rounded-md bg-pending-50 p-3 text-sm text-pending-700">{payloadError}</p> : !data ? <p className="text-sm text-ink-2">Decrypting payload…</p> : (
                   <section className="grid gap-3">
                     <div className="flex flex-wrap items-center gap-2 text-sm text-ink-2"><span>{data.payload.facts.length} fields</span><span>·</span><span>consent <code className="font-mono text-xs">{data.payload.consent_id.slice(0, 8)}…</code> {data.consent_status}</span><span>·</span><span>{data.exchanged_at ? `exchanged ${fmtDate(data.exchanged_at)}` : "not exchanged yet"}</span>{data.payload.profile.guardian_acting && <Chip size="sm" color="warning">guardian acting</Chip>}</div>
                     {data.consent_status === "revoked" && <p className="rounded-md bg-danger-50 px-3 py-2 text-sm text-danger-500">The citizen revoked this consent. Stop using the data per your retention policy.</p>}

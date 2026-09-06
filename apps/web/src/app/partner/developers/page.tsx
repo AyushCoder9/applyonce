@@ -1,7 +1,8 @@
-import { db, t, eq, desc, inArray } from "@praman/db";
-import { PageHeader } from "@praman/ui";
+import { db, t, eq, desc, inArray } from "@applyonce/db";
+import { PageHeader } from "@applyonce/ui";
 import { requirePartnerMember, canManage } from "@/components/partner/session";
 import { DevelopersPanel } from "@/components/partner/developers-panel";
+import { deploymentAppUrl } from "@/lib/urls";
 
 export const metadata = { title: "Developers" };
 
@@ -13,7 +14,7 @@ export default async function DevelopersPage() {
   return (
     <>
       <PageHeader title="Developers" subtitle="Keys are shown once and stored hashed. Webhooks are signed with a per-endpoint secret." />
-      <DevelopersPanel canManage={canManage(role)} verified={partner.status === "verified"} appUrl={process.env.NEXT_PUBLIC_APP_URL ?? "http://localhost:3300"}
+      <DevelopersPanel canManage={canManage(role)} verified={partner.status === "verified"} appUrl={deploymentAppUrl()}
         keys={keys.map((k) => ({ id: k.id, env: k.env, prefix: k.prefix, label: k.label, createdAt: k.createdAt.toISOString(), lastUsedAt: k.lastUsedAt?.toISOString() ?? null, revokedAt: k.revokedAt?.toISOString() ?? null }))}
         hooks={hooks.map((h) => ({ id: h.id, url: h.url, events: h.events, active: h.active, createdAt: h.createdAt.toISOString() }))}
         deliveries={deliveries.map((d) => ({ id: d.id, event: d.event, status: d.status, attempts: d.attempts, responseStatus: d.responseStatus, lastError: d.lastError, createdAt: d.createdAt.toISOString(), url: hooks.find((h) => h.id === d.webhookId)?.url ?? "" }))} />

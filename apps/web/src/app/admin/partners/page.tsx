@@ -1,6 +1,6 @@
 import { Chip } from "@/components/client-ui";
-import { db, t, desc, eq, count } from "@praman/db";
-import { PageHeader, fmtDate } from "@praman/ui";
+import { db, t, desc, eq, count } from "@applyonce/db";
+import { PageHeader, fmtDate } from "@applyonce/ui";
 import { PartnerStatus } from "@/components/admin/actions";
 export const dynamic = "force-dynamic";
 const COLOR = { pending: "warning", verified: "success", suspended: "danger" } as const;

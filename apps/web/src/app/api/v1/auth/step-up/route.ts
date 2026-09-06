@@ -1,6 +1,6 @@
 import { z } from "zod";
 import { headers } from "next/headers";
-import { db, t, eq } from "@praman/db";
+import { db, t, eq } from "@applyonce/db";
 import { handler, citizen, body, ok, ApiError, log } from "@/lib/api";
 import { auth } from "@/lib/auth";
 import { STEP_UP_WINDOW_MS } from "@/lib/session";

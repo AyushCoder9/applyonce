@@ -1,5 +1,5 @@
 import { ShieldCheck, ScanLine, PenLine, AlertTriangle, Clock } from "lucide-react";
-import type { Source } from "@praman/schema";
+import type { Source } from "@applyonce/schema";
 import { SOURCE_META, verifierName, daysUntil, cx, type Locale } from "./format";
 
 const TONE = {

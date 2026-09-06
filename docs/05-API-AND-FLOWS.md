@@ -27,7 +27,7 @@ All responses `{ ok, data | error: {code, message, fields?} }`. Auth: session co
 `POST /partner/share-sessions` `{form_id, return_url, state}` → `{share_url, session_id}` (server-side; the button just opens `share_url`)
 `POST /partner/share-sessions/:id/exchange` `{share_token}` → `{payload_jws, consent_id, application_id}` — single use, 10-min TTL
 `GET /partner/jwks` (public keys) · `POST /partner/applications/:id/status` `{status, note, external_ref}` · `POST /partner/verification-requests` `{application_id, fact_keys, reason}` · `GET /partner/forms` · `POST /partner/forms` · `POST /partner/webhooks/test`
-Webhook events (HMAC-SHA256 `X-Praman-Signature`, retried 5× exp backoff): `share.completed`, `consent.revoked`, `verification.updated`, `application.withdrawn`.
+Webhook events (HMAC-SHA256 `X-ApplyOnce-Signature`, retried 5× exp backoff): `share.completed`, `consent.revoked`, `verification.updated`, `application.withdrawn`.
 
 ### Data principal
 `POST /me/export` (job → signed ZIP: JSON + PDFs) · `POST /me/erase` (30-day grace, legal holds) · `GET /me/audit`
@@ -43,8 +43,8 @@ Webhook events (HMAC-SHA256 `X-Praman-Signature`, retried 5× exp backoff): `sha
 6. Step 6: create passkey (WebAuthn, platform authenticator) → Home.
 Mock mode: step 2 shows a fake DigiLocker consent screen and returns the seeded fixture in ~2 s with progress animation.
 
-### F2 — Apply with Praman (partner-initiated)
-1. Partner server: `POST /partner/share-sessions` → `share_url`. Button (from `@praman/sdk`) opens it (popup or redirect).
+### F2 — Apply with ApplyOnce (partner-initiated)
+1. Partner server: `POST /partner/share-sessions` → `share_url`. Button (from `@applyonce/sdk`) opens it (popup or redirect).
 2. `/share/:token` (citizen, logged in or logs in): shows partner card (verified org badge), purpose, retention, then `FieldDiff`: 44 requested · 39 available (36 verified) · 5 missing.
 3. Missing fields → inline mini-form (e.g., exam city choices); optional custom questions.
 4. Step-up (passkey) → `POST /share/:token/consent`: creates `consents`, `applications(status=submitted, source=sdk)`, `shares` (payload JWS stored encrypted), returns `return_url?share_token=…&state=…`.
@@ -54,8 +54,8 @@ Invariant tests: no consent → no share; scope ⊆ form fields; revoked consent
 
 ### F3 — Extension autofill (no partner integration)
 1. User installs extension, logs in (passkey via web page handshake → short-lived extension token).
-2. On a known portal (recipe matched by URL + DOM fingerprint): badge shows "Praman can fill 38 fields". Click → step-up in popup → `GET /extension/fill-plan?recipe=nta-jee&profile=…` returns field→value map (values decrypted server-side, sent over TLS, never cached on disk).
-3. Content script fills inputs/selects/radios sequentially with highlight sweep; skips captcha/file inputs; documents show "attach from Praman" helper listing the right file (downloads on click).
+2. On a known portal (recipe matched by URL + DOM fingerprint): badge shows "ApplyOnce can fill 38 fields". Click → step-up in popup → `GET /extension/fill-plan?recipe=nta-jee&profile=…` returns field→value map (values decrypted server-side, sent over TLS, never cached on disk).
+3. Content script fills inputs/selects/radios sequentially with highlight sweep; skips captcha/file inputs; documents show "attach from ApplyOnce" helper listing the right file (downloads on click).
 4. After submit, recipe captures application number → `POST /applications` (source=extension) with external_ref + screenshot of confirmation (optional, user-approved).
 Recipes live in `apps/extension/recipes/*.json` (`match`, `fields[] {selector, fact_key, transform}`); `generic` recipe uses label-text heuristics. Community-contributable.
 
@@ -68,17 +68,17 @@ Add minor: creates ward profile + `relations(basis=minor, scope=*)`; guardian ac
 ### F6 — Expiry & mismatch
 Nightly job scans `facts.expires_at` (OBC-NCL 1 yr, income cert, passport, DL) → reminders at 60/30/7 days with "re-fetch from DigiLocker" one-tap. Mismatch job compares name/DOB across sources with normalised comparison (transliteration-aware); severity high if partners commonly reject.
 
-## 3. `@praman/sdk` (partner-facing, tiny)
+## 3. `@applyonce/sdk` (partner-facing, tiny)
 ```html
-<script src="https://cdn.praman.in/sdk.js"></script>
-<button data-praman-form="bta-jee-2026">Apply with Praman</button>
-<script>Praman.init({ createSession: "/api/praman/session" })</script>
+<script src="https://cdn.applyonce.in/sdk.js"></script>
+<button data-applyonce-form="bta-jee-2026">Apply with ApplyOnce</button>
+<script>ApplyOnce.init({ createSession: "/api/applyonce/session" })</script>
 ```
-Server helper (Node): `praman.createShareSession({formId, returnUrl, state})`, `praman.exchange(shareToken)` → verified typed payload (`PramanPayload` from `packages/schema`), `praman.verifyWebhook(req)`, `praman.pushStatus(applicationId, status)`.
+Server helper (Node): `applyonce.createShareSession({formId, returnUrl, state})`, `applyonce.exchange(shareToken)` → verified typed payload (`ApplyOncePayload` from `packages/schema`), `applyonce.verifyWebhook(req)`, `applyonce.pushStatus(applicationId, status)`.
 
 ## 4. Demo exam portal script (what judges see, ~3 min)
 1. Open BTA form → click "Fill manually" → 6 steps, 48 fields, timer visible (they feel the pain for 20 s).
-2. Back → "Apply with Praman" → Praman consent screen shows 44 fields, 36 verified by CBSE/UIDAI/NSDL, 5 missing → fill 5 → passkey → back to BTA with everything filled + verified badges + attached marksheet & category certificate → submit → application ref.
-3. In Praman tracker the application appears. BTA admin pushes "Admit card released" → notification in Praman.
+2. Back → "Apply with ApplyOnce" → ApplyOnce consent screen shows 44 fields, 36 verified by CBSE/UIDAI/NSDL, 5 missing → fill 5 → passkey → back to BTA with everything filled + verified badges + attached marksheet & category certificate → submit → application ref.
+3. In ApplyOnce tracker the application appears. BTA admin pushes "Admit card released" → notification in ApplyOnce.
 4. Open Connections → show exactly what BTA received; revoke → BTA webhook fires.
 5. Open Family → switch to sister Riya's profile → same form filled as guardian.

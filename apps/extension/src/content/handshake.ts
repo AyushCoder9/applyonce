@@ -1,12 +1,12 @@
 /**
- * Runs only on the Praman app origin (see manifest content_scripts matches).
- * Listens for `window.postMessage({type:"PRAMAN_EXT_TOKEN", ...})` from the
+ * Runs only on the ApplyOnce app origin (see manifest content_scripts matches).
+ * Listens for `window.postMessage({type:"APPLYONCE_EXT_TOKEN", ...})` from the
  * `/app/extension/connect` page, hands the token to the background service worker
- * (the only place it's stored), then replies `PRAMAN_EXT_CONNECTED` so the page can
+ * (the only place it's stored), then replies `APPLYONCE_EXT_CONNECTED` so the page can
  * show a confirmation state.
  */
 interface ExtTokenMessage {
-  type: "PRAMAN_EXT_TOKEN";
+  type: "APPLYONCE_EXT_TOKEN";
   token: string;
   expiresAt: string;
   user: { name: string };
@@ -15,7 +15,7 @@ interface ExtTokenMessage {
 
 function isExtTokenMessage(data: unknown): data is ExtTokenMessage {
   const d = data as Partial<ExtTokenMessage> | null;
-  return !!d && d.type === "PRAMAN_EXT_TOKEN" && typeof d.token === "string" && typeof d.expiresAt === "string" && !!d.user && Array.isArray(d.profiles);
+  return !!d && d.type === "APPLYONCE_EXT_TOKEN" && typeof d.token === "string" && typeof d.expiresAt === "string" && !!d.user && Array.isArray(d.profiles);
 }
 
 window.addEventListener("message", (event: MessageEvent) => {
@@ -24,10 +24,10 @@ window.addEventListener("message", (event: MessageEvent) => {
   const { token, expiresAt, user, profiles } = event.data;
 
   chrome.runtime.sendMessage(
-    { type: "PRAMAN_SET_TOKEN", token, expiresAt, apiBase: window.location.origin, user, profiles },
+    { type: "APPLYONCE_SET_TOKEN", token, expiresAt, apiBase: window.location.origin, user, profiles },
     () => {
       if (chrome.runtime.lastError) return; // background not ready; user can use the copy/paste fallback
-      window.postMessage({ type: "PRAMAN_EXT_CONNECTED" }, window.location.origin);
+      window.postMessage({ type: "APPLYONCE_EXT_CONNECTED" }, window.location.origin);
     },
   );
 });

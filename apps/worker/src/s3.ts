@@ -2,17 +2,17 @@
 import { S3Client, PutObjectCommand, GetObjectCommand } from "@aws-sdk/client-s3";
 import { getSignedUrl } from "@aws-sdk/s3-request-presigner";
 
-const g = globalThis as unknown as { __pramanS3?: S3Client };
+const g = globalThis as unknown as { __applyonceS3?: S3Client };
 
 export const s3 = () =>
-  (g.__pramanS3 ??= new S3Client({
+  (g.__applyonceS3 ??= new S3Client({
     endpoint: process.env.S3_ENDPOINT ?? "http://localhost:9002",
     region: process.env.S3_REGION ?? "us-east-1",
     forcePathStyle: (process.env.S3_FORCE_PATH_STYLE ?? "true") === "true",
-    credentials: { accessKeyId: process.env.S3_ACCESS_KEY ?? "praman", secretAccessKey: process.env.S3_SECRET_KEY ?? "praman123" },
+    credentials: { accessKeyId: process.env.S3_ACCESS_KEY ?? "applyonce", secretAccessKey: process.env.S3_SECRET_KEY ?? "applyonce123" },
   }));
 
-export const BUCKET = () => process.env.S3_BUCKET ?? "praman-docs";
+export const BUCKET = () => process.env.S3_BUCKET ?? "applyonce-docs";
 
 export async function putObject(key: string, body: Uint8Array, contentType = "application/pdf") {
   await s3().send(new PutObjectCommand({ Bucket: BUCKET(), Key: key, Body: body, ContentType: contentType }));

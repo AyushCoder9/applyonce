@@ -1,7 +1,7 @@
-import { documentAllowed } from "@praman/schema";
+import { documentAllowed } from "@applyonce/schema";
 import { z } from "zod";
-import { db, t, eq, and, getDek, putFact } from "@praman/db";
-import { coerce, isFactKey } from "@praman/schema";
+import { db, t, eq, and, getDek, putFact } from "@applyonce/db";
+import { coerce, isFactKey } from "@applyonce/schema";
 import { handler, citizen, body, ok, ApiError, log } from "@/lib/api";
 import { scopeAllows } from "@/lib/session";
 /** POST {accept: string[]} → writes accepted proposed facts as document_extracted; marks the extraction reviewed. */

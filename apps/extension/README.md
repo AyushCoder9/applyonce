@@ -1,29 +1,29 @@
-# Praman Autofill (Chrome MV3)
+# ApplyOnce Autofill (Chrome MV3)
 
-Fills exam/scholarship/KYC forms from your verified Praman vault. Built with
+Fills exam/scholarship/KYC forms from your verified ApplyOnce vault. Built with
 `@crxjs/vite-plugin` + React + Tailwind. See `docs/05-API-AND-FLOWS.md` §F3 and
 `docs/04-DESIGN-SYSTEM.md` §4 for the product spec this implements.
 
 ## Load unpacked
 
 ```
-pnpm --filter @praman/extension build   # writes apps/extension/dist
+pnpm --filter @applyonce/extension build   # writes apps/extension/dist
 ```
 
 Then in Chrome: `chrome://extensions` → enable **Developer mode** → **Load unpacked**
 → select `apps/extension/dist`. Reload the extension after every rebuild
-(`pnpm --filter @praman/extension dev` watches and rebuilds `dist/` on change —
+(`pnpm --filter @applyonce/extension dev` watches and rebuilds `dist/` on change —
 reload the unpacked extension in `chrome://extensions` to pick up the new build).
 
 ## Connect flow
 
-1. Log into the Praman app (`http://localhost:3300`) and open **`/app/extension/connect`**.
+1. Log into the ApplyOnce app (`http://localhost:3300`) and open **`/app/extension/connect`**.
 2. Click **Connect this browser's extension**. The page mints a 30-day token
    (`POST /api/v1/extension/token`) and posts it to the page via
-   `window.postMessage({type:"PRAMAN_EXT_TOKEN", ...}, location.origin)`.
-3. `src/content/handshake.ts` — a content script that only runs on the Praman app
+   `window.postMessage({type:"APPLYONCE_EXT_TOKEN", ...}, location.origin)`.
+3. `src/content/handshake.ts` — a content script that only runs on the ApplyOnce app
    origin — picks up that message, forwards it to the background service worker
-   (`PRAMAN_SET_TOKEN`), then replies `PRAMAN_EXT_CONNECTED` so the page shows a
+   (`APPLYONCE_SET_TOKEN`), then replies `APPLYONCE_EXT_CONNECTED` so the page shows a
    confirmation. The token is stored in `chrome.storage.local` **in the background
    worker only** — content scripts and the popup never hold it directly; they ask
    the background to make API calls on their behalf.
@@ -31,7 +31,7 @@ reload the unpacked extension in `chrome://extensions` to pick up the new build)
    injected, etc.), the connect page shows a copyable **connection code** — a
    base64 blob of `{token, expiresAt, apiBase, user, profiles}` — with a copy
    button. Paste it into the popup's "Paste connection code" box (shown when not
-   connected) and it calls the same `PRAMAN_SET_TOKEN` message directly.
+   connected) and it calls the same `APPLYONCE_SET_TOKEN` message directly.
 
 ## How a page gets filled
 
@@ -42,9 +42,9 @@ reload the unpacked extension in `chrome://extensions` to pick up the new build)
    always the fallback: it scans every labeled `<input>/<select>/<textarea>` and
    matches the visible label/placeholder text against a keyword table
    (`src/recipes/generic.json`) — e.g. "Father's Name" → `family.father.name`.
-3. If any fields resolve, a small banner appears ("Praman can fill N fields") with
+3. If any fields resolve, a small banner appears ("ApplyOnce can fill N fields") with
    a **Fill** button. The extension popup offers the same action plus a profile
-   switcher, an OTP prompt for sensitive fields, and an "Attach from Praman"
+   switcher, an OTP prompt for sensitive fields, and an "Attach from ApplyOnce"
    document list.
 4. On Fill: the content script (or popup) asks the background for a fill-plan
    (`GET /api/v1/extension/fill-plan`), then writes each value into its field
@@ -76,7 +76,7 @@ often, since they're maintained by outside orgs) and:
    matching the wrong step of a multi-step form. Omit only for a recipe meant to
    match everywhere (like `generic`).
 3. `fields`: `{ selector, key, transform?, arrayIndex? }[]`. `key` must be a real
-   `@praman/schema` fact key (unit-tested — `test/recipes.test.ts` asserts every
+   `@applyonce/schema` fact key (unit-tested — `test/recipes.test.ts` asserts every
    recipe's keys resolve via `isFactKey`). `transform` is one of `upper`, `lower`,
    `dd/mm/yyyy`, `yyyy`, `first_word`, `last_word`, `digits`, or an inline
    `map:{"raw":"option label"}`. `arrayIndex` picks one entry out of an
@@ -85,16 +85,16 @@ often, since they're maintained by outside orgs) and:
 5. Register the file in `src/recipes/index.ts` (`RECIPES` array — keep `generic`
    last) and add the portal's origin to `host_permissions` in `manifest.config.ts`.
 6. Add a test in `test/recipes.test.ts` (fake `{url, has(selector)}`, no real DOM
-   needed) and run `pnpm --filter @praman/extension test`.
+   needed) and run `pnpm --filter @applyonce/extension test`.
 
 ## What's verified vs. not
 
-- `pnpm --filter @praman/extension test` — 41 unit tests over pure functions
+- `pnpm --filter @applyonce/extension test` — 41 unit tests over pure functions
   (`transforms`, `select-match`, `matchRecipe`/`resolveFields`/`matchGenericLabel`,
   and a check that every recipe's fact keys are real registry keys). No DOM in the
   test run (no jsdom/linkedom installed) — fill.ts/handshake.ts/background.ts are
   DOM/`chrome.*`-only and are exercised by manual build/inspection, not vitest.
-- `pnpm --filter @praman/extension typecheck` and `build` are green; `dist/manifest.json`
+- `pnpm --filter @applyonce/extension typecheck` and `build` are green; `dist/manifest.json`
   is a valid MV3 manifest (verified by loading it and inspecting crxjs's generated
   `content_scripts`/`web_accessible_resources`).
 - The web endpoints under `apps/web/src/app/api/v1/extension/**` were exercised

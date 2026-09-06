@@ -1,6 +1,6 @@
 import { Chip } from "@/components/client-ui";
-import { db, t, desc } from "@praman/db";
-import { PageHeader } from "@praman/ui";
+import { db, t, desc } from "@applyonce/db";
+import { PageHeader } from "@applyonce/ui";
 import { providerModes } from "@/components/admin/data";
 export const dynamic = "force-dynamic";
 const JOB = { queued: "default", running: "accent", succeeded: "success", failed: "danger" } as const;

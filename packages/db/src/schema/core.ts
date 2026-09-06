@@ -196,7 +196,7 @@ export const forms = pgTable("forms", {
   purpose: purposeEnum("purpose").notNull(),
   kind: appKind("kind").notNull().default("other"),
   requestedFields: jsonb("requested_fields").$type<{ key: string; required: boolean }[]>().notNull().default([]),
-  customFields: jsonb("custom_fields").$type<import("@praman/schema").CustomField[]>().notNull().default([]),
+  customFields: jsonb("custom_fields").$type<import("@applyonce/schema").CustomField[]>().notNull().default([]),
   retentionDays: integer("retention_days").notNull().default(365),
   redirectUrl: text("redirect_url").notNull(),
   webhookUrl: text("webhook_url"),

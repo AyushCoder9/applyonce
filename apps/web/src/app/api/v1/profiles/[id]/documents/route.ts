@@ -1,5 +1,5 @@
-import { documentAllowed } from "@praman/schema";
-import { db, t, eq, desc, inArray } from "@praman/db";
+import { documentAllowed } from "@applyonce/schema";
+import { db, t, eq, desc, inArray } from "@applyonce/db";
 import { handler, citizen, ok } from "@/lib/api";
 /** GET → documents for the profile + which have unreviewed extractions. */
 export const GET = handler(async (req, { params }) => {

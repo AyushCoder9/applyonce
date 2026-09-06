@@ -1,6 +1,6 @@
 import "server-only";
-import { db, t, eq, gt, and, count, dsql, inArray } from "@praman/db";
-import { QUEUES, queue } from "@praman/jobs";
+import { db, t, eq, gt, and, count, dsql, inArray } from "@applyonce/db";
+import { QUEUES, queue } from "@applyonce/jobs";
 
 const n = async (q: Promise<{ n: number }[]>) => (await q)[0]?.n ?? 0;
 export async function overviewStats() {
@@ -32,10 +32,11 @@ export const providerModes = () => PROVIDER_ENV.map(([name, env]) => ({ name, en
 export async function pingDb() { const t0 = Date.now(); try { await db.execute(dsql`select 1`); return { ok: true, ms: Date.now() - t0 }; } catch (e) { return { ok: false, ms: Date.now() - t0, error: (e as Error).message }; } }
 export async function pingRedis() {
   const t0 = Date.now();
-  try { const { redis } = await import("@praman/jobs"); const r = await Promise.race([redis().ping(), new Promise<never>((_, rej) => setTimeout(() => rej(new Error("timeout")), 2000))]); return { ok: r === "PONG", ms: Date.now() - t0 }; }
+  try { const { redis } = await import("@applyonce/jobs"); const r = await Promise.race([redis().ping(), new Promise<never>((_, rej) => setTimeout(() => rej(new Error("timeout")), 2000))]); return { ok: r === "PONG", ms: Date.now() - t0 }; }
   catch (e) { return { ok: false, ms: Date.now() - t0, error: (e as Error).message }; }
 }
 
 export async function workerHealth() {
-  try {const {redis}=await import("@praman/jobs");const at=await Promise.race([redis().get("praman:worker:heartbeat"),new Promise<null>(resolve=>setTimeout(()=>resolve(null),2000))]);return {ok:!!at,note:at?"Heartbeat received":"No recent worker heartbeat"};} catch {return {ok:false,note:"Worker health unavailable"};}
+  if (process.env.APPLYONCE_INLINE_JOBS === "1") return {ok:true,note:"Request-scoped processor enabled"};
+  try {const {redis}=await import("@applyonce/jobs");const at=await Promise.race([redis().get("applyonce:worker:heartbeat"),new Promise<null>(resolve=>setTimeout(()=>resolve(null),2000))]);return {ok:!!at,note:at?"Heartbeat received":"No recent worker heartbeat"};} catch {return {ok:false,note:"Worker health unavailable"};}
 }

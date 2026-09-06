@@ -1,7 +1,7 @@
 /** Share flow helpers. `buildDiff`/`diffSummary`/`withQuery` are pure (unit-tested); `loadShareSession` reads the DB. */
-import { canShare, field, isFactKey, scopeContains, type Fact, type FieldDiffRow, type Purpose, type CustomField } from "@praman/schema";
-import { db, t, eq, mask } from "@praman/db";
-import { randomToken, sha256 } from "@praman/crypto";
+import { canShare, field, isFactKey, scopeContains, type Fact, type FieldDiffRow, type Purpose, type CustomField } from "@applyonce/schema";
+import { db, t, eq, mask } from "@applyonce/db";
+import { randomToken, sha256 } from "@applyonce/crypto";
 
 export interface FormLike { purpose: Purpose; requestedFields: { key: string; required: boolean }[]; customFields?: CustomField[] }
 

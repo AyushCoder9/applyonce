@@ -1,5 +1,5 @@
 import { z } from "zod";
-import { db, t, and, eq, isNull, inArray } from "@praman/db";
+import { db, t, and, eq, isNull, inArray } from "@applyonce/db";
 import { handler, citizen, ok, body } from "@/lib/api";
 export const POST = handler(async (req) => {
   const { user } = await citizen(req);

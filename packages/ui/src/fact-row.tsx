@@ -2,7 +2,7 @@
 import { useState } from "react";
 import { Eye, EyeOff, FileText, MoreHorizontal, Pencil, RotateCw, History } from "lucide-react";
 import { Dropdown } from "@heroui/react";
-import { field, type Fact } from "@praman/schema";
+import { field, type Fact } from "@applyonce/schema";
 import { SourceChip } from "./source-chip";
 import { fmtValue, label, cx, type Locale } from "./format";
 

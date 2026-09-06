@@ -1,4 +1,4 @@
-import { enqueue } from "@praman/jobs";
+import { enqueue } from "@applyonce/jobs";
 import { handler, citizen, ApiError, ok, log } from "@/lib/api";
 import { createJob, providerRef } from "../../../profiles/_lib";
 /** POST → re-run the DigiLocker sync (also the "re-fetch" one-tap for expiring certificates). */

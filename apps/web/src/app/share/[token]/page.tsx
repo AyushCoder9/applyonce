@@ -1,15 +1,15 @@
-import { documentAllowed } from "@praman/schema";
+import { documentAllowed } from "@applyonce/schema";
 import Link from "next/link";
 import { redirect } from "next/navigation";
 import { AlertTriangle } from "lucide-react";
-import { db, t, and, eq, getDek, getFacts } from "@praman/db";
+import { db, t, and, eq, getDek, getFacts } from "@applyonce/db";
 import { getSession, listProfiles, requireProfileAccess } from "@/lib/session";
 import { loadShareSession, buildDiff, diffSummary } from "@/lib/share";
 import { ShareFlow } from "@/components/share/share-flow";
 
 const PROBLEM = {
-  notfound: { title: "This link doesn’t exist", blurb: "Check the link, or go back to the portal and click “Apply with Praman” again." },
-  expired: { title: "This link has expired", blurb: "Share links are valid for 15 minutes. Go back to the portal and click “Apply with Praman” again." },
+  notfound: { title: "This link doesn’t exist", blurb: "Check the link, or go back to the portal and click “Apply with ApplyOnce” again." },
+  expired: { title: "This link has expired", blurb: "Share links are valid for 15 minutes. Go back to the portal and click “Apply with ApplyOnce” again." },
   used: { title: "Already shared", blurb: "You’ve already completed this request. Check Connections to see exactly what was shared." },
   cancelled: { title: "Request cancelled", blurb: "The partner cancelled this request. Start again from their portal." },
 };
@@ -27,7 +27,7 @@ export default async function SharePage({ params }: { params: Promise<{ token: s
         <div className="mx-auto grid size-14 place-items-center rounded-pill bg-pending-50 text-pending-700"><AlertTriangle className="size-7" /></div>
         <h1 className="mt-4 font-display text-2xl font-bold">{p.title}</h1>
         <p className="mt-2 text-ink-2">{p.blurb}</p>
-        <div className="mt-6 flex justify-center gap-3"><Link href="/app/connections" className="rounded-pill border border-line px-5 py-2.5 font-medium">Connections</Link><Link href="/app" className="cta px-5 py-2.5">Go to Praman</Link></div>
+        <div className="mt-6 flex justify-center gap-3"><Link href="/app/connections" className="rounded-pill border border-line px-5 py-2.5 font-medium">Connections</Link><Link href="/app" className="cta px-5 py-2.5">Go to ApplyOnce</Link></div>
       </div>
     );
   }

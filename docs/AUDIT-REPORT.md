@@ -1,12 +1,43 @@
-# Praman audit and implementation report
+# ApplyOnce audit and implementation report
 
-Audit date: 6 September 2026. Baseline: `bd3dc84218110d04fd917e6ad363d75c560b3bbb`. Scope: the full monorepo, current and historical Markdown, configuration, application routes, shared packages, worker, SDK and extension.
+Audit date: 6 September 2026, with final local release follow-up on 7 September 2026. Baseline: `bd3dc84218110d04fd917e6ad363d75c560b3bbb`. Scope: the full monorepo, current and historical Markdown, configuration, application routes, shared packages, worker, SDK and extension.
+
+## 7 September release follow-up
+
+The final localhost release pass repeated the complete citizen, partner, operations and BTA workflows in both development and optimized production mode. It corrected additional issues found only through broad browser rendering and manual state progression:
+
+| Finding | Correction and proof |
+|---|---|
+| Demo seed duplicated records on repeated setup | Seed now reuses profiles, documents, partners, forms, memberships, keys, flags and demo records. Two consecutive seeds produce unchanged counts. |
+| A development database reset could leave process-cached encryption keys stale | Development rereads wrapped keys; production retains the process cache. Database and crypto suites pass after a clean reset. |
+| Masked annual income rendered as `₹NaN` in consent | Formatting preserves sensitive masked placeholders. The consent screen was rechecked in the browser. |
+| Notifications could hydrate with a different relative minute | Server supplies one render timestamp for grouping and relative labels. The all-page browser sweep now reports no hydration errors. |
+| Operations audit table widened the entire desktop shell | The shell grid now uses `minmax(0,1fr)` and a `min-width: 0` content column; the table scrolls inside its card. |
+| Sandbox controls allowed contradictory terminal status changes | A shared forward-only status state machine now protects both partner APIs and the BTA simulator. A rejected application returns 409 for a later acceptance, remains rejected, and displays no invalid action. |
+| Authenticated pages repeated session/profile work and dashboard queries ran serially | Request-level React caching and parallel independent database reads remove the avoidable waterfalls. |
+| Route-only checks could miss hydration, labels and viewport defects | A permanent Playwright sweep covers every public, citizen, partner, operations and BTA page plus seeded detail pages. A source gate rejects placeholder links, handlerless buttons and empty event handlers across 117 TSX files. |
+
+Final release evidence on 7 September 2026:
+
+| Check | Result |
+|---|---|
+| Unit and database integration suites | **107/107 passed** across eight package tasks |
+| TypeScript | **11/11 tasks passed** |
+| Optimized production build | **3/3 passed** in 1m 14.81s: web, BTA and extension |
+| Browser workflows in production mode | **16/16 passed** in 59.2s |
+| API, authorization, persistence and route audit in production mode | **83/83 passed** |
+| ESLint and interaction source gates | **Passed with zero warnings**; 117 TSX files checked for stale controls |
+| Production dependency audit | **0 known vulnerabilities** |
+| Warm localhost response sample | Authenticated pages **16–26ms total**; BTA homepage **1.5–2.5ms total** |
+| Runtime health | Public status page reports web, Postgres, Redis and worker heartbeat operational |
+
+Production-mode package commands must be launched through `node scripts/run.mjs ...` so the root environment is loaded, exactly as documented in `RUNBOOK.md`. Direct package starts intentionally do not discover a repository-root `.env` from a nested workspace. The final browser run used the documented wrapper commands.
 
 ## Method and environment
 
 Graphify was used to query the existing dependency graph before code changes and to extract a refreshed code graph afterward. The source inventory reads text files and records hashes, line counts, headings and exported symbols. Graph navigation and source review were followed by TypeScript checks, unit/database tests, production builds, authenticated HTTP checks and native browser workflows.
 
-Validation used a separate worktree, database `praman_audit_20260906`, Redis database 6, S3 bucket `praman-audit-20260906`, web port 3400 and BTA port 3401. Existing servers on 3300/3301 were left running. Provider/SMS/OCR data was mocked; database, object storage, worker queues, SDK exchange and application callbacks were real local services.
+Validation used a separate worktree, database `applyonce_audit_20260906`, Redis database 6, S3 bucket `applyonce-audit-20260906`, web port 3400 and BTA port 3401. Existing servers on 3300/3301 were left running. Provider/SMS/OCR data was mocked; database, object storage, worker queues, SDK exchange and application callbacks were real local services.
 
 Reading/inventory coverage is not the same as executing every state combination. This report distinguishes executable checks from source review and external validation. It is an engineering audit, not an independent penetration test, accessibility certification or production-readiness certification.
 
@@ -39,8 +70,8 @@ Reading/inventory coverage is not the same as executing every state combination.
 | Custom answers | Choice/date/number/boolean/file inputs were not uniformly validated | Shared typed, bounded validation and file ownership/scope checks |
 | Consent race | An open share session could be submitted more than once | Atomic transactional claim before consent/share/application writes; exchange serializes with revocation on the consent row |
 | Denial | Decline navigation did not invalidate the server session | Cancellation endpoint marks the link unusable |
-| Redirects | Partner return URLs could lead to arbitrary origins | Match registered redirect origins; sandbox exception limited to Praman origin |
-| Dead catalog links | Seeded non-BTA institutions redirected to `.example` pages | Complete hosted sandbox submissions with Praman tracker returns |
+| Redirects | Partner return URLs could lead to arbitrary origins | Match registered redirect origins; sandbox exception limited to ApplyOnce origin |
+| Dead catalog links | Seeded non-BTA institutions redirected to `.example` pages | Complete hosted sandbox submissions with ApplyOnce tracker returns |
 | Expired/revoked access | Payload access and status handling did not consistently reject ended consent | Explicit expiry/revocation checks and “Access ended” applicant UI |
 | Dependency advisory | Transitive esbuild 0.18.20 had a moderate development-server advisory | Targeted core-utils override to 0.25.12; Drizzle configuration checks and production dependency scan pass |
 | Concurrent fact updates | Provider refresh and self edits could race on provenance | Row-locked transaction covering the fact, derived values and history; concurrent-write regression |

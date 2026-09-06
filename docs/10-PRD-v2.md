@@ -17,7 +17,7 @@ The verified-profile layer for India: **enter once, verify once, apply anywhere,
 | 4 | **Working professional (25–50)** | "When my address or bank details change, let that one update propagate to everything I've consented to share it with." | KYC fatigue across bank/insurance/rentals/passport/tax/EPFO; an address change propagates nowhere |
 | 5 | **Senior citizen (60+)** | "When I need to prove I'm alive/eligible for a pension or health scheme, let a trusted person do it for me without exposing everything I own." | Digitally excluded (13–15% internet usage per research 02 §Part C); biometric auth fails with aged fingerprints; needs a delegate |
 | 6 | **Institution admin** — exam board, college, employer, hospital | "When I need verified applicant data at scale, let me get it pre-verified instead of manually checking documents for fraud." | Bad data, manual verification load, document fraud, no standard field set |
-| 7 | **Praman admin/ops** | "When something goes wrong (fraud, breach, abuse), let me see and act on it fast with a full audit trail." | — (internal persona; no external pain, but the product must give them this or trust collapses) |
+| 7 | **ApplyOnce admin/ops** | "When something goes wrong (fraud, breach, abuse), let me see and act on it fast with a full audit trail." | — (internal persona; no external pain, but the product must give them this or trust collapses) |
 
 ## 4. Feature list by surface (MoSCoW + acceptance criteria)
 Priority key: **M**ust (v0.9 demo blocker) · **S**hould (v1.0 pilot) · **C**ould (v1.5+) · **W**on't (not in this roadmap).
@@ -31,7 +31,7 @@ Priority key: **M**ust (v0.9 demo blocker) · **S**hould (v1.0 pilot) · **C**ou
 | Documents (DigiLocker / upload / generated) | M | OCR-proposed facts land as `source=document_extracted`, distinct from `issuer_verified`; an extraction conflicting with an issuer-verified value creates a `mismatch` row, never silently overwrites |
 | Verifications hub | S | Expiry reminders fire at 60/30/7 days before `facts.expires_at`; mismatch list shows severity and a guided fix path |
 | Connections & consent ledger | M | One-tap revoke sets `consents.revoked_at` and fires the partner's `consent.revoked` webhook within the retry window; `/me/export` and `/me/erase` both functional |
-| Apply with Praman (share flow) | M | `FieldDiff` accurately reflects requested vs. available vs. missing; **no share can be created without a valid, unrevoked, in-scope consent** (DB trigger + test, per `docs/02-ARCHITECTURE.md` §6) |
+| Apply with ApplyOnce (share flow) | M | `FieldDiff` accurately reflects requested vs. available vs. missing; **no share can be created without a valid, unrevoked, in-scope consent** (DB trigger + test, per `docs/02-ARCHITECTURE.md` §6) |
 | Applications tracker | M | Partner status pushes appear in the timeline via SSE within seconds of `POST /partner/applications/:id/status` |
 | Family (dependents & delegation) | M | Adding a minor creates a ward `profile` + `relations(basis='minor')`; handover-at-18 SMS flow works; a guardian's default share scope for a minor excludes `health.*` unless explicitly step-up confirmed (per `docs/07-USE-CASE-CATALOG.md` §4) |
 | Settings (language, security, privacy) | S | EN/HI toggle changes all labels via the registry's `Label{en,hi}`; audit log viewer shows the citizen's own `audit_log` rows |
@@ -43,9 +43,9 @@ Priority key: **M**ust (v0.9 demo blocker) · **S**hould (v1.0 pilot) · **C**ou
 |---|---|---|
 | Org onboarding | M | Self-serve CIN/UDISE/AISHE/GSTIN check + manual review queue in admin; sandbox API key issued immediately, live key only after `partners.status='verified'` |
 | Form builder | M | Field picker is restricted to `SHAREABLE_KEYS` from the registry; selecting a purpose auto-drops keys `canShare()` returns false for (per `packages/schema/src/consent.ts`) |
-| Applicants table with per-field verified badges | M | Each cell shows `source` from the payload; drawer shows the full `PramanPayload` for that applicant |
+| Applicants table with per-field verified badges | M | Each cell shows `source` from the payload; drawer shows the full `ApplyOncePayload` for that applicant |
 | Verification requests | S | `POST /partner/verification-requests` creates a citizen-visible request; citizen can re-verify or decline with a reason |
-| Webhooks + JWKS | M | Deliveries HMAC-signed (`X-Praman-Signature`), retried 5× exponential backoff, deduplicated via `Idempotency-Key`; `GET /partner/jwks` serves current signing keys |
+| Webhooks + JWKS | M | Deliveries HMAC-signed (`X-ApplyOnce-Signature`), retried 5× exponential backoff, deduplicated via `Idempotency-Key`; `GET /partner/jwks` serves current signing keys |
 | API keys (sandbox/live) | M | Keys hashed at rest (`key_hash`), never returned again after creation, revocable |
 | Bulk import of legacy applicants | C | CSV import maps to registry keys with a dry-run diff before commit |
 | Analytics / fraud signals | W (v0.9) / C (v1.5) | Deferred — no fraud-signal ML in scope before pilot data exists |
@@ -64,8 +64,8 @@ Priority key: **M**ust (v0.9 demo blocker) · **S**hould (v1.0 pilot) · **C**ou
 ### 4.4 Demo exam portal (`apps/demo-exam-portal`)
 | Feature | Pri | Acceptance criteria |
 |---|---|---|
-| "Bharat Test Agency — BTA-JEE 2026" 6-step, 48-field form | M | "Fill manually" path has a visible timer (feels the pain, ~20s minimum before the point lands); "Apply with Praman" completes the same form in <90s end-to-end |
-| Status push admin panel | M | Demo admin can push "Admit card released"; appears in the citizen's Praman tracker within seconds |
+| "Bharat Test Agency — BTA-JEE 2026" 6-step, 48-field form | M | "Fill manually" path has a visible timer (feels the pain, ~20s minimum before the point lands); "Apply with ApplyOnce" completes the same form in <90s end-to-end |
+| Status push admin panel | M | Demo admin can push "Admit card released"; appears in the citizen's ApplyOnce tracker within seconds |
 
 ### 4.5 Extension (Chrome MV3)
 | Feature | Pri | Acceptance criteria |
@@ -77,19 +77,19 @@ Priority key: **M**ust (v0.9 demo blocker) · **S**hould (v1.0 pilot) · **C**ou
 | Application-ref capture post-submit | S | Confirmation page's reference number is captured into `applications.external_ref` with `source='extension'` |
 | Community-contributable recipes | C | Recipe schema documented; PR template exists |
 
-### 4.6 SDK (`@praman/sdk`)
+### 4.6 SDK (`@applyonce/sdk`)
 | Feature | Pri | Acceptance criteria |
 |---|---|---|
-| "Apply with Praman" button (script tag) | M | Renders from `data-praman-form`, opens `share_url` in popup or redirect |
-| Node server helper | M | `createShareSession`, `exchange`, `verifyWebhook`, `pushStatus` all typed against `PramanPayload` from `packages/schema` |
-| Typed payload + signature verification | M | Partner can verify the JWS against `GET /partner/jwks` without a Praman-provided library if they choose |
+| "Apply with ApplyOnce" button (script tag) | M | Renders from `data-applyonce-form`, opens `share_url` in popup or redirect |
+| Node server helper | M | `createShareSession`, `exchange`, `verifyWebhook`, `pushStatus` all typed against `ApplyOncePayload` from `packages/schema` |
+| Typed payload + signature verification | M | Partner can verify the JWS against `GET /partner/jwks` without a ApplyOnce-provided library if they choose |
 | SDKs beyond Node (Python, PHP, Java) | W | Not in scope until ≥3 non-Node partners request it |
 
 ## 5. Non-goals (v0.9–v1.5)
-Native mobile apps (PWA first) · storing biometrics · replacing DigiLocker/UMANG · becoming a DPDP Consent Manager or an AA Financial Information User directly (Praman integrates with/white-labels under existing licensed entities — `docs/08-INTEGRATIONS-PLAN.md` §2–3) · government-only distribution · becoming an AUA/KUA for online Aadhaar auth · full ITR-via-Account-Aggregator (not live nationally as of this writing) · direct CKYC registration (access-gated to PMLA reporting entities).
+Native mobile apps (PWA first) · storing biometrics · replacing DigiLocker/UMANG · becoming a DPDP Consent Manager or an AA Financial Information User directly (ApplyOnce integrates with/white-labels under existing licensed entities — `docs/08-INTEGRATIONS-PLAN.md` §2–3) · government-only distribution · becoming an AUA/KUA for online Aadhaar auth · full ITR-via-Account-Aggregator (not live nationally as of this writing) · direct CKYC registration (access-gated to PMLA reporting entities).
 
 ## 6. Success metrics
-- Time to complete a 40-field exam form: **<90s** with Praman vs. ~25min baseline.
+- Time to complete a 40-field exam form: **<90s** with ApplyOnce vs. ~25min baseline.
 - Onboarding completion rate ≥60%; DigiLocker connect success ≥85%.
 - Verified-fact coverage per active profile ≥20 facts.
 - Partner integration time ≤1 day (sandbox → first successful share).
@@ -99,11 +99,11 @@ Native mobile apps (PWA first) · storing biometrics · replacing DigiLocker/UMA
 
 ## 7. Release plan
 
-**v0.9 — Demo (judge/investor-facing, all providers mocked).** The full P1 feature set above at **Must** priority: vault, onboarding, Apply-with-Praman share flow, applications tracker, family/delegation, connections/consent ledger, the BTA-JEE demo portal, and an extension covering at least the demo portal's "Fill manually" path plus one real legacy recipe. All three golden Playwright flows (onboarding, apply-with-praman, extension fill on demo portal) green in CI. `docker compose up` gives a working demo with seeded users in <3 minutes.
+**v0.9 — Demo (judge/investor-facing, all providers mocked).** The full P1 feature set above at **Must** priority: vault, onboarding, Apply-with-ApplyOnce share flow, applications tracker, family/delegation, connections/consent ledger, the BTA-JEE demo portal, and an extension covering at least the demo portal's "Fill manually" path plus one real legacy recipe. All three golden Playwright flows (onboarding, apply-with-applyonce, extension fill on demo portal) green in CI. `docker compose up` gives a working demo with seeded users in <3 minutes.
 
-**v1.0 — Pilot (one real institution + one CSC district, live providers).** Swap mock → Setu sandbox/live for DigiLocker + Aadhaar offline XML + PAN + e-Sign (`docs/08-INTEGRATIONS-PLAN.md` §3, months 3–9). One live institution or scholarship-body partner on a real "Apply with Praman" form. Extension recipe library extended to NSP + one state SSC/CET portal. CSC/VLE channel pilot (20–50 operators, one district). Notifications (SMS/email/push) live. Data-principal export/erase live end-to-end.
+**v1.0 — Pilot (one real institution + one CSC district, live providers).** Swap mock → Setu sandbox/live for DigiLocker + Aadhaar offline XML + PAN + e-Sign (`docs/08-INTEGRATIONS-PLAN.md` §3, months 3–9). One live institution or scholarship-body partner on a real "Apply with ApplyOnce" form. Extension recipe library extended to NSP + one state SSC/CET portal. CSC/VLE channel pilot (20–50 operators, one district). Notifications (SMS/email/push) live. Data-principal export/erase live end-to-end.
 
-**v1.5 — Scale (health vertical exploration, more states, regulatory maturity).** ABDM HIU exploration if health-vertical traction justifies the 6–9 month certification lift. Account Aggregator white-label conversation converts to a live integration if a partner FIU is secured. Extension recipe library to 50+ portals. Hosted "Praman Forms" for institutions with no dev team. DigiLocker pull live for additional e-District states beyond the 3 confirmed (Maharashtra, Karnataka, Tamil Nadu). Formal DPDP Consent Manager registration decision made once Phase 2 rules are live (14 Nov 2026).
+**v1.5 — Scale (health vertical exploration, more states, regulatory maturity).** ABDM HIU exploration if health-vertical traction justifies the 6–9 month certification lift. Account Aggregator white-label conversation converts to a live integration if a partner FIU is secured. Extension recipe library to 50+ portals. Hosted "ApplyOnce Forms" for institutions with no dev team. DigiLocker pull live for additional e-District states beyond the 3 confirmed (Maharashtra, Karnataka, Tamil Nadu). Formal DPDP Consent Manager registration decision made once Phase 2 rules are live (14 Nov 2026).
 
 ## 8. Open questions
 1. Consent Manager vs. Data Fiduciary posture — decide before the DPDP registration window opens (14 Nov 2026); v1.5 assumes Data Fiduciary integrating with a registered CM, but this should be revisited with legal counsel as volume grows.

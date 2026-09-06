@@ -1,8 +1,8 @@
 import Link from "next/link";
 import { ListChecks, CalendarClock } from "lucide-react";
-import { db, t, eq, desc } from "@praman/db";
-import { APPLICATION_STATUSES } from "@praman/schema";
-import { PageHeader, EmptyState, daysUntil, fmtDate } from "@praman/ui";
+import { db, t, eq, desc } from "@applyonce/db";
+import { APPLICATION_STATUSES } from "@applyonce/schema";
+import { PageHeader, EmptyState, daysUntil, fmtDate } from "@applyonce/ui";
 import { requireUser, requireProfileAccess } from "@/lib/session";
 import { STATUS_META, KIND_LABEL } from "@/components/applications/model";
 import { TrackDrawer } from "@/components/applications/track-drawer";
@@ -28,14 +28,14 @@ export default async function ApplicationsPage({ searchParams }: { searchParams:
         {Object.keys(KIND_LABEL).filter((k) => all.some((a) => a.kind === k)).map((k) => chip(`/app/applications?kind=${k}`, KIND_LABEL[k]!, kind === k))}
       </div>
       {!rows.length ? (
-        <EmptyState icon={<ListChecks className="size-6" />} title={all.length ? "Nothing matches this filter" : "No applications yet"} blurb={all.length ? "Clear the filter to see everything." : "Apply with Praman and it lands here automatically — or add one you made elsewhere."} action={<Link href="/app/apply" className="cta px-5 py-2.5">Find a form</Link>} />
+        <EmptyState icon={<ListChecks className="size-6" />} title={all.length ? "Nothing matches this filter" : "No applications yet"} blurb={all.length ? "Clear the filter to see everything." : "Apply with ApplyOnce and it lands here automatically — or add one you made elsewhere."} action={<Link href="/app/apply" className="cta px-5 py-2.5">Find a form</Link>} />
       ) : (
         <ul className="grid gap-3">
           {rows.map((a, i) => { const d = daysUntil(a.deadlineAt); return (
             <li key={a.id} className="rise" style={{ animationDelay: `${Math.min(i, 8) * 30}ms` }}>
               <Link href={`/app/applications/${a.id}`} className="card flex flex-col gap-2 p-4 transition-shadow hover:shadow-pop sm:flex-row sm:items-center sm:gap-4" data-testid="application-row">
                 <div className="min-w-0 flex-1">
-                  <div className="flex flex-wrap items-center gap-2"><StatusChip s={a.status} /><span className="text-xs text-ink-3">{KIND_LABEL[a.kind]} · {a.source === "sdk" ? "via Praman" : a.source === "extension" ? "via extension" : "tracked manually"}</span></div>
+                  <div className="flex flex-wrap items-center gap-2"><StatusChip s={a.status} /><span className="text-xs text-ink-3">{KIND_LABEL[a.kind]} · {a.source === "sdk" ? "via ApplyOnce" : a.source === "extension" ? "via extension" : "tracked manually"}</span></div>
                   <h3 className="mt-1 font-display text-lg font-bold leading-tight">{a.title}</h3>
                   <div className="text-sm text-ink-2">{a.orgName}{a.externalRef ? ` · Ref ${a.externalRef}` : ""}</div>
                 </div>
