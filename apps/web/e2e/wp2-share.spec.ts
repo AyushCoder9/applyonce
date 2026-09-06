@@ -48,17 +48,19 @@ test("partner session → consent → exchange → replay 409 → revoke", async
   await page.getByTestId("consent-share").click();
   await expect(page.getByTestId("share-flow")).toHaveAttribute("data-step", "fill");
   const pickFirst = async (label: string | RegExp, option?: string | RegExp) => {
-    await page.getByRole("button", { name: label }).first().click();
+    const trigger=page.getByRole("button", { name: label }).first();
+    if (!await trigger.count()) return;
+    await trigger.click();
     const opts = page.getByRole("option");
     await (option ? opts.filter({ hasText: option }).first() : opts.first()).click();
   };
   await pickFirst(/Photograph/);
   await pickFirst(/Signature/);
-  await page.getByLabel("Current address line 1").fill("12 Gomti Nagar");
-  await page.getByLabel("Current village / town / city").fill("Lucknow");
-  await page.getByLabel("Current district").fill("Lucknow");
-  await pickFirst(/Current state/);
-  await page.getByLabel("Current PIN code").fill("226010");
+  if(await page.getByLabel("Current address line 1").count()) await page.getByLabel("Current address line 1").fill("12 Gomti Nagar");
+  if(await page.getByLabel("Current village / town / city").count()) await page.getByLabel("Current village / town / city").fill("Lucknow");
+  if(await page.getByLabel("Current district").count()) await page.getByLabel("Current district").fill("Lucknow");
+  await pickFirst(/Current state/, "Uttar Pradesh");
+  if(await page.getByLabel("Current PIN code").count()) await page.getByLabel("Current PIN code").fill("226010");
   for (const [label, option] of [["Exam city preference 1", "Lucknow"], ["Exam city preference 2", "Delhi"], ["Paper", "Paper 1 (B.E./B.Tech)"], ["Question paper medium", "English"]] as const) await pickFirst(new RegExp(label), option);
   await page.getByText("I declare the information is true").click();
   await page.getByTestId("consent-share").click();

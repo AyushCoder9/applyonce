@@ -16,7 +16,7 @@ export default async function Dpo() {
         <ul className="mt-6 grid gap-2 text-sm text-ink-2">
           {[["Download everything", "/app/settings?tab=privacy"], ["Revoke a share", "/app/connections"], ["Fix a value", "/app/vault"], ["Delete my account", "/app/settings?tab=privacy"]].map(([t, h]) => <li key={t}><Link href={h!} className="underline">{t}</Link> — in the app, no waiting.</li>)}
         </ul>
-        <div className="mt-8 rounded-lg border border-line bg-surface p-4 text-sm"><b>Data Protection Officer</b><div className="text-ink-2">Praman Technologies, Lucknow, India<br /><a className="underline" href="mailto:dpo@praman.in">dpo@praman.in</a> · reply within 30 days<br />Escalation: Data Protection Board of India</div></div>
+        <div className="mt-8 rounded-lg border border-line bg-surface p-4 text-sm"><b>Data Protection Officer</b><div className="text-ink-2">Project operator · sandbox request queue<br /><a className="underline" href="mailto:dpo@praman.in">dpo@praman.in</a> · sample contact, not a monitored inbox<br />Requests submitted here appear in the Praman admin console.</div></div>
       </div>
       <DpoForm loggedIn={!!s} name={s?.user.name} />
     </Container>

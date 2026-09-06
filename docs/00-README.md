@@ -1,3 +1,11 @@
+# Documentation index
+
+Start with [PROJECT-CONTEXT.md](PROJECT-CONTEXT.md), [AUDIT-REPORT.md](AUDIT-REPORT.md), [CURRENT-PROGRESS.md](CURRENT-PROGRESS.md), [DEMO-SCRIPT.md](DEMO-SCRIPT.md) and [RUNBOOK.md](RUNBOOK.md). These describe the September 2026 audited implementation.
+
+The material below is historical product planning. Proposed integrations, compliance, deployment and market claims should not be read as implemented capabilities.
+
+---
+
 # Praman — build kit
 
 **Praman** (Hindi/Sanskrit: *praman* = "proof / verified evidence") · Working tagline: **Verify once. Apply anywhere.**

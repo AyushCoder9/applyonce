@@ -3,7 +3,7 @@ import { db, sql } from "./client";
 import * as t from "./schema";
 import { getDek } from "./keys";
 import { putFact } from "./facts";
-import { AARAV, SUNITA, VIKRAM, RIYA, KAMLA, docToFacts, type DemoPerson } from "@praman/providers/fixtures";
+import { AARAV, SUNITA, VIKRAM, RIYA, KAMLA, docToFacts, sampleDocument, type DemoPerson } from "@praman/providers/fixtures";
 import { sha256, encrypt, kekFromEnv } from "@praman/crypto";
 import { hkdfSync } from "node:crypto";
 
@@ -18,10 +18,16 @@ async function seedPerson(p: DemoPerson) {
   await db.insert(t.providerLinks).values({ userId: p.id, provider: "digilocker", status: "linked", lastSyncAt: new Date(), meta: { ref: `dl_${p.id}` } });
   // documents + issuer-verified facts (as if DigiLocker sync ran)
   for (const d of p.docs) {
-    const [doc] = await db.insert(t.documents).values({ profileId: pid, docType: d.docType, title: d.name, issuerId: d.issuerId, issuerName: d.issuerName, docUri: d.uri, storageKey: `mock/${p.id}/${d.uri}.pdf`, mime: d.mime, size: 48213, sha256: sha256(d.uri), origin: "digilocker", issuedAt: d.issuedAt ? new Date(d.issuedAt) : null, validUntil: d.validUntil ? new Date(d.validUntil) : null, status: "ready", meta: d.data ?? {} }).returning();
+    const sample = sampleDocument(d.docType,d.name);
+    const [doc] = await db.insert(t.documents).values({ profileId: pid, docType: d.docType, title: d.name, issuerId: d.issuerId, issuerName: d.issuerName, docUri: d.uri, storageKey: `mock/${p.id}/${d.uri}.pdf`, mime: sample.mime, size: sample.bytes.length, sha256: sha256(sample.bytes), origin: "digilocker", issuedAt: d.issuedAt ? new Date(d.issuedAt) : null, validUntil: d.validUntil ? new Date(d.validUntil) : null, status: "ready", meta: d.data ?? {} }).returning();
     for (const f of docToFacts(d, p)) await putFact(dek, { profileId: pid, key: f.key, value: f.value as never, source: "issuer_verified", verifiedBy: f.verifiedBy, evidenceDocumentId: doc!.id, expiresAt: f.expiresAt ? new Date(f.expiresAt) : null, verifiedAt: new Date() });
     const fileKey = ({ marksheet_10: "education.class10.marksheet", marksheet_12: "education.class12.marksheet", category_cert: "category.certificate", income_cert: "family.income_certificate", domicile_cert: "category.domicile_certificate", degree: "education.graduation.certificate" } as Record<string, string>)[d.docType];
     if (fileKey) await putFact(dek, { profileId: pid, key: fileKey, value: doc!.id, source: "issuer_verified", verifiedBy: "digilocker", evidenceDocumentId: doc!.id });
+  }
+  for (const docType of ["photo","signature"]) {
+    const title = `Sample ${docType} - replace for a real application`;
+    const sample = sampleDocument(docType,title);
+    await db.insert(t.documents).values({profileId:pid,docType,title,storageKey:`mock/${p.id}/${docType}.png`,mime:sample.mime,size:sample.bytes.length,sha256:sha256(sample.bytes),origin:"generated",status:"ready",meta:{sample:true}});
   }
   await putFact(dek, { profileId: pid, key: "contact.mobile_primary", value: p.phone, source: "provider_verified", verifiedBy: "otp" });
   if (p.apaar) await putFact(dek, { profileId: pid, key: "identity.apaar_id", value: p.apaar, source: "issuer_verified", verifiedBy: "apaar" });

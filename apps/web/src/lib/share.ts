@@ -1,17 +1,17 @@
 /** Share flow helpers. `buildDiff`/`diffSummary`/`withQuery` are pure (unit-tested); `loadShareSession` reads the DB. */
-import { canShare, field, isFactKey, type Fact, type FieldDiffRow, type Purpose, type CustomField } from "@praman/schema";
+import { canShare, field, isFactKey, scopeContains, type Fact, type FieldDiffRow, type Purpose, type CustomField } from "@praman/schema";
 import { db, t, eq, mask } from "@praman/db";
 import { randomToken, sha256 } from "@praman/crypto";
 
 export interface FormLike { purpose: Purpose; requestedFields: { key: string; required: boolean }[]; customFields?: CustomField[] }
 
 /** Requested vs have vs missing for one profile. Sensitive values are masked (payload is built server-side at consent). */
-export function buildDiff(facts: Fact[], form: FormLike, opts: { maskSensitive?: boolean } = {}): FieldDiffRow[] {
+export function buildDiff(facts: Fact[], form: FormLike, opts: { maskSensitive?: boolean; scope?: string[] } = {}): FieldDiffRow[] {
   const byKey = new Map(facts.filter((f) => f.repeatIndex === 0).map((f) => [f.key, f]));
   return form.requestedFields.filter((r) => isFactKey(r.key)).map((r) => {
-    if (!canShare(r.key, form.purpose)) return { key: r.key, required: r.required, status: "blocked" };
+    if (!canShare(r.key, form.purpose) || !scopeContains(opts.scope ?? ["*"], r.key)) return { key: r.key, required: r.required, status: "blocked" };
     const f = byKey.get(r.key);
-    if (!f || f.value == null || f.value === "") return { key: r.key, required: r.required, status: "missing" };
+    if (!f || f.value == null || f.value === "" || (f.expiresAt && Date.parse(f.expiresAt) <= Date.now())) return { key: r.key, required: r.required, status: "missing" };
     const status = f.source === "issuer_verified" || f.source === "provider_verified" ? "verified" : f.source === "document_extracted" ? "extracted" : "self";
     const value = opts.maskSensitive && field(r.key).sensitive ? mask(r.key, f.value) : f.value;
     return { key: r.key, required: r.required, status, value, source: f.source, verifiedBy: f.verifiedBy ?? null };

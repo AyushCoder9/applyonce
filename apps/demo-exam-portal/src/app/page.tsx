@@ -50,8 +50,7 @@ export default function HomePage() {
         <div className="gov-card" style={{ padding: 20, borderColor: "var(--color-gov-blue)" }}>
           <h2 style={{ fontSize: 16, margin: "0 0 8px" }}>Have a Praman account?</h2>
           <p style={{ marginTop: 0, color: "var(--color-gov-ink-2)" }}>
-            Skip the form. Praman fills your name, address, marks, category and uploads &mdash; already verified by
-            UIDAI, CBSE and your state e-District &mdash; in one click.
+            Reuse your saved name, address, marks and documents. Review each source and approve the share. This sandbox uses clearly labeled sample provider records.
           </p>
           <form action="/api/praman/session" method="POST">
             <button type="submit" className="btn btn-primary">Apply with Praman &rarr;</button>

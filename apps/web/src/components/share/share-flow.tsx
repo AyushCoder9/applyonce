@@ -7,7 +7,7 @@
 import { useEffect, useMemo, useState } from "react";
 import { Button, Alert, Chip, TextField, Label, Input, Select, ListBox } from "@heroui/react";
 import { ArrowLeft, Users } from "lucide-react";
-import { field, type FieldDiffRow, type FactValue, type Purpose, type CustomField } from "@praman/schema";
+import { field, customAnswerErrors, type FieldDiffRow, type FactValue, type Purpose, type CustomField } from "@praman/schema";
 import { PartnerIdentity, ConsentSummaryChips, ConsentFieldList, ConsentActions, ConsentReceipt, FactEditor, type Locale } from "@praman/ui";
 import { StepUpDialog } from "@/components/share/step-up-fallback";
 
@@ -19,7 +19,7 @@ export interface ShareFlowProps {
   form: { id: string; name: string; purpose: Purpose; retentionDays: number; customFields: CustomField[]; deadlineAt: string | null };
   session: { id: string; returnUrl: string; state: string | null; expiresAt: string; env: "sandbox" | "live" };
   profiles: Profile[];
-  initial: { profileId: string; rows: FieldDiffRow[]; summary: Summary; documents: { id: string; title: string }[] };
+  initial: { profileId: string; rows: FieldDiffRow[]; summary: Summary; documents: { id: string; title: string; docType?: string }[] };
 }
 
 const T = (l: Locale) => (en: string, hi: string) => (l === "hi" ? hi : en);
@@ -48,22 +48,22 @@ export function ShareFlow({ token, locale, phone, partner, form, session, profil
   const shareCount = rows.filter((r) => (r.status === "verified" || r.status === "extracted" || r.status === "self") && (r.required || selected.has(r.key))).length + missingRequired.length + Object.keys(values).filter((k) => missingOptional.some((r) => r.key === k) && values[k] != null).length;
 
   async function switchProfile(id: string) {
-    setProfileId(id); setBusy(true); setErr(null);
+    setBusy(true); setErr(null);
     const r = await fetch(`/api/v1/share/${token}?profile=${id}`).then((x) => x.json()).catch(() => null);
     setBusy(false);
     if (!r?.ok) return setErr(r?.error?.message ?? t("Could not load this profile.", "यह प्रोफ़ाइल लोड नहीं हो सकी।"));
-    setRows(r.data.rows); setSummary(r.data.summary); setValues({});
+    setProfileId(id); setRows(r.data.rows); setCustom({}); setErrors({}); setStep("review"); setSummary(r.data.summary); setValues({});
     setSelected(new Set((r.data.rows as FieldDiffRow[]).filter((x) => x.status !== "missing" && x.status !== "blocked").map((x) => x.key)));
-    setDocuments([]);
+    setDocuments(r.data.documents ?? []);
     await fetch("/api/v1/profiles/active", { method: "POST", headers: { "content-type": "application/json" }, body: JSON.stringify({ profileId: id }) }).catch(() => undefined);
   }
   const toggle = (key: string) => setSelected((s) => { const n = new Set(s); if (n.has(key)) n.delete(key); else n.add(key); return n; });
-  const deny = () => { try { const u = new URL(session.returnUrl); u.searchParams.set("praman_error", "denied"); if (session.state) u.searchParams.set("state", session.state); location.assign(u.toString()); } catch { location.assign("/app"); } };
+  const deny = async () => { setBusy(true); const response = await fetch(`/api/v1/share/${token}`, { method: "DELETE" }).catch(() => null); if (!response?.ok) { setBusy(false); setErr("Could not cancel. Please try again."); return; } try { const u = new URL(session.returnUrl); u.searchParams.set("praman_error", "denied"); if (session.state) u.searchParams.set("state", session.state); location.assign(u.toString()); } catch { location.assign("/app"); } };
 
   function validateFill() {
     const e: Record<string, string> = {};
     for (const r of missingRequired) if (values[r.key] == null || values[r.key] === "") e[r.key] = t("Required", "आवश्यक");
-    for (const c of form.customFields) if (c.required && (custom[c.id] == null || custom[c.id] === "" || custom[c.id] === false)) e[c.id] = t("Required", "आवश्यक");
+    Object.assign(e, customAnswerErrors(form.customFields, custom));
     setErrors(e);
     return !Object.keys(e).length;
   }
@@ -123,8 +123,8 @@ export function ShareFlow({ token, locale, phone, partner, form, session, profil
         <>
           <ConsentSummaryChips s={summary} locale={locale} />
           <ConsentFieldList rows={rows} locale={locale} selected={selected} onToggle={toggle} />
-          <p className="text-xs text-ink-3">{t(`* required by ${partner.name}. Untick any optional field to keep it private. Sensitive values stay masked here and are sent encrypted.`, `* ${partner.name} द्वारा आवश्यक। निजी रखने के लिए वैकल्पिक फ़ील्ड अनचेक करें।`)}</p>
-          <ConsentActions locale={locale} onShare={onShare} onDeny={deny} busy={busy} shareLabel={needsFill ? t(`Continue · ${missingRequired.length} to fill`, `जारी रखें · ${missingRequired.length} भरें`) : t(`Share ${shareCount} fields`, `${shareCount} फ़ील्ड साझा करें`)} hint={t("You’ll confirm with an OTP or passkey before anything is shared.", "साझा करने से पहले आप OTP या पासकी से पुष्टि करेंगे।")} />
+          <p className="text-xs text-ink-3">{t(`* required by ${partner.name}. Untick any optional field to keep it private. Sensitive values stay masked here and are sent over an encrypted connection.`, `* ${partner.name} द्वारा आवश्यक। निजी रखने के लिए वैकल्पिक फ़ील्ड अनचेक करें।`)}</p>
+          <ConsentActions locale={locale} onShare={onShare} onDeny={deny} busy={busy} disabled={rows.some(r => r.required && r.status === "blocked")} shareLabel={needsFill ? t(`Continue · ${missingRequired.length} to fill`, `जारी रखें · ${missingRequired.length} भरें`) : t(`Share ${shareCount} fields`, `${shareCount} फ़ील्ड साझा करें`)} hint={t("You’ll confirm with an OTP or passkey before anything is shared.", "साझा करने से पहले आप OTP या पासकी से पुष्टि करेंगे।")} />
         </>
       )}
 
@@ -140,7 +140,7 @@ export function ShareFlow({ token, locale, phone, partner, form, session, profil
           {form.customFields.length > 0 && (
             <section className="card grid gap-4 p-5">
               <div><h2 className="font-display text-lg font-bold">{t(`${partner.name} also asks`, `${partner.name} यह भी पूछता है`)}</h2><p className="text-sm text-ink-2">{t("These answers go only to this application.", "ये उत्तर केवल इस आवेदन में जाते हैं।")}</p></div>
-              {form.customFields.map((c) => <CustomInput key={c.id} c={c} value={custom[c.id]} error={errors[c.id]} onChange={(v) => setCustom((s) => ({ ...s, [c.id]: v }))} locale={locale} />)}
+              {form.customFields.map((c) => <CustomInput key={c.id} c={c} value={custom[c.id]} error={errors[c.id]} onChange={(v) => setCustom((s) => ({ ...s, [c.id]: v }))} locale={locale} documents={documents} />)}
             </section>
           )}
           {missingOptional.length > 0 && (
@@ -148,7 +148,7 @@ export function ShareFlow({ token, locale, phone, partner, form, session, profil
               <div className="mt-4 grid gap-4">{missingOptional.map((r) => <FactEditor key={r.key} def={field(r.key)} value={values[r.key]} onChange={(v) => setValues((s) => ({ ...s, [r.key]: v }))} locale={locale} documents={documents} />)}</div>
             </details>
           )}
-          <ConsentActions locale={locale} onShare={onShare} onDeny={deny} busy={busy} shareLabel={t(`Share ${shareCount} fields`, `${shareCount} फ़ील्ड साझा करें`)} hint={t("You’ll confirm with an OTP or passkey before anything is shared.", "साझा करने से पहले आप OTP या पासकी से पुष्टि करेंगे।")} />
+          <ConsentActions locale={locale} onShare={onShare} onDeny={deny} busy={busy} disabled={rows.some(r => r.required && r.status === "blocked")} shareLabel={t(`Share ${shareCount} fields`, `${shareCount} फ़ील्ड साझा करें`)} hint={t("You’ll confirm with an OTP or passkey before anything is shared.", "साझा करने से पहले आप OTP या पासकी से पुष्टि करेंगे।")} />
         </>
       )}
 
@@ -157,7 +157,7 @@ export function ShareFlow({ token, locale, phone, partner, form, session, profil
   );
 }
 
-function CustomInput({ c, value, error, onChange, locale }: { c: CustomField; value: unknown; error?: string; onChange: (v: unknown) => void; locale: Locale }) {
+function CustomInput({ c, value, error, onChange, locale, documents }: { documents: {id: string; title: string}[]; c: CustomField; value: unknown; error?: string; onChange: (v: unknown) => void; locale: Locale }) {
   const t = T(locale);
   const lbl = <>{c.label}{c.required && <span className="text-danger-500"> *</span>}</>;
   if (c.type === "bool") return <div className="grid gap-1"><label className="flex cursor-pointer items-start gap-3 text-[15px]"><input type="checkbox" className="mt-0.5 size-5 shrink-0 accent-brand-500" checked={value === true} onChange={(e) => onChange(e.target.checked)} aria-invalid={!!error} />{lbl}</label>{error && <p className="text-sm text-danger-500">{error}</p>}</div>;
@@ -168,7 +168,7 @@ function CustomInput({ c, value, error, onChange, locale }: { c: CustomField; va
       <Select.Popover><ListBox>{(c.options ?? []).map((o) => <ListBox.Item key={o} id={o} textValue={o}>{o}<ListBox.ItemIndicator /></ListBox.Item>)}</ListBox></Select.Popover>
     </Select>
   );
-  if (c.type === "file") return <div className="rounded-md border border-dashed border-line p-3 text-sm text-ink-2"><div className="font-medium text-ink">{lbl}</div>{t("Upload this on the partner’s portal after returning.", "वापस जाने पर साझेदार के पोर्टल पर अपलोड करें।")}</div>;
+  if (c.type === "file") return <label className="grid gap-2 text-sm">{lbl}<select className="rounded-md border border-line bg-surface p-3" value={String(value ?? "")} onChange={e => onChange(e.target.value)}><option value="">Choose a document</option>{documents.map(d => <option key={d.id} value={d.id}>{d.title}</option>)}</select>{error && <span className="text-danger-500">{error}</span>}<a href="/app/documents?upload=1" target="_blank" rel="noreferrer" className="underline">Upload in a new tab, then refresh this request</a></label>;
   return (
     <TextField value={value == null ? "" : String(value)} onChange={(v) => onChange(c.type === "number" ? (v === "" ? null : Number(v)) : v)} type={c.type === "number" ? "number" : c.type === "date" ? "date" : "text"} isInvalid={!!error} isRequired={c.required}>
       <Label>{lbl}</Label><Input />

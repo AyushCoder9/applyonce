@@ -13,6 +13,7 @@ export function ApplicantsTable({ rows }: { rows: ApplicantRow[] }) {
   const router = useRouter();
   const [open, setOpen] = useState<ApplicantRow | null>(null);
   const [data, setData] = useState<{ payload: PramanPayload; exchanged_at: string | null; consent_status: string } | null>(null);
+  const [payloadError, setPayloadError] = useState<string | null>(null);
   const [status, setStatus] = useState("under_review");
   const [note, setNote] = useState("");
   const [ref, setRef] = useState("");
@@ -21,10 +22,10 @@ export function ApplicantsTable({ rows }: { rows: ApplicantRow[] }) {
   const [busy, setBusy] = useState(false);
 
   const openRow = async (r: ApplicantRow) => {
-    setOpen(r); setData(null); setPick(new Set()); setStatus(r.status === "submitted" ? "under_review" : r.status); setRef(r.externalRef ?? "");
+    setOpen(r); setData(null); setPayloadError(null); setPick(new Set()); setStatus(r.status === "submitted" ? "under_review" : r.status); setRef(r.externalRef ?? "");
     if (!r.hasPayload) return;
     const res = await getApplicantPayload(r.id);
-    if (!res.ok) return toast.danger(res.error);
+    if (!res.ok) { setPayloadError(res.error); return; }
     setData(res.data);
   };
   const push = async () => {
@@ -67,14 +68,14 @@ export function ApplicantsTable({ rows }: { rows: ApplicantRow[] }) {
                   <TextField value={note} onChange={setNote}><Label>Note to the applicant</Label><Input placeholder="e.g. Admit card released — download from the portal" /></TextField>
                   <div className="flex justify-end"><Button className="cta" onPress={push} isPending={busy} data-testid="push-status">Push status</Button></div>
                 </section>
-                {!open.hasPayload ? <p className="text-sm text-ink-2">No Praman payload for this application.</p> : !data ? <p className="text-sm text-ink-2">Decrypting payload…</p> : (
+                {!open.hasPayload ? <p className="text-sm text-ink-2">No Praman payload for this application.</p> : payloadError ? <p role="status" className="rounded-md bg-pending-50 p-3 text-sm text-pending-700">{payloadError}</p> : !data ? <p className="text-sm text-ink-2">Decrypting payload…</p> : (
                   <section className="grid gap-3">
                     <div className="flex flex-wrap items-center gap-2 text-sm text-ink-2"><span>{data.payload.facts.length} fields</span><span>·</span><span>consent <code className="font-mono text-xs">{data.payload.consent_id.slice(0, 8)}…</code> {data.consent_status}</span><span>·</span><span>{data.exchanged_at ? `exchanged ${fmtDate(data.exchanged_at)}` : "not exchanged yet"}</span>{data.payload.profile.guardian_acting && <Chip size="sm" color="warning">guardian acting</Chip>}</div>
                     {data.consent_status === "revoked" && <p className="rounded-md bg-danger-50 px-3 py-2 text-sm text-danger-500">The citizen revoked this consent. Stop using the data per your retention policy.</p>}
                     <ul className="divide-y divide-line rounded-md border border-line">
                       {data.payload.facts.map((f) => (
                         <li key={f.key} className="grid grid-cols-[auto_1fr_auto] items-center gap-3 px-3 py-2 text-sm">
-                          <Checkbox isSelected={pick.has(f.key)} onChange={(v) => setPick((s) => { const n = new Set(s); if (v) n.add(f.key); else n.delete(f.key); return n; })} aria-label={`Re-verify ${keyLabel(f.key)}`}><Checkbox.Control><Checkbox.Indicator /></Checkbox.Control></Checkbox>
+                          <Checkbox isSelected={pick.has(f.key)} onChange={(v) => setPick((s) => { const n = new Set(s); if (v) n.add(f.key); else n.delete(f.key); return n; })} aria-label={`Re-verify ${keyLabel(f.key)}`}><Checkbox.Content aria-label={`Re-verify ${keyLabel(f.key)}`}><Checkbox.Control><Checkbox.Indicator /></Checkbox.Control></Checkbox.Content></Checkbox>
                           <div className="min-w-0"><div className="text-ink-2">{keyLabel(f.key)}</div><div className="truncate font-medium">{fmtValue(f.key, f.value)}</div></div>
                           <SourceChip source={f.source} verifiedBy={f.verifiedBy} />
                         </li>

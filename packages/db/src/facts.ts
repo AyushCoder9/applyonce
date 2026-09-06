@@ -3,10 +3,10 @@
  * enforces "issuer-verified is never overwritten by a weaker source" (creates a mismatch instead), keeps history.
  */
 import { and, eq, inArray } from "drizzle-orm";
-import { field, isFactKey, validateFact, type Source, type Fact, type FactValue, SOURCES } from "@praman/schema";
+import { field, isFactKey, validateFact, type Source, type Fact, type FactValue, SOURCES, documentTypeForKey } from "@praman/schema";
 import { encryptJson, decryptJson } from "@praman/crypto";
 import { db, type Db, type Tx } from "./client";
-import { facts, factHistory, mismatches } from "./schema";
+import { facts, factHistory, mismatches, documents } from "./schema";
 
 const RANK: Record<Source, number> = { self_declared: 0, document_extracted: 1, provider_verified: 2, issuer_verified: 3 };
 const aad = (profileId: string, key: string, i: number) => `fact:${profileId}:${key}:${i}`;
@@ -19,23 +19,32 @@ export interface PutFact {
 export type PutResult = { status: "created" | "updated" | "unchanged" | "mismatch"; id?: string };
 
 export async function putFact(dek: Buffer, p: PutFact, tx: Db | Tx = db): Promise<PutResult> {
+  // Serialize the provenance decision with its write, including derived facts/history.
+  if (tx === db) return db.transaction(inner => putFact(dek, p, inner));
   const def = field(p.key);
   if (def.system && p.source === "self_declared") throw new Error(`system key ${p.key} cannot be self-declared`);
   if (!def.sources.includes(p.source)) throw new Error(`${p.key} does not accept source ${p.source}`);
   const parsed = validateFact(p.key, p.value);
   if (!parsed.success) throw new Error(`invalid ${p.key}: ${parsed.error.issues.map((i) => i.message).join(", ")}`);
   const value = parsed.data as FactValue;
+  if (def.type === "file_ref" && value != null) {
+    const doc = await tx.query.documents.findFirst({ where: and(eq(documents.id, String(value)), eq(documents.profileId, p.profileId), eq(documents.status, "ready")) });
+    if (!doc) throw new Error(`invalid ${p.key}: choose a ready document from this profile`);
+    const expected = documentTypeForKey(p.key);
+    if (expected && doc.docType !== expected) throw new Error(`invalid ${p.key}: choose a ${expected} document`);
+  }
   const i = p.repeatIndex ?? 0;
+  if (!Number.isInteger(i) || i < 0 || i > 50) throw new Error("repeatIndex must be an integer from 0 to 50");
   if (i > 0 && !def.repeat) throw new Error(`${p.key} is not repeatable`);
 
-  const existing = await tx.query.facts.findFirst({ where: and(eq(facts.profileId, p.profileId), eq(facts.factKey, p.key), eq(facts.repeatIndex, i)) });
+  const [existing] = await tx.select().from(facts).where(and(eq(facts.profileId, p.profileId), eq(facts.factKey, p.key), eq(facts.repeatIndex, i))).limit(1).for("update");
   const oldValue = existing ? readValue(dek, existing, p.profileId) : undefined;
 
   if (existing && RANK[existing.source] > RANK[p.source] && !sameValue(oldValue, value)) {
-    await tx.insert(mismatches).values({ profileId: p.profileId, factKey: p.key, sourceA: existing.verifiedBy ?? existing.source, valueA: String(display(oldValue)), sourceB: p.verifiedBy ?? p.source, valueB: String(display(value)), severity: p.key === "identity.full_name" || p.key === "identity.dob" ? "high" : "medium" });
+    await tx.insert(mismatches).values({ profileId: p.profileId, factKey: p.key, sourceA: existing.verifiedBy ?? existing.source, valueA: String(display(def.sensitive ? mask(p.key, oldValue!) : oldValue)), sourceB: p.verifiedBy ?? p.source, valueB: String(display(def.sensitive ? mask(p.key, value) : value)), severity: p.key === "identity.full_name" || p.key === "identity.dob" ? "high" : "medium" });
     return { status: "mismatch", id: existing.id };
   }
-  if (existing && sameValue(oldValue, value) && RANK[existing.source] >= RANK[p.source]) return { status: "unchanged", id: existing.id };
+  if (existing && sameValue(oldValue, value) && (RANK[existing.source] > RANK[p.source] || (RANK[existing.source] === RANK[p.source] && p.source === "self_declared"))) return { status: "unchanged", id: existing.id };
 
   const enc = def.sensitive;
   const row = {
@@ -72,6 +81,7 @@ export function readValue(dek: Buffer, row: typeof facts.$inferSelect, profileId
 }
 
 export async function getFacts(dek: Buffer, profileId: string, opts: { section?: string; keys?: string[] } = {}, tx: Db | Tx = db): Promise<Fact[]> {
+  if (opts.keys && opts.keys.length === 0) return [];
   const where = [eq(facts.profileId, profileId)];
   if (opts.keys?.length) where.push(inArray(facts.factKey, opts.keys));
   const rows = await tx.select().from(facts).where(and(...where));

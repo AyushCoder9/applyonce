@@ -74,8 +74,7 @@ async function handle(msg: BackgroundRequest): Promise<unknown> {
     }
     case "PRAMAN_FILL_PLAN": {
       const q = new URLSearchParams({ recipe: msg.recipe, profile: msg.profileId, keys: msg.keys.join(",") });
-      if (msg.stepUp) q.set("stepUp", msg.stepUp);
-      return apiFetch(`/api/v1/extension/fill-plan?${q.toString()}`);
+      return apiFetch(`/api/v1/extension/fill-plan?${q.toString()}`,{headers:msg.stepUp ? {"x-praman-step-up":msg.stepUp} : {}});
     }
     case "PRAMAN_DOCUMENTS":
       return apiFetch(`/api/v1/extension/documents?profile=${encodeURIComponent(msg.profileId)}`);

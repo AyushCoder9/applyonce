@@ -1,6 +1,6 @@
 import type { Metadata } from "next";
 import Link from "next/link";
-import { Chip } from "@heroui/react";
+import { Chip } from "@/components/client-ui";
 import { Globe, Plug, ShieldCheck, Sparkles } from "lucide-react";
 import { db, t, eq } from "@praman/db";
 import { PageHeader, Callout } from "@praman/ui";

@@ -1,4 +1,4 @@
-import { createHash } from "node:crypto";
+import { createHash, randomUUID } from "node:crypto";
 import { NextResponse } from "next/server";
 import { FIELDS } from "@/lib/fields";
 import { generateApplicationNumber } from "@/lib/id";
@@ -51,6 +51,7 @@ export async function POST(request: Request) {
   const record: ApplicationRecord = {
     ref,
     source: "manual",
+    accessToken: randomUUID(),
     status: "submitted",
     createdAt: now,
     submittedAt: now,
@@ -62,6 +63,6 @@ export async function POST(request: Request) {
   saveApplication(record);
 
   const res = NextResponse.redirect(new URL(`/status/${ref}`, request.url), { status: 303 });
-  res.cookies.set("bta_last_ref", ref, { httpOnly: false, sameSite: "lax", path: "/" });
+  res.cookies.set("bta_access", record.accessToken!, { httpOnly: true, sameSite: "lax", secure:new URL(request.url).protocol === "https:",path: "/", maxAge:86400 });
   return res;
 }

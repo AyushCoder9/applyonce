@@ -1,3 +1,4 @@
+"use client";
 import Link from "next/link";
 import { buttonVariants } from "@heroui/react";
 /** A Next <Link> styled as a HeroUI Button (HeroUI's `render` wants a function; this is simpler for plain navigation). */

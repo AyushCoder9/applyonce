@@ -18,12 +18,17 @@ export const POST = handler(async (req, { params }) => {
   if (!share || share.shareSessionId !== sess.id) throw new ApiError(404, "SHARE_TOKEN_INVALID", "No share matches this token for this session");
   if (share.exchangedAt) throw new ApiError(409, "SHARE_TOKEN_USED", "This share token was already exchanged");
   if (share.expiresAt.getTime() < Date.now()) throw new ApiError(410, "SHARE_TOKEN_EXPIRED", "Share tokens expire 10 minutes after consent");
-  const consent = await db.query.consents.findFirst({ where: eq(t.consents.id, share.consentId) });
-  if (!consent || consent.revokedAt) throw new ApiError(409, "CONSENT_REVOKED", "The citizen revoked this consent");
-  // race-safe single use
-  const claimed = await db.update(t.shares).set({ exchangedAt: new Date() }).where(and(eq(t.shares.id, share.id), isNull(t.shares.exchangedAt))).returning({ id: t.shares.id });
-  if (!claimed.length) throw new ApiError(409, "SHARE_TOKEN_USED", "This share token was already exchanged");
-  await db.update(t.shareSessions).set({ status: "exchanged" }).where(eq(t.shareSessions.id, sess.id));
+  // Serialize exchange with consent revocation. Both paths lock/update the consent row.
+  const consent = await db.transaction(async tx => {
+    const [current] = await tx.select().from(t.consents).where(eq(t.consents.id, share.consentId)).for("update");
+    if (!current || current.revokedAt) throw new ApiError(409, "CONSENT_REVOKED", "The citizen revoked this consent");
+    if (current.expiresAt.getTime() <= Date.now()) throw new ApiError(410,"CONSENT_EXPIRED","This consent has expired.");
+    if (share.expiresAt.getTime() <= Date.now()) throw new ApiError(410,"SHARE_TOKEN_EXPIRED","This share token has expired.");
+    const claimed = await tx.update(t.shares).set({ exchangedAt: new Date() }).where(and(eq(t.shares.id, share.id), isNull(t.shares.exchangedAt))).returning({ id: t.shares.id });
+    if (!claimed.length) throw new ApiError(409, "SHARE_TOKEN_USED", "This share token was already exchanged");
+    await tx.update(t.shareSessions).set({ status: "exchanged" }).where(eq(t.shareSessions.id, sess.id));
+    return current;
+  });
   const payload_jws = decryptString(systemDek(), share.payloadEnc, `share:${share.id}`);
   await audit({ actorPartnerId: p.id, action: "share.exchange", targetType: "share", targetId: share.id, meta: { consentId: consent.id, applicationId: share.applicationId } });
   return ok({ payload_jws, consent_id: consent.id, application_id: share.applicationId });

@@ -1,8 +1,9 @@
+import type { PramanPayload } from "@praman/schema";
 /**
  * Ponytail persistence: a single JSON file under `.data/`, read/written synchronously.
  * No DB, no ORM — just enough to survive `next dev` reloads for the demo.
  */
-import { existsSync, mkdirSync, readFileSync, writeFileSync } from "node:fs";
+import { existsSync, mkdirSync, readFileSync, writeFileSync, renameSync } from "node:fs";
 import path from "node:path";
 
 export type AppSource = "manual" | "praman";
@@ -22,6 +23,7 @@ export interface StatusEvent {
 }
 
 export interface ApplicationRecord {
+  accessToken?: string;
   ref: string; // BTA26-XXXXXXX — our primary key
   source: AppSource;
   status: string;
@@ -52,17 +54,20 @@ interface PendingSession {
   createdAt: number;
 }
 
+export interface Draft {payload:PramanPayload;verified:boolean;offline:boolean;createdAt:number;submittedRef?:string}
+
 interface StoreShape {
+  drafts: Record<string,Draft>;
   applications: Record<string, ApplicationRecord>;
   webhookEvents: WebhookEventRecord[];
   /** pending share-session `state` nonces, keyed by state -> {sessionId, createdAt} */
   pendingStates: Record<string, PendingSession>;
 }
 
-const DATA_DIR = path.join(process.cwd(), ".data");
+const DATA_DIR = process.env.DEMO_DATA_DIR ?? path.join(process.cwd(), ".data");
 const STORE_PATH = path.join(DATA_DIR, "store.json");
 
-const EMPTY: StoreShape = { applications: {}, webhookEvents: [], pendingStates: {} };
+const EMPTY: StoreShape = { drafts: {}, applications: {}, webhookEvents: [], pendingStates: {} };
 
 function ensureFile(): void {
   if (!existsSync(DATA_DIR)) mkdirSync(DATA_DIR, { recursive: true });
@@ -74,15 +79,16 @@ function readStore(): StoreShape {
   try {
     const raw = readFileSync(STORE_PATH, "utf8");
     const parsed = JSON.parse(raw) as Partial<StoreShape>;
-    return { applications: parsed.applications ?? {}, webhookEvents: parsed.webhookEvents ?? [], pendingStates: parsed.pendingStates ?? {} };
+    return { drafts: parsed.drafts ?? {}, applications: parsed.applications ?? {}, webhookEvents: parsed.webhookEvents ?? [], pendingStates: parsed.pendingStates ?? {} };
   } catch {
-    return { ...EMPTY };
+    throw new Error("The demo data file could not be read. Restore it from backup; no data was overwritten.");
   }
 }
 
 function writeStore(store: StoreShape): void {
   ensureFile();
-  writeFileSync(STORE_PATH, JSON.stringify(store, null, 2));
+  writeFileSync(STORE_PATH + ".tmp", JSON.stringify(store, null, 2));
+  renameSync(STORE_PATH + ".tmp", STORE_PATH);
 }
 
 // ---------- applications ----------
@@ -125,7 +131,7 @@ export function markConsentRevoked(predicate: (a: ApplicationRecord) => boolean)
   const store = readStore();
   const touched: ApplicationRecord[] = [];
   for (const app of Object.values(store.applications)) {
-    if (predicate(app)) {
+    if (predicate(app) && !app.consentRevoked) {
       app.consentRevoked = true;
       app.history.push({ status: app.status, note: "Consent revoked by citizen on Praman", at: new Date().toISOString(), actor: "praman" });
       touched.push(app);
@@ -165,5 +171,9 @@ export function consumeState(state: string | null | undefined): string | null {
   const pending = store.pendingStates[state];
   delete store.pendingStates[state];
   writeStore(store);
-  return pending?.sessionId ?? null;
+  return pending && Date.now() - pending.createdAt < 15 * 60 * 1000 ? pending.sessionId : null;
 }
+
+export function saveDraft(token:string,draft:Draft) {const store=readStore();store.drafts[token]=draft;for(const [key,value] of Object.entries(store.drafts)) if(Date.now()-value.createdAt>30*60*1000) delete store.drafts[key];writeStore(store);}
+export function getDraft(token:string):Draft|undefined {const draft=readStore().drafts[token];return draft && Date.now()-draft.createdAt<30*60*1000 ? draft : undefined;}
+export function completeDraft(token:string,ref:string) {const store=readStore();if(store.drafts[token]) store.drafts[token].submittedRef=ref;writeStore(store);}

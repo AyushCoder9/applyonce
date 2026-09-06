@@ -16,10 +16,10 @@ type Passkey = { id: string; name?: string | null; createdAt?: string | Date; de
 const T = {
   title: { en: "Settings", hi: "सेटिंग्स" }, profile: { en: "Profile", hi: "प्रोफ़ाइल" }, security: { en: "Security", hi: "सुरक्षा" }, privacy: { en: "Privacy & data", hi: "गोपनीयता व डेटा" }, audit: { en: "Audit log", hi: "ऑडिट लॉग" },
   name: { en: "Your name", hi: "आपका नाम" }, language: { en: "Language", hi: "भाषा" }, langBlurb: { en: "Labels across Praman switch to Hindi.", hi: "पूरे प्रमाण के लेबल हिंदी में दिखेंगे।" }, save: { en: "Save", hi: "सहेजें" },
-  passkeys: { en: "Passkeys", hi: "पासकी" }, passkeysBlurb: { en: "Face/fingerprint sign-in. Needed for sharing and reveals.", hi: "चेहरा/उंगली से लॉगिन। साझा करने के लिए ज़रूरी।" }, addPasskey: { en: "Add passkey", hi: "पासकी जोड़ें" },
+  passkeys: { en: "Passkeys", hi: "पासकी" }, passkeysBlurb: { en: "Face/fingerprint sign-in. Confirm sharing with a passkey or OTP.", hi: "चेहरा/उंगली से लॉगिन। साझा करने के लिए ज़रूरी।" }, addPasskey: { en: "Add passkey", hi: "पासकी जोड़ें" },
   sessions: { en: "Devices & sessions", hi: "डिवाइस व सत्र" }, thisDevice: { en: "This device", hi: "यह डिवाइस" }, revoke: { en: "Sign out", hi: "साइन आउट" },
-  download: { en: "Download my data", hi: "मेरा डेटा डाउनलोड करें" }, downloadBlurb: { en: "A ZIP with all your facts (JSON) and documents. Ready in a few minutes; link valid 24 h.", hi: "आपके सभी तथ्य (JSON) और दस्तावेज़ों की ZIP। कुछ मिनट में तैयार; लिंक 24 घंटे वैध।" },
-  erase: { en: "Delete my account", hi: "मेरा खाता हटाएँ" }, eraseBlurb: { en: "30-day grace: log in again to cancel. After that everything is erased, except records we must keep by law (consent ledger entries partners rely on, 7 years).", hi: "30 दिन की अवधि: रद्द करने के लिए दोबारा लॉगिन करें। उसके बाद सब मिट जाता है, सिवाय क़ानूनन ज़रूरी रिकॉर्ड (सहमति लेजर, 7 वर्ष)।" },
+  download: { en: "Download my data", hi: "मेरा डेटा डाउनलोड करें" }, downloadBlurb: { en: "A compressed JSON export of facts, document metadata, applications and consent records. Download document files separately. Link valid 24 h.", hi: "आपके सभी तथ्य (JSON) और दस्तावेज़ों की ZIP। कुछ मिनट में तैयार; लिंक 24 घंटे वैध।" },
+  erase: { en: "Delete my account", hi: "मेरा खाता हटाएँ" }, eraseBlurb: { en: "Deletion starts after 30 days. Cancel a pending request below. Recent active applications may temporarily hold deletion.", hi: "30 दिन की अवधि: रद्द करने के लिए दोबारा लॉगिन करें। उसके बाद सब मिट जाता है, सिवाय क़ानूनन ज़रूरी रिकॉर्ड (सहमति लेजर, 7 वर्ष)।" },
   requests: { en: "Your requests", hi: "आपके अनुरोध" },
 };
 const inp = "w-full rounded-md border border-line bg-surface px-3 py-2.5 text-[15px]";
@@ -51,7 +51,7 @@ export function SettingsClient({ locale: l, user, sessions, requests, audit, tab
         </section>
         <section className="card flex items-center justify-between gap-4 p-5">
           <div className="flex items-start gap-3"><Languages className="mt-0.5 size-5 text-brand-600" /><div><div className="font-semibold" data-testid="settings-language-label">{T.language[l]}</div><div className="text-sm text-ink-2">{T.langBlurb[l]}</div></div></div>
-          <Switch isSelected={l === "hi"} onChange={setLocale} isDisabled={busy === "locale"} data-testid="locale-switch"><Switch.Control><Switch.Thumb /></Switch.Control><Switch.Content><span className="hi text-sm font-medium">हिंदी</span></Switch.Content></Switch>
+          <Switch isSelected={l === "hi"} onChange={setLocale} isDisabled={busy === "locale"} data-testid="locale-switch"><Switch.Content><Switch.Control><Switch.Thumb /></Switch.Control><span className="hi text-sm font-medium">हिंदी</span></Switch.Content></Switch>
         </section>
         <Link href="/app/settings/notifications" className="card flex items-center justify-between p-5 hover:shadow-pop"><div><div className="font-semibold">{l === "hi" ? "सूचना प्राथमिकताएँ" : "Notification preferences"}</div><div className="text-sm text-ink-2">{l === "hi" ? "SMS, ईमेल, व्हाट्सऐप" : "SMS, email, WhatsApp per category"}</div></div><span className="text-ink-3">›</span></Link>
       </Tabs.Panel>
@@ -111,7 +111,7 @@ function Privacy({ locale: l, requests, onChange }: { locale: Locale; requests: 
     setBusy(false);
     if (r.status === 403 && j?.error?.code === "STEP_UP_REQUIRED") return setStep(kind);
     if (!r.ok) return toast.danger(j?.error?.message ?? "Failed");
-    toast.success(kind === "export" ? (l === "hi" ? "एक्सपोर्ट तैयार हो रहा है" : "Export started") : (l === "hi" ? "हटाना निर्धारित (30 दिन)" : "Deletion scheduled (30 days)"), { description: kind === "export" ? (l === "hi" ? "तैयार होने पर सूचना मिलेगी।" : "We'll notify you when the ZIP is ready.") : undefined });
+    toast.success(kind === "export" ? (l === "hi" ? "एक्सपोर्ट तैयार हो रहा है" : "Export started") : (l === "hi" ? "हटाना निर्धारित (30 दिन)" : "Deletion scheduled (30 days)"), { description: kind === "export" ? (l === "hi" ? "तैयार होने पर सूचना मिलेगी।" : "We will notify you when the JSON export is ready.") : undefined });
     onChange();
   };
   const erase = () => { const c = prompt(l === "hi" ? "पुष्टि के लिए DELETE लिखें" : "Type DELETE to confirm"); if (c === "DELETE") run("erase"); };
@@ -123,14 +123,14 @@ function Privacy({ locale: l, requests, onChange }: { locale: Locale; requests: 
           <ul className="mt-2 grid gap-1 text-sm text-ink-2">
             <li><b className="text-ink">{l === "hi" ? "क्या" : "What"}:</b> {l === "hi" ? "पहचान, संपर्क, पता, परिवार, श्रेणी, शिक्षा, रोज़गार, बैंक; स्वास्थ्य केवल ऑप्ट-इन।" : "identity, contact, address, family, category, education, employment, bank; health only if you opt in."}</li>
             <li><b className="text-ink">{l === "hi" ? "क्यों" : "Why"}:</b> {l === "hi" ? "आपके फ़ॉर्म भरना और सत्यापित करना — केवल आपकी हर बार की सहमति से।" : "to fill and verify your applications — only when you tap Allow, every time."}</li>
-            <li><b className="text-ink">{l === "hi" ? "कब तक" : "How long"}:</b> {l === "hi" ? "जब तक आपका खाता है; सहमति रिकॉर्ड 7 वर्ष।" : "while your account exists; consent records 7 years (Consent Manager rule)."}</li>
+            <li><b className="text-ink">{l === "hi" ? "कब तक" : "How long"}:</b> {l === "hi" ? "जब तक आपका खाता है; सहमति रिकॉर्ड 7 वर्ष।" : "while your account exists, subject to your selected consent periods and the deletion workflow."}</li>
             <li><b className="text-ink">{l === "hi" ? "कभी नहीं" : "Never"}:</b> {l === "hi" ? "आपका आधार नंबर, विज्ञापन, बिक्री।" : "your Aadhaar number, ads, selling data."}</li>
           </ul>
           <Link href="/privacy" className="mt-2 inline-block text-sm text-brand-600 underline">{l === "hi" ? "पूरी सूचना पढ़ें" : "Read the full notice"}</Link></div></div>
       </section>
       <section className="card flex flex-wrap items-center justify-between gap-4 p-5"><div className="flex items-start gap-3"><Download className="mt-0.5 size-5 text-brand-600" /><div><h2 className="font-semibold">{T.download[l]}</h2><p className="text-sm text-ink-2">{T.downloadBlurb[l]}</p></div></div><Button variant="secondary" onPress={() => run("export")} isPending={busy} data-testid="export-btn">{T.download[l]}</Button></section>
       <section className="card flex flex-wrap items-center justify-between gap-4 border-danger-500/30 p-5"><div className="flex items-start gap-3"><Trash2 className="mt-0.5 size-5 text-danger-500" /><div><h2 className="font-semibold">{T.erase[l]}</h2><p className="text-sm text-ink-2">{T.eraseBlurb[l]}</p></div></div><Button variant="danger-soft" onPress={erase} isPending={busy}>{T.erase[l]}</Button></section>
-      {requests.length > 0 && <section className="card p-5"><h2 className="font-semibold">{T.requests[l]}</h2><ul className="mt-2 divide-y divide-line text-sm">{requests.map((r) => <li key={r.id} className="flex items-center justify-between py-2"><span className="capitalize">{r.kind} · {fmtDate(r.requestedAt, l)}</span><Chip size="sm" color={STATUS[r.status] ?? "default"}>{r.status}</Chip></li>)}</ul></section>}
+      {requests.length > 0 && <section className="card p-5"><h2 className="font-semibold">{T.requests[l]}</h2><ul className="mt-2 divide-y divide-line text-sm">{requests.map((r) => <li key={r.id} className="flex items-center justify-between py-2"><span className="capitalize">{r.kind} · {fmtDate(r.requestedAt, l)}</span><div className="flex items-center gap-2"><Chip size="sm" color={STATUS[r.status] ?? "default"}>{r.status}</Chip>{r.kind === "erase" && ["pending","on_hold"].includes(r.status) && <Button size="sm" variant="outline" onPress={async()=>{try {const response=await fetch("/api/v1/me/erase",{method:"DELETE"}); if(!response.ok) throw new Error("Could not cancel deletion");toast.success(l==="hi"?"हटाना रद्द हुआ":"Deletion cancelled");onChange();}catch(error){toast.danger((error as Error).message);}}}>{l==="hi"?"रद्द करें":"Cancel deletion"}</Button>}</div></li>)}</ul></section>}
       <StepUpDialog open={!!step} locale={l} onOpenChange={(o) => !o && setStep(null)} onDone={(ok) => { const k = step; setStep(null); if (ok && k) run(k); }} />
     </>
   );

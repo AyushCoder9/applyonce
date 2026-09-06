@@ -56,8 +56,8 @@ export function DocumentDetail({ doc, extractions, linkedFacts, current, locale 
               <span className={cx("grid size-16 place-items-center rounded-lg", doc.origin === "digilocker" ? "bg-verified-50 text-verified-700" : "bg-surface-2 text-ink-2")}><FileText className="size-8" strokeWidth={1.5} /></span>
               <div className="font-display text-xl font-bold">{doc.title}</div>
               <div className="text-sm text-ink-2">{doc.issuerName ?? tr(locale, "Uploaded by you", "आपके द्वारा अपलोड")}{doc.issuedAt ? ` · ${fmtDate(doc.issuedAt, locale)}` : ""}</div>
-              {mock ? <p className="max-w-md text-sm text-ink-3">{tr(locale, "Demo mode: the original PDF stays with the issuer. Its fingerprint (hash) is recorded below, so partners can verify it.", "डेमो: मूल PDF जारीकर्ता के पास है। नीचे उसका हैश दर्ज है ताकि साझेदार सत्यापित कर सकें।")}</p>
-                : <Button variant="outline" onPress={view} isPending={busy}><Lock className="size-4" />{tr(locale, "View original (confirm it’s you)", "मूल देखें (पुष्टि करें)")}</Button>}
+              {mock && <p className="max-w-md text-sm text-ink-3">{tr(locale, "Sandbox: view a clearly marked sample attachment. This is not a real issuer document.", "सैंडबॉक्स: नमूना फ़ाइल देखें। यह असली जारीकर्ता दस्तावेज़ नहीं है।")}</p>}
+              {<Button variant="outline" onPress={view} isPending={busy}><Lock className="size-4" />{tr(locale, mock ? "View sample attachment" : "View original (confirm it’s you)", "मूल देखें (पुष्टि करें)")}</Button>}
             </div>
           )}
         </section>
@@ -119,7 +119,7 @@ export function DocumentDetail({ doc, extractions, linkedFacts, current, locale 
         <section className="card p-5">
           <h3 className="font-display text-lg font-bold">{tr(locale, "Use it", "इस्तेमाल करें")}</h3>
           <div className="mt-3 grid gap-2">
-            {!mock && <Button variant="outline" onPress={view} isPending={busy}><Lock className="size-4" />{src ? tr(locale, "Refresh link", "लिंक ताज़ा करें") : tr(locale, "Download / view", "डाउनलोड / देखें")}</Button>}
+            {<Button variant="outline" onPress={view} isPending={busy}><Lock className="size-4" />{src ? tr(locale, "Refresh link", "लिंक ताज़ा करें") : tr(locale, "Download / view", "डाउनलोड / देखें")}</Button>}
             <LinkButton variant="outline" href="/app/apply"><ExternalLink className="size-4" />{tr(locale, "Attach in an application", "आवेदन में संलग्न करें")}</LinkButton>
           </div>
           <p className="mt-3 text-xs text-ink-3">{tr(locale, "Downloads need your passkey or OTP and are logged in your audit trail.", "डाउनलोड के लिए पासकी/OTP चाहिए और यह ऑडिट में दर्ज होता है।")}</p>

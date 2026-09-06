@@ -1,3 +1,4 @@
+import { cookies } from "next/headers";
 import { notFound } from "next/navigation";
 import { getApplication } from "@/lib/store";
 import { StatusTimeline } from "@/components/StatusTimeline";
@@ -32,7 +33,7 @@ function AdminButton({ applicationRef, status, note, label, variant }: { applica
 export default async function StatusPage({ params }: { params: Promise<{ ref: string }> }) {
   const { ref } = await params;
   const app = getApplication(ref);
-  if (!app) notFound();
+  if (!app || !app.accessToken || (await cookies()).get("bta_access")?.value !== app.accessToken) notFound();
 
   const badge = STATUS_BADGE[app.status] ?? { bg: "#eceef0", fg: "#4a4a4a", label: app.status };
 
@@ -77,19 +78,19 @@ export default async function StatusPage({ params }: { params: Promise<{ ref: st
         </div>
       )}
 
-      <div className="gov-card" style={{ padding: "16px 20px", borderColor: "var(--color-gov-blue)" }}>
-        <h2 style={{ fontSize: 15, margin: "0 0 4px" }}>Admin panel (demo only, no auth)</h2>
+      {(process.env.DEMO_ADMIN_ENABLED === "1" || process.env.NODE_ENV !== "production") && <div className="gov-card" style={{ padding: "16px 20px", borderColor: "var(--color-gov-blue)" }}>
+        <h2 style={{ fontSize: 15, margin: "0 0 4px" }}>Sandbox status simulator</h2>
         <p style={{ marginTop: 0, marginBottom: 12, fontSize: 12, color: "var(--color-gov-ink-2)" }}>
           {app.pramanApplicationId
             ? "These buttons call Praman's partner status API (with an Idempotency-Key) so the citizen's tracker updates immediately."
             : "This application did not come through Praman, so status changes only affect this portal."}
         </p>
         <div style={{ display: "flex", gap: 10, flexWrap: "wrap" }}>
-          <AdminButton applicationRef={app.ref} status="shortlisted" note="Admit card released — download from BTA portal" label="Push: Admit card released" variant="primary" />
+          <AdminButton applicationRef={app.ref} status="shortlisted" note="Sample status event: admit card released. No real exam document is issued in this sandbox." label="Push: Admit card released" variant="primary" />
           <AdminButton applicationRef={app.ref} status="accepted" note="Congratulations — you have been accepted." label="Push: Accepted" variant="success" />
           <AdminButton applicationRef={app.ref} status="rejected" note="We regret to inform you that your application was not successful." label="Push: Rejected" variant="danger" />
         </div>
-      </div>
+      </div>}
     </div>
   );
 }

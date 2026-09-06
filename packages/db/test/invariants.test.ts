@@ -1,6 +1,6 @@
 /** Runs against the local docker Postgres (DATABASE_URL). Proves: no share without valid consent; facts encrypt + provenance rules. */
 import { describe, it, expect, beforeAll, afterAll } from "vitest";
-import { db, sql, t, eq, getDek, putFact, getFacts, mask } from "../src";
+import { db, sql, t, eq, getDek, putFact, getFacts, mask, listAccessibleProfiles } from "../src";
 
 process.env.PRAMAN_KEK_HEX ??= "0".repeat(64);
 let profileId: string, partnerId: string, userId = "usr_test_inv";
@@ -49,5 +49,43 @@ describe("facts", () => {
     expect((await db.select().from(t.mismatches).where(eq(t.mismatches.profileId, profileId))).length).toBe(1);
     await expect(putFact(dek, { profileId, key: "identity.nope", value: "x", source: "self_declared" })).rejects.toThrow(/Unknown fact_key/);
     await expect(putFact(dek, { profileId, key: "identity.aadhaar_ref_key", value: "x", source: "self_declared" })).rejects.toThrow();
+  });
+});
+
+
+describe("audit regressions", () => {
+  it("empty scopes never become full vault reads; verified refresh extends expiry", async () => {
+    const dek = await getDek(userId);
+    expect(await getFacts(dek,profileId,{keys:[]})).toEqual([]);
+    await putFact(dek,{profileId,key:"identity.gender",value:"M",source:"issuer_verified",verifiedBy:"uidai",expiresAt:new Date(Date.now()-1000)});
+    const expiresAt = new Date(Date.now()+86400000);
+    await putFact(dek,{profileId,key:"identity.gender",value:"M",source:"issuer_verified",verifiedBy:"uidai",expiresAt});
+    expect((await getFacts(dek,profileId,{keys:["identity.gender"]}))[0]!.expiresAt).toBe(expiresAt.toISOString());
+  });
+  it("document references require the matching type, ready state and same profile", async () => {
+    const dek = await getDek(userId);
+    const [ward] = await db.insert(t.profiles).values({ownerUserId:userId,kind:"dependent",displayName:"Ward"}).returning();
+    const [foreign] = await db.insert(t.documents).values({profileId:ward!.id,docType:"photo",title:"Foreign photo",origin:"upload",status:"ready"}).returning();
+    const [wrong] = await db.insert(t.documents).values({profileId,docType:"signature",title:"Signature",origin:"upload",status:"ready"}).returning();
+    await expect(putFact(dek,{profileId,key:"identity.photo",value:foreign!.id,source:"self_declared"})).rejects.toThrow(/ready document/);
+    await expect(putFact(dek,{profileId,key:"identity.photo",value:wrong!.id,source:"self_declared"})).rejects.toThrow(/photo document/);
+    const withoutRelation = await listAccessibleProfiles(userId);
+    expect(withoutRelation.all.some(p=>p.id===ward!.id)).toBe(false);
+    await db.insert(t.relations).values({guardianProfileId:profileId,wardProfileId:ward!.id,relation:"guardian",basis:"elder_consent",scope:["health"]});
+    expect((await listAccessibleProfiles(userId)).all.find(p=>p.id===ward!.id)?.scope).toEqual(["health"]);
+  });
+});
+
+
+describe("concurrent provenance",()=>{
+  it("a weaker simultaneous write cannot downgrade verified evidence",async()=>{
+    const dek=await getDek(userId);
+    await putFact(dek,{profileId,key:"identity.nationality",value:"IN",source:"self_declared"});
+    await Promise.all([
+      putFact(dek,{profileId,key:"identity.nationality",value:"IN",source:"issuer_verified",verifiedBy:"uidai"}),
+      ...Array.from({length:6},()=>putFact(dek,{profileId,key:"identity.nationality",value:"NRI",source:"self_declared"})),
+    ]);
+    const fact=(await getFacts(dek,profileId,{keys:["identity.nationality"]}))[0]!;
+    expect(fact.source).toBe("issuer_verified");expect(fact.value).toBe("IN");
   });
 });

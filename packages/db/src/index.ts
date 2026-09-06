@@ -5,3 +5,5 @@ export { eq, and, or, ne, desc, asc, isNull, isNotNull, inArray, lt, lte, gt, gt
 export * from "./keys";
 export * from "./facts";
 export * from "./audit";
+
+export * from "./access";

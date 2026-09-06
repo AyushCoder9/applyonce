@@ -1,6 +1,6 @@
+import { documentAllowed } from "@praman/schema";
 import Link from "next/link";
 import { LinkButton } from "@/components/vault/link-button";
-import { Button } from "@heroui/react";
 import { db, t, eq, desc, inArray } from "@praman/db";
 import { PageHeader } from "@praman/ui";
 import { requireUser, requireProfileAccess } from "@/lib/session";
@@ -13,7 +13,7 @@ export default async function DocumentsPage({ searchParams }: { searchParams: Pr
   const s = await requireUser("/app/documents");
   const locale = localeOf(s.user);
   const a = await requireProfileAccess(s);
-  const rows = await db.select().from(t.documents).where(eq(t.documents.profileId, a.profile.id)).orderBy(desc(t.documents.createdAt));
+  const rows = (await db.select().from(t.documents).where(eq(t.documents.profileId, a.profile.id)).orderBy(desc(t.documents.createdAt))).filter(d => documentAllowed(a.scope, d.docType));
   const ex = rows.length ? await db.select({ documentId: t.documentExtractions.documentId, reviewedAt: t.documentExtractions.reviewedAt }).from(t.documentExtractions).where(inArray(t.documentExtractions.documentId, rows.map((d) => d.id))) : [];
   const review = new Set(ex.filter((e) => !e.reviewedAt).map((e) => e.documentId));
   const docs: DocItem[] = rows.map((d) => ({ id: d.id, title: d.title, docType: d.docType, issuerName: d.issuerName, origin: d.origin, status: d.status, validUntil: d.validUntil?.toISOString() ?? null, issuedAt: d.issuedAt?.toISOString() ?? null, sha256: d.sha256, needsReview: review.has(d.id), createdAt: d.createdAt.toISOString() }));

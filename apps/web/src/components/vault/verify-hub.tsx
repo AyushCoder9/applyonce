@@ -18,7 +18,7 @@ const PROVIDERS = [
   { id: "pan", icon: CreditCard, en: "PAN", hi: "पैन", blurbEn: "Checks your PAN with the Income Tax Department and matches the name.", blurbHi: "आयकर विभाग से पैन जाँचता है और नाम मिलाता है।" },
   { id: "abha", icon: HeartPulse, en: "ABHA (health ID)", hi: "आभा (स्वास्थ्य आईडी)", blurbEn: "Links your ABHA number and blood group for hospital and scheme forms.", blurbHi: "अस्पताल और योजना फ़ॉर्म के लिए आभा नंबर व रक्त समूह जोड़ता है।" },
   { id: "aa", icon: Landmark, en: "Account Aggregator", hi: "अकाउंट एग्रीगेटर", blurbEn: "Verifies family income from bank statements for scholarships (RBI-regulated consent).", blurbHi: "छात्रवृत्ति हेतु बैंक स्टेटमेंट से आय सत्यापित करता है (RBI-नियंत्रित सहमति)।" },
-  { id: "esign", icon: PenTool, en: "e-Sign", hi: "ई-साइन", blurbEn: "Sign declarations with Aadhaar e-Sign. Coming soon.", blurbHi: "आधार ई-साइन से घोषणाएँ हस्ताक्षरित करें। जल्द आ रहा है।" },
+  { id: "esign", icon: PenTool, en: "e-Sign", hi: "ई-साइन", blurbEn: "Sign declarations with Aadhaar e-Sign. Create an OTP-confirmed sandbox declaration receipt.", blurbHi: "आधार ई-साइन से घोषणाएँ हस्ताक्षरित करें। सैंडबॉक्स घोषणा रसीद बनाएँ।" },
 ] as const;
 
 export function VerifyHub({ profileId, links, jobs: initialJobs, mismatches, expiring, locale = "en", focusJobId, error }: { profileId: string; links: LinkRow[]; jobs: Job[]; mismatches: Mismatch[]; expiring: Fact[]; locale?: Locale; focusJobId?: string | null; error?: string | null }) {
@@ -51,7 +51,7 @@ export function VerifyHub({ profileId, links, jobs: initialJobs, mismatches, exp
   };
   const resolve = async (m: Mismatch, keep: "a" | "b") => {
     setBusy(m.id);
-    try { await api(`/profiles/${profileId}/mismatches/${m.id}/resolve`, { method: "POST", json: { keep } }); toast.success(keep === "a" ? tr(locale, "Kept the verified value", "सत्यापित मान रखा") : tr(locale, "Kept yours — re-verify soon", "आपका मान रखा — जल्द पुनः सत्यापित करें")); router.refresh(); }
+    try { await api(`/profiles/${profileId}/mismatches/${m.id}/resolve`, { method: "POST", json: { keep } }); toast.success(keep === "a" ? tr(locale, "Kept the verified value", "सत्यापित मान रखा") : tr(locale, "Re-verification requested; the verified value is unchanged", "आपका मान रखा — जल्द पुनः सत्यापित करें")); router.refresh(); }
     catch (e) { toast.danger((e as Error).message); }
     finally { setBusy(null); }
   };
@@ -68,7 +68,7 @@ export function VerifyHub({ profileId, links, jobs: initialJobs, mismatches, exp
                 <span className={cx("grid size-11 shrink-0 place-items-center rounded-md", linked ? "bg-verified-50 text-verified-700" : "bg-brand-50 text-brand-600")}><I className="size-6" strokeWidth={1.75} /></span>
                 <div className="min-w-0 flex-1">
                   <div className="flex flex-wrap items-center gap-2"><h3 className="font-display text-lg font-bold">{locale === "hi" ? p.hi : p.en}</h3>
-                    {linked ? <Chip size="sm" color="success" variant="soft"><span className="inline-flex items-center gap-1"><Check className="size-3.5" />{tr(locale, "Connected", "जुड़ा")}</span></Chip> : p.id === "esign" ? <Chip size="sm" variant="soft">{tr(locale, "Soon", "जल्द")}</Chip> : <Chip size="sm" color="warning" variant="soft">{tr(locale, "Not connected", "नहीं जुड़ा")}</Chip>}</div>
+                    {linked ? <Chip size="sm" color="success" variant="soft"><span className="inline-flex items-center gap-1"><Check className="size-3.5" />{tr(locale, "Connected", "जुड़ा")}</span></Chip> : p.id === "esign" ? <Chip size="sm" variant="soft">{tr(locale, "Sandbox", "सैंडबॉक्स")}</Chip> : <Chip size="sm" color="warning" variant="soft">{tr(locale, "Not connected", "नहीं जुड़ा")}</Chip>}</div>
                   <p className="mt-0.5 text-sm text-ink-2">{locale === "hi" ? p.blurbHi : p.blurbEn}</p>
                   {linked && link?.lastSyncAt && <p className="mt-1 text-xs text-ink-3">{tr(locale, "Last sync", "अंतिम सिंक")} {fmtDate(link.lastSyncAt, locale)}</p>}
                 </div>
@@ -93,7 +93,7 @@ export function VerifyHub({ profileId, links, jobs: initialJobs, mismatches, exp
                 )}
                 {p.id === "abha" && <Button variant="outline" onPress={() => go("/providers/abha/link", "abha")} isPending={busy === "abha"} isDisabled={!!running}>{linked ? tr(locale, "Re-link", "फिर जोड़ें") : tr(locale, "Link ABHA", "आभा जोड़ें")}</Button>}
                 {p.id === "aa" && <Button variant="outline" onPress={() => go("/providers/aa/consent", "aa")} isPending={busy === "aa"} isDisabled={!!running}>{linked ? tr(locale, "Refresh income", "आय ताज़ा करें") : tr(locale, "Give consent", "सहमति दें")}</Button>}
-                {p.id === "esign" && <Button variant="outline" isDisabled>{tr(locale, "Coming soon", "जल्द")}</Button>}
+                {p.id === "esign" && <a href="/app/sign" className="rounded-md border border-line px-4 py-2 text-sm font-semibold">{tr(locale,"Create a declaration","घोषणा बनाएँ")}</a>}
               </div>
             </article>
           );

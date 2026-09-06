@@ -16,6 +16,11 @@ export const POST = handler(async (req) => {
     const form = await db.query.forms.findFirst({ where: and(eq(t.forms.partnerId, p.id), isUuid(ref) ? eq(t.forms.id, ref) : eq(t.forms.slug, ref)) });
     if (!form) throw new ApiError(404, "FORM_NOT_FOUND", "No form with that id or slug belongs to this partner");
     if (form.status !== "live") throw new ApiError(409, "FORM_NOT_LIVE", "Publish the form before creating share sessions");
+    if (form.deadlineAt && form.deadlineAt.getTime() <= Date.now()) throw new ApiError(409,"FORM_CLOSED","The deadline has passed.");
+    const returnUrl = new URL(b.return_url);
+    const allowedOrigins = [new URL(form.redirectUrl).origin];
+    if (env === "sandbox") allowedOrigins.push(new URL(process.env.NEXT_PUBLIC_APP_URL ?? "http://localhost:3300").origin);
+    if (!allowedOrigins.includes(returnUrl.origin) || returnUrl.username || returnUrl.password || !["https:","http:"].includes(returnUrl.protocol)) throw new ApiError(422,"RETURN_URL_NOT_ALLOWED","Return URL must use the registered form redirect origin.");
     const token = randomToken(32);
     const expiresAt = new Date(Date.now() + SESSION_TTL_MS);
     const [s] = await db.insert(t.shareSessions).values({ partnerId: p.id, formId: form.id, token, returnUrl: b.return_url, state: b.state ?? null, env, expiresAt }).returning({ id: t.shareSessions.id });

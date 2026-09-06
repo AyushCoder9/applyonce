@@ -4,11 +4,11 @@
  * (string | number | boolean | string[] | object | null); `coerceInput` turns raw UI text into that.
  */
 import { TextField, Label, Input, Description, FieldError, TextArea, Select, ListBox, Switch, NumberField } from "@heroui/react";
-import { ENUM_LABELS, type FieldDef, type FactValue } from "@praman/schema";
+import { ENUM_LABELS, documentTypeForKey, type FieldDef, type FactValue } from "@praman/schema";
 import { MobileInput, PincodeInput, PanInput, IfscInput } from "./inputs-india";
 import type { Locale } from "./format";
 
-export interface FactEditorProps { def: FieldDef; value: FactValue | undefined; onChange: (v: FactValue) => void; locale?: Locale; error?: string | null; autoFocus?: boolean; documents?: { id: string; title: string }[]; onPincodeLookup?: (r: { district: string; state: string } | null) => void }
+export interface FactEditorProps { def: FieldDef; value: FactValue | undefined; onChange: (v: FactValue) => void; locale?: Locale; error?: string | null; autoFocus?: boolean; documents?: { id: string; title: string; docType?: string }[]; onPincodeLookup?: (r: { district: string; state: string } | null) => void }
 
 const NUMERIC = new Set(["number", "int", "year", "percentage", "money"]);
 /** ENUM_LABELS group for a key, else null. */
@@ -39,6 +39,8 @@ export function coerceInput(def: FieldDef, raw: unknown): FactValue {
 export const rawFor = (def: FieldDef, v: FactValue | undefined): string => (v == null ? "" : def.type === "string[]" && Array.isArray(v) ? v.join(", ") : def.type === "json" ? JSON.stringify(v, null, 2) : String(v));
 
 export function FactEditor({ def, value, onChange, locale = "en", error, autoFocus, documents = [], onPincodeLookup }: FactEditorProps) {
+  const expectedType = documentTypeForKey(def.key);
+  documents = documents.filter(d => !expectedType || !d.docType || d.docType === expectedType);
   const label = def.label[locale];
   const help = def.help?.[locale];
   const text = rawFor(def, value);
@@ -51,7 +53,7 @@ export function FactEditor({ def, value, onChange, locale = "en", error, autoFoc
     case "bool":
       return (
         <div className="grid gap-1">
-          <Switch isSelected={value === true} onChange={(b) => onChange(b)} autoFocus={autoFocus}><Switch.Control><Switch.Thumb /></Switch.Control><Switch.Content>{label}</Switch.Content></Switch>
+          <Switch isSelected={value === true} onChange={(b) => onChange(b)} autoFocus={autoFocus}><Switch.Content><Switch.Control><Switch.Thumb /></Switch.Control>{label}</Switch.Content></Switch>
           {help && <p className="text-sm text-ink-3">{help}</p>}{error && <p className="text-sm text-danger-500">{error}</p>}
         </div>
       );
@@ -73,7 +75,7 @@ export function FactEditor({ def, value, onChange, locale = "en", error, autoFoc
           <FieldError>{error}</FieldError>
           <Select.Popover><ListBox>{documents.map((d) => <ListBox.Item key={d.id} id={d.id} textValue={d.title}>{d.title}<ListBox.ItemIndicator /></ListBox.Item>)}</ListBox></Select.Popover>
         </Select>
-      ) : <div className="rounded-md border border-dashed border-line p-3 text-sm text-ink-2"><div className="font-medium text-ink">{label}</div>{locale === "hi" ? "पहले दस्तावेज़ अपलोड करें, फिर यहाँ चुनें।" : "Upload the document first, then pick it here."}</div>;
+      ) : <div className="rounded-md border border-dashed border-line p-3 text-sm text-ink-2"><div className="font-medium text-ink">{label}</div>{locale === "hi" ? "पहले दस्तावेज़ अपलोड करें, फिर यहाँ चुनें।" : "Upload the document first, then pick it here."}<a href="/app/documents?upload=1" target="_blank" rel="noreferrer" className="mt-2 block underline">Upload in a new tab, then refresh</a></div>;
     case "number": case "int": case "year": case "percentage": case "money": {
       const fmt: Intl.NumberFormatOptions = def.type === "money" ? { style: "currency", currency: "INR", maximumFractionDigits: 0 } : def.type === "year" ? { useGrouping: false } : def.type === "percentage" ? { maximumFractionDigits: 2 } : { maximumFractionDigits: 3 };
       return (

@@ -1,3 +1,4 @@
+import { documentAllowed } from "@praman/schema";
 import { notFound } from "next/navigation";
 import { db, t, eq, desc } from "@praman/db";
 import { PageHeader } from "@praman/ui";
@@ -13,7 +14,7 @@ export default async function DocumentPage({ params }: { params: Promise<{ id: s
   const doc = await db.query.documents.findFirst({ where: eq(t.documents.id, id) });
   if (!doc) notFound();
   const a = await requireProfileAccess(s, doc.profileId).catch(() => null);
-  if (!a) notFound();
+  if (!a || !documentAllowed(a.scope, doc.docType)) notFound();
   const extractions = await db.select().from(t.documentExtractions).where(eq(t.documentExtractions.documentId, doc.id)).orderBy(desc(t.documentExtractions.createdAt));
   const facts = await loadFacts(a);
   const linked = facts.filter((f) => f.evidenceDocumentId === doc.id);

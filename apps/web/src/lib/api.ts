@@ -31,6 +31,8 @@ export async function body<T extends z.ZodType>(req: Request, schema: T): Promis
 
 /** Citizen auth for API routes. */
 export async function citizen(req: Request, opts: { profileId?: string | null; stepUp?: boolean } = {}) {
+  const origin = req.headers.get("origin");
+  if (!["GET","HEAD","OPTIONS"].includes(req.method) && origin && ![new URL(req.url).origin,process.env.BETTER_AUTH_URL].includes(origin)) throw new ApiError(403,"ORIGIN_NOT_ALLOWED");
   const s = await getSession();
   if (!s) throw new ApiError(401, "UNAUTHENTICATED");
   if (opts.stepUp && !isSteppedUp(s)) throw new ApiError(403, "STEP_UP_REQUIRED", "Confirm with your passkey or OTP to continue");
@@ -48,7 +50,7 @@ export async function partner(req: Request) {
   const row = await db.query.partnerApiKeys.findFirst({ where: and(eq(t.partnerApiKeys.keyHash, sha256(key)), isNull(t.partnerApiKeys.revokedAt)) });
   if (!row) throw new ApiError(401, "PARTNER_KEY_INVALID");
   const p = await db.query.partners.findFirst({ where: eq(t.partners.id, row.partnerId) });
-  if (!p || p.status === "suspended") throw new ApiError(403, "PARTNER_SUSPENDED");
+  if (!p || p.status === "suspended" || (row.env === "live" && p.status !== "verified")) throw new ApiError(403, "PARTNER_SUSPENDED");
   db.update(t.partnerApiKeys).set({ lastUsedAt: new Date() }).where(eq(t.partnerApiKeys.id, row.id)).catch(() => {});
   return { partner: p, env: row.env, keyId: row.id };
 }

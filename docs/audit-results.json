@@ -1,0 +1,424 @@
+{
+  "at": "2026-09-06T15:08:50.827Z",
+  "base": "http://localhost:3400",
+  "portal": "http://localhost:3401",
+  "passed": 83,
+  "total": 83,
+  "results": [
+    {
+      "name": "anonymous APIs require authentication",
+      "passed": true,
+      "ms": 186
+    },
+    {
+      "name": "citizen OTP login and profile list",
+      "passed": true,
+      "ms": 83
+    },
+    {
+      "name": "guardian scope remains limited",
+      "passed": true,
+      "ms": 70
+    },
+    {
+      "name": "cross-origin mutations rejected",
+      "passed": true,
+      "ms": 6
+    },
+    {
+      "name": "ordinary citizen cannot call admin",
+      "passed": true,
+      "ms": 7
+    },
+    {
+      "name": "passkey step-up cannot be faked with fresh OTP session",
+      "passed": true,
+      "ms": 39
+    },
+    {
+      "name": "sensitive document needs step-up",
+      "passed": true,
+      "ms": 236
+    },
+    {
+      "name": "OTP step-up and revocable sample preview",
+      "passed": true,
+      "ms": 72
+    },
+    {
+      "name": "foreign and wrong-type document references rejected",
+      "passed": true,
+      "ms": 32
+    },
+    {
+      "name": "provider cannot import guardian identity into a dependent",
+      "passed": true,
+      "ms": 10
+    },
+    {
+      "name": "registered partner redirect origin enforced",
+      "passed": true,
+      "ms": 9
+    },
+    {
+      "name": "declining consent invalidates the link",
+      "passed": true,
+      "ms": 60
+    },
+    {
+      "name": "BTA start creates browser-bound state and real share session",
+      "passed": true,
+      "ms": 109
+    },
+    {
+      "name": "readiness guide works without sharing identity values",
+      "passed": true,
+      "ms": 22
+    },
+    {
+      "name": "tampered custom choices are rejected",
+      "passed": true,
+      "ms": 7
+    },
+    {
+      "name": "scoped guardian cannot consent to out-of-scope form",
+      "passed": true,
+      "ms": 25
+    },
+    {
+      "name": "consent produces an application and signed partner callback",
+      "passed": true,
+      "ms": 235
+    },
+    {
+      "name": "BTA submission rejects forged review sessions",
+      "passed": true,
+      "ms": 2
+    },
+    {
+      "name": "extension token cannot be passed in query or access system facts",
+      "passed": true,
+      "ms": 41
+    },
+    {
+      "name": "upload size and MIME validation",
+      "passed": true,
+      "ms": 39
+    },
+    {
+      "name": "real file upload completes processing and is downloadable",
+      "passed": true,
+      "ms": 1336
+    },
+    {
+      "name": "erasure can be scheduled and explicitly cancelled",
+      "passed": true,
+      "ms": 71
+    },
+    {
+      "name": "declaration is stored with its full text and downloadable receipt",
+      "passed": true,
+      "ms": 92
+    },
+    {
+      "name": "data export queues successfully",
+      "passed": true,
+      "ms": 36
+    },
+    {
+      "name": "partner and administrator login",
+      "passed": true,
+      "ms": 68
+    },
+    {
+      "name": "public page /",
+      "passed": true,
+      "ms": 20
+    },
+    {
+      "name": "public page /demo",
+      "passed": true,
+      "ms": 7
+    },
+    {
+      "name": "public page /for-institutions",
+      "passed": true,
+      "ms": 6
+    },
+    {
+      "name": "public page /privacy",
+      "passed": true,
+      "ms": 5
+    },
+    {
+      "name": "public page /security",
+      "passed": true,
+      "ms": 9
+    },
+    {
+      "name": "public page /terms",
+      "passed": true,
+      "ms": 5
+    },
+    {
+      "name": "public page /dpo",
+      "passed": true,
+      "ms": 16
+    },
+    {
+      "name": "public page /status",
+      "passed": true,
+      "ms": 21
+    },
+    {
+      "name": "public page /auth/login",
+      "passed": true,
+      "ms": 7
+    },
+    {
+      "name": "citizen page /app",
+      "passed": true,
+      "ms": 27
+    },
+    {
+      "name": "citizen page /app/vault",
+      "passed": true,
+      "ms": 19
+    },
+    {
+      "name": "citizen page /app/vault/identity",
+      "passed": true,
+      "ms": 33
+    },
+    {
+      "name": "citizen page /app/vault/contact",
+      "passed": true,
+      "ms": 16
+    },
+    {
+      "name": "citizen page /app/vault/address",
+      "passed": true,
+      "ms": 17
+    },
+    {
+      "name": "citizen page /app/vault/family",
+      "passed": true,
+      "ms": 19
+    },
+    {
+      "name": "citizen page /app/vault/category",
+      "passed": true,
+      "ms": 17
+    },
+    {
+      "name": "citizen page /app/vault/education",
+      "passed": true,
+      "ms": 19
+    },
+    {
+      "name": "citizen page /app/vault/employment",
+      "passed": true,
+      "ms": 16
+    },
+    {
+      "name": "citizen page /app/vault/bank",
+      "passed": true,
+      "ms": 11
+    },
+    {
+      "name": "citizen page /app/vault/health",
+      "passed": true,
+      "ms": 11
+    },
+    {
+      "name": "citizen page /app/vault/prefs",
+      "passed": true,
+      "ms": 12
+    },
+    {
+      "name": "citizen page /app/apply",
+      "passed": true,
+      "ms": 12
+    },
+    {
+      "name": "citizen page /app/apply/bta-jee-2026",
+      "passed": true,
+      "ms": 17
+    },
+    {
+      "name": "citizen page /app/apply/nova-btech-2026",
+      "passed": true,
+      "ms": 18
+    },
+    {
+      "name": "citizen page /app/apply/savings-account-kyc",
+      "passed": true,
+      "ms": 16
+    },
+    {
+      "name": "citizen page /app/applications",
+      "passed": true,
+      "ms": 15
+    },
+    {
+      "name": "citizen page /app/documents",
+      "passed": true,
+      "ms": 19
+    },
+    {
+      "name": "citizen page /app/verify",
+      "passed": true,
+      "ms": 20
+    },
+    {
+      "name": "citizen page /app/sign",
+      "passed": true,
+      "ms": 13
+    },
+    {
+      "name": "citizen page /app/connections",
+      "passed": true,
+      "ms": 19
+    },
+    {
+      "name": "citizen page /app/family",
+      "passed": true,
+      "ms": 12
+    },
+    {
+      "name": "citizen page /app/settings",
+      "passed": true,
+      "ms": 14
+    },
+    {
+      "name": "citizen page /app/settings/notifications",
+      "passed": true,
+      "ms": 15
+    },
+    {
+      "name": "citizen page /app/notifications",
+      "passed": true,
+      "ms": 14
+    },
+    {
+      "name": "citizen page /app/extension",
+      "passed": true,
+      "ms": 12
+    },
+    {
+      "name": "citizen page /app/extension/connect",
+      "passed": true,
+      "ms": 12
+    },
+    {
+      "name": "citizen page /app/documents/e40f7442-31a8-47a8-ba39-d9d824d0431b",
+      "passed": true,
+      "ms": 19
+    },
+    {
+      "name": "citizen page /app/applications/3eb43a6a-42ec-4f17-8f71-2990a1e1766e",
+      "passed": true,
+      "ms": 24
+    },
+    {
+      "name": "citizen page /app/connections/7967dc58-b8c8-457e-a1b7-61ce5a7f628f",
+      "passed": true,
+      "ms": 22
+    },
+    {
+      "name": "partner page /partner",
+      "passed": true,
+      "ms": 31
+    },
+    {
+      "name": "partner page /partner/forms",
+      "passed": true,
+      "ms": 12
+    },
+    {
+      "name": "partner page /partner/forms/new",
+      "passed": true,
+      "ms": 49
+    },
+    {
+      "name": "partner page /partner/applicants",
+      "passed": true,
+      "ms": 47
+    },
+    {
+      "name": "partner page /partner/developers",
+      "passed": true,
+      "ms": 60
+    },
+    {
+      "name": "partner page /partner/team",
+      "passed": true,
+      "ms": 27
+    },
+    {
+      "name": "partner page /partner/settings",
+      "passed": true,
+      "ms": 16
+    },
+    {
+      "name": "admin page /admin",
+      "passed": true,
+      "ms": 89
+    },
+    {
+      "name": "admin page /admin/partners",
+      "passed": true,
+      "ms": 27
+    },
+    {
+      "name": "admin page /admin/providers",
+      "passed": true,
+      "ms": 12
+    },
+    {
+      "name": "admin page /admin/queues",
+      "passed": true,
+      "ms": 19
+    },
+    {
+      "name": "admin page /admin/flags",
+      "passed": true,
+      "ms": 11
+    },
+    {
+      "name": "admin page /admin/audit",
+      "passed": true,
+      "ms": 25
+    },
+    {
+      "name": "admin page /admin/requests",
+      "passed": true,
+      "ms": 18
+    },
+    {
+      "name": "BTA page /",
+      "passed": true,
+      "ms": 10
+    },
+    {
+      "name": "BTA page /apply/manual",
+      "passed": true,
+      "ms": 11
+    },
+    {
+      "name": "BTA page /apply/return?error=state",
+      "passed": true,
+      "ms": 3
+    },
+    {
+      "name": "BTA page /status/unknown",
+      "passed": true,
+      "ms": 11
+    },
+    {
+      "name": "revocation blocks partner status changes",
+      "passed": true,
+      "ms": 42
+    }
+  ]
+}

@@ -1,4 +1,4 @@
-import { Chip } from "@heroui/react";
+import { Chip } from "@/components/client-ui";
 import { db, t, desc } from "@praman/db";
 import { PageHeader } from "@praman/ui";
 import { providerModes } from "@/components/admin/data";

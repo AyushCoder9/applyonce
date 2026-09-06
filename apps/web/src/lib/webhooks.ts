@@ -27,6 +27,9 @@ export async function partnerApplication(partnerId: string, applicationId: strin
 
 export async function pushApplicationStatus(partnerId: string, applicationId: string, p: { status: ApplicationStatus; note?: string | null; externalRef?: string | null }, idempotencyKey: string, actorUserId?: string | null) {
   const app = await partnerApplication(partnerId, applicationId);
+  const share=await db.query.shares.findFirst({where:eq(t.shares.applicationId,applicationId)});
+  if(share){const consent=await db.query.consents.findFirst({where:eq(t.consents.id,share.consentId)});if(!consent || consent.revokedAt || consent.expiresAt.getTime()<=Date.now())throw new ApiError(409,"CONSENT_INACTIVE","Consent has ended; no further status changes are allowed.");}
+  if(app.status==="withdrawn")throw new ApiError(409,"APPLICATION_WITHDRAWN");
   const dup = await db.query.partnerStatusPushes.findFirst({ where: eq(t.partnerStatusPushes.idempotencyKey, idempotencyKey) });
   if (dup) return { applicationId, status: dup.status, duplicate: true };
   const partner = (await db.query.partners.findFirst({ where: eq(t.partners.id, partnerId) }))!;

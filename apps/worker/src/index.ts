@@ -29,10 +29,12 @@ for (const w of workers) {
 }
 
 await registerSchedulers();
+await redis().set("praman:worker:heartbeat", new Date().toISOString(), "EX", 90);
 logger.info({ queues: QUEUES }, "schedulers registered, workers started");
 
 const healthTimer = setInterval(async () => {
   try {
+    await redis().set("praman:worker:heartbeat", new Date().toISOString(), "EX", 90);
     const counts = await Promise.all(QUEUES.map(async (name) => [name, await queue(name).getJobCounts()] as const));
     logger.info({ queues: Object.fromEntries(counts) }, "queue health");
   } catch (err) {

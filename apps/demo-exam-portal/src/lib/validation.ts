@@ -39,7 +39,7 @@ export function formatDMY(iso: string): string {
 
 /** Accepts either an ISO date (already-verified Praman facts) or a DD/MM/YYYY string (freshly edited on /apply/return) -> ISO, or null if invalid. */
 export function normalizeDateInput(raw: string): string | null {
-  if (/^\d{4}-\d{2}-\d{2}$/.test(raw)) return raw;
+  if (/^\d{4}-\d{2}-\d{2}$/.test(raw)) return parseDMY(formatDMY(raw));
   return parseDMY(raw);
 }
 
@@ -60,7 +60,7 @@ export function validateValue(spec: FieldSpec, raw: string | boolean | undefined
   }
 
   if (spec.isDate) {
-    const iso = parseDMY(s);
+    const iso = normalizeDateInput(s);
     if (!iso) return { ok: false, error: "Enter a valid date as DD/MM/YYYY." };
     return { ok: true, value: iso };
   }

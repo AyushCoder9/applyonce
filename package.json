@@ -2,21 +2,31 @@
   "name": "praman",
   "private": true,
   "packageManager": "pnpm@9.15.9",
-  "engines": { "node": ">=22" },
+  "engines": {
+    "node": ">=22"
+  },
   "scripts": {
-    "dev": "turbo dev",
-    "build": "turbo build",
-    "test": "turbo test",
+    "dev": "node scripts/run.mjs turbo dev",
+    "build": "node scripts/run.mjs turbo build",
+    "test": "node scripts/run.mjs turbo test",
     "lint": "turbo lint",
-    "typecheck": "turbo typecheck",
-    "db:generate": "pnpm --filter @praman/db generate",
-    "db:migrate": "pnpm --filter @praman/db migrate",
-    "db:seed": "pnpm --filter @praman/db seed",
-    "db:reset": "pnpm --filter @praman/db reset",
-    "graph": "graphify update ."
+    "typecheck": "node scripts/run.mjs turbo typecheck",
+    "db:generate": "node scripts/run.mjs pnpm --filter @praman/db generate",
+    "db:migrate": "node scripts/run.mjs pnpm --filter @praman/db migrate",
+    "db:seed": "node scripts/run.mjs pnpm --filter @praman/db seed",
+    "db:reset": "node scripts/run.mjs pnpm --filter @praman/db reset",
+    "graph": "graphify update .",
+    "db:refresh-demo": "node scripts/run.mjs pnpm --filter @praman/db exec tsx src/refresh-demo.ts",
+    "inventory": "node scripts/inventory.mjs",
+    "audit:workflows": "node scripts/run.mjs node scripts/audit.mjs"
   },
   "devDependencies": {
     "turbo": "catalog:",
     "typescript": "catalog:"
+  },
+  "pnpm": {
+    "overrides": {
+      "@esbuild-kit/core-utils>esbuild": "0.25.12"
+    }
   }
 }

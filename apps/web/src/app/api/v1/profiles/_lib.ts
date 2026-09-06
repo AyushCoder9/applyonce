@@ -13,7 +13,7 @@ export const sectionOf = (key: string) => key.split(".")[0]!;
 export async function loadFacts(a: Access, opts: { section?: string; keys?: string[]; reveal?: boolean } = {}): Promise<FactOut[]> {
   const dek = await getDek(a.ownerUserId);
   const rows = await getFacts(dek, a.profile.id, { section: opts.section, keys: opts.keys });
-  const visible = rows.filter((f) => scopeAllows(a.scope, sectionOf(f.key)));
+  const visible = rows.filter((f) => !field(f.key).system && scopeAllows(a.scope, sectionOf(f.key)));
   return opts.reveal ? visible : visible.map((f) => (field(f.key).sensitive ? { ...f, value: mask(f.key, f.value), masked: true } : f));
 }
 

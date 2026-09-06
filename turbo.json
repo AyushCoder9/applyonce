@@ -1,12 +1,52 @@
 {
   "$schema": "https://turbo.build/schema.json",
   "ui": "tui",
-  "globalEnv": ["NODE_ENV", "DATABASE_URL", "REDIS_URL", "PROVIDER_*", "PRAMAN_*", "S3_*", "NEXT_PUBLIC_*", "BETTER_AUTH_*"],
+  "globalEnv": [
+    "NODE_ENV",
+    "DATABASE_URL",
+    "REDIS_URL",
+    "PROVIDER_*",
+    "PRAMAN_*",
+    "S3_*",
+    "NEXT_PUBLIC_*",
+    "BETTER_AUTH_*",
+    "BTA_*",
+    "DEMO_*",
+    "OPENAI_*",
+    "SETU_*",
+    "MSG91_*",
+    "RESEND_*"
+  ],
   "tasks": {
-    "build": { "dependsOn": ["^build"], "outputs": [".next/**", "!.next/cache/**", "dist/**"] },
-    "dev": { "cache": false, "persistent": true },
-    "test": { "dependsOn": ["^build"], "outputs": [] },
-    "typecheck": { "dependsOn": ["^build"], "outputs": [] },
-    "lint": { "outputs": [] }
+    "build": {
+      "dependsOn": [
+        "^build"
+      ],
+      "outputs": [
+        ".next/**",
+        "!.next/cache/**",
+        "dist/**"
+      ]
+    },
+    "dev": {
+      "cache": false,
+      "persistent": true
+    },
+    "test": {
+      "dependsOn": [
+        "^build"
+      ],
+      "outputs": [],
+      "cache": false
+    },
+    "typecheck": {
+      "dependsOn": [
+        "^build"
+      ],
+      "outputs": []
+    },
+    "lint": {
+      "outputs": []
+    }
   }
 }

@@ -15,6 +15,7 @@ export const POST = handler(async (req) => {
     userId: user.id,
     token,
     expiresAt,
+    steppedUpAt: (session.session as {steppedUpAt?:Date|null}).steppedUpAt ?? null,
     userAgent: "praman-extension",
     ipAddress: req.headers.get("x-forwarded-for") ?? null,
   });

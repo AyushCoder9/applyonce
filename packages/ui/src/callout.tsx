@@ -1,3 +1,4 @@
+"use client";
 import { Alert } from "@heroui/react";
 /** Never more than one per view. */
 export function Callout({ tone = "info", title, children, action }: { tone?: "info" | "warning" | "danger" | "success"; title: string; children?: React.ReactNode; action?: React.ReactNode }) {

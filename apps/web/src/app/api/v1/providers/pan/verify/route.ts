@@ -1,11 +1,12 @@
 import { z } from "zod";
 import { enqueue } from "@praman/jobs";
 import { RE } from "@praman/schema";
-import { handler, citizen, body, ok, log } from "@/lib/api";
+import { handler, citizen, ApiError, body, ok, log } from "@/lib/api";
 import { createJob } from "../../../profiles/_lib";
 /** POST {pan} → job pan.verify. */
 export const POST = handler(async (req) => {
   const a = await citizen(req);
+  if (a.profile.kind !== "self" || a.ownerUserId !== a.user.id) throw new ApiError(403,"PROVIDER_SELF_ONLY","Switch to your own profile to connect your provider account. Add dependent evidence through Documents.");
   const { pan } = await body(req, z.object({ pan: z.string().trim().toUpperCase().regex(RE.pan, "Format ABCDE1234F") }));
   const job = await createJob(a.profile.id, "pan", "verify_pan", { pan: pan.slice(0, 5) + "****" + pan.slice(-1) });
   await enqueue("pan.verify", { jobId: job.id, userId: a.ownerUserId, profileId: a.profile.id, pan });

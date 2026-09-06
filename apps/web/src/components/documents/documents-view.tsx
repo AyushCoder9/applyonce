@@ -29,7 +29,7 @@ export function DocumentsView({ profileId, docs, locale = "en", openUpload = fal
   const chip = (on: boolean) => cx("min-h-9 rounded-pill border px-3 text-sm font-medium transition-colors", on ? "border-brand-500 bg-brand-50 text-brand-700" : "border-line bg-surface text-ink-2 hover:bg-surface-2");
 
   return (
-    <div className="grid gap-6">
+    <div className="grid min-w-0 grid-cols-1 gap-6">
       {review.length > 0 && (
         <Link href={`/app/documents/${review[0]!.id}`} className="card flex items-center gap-4 border-info-500/30 bg-info-50 p-4 hover:shadow-pop" data-testid="review-banner">
           <span className="grid size-10 shrink-0 place-items-center rounded-md bg-surface text-info-500"><ScanLine className="size-5" /></span>
@@ -64,7 +64,7 @@ export function DocumentsView({ profileId, docs, locale = "en", openUpload = fal
           ? <EmptyState icon={<ShieldCheck className="size-7" />} title={tr(locale, "No issued documents yet", "अभी कोई जारी दस्तावेज़ नहीं")} blurb={tr(locale, "Connect DigiLocker and your Aadhaar, PAN and marksheets appear here, verified by their issuers.", "DigiLocker जोड़ें — आधार, पैन और मार्कशीट यहाँ जारीकर्ता-सत्यापित दिखेंगे।")} action={<LinkButton variant="outline" href="/app/verify">{tr(locale, "Connect DigiLocker", "DigiLocker जोड़ें")}</LinkButton>} />
           : <EmptyState icon={<Upload className="size-7" />} title={tr(locale, "Nothing uploaded yet", "अभी कुछ अपलोड नहीं")} blurb={tr(locale, "Upload a certificate and we read the facts out of it for you to confirm.", "प्रमाण पत्र अपलोड करें — हम तथ्य पढ़कर आपसे पुष्टि लेंगे।")} action={<Button variant="outline" onPress={() => setShow(true)}>{tr(locale, "Upload a document", "दस्तावेज़ अपलोड करें")}</Button>} />
       ) : (
-        <div className="grid gap-3 md:grid-cols-2" data-testid="doc-grid">
+        <div className="grid min-w-0 grid-cols-1 gap-3 md:grid-cols-2" data-testid="doc-grid">
           {list.map((d) => <DocCard key={d.id} doc={d} href={`/app/documents/${d.id}`} locale={locale} action={d.needsReview ? <span className="self-center rounded-pill bg-info-50 px-2.5 py-1 text-xs font-semibold text-info-500">{tr(locale, "Review facts", "तथ्य समीक्षा")}</span> : undefined} />)}
         </div>
       )}

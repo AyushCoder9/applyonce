@@ -70,7 +70,7 @@ export function FormBuilder({ initial, partnerName, verified }: { initial?: Buil
                 <ul className="divide-y divide-line border-t border-line">
                   {defs.map((d) => { const ok = canShare(d.key, purpose); const on = fields.has(d.key); return (
                     <li key={d.key} className={`grid grid-cols-[auto_1fr_auto] items-center gap-3 px-3 py-1.5 text-sm ${!ok ? "opacity-60" : ""}`}>
-                      <Checkbox isSelected={on && ok} isDisabled={!ok} onChange={(v) => toggleField(d.key, v)} aria-label={d.label.en}><Checkbox.Control><Checkbox.Indicator /></Checkbox.Control></Checkbox>
+                      <Checkbox isSelected={on && ok} isDisabled={!ok} onChange={(v) => toggleField(d.key, v)} aria-label={d.label.en}><Checkbox.Content aria-label={d.label.en}><Checkbox.Control><Checkbox.Indicator /></Checkbox.Control></Checkbox.Content></Checkbox>
                       <div className="min-w-0"><div>{d.label.en}{d.sensitive && <span className="ml-1 text-xs text-pending-700">sensitive</span>}</div><div className="truncate font-mono text-xs text-ink-3">{d.key}{!ok && <span className="ml-2 text-danger-500">not shareable for {PURPOSE_LABELS[purpose].en}</span>}</div></div>
                       {on && ok && <label className="flex items-center gap-1 text-xs"><input type="checkbox" checked={fields.get(d.key) ?? true} onChange={(e) => setRequired(d.key, e.target.checked)} />required</label>}
                     </li>

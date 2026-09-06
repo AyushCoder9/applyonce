@@ -28,7 +28,7 @@ export default function WebhooksAdminPage() {
             <span style={{ fontSize: 12, color: "var(--color-gov-ink-2)" }}>{new Date(e.receivedAt).toLocaleString("en-IN")}</span>
           </div>
           {e.note && <p style={{ margin: "0 0 8px", fontSize: 12, color: "var(--color-gov-error)" }}>{e.note}</p>}
-          <pre style={{ margin: 0, fontSize: 11, background: "#f2f4f6", padding: 10, borderRadius: 3, overflowX: "auto" }}>{JSON.stringify(e.payload, null, 2)}</pre>
+          <pre style={{ margin: 0, fontSize: 11, background: "#f2f4f6", padding: 10, borderRadius: 3, overflowX: "auto" }}>{JSON.stringify({id:e.id,type:e.type,receivedAt:e.receivedAt,verified:e.verified}, null, 2)}</pre>
         </div>
       ))}
     </div>

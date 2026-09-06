@@ -3,13 +3,14 @@ import { NextResponse } from "next/server";
 import { cookies } from "next/headers";
 import { enqueue } from "@praman/jobs";
 import { providers, byPhone } from "@praman/providers";
-import { handler, citizen, ok, log } from "@/lib/api";
+import { handler, citizen, ApiError, ok, log } from "@/lib/api";
 import { appUrl, createJob, providerRef, withJob } from "../../../profiles/_lib";
 
 /** POST {next?} → {url} to the ABHA consent screen. */
 export const POST = handler(async (req) => {
   const a = await citizen(req);
-  const { next } = z.object({ next: z.string().startsWith("/").max(300).optional() }).parse(await req.json().catch(() => ({})));
+  if (a.profile.kind !== "self" || a.ownerUserId !== a.user.id) throw new ApiError(403,"PROVIDER_SELF_ONLY","Switch to your own profile to connect your provider account. Add dependent evidence through Documents.");
+  const { next } = z.object({ next: z.string().startsWith("/").max(300).refine(v=>!v.startsWith("//") && !v.includes("\\"),"Use a local page path").optional() }).parse(await req.json().catch(() => ({})));
   const { url, state } = await providers.abha.startLink(a.user.id, `${appUrl(req)}/api/v1/providers/abha/link`);
   await log(a.session, "provider.start", "provider_link", null, { provider: "abha", profileId: a.profile.id });
   const res = ok({ url });

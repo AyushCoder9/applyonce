@@ -23,7 +23,7 @@ export function PartnerStatus({ id, status }: { id: string; status: string }) {
 export function FlagToggle({ flagKey, enabled }: { flagKey: string; enabled: boolean }) {
   const router = useRouter(); const [, start] = useTransition(); const [v, setV] = useState(enabled);
   const set = async (n: boolean) => { setV(n); try { await call(`/api/v1/admin/flags/${flagKey}`, "PUT", { enabled: n }); toast.success(`${flagKey} ${n ? "on" : "off"}`); start(() => router.refresh()); } catch (e) { setV(!n); toast.danger((e as Error).message); } };
-  return <Switch isSelected={v} onChange={set} aria-label={`Toggle ${flagKey}`}><Switch.Control><Switch.Thumb /></Switch.Control></Switch>;
+  return <Switch isSelected={v} onChange={set} aria-label={`Toggle ${flagKey}`}><Switch.Content aria-label={`Toggle ${flagKey}`}><Switch.Control><Switch.Thumb /></Switch.Control></Switch.Content></Switch>;
 }
 export function NewFlag() {
   const router = useRouter(); const [, start] = useTransition(); const [k, setK] = useState("");

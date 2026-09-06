@@ -1,4 +1,4 @@
-import { Chip } from "@heroui/react";
+import { Chip } from "@/components/client-ui";
 import { PageHeader } from "@praman/ui";
 import { queueCounts } from "@/components/admin/data";
 export const dynamic = "force-dynamic";

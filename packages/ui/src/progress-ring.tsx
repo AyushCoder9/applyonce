@@ -1,3 +1,4 @@
+"use client";
 import { ProgressCircle } from "@heroui/react";
 import { cx } from "./format";
 /** Completion ring with plain-language count (never a bare %). */

@@ -125,3 +125,5 @@ export function docToFacts(doc: IssuedDoc, person: { aadhaar: AadhaarOfflineKyc;
     default: return [];
   }
 }
+
+export { sampleDocument, tinyPdf } from "./sample-document";

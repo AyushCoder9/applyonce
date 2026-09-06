@@ -13,7 +13,7 @@ export default async function FormPage({ params, searchParams }: { params: Promi
   if (!f) notFound();
   const [{ n: applicants } = { n: 0 }] = await db.select({ n: count() }).from(t.applications).where(eq(t.applications.formId, f.id));
   const app = process.env.NEXT_PUBLIC_APP_URL ?? "http://localhost:3300";
-  const html = `<script src="${app}/sdk.js"></script>\n<button data-praman-form="${f.slug}">Apply with Praman</button>\n<script>Praman.init({ createSession: "/api/praman/session" })</script>`;
+  const html = `<form action="/api/praman/session" method="POST">\n  <button type="submit">Apply with Praman</button>\n</form>\n<!-- Your server creates the session, stores a state nonce,\n     then redirects to share_url with HTTP 303. -->`;
   const node = `import { createPraman } from "@praman/sdk";\nconst praman = createPraman({ apiKey: process.env.PRAMAN_API_KEY!, baseUrl: "${app}" });\n\n// POST /api/praman/session\nconst { share_url } = await praman.createShareSession({ formSlug: "${f.slug}", returnUrl: "${f.redirectUrl}", state: cartId });\n\n// on ${f.redirectUrl}?share_token=…\nconst { payload, consent_id, application_id } = await praman.exchange(shareToken);`;
   const curl = `curl -X POST ${app}/api/v1/partner/share-sessions \\\n  -H "Authorization: Bearer pk_sandbox_…" -H "Content-Type: application/json" \\\n  -d '{"form_slug":"${f.slug}","return_url":"${f.redirectUrl}","state":"abc"}'`;
   const tabs = [["embed", "Embed"], ["edit", "Edit"], ["versions", "Versions"]] as const;

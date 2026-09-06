@@ -1,4 +1,5 @@
-import * as Icons from "lucide-react";
+import { IdCard, Phone, MapPin, Users, BadgeCheck, GraduationCap, Briefcase, HeartPulse, Landmark, SlidersHorizontal, Folder, type LucideIcon } from "lucide-react";
+const icons: Record<string, LucideIcon> = { IdCard, Phone, MapPin, Users, BadgeCheck, GraduationCap, Briefcase, HeartPulse, Landmark, SlidersHorizontal, Folder };
 import { getDek, getFacts, completion } from "@praman/db";
 import { SECTION_META, fieldsInSection } from "@praman/schema";
 import { SectionCard, PageHeader, ProgressRing } from "@praman/ui";
@@ -19,7 +20,7 @@ export default async function VaultPage() {
         actions={<ProgressRing value={filled} max={tot} label={tr(locale, `${ver} verified`, `${ver} सत्यापित`)} />} />
       <div className="grid gap-4 sm:grid-cols-2 lg:grid-cols-3" data-testid="section-grid">
         {sections.map(({ m, c, n }) => {
-          const I = (Icons as unknown as Record<string, React.ComponentType<{ className?: string; strokeWidth?: number }>>)[SECTION_ICON[m.icon] ?? "Folder"];
+          const I = icons[SECTION_ICON[m.icon] ?? "Folder"];
           const optOut = m.optIn && n === 0;
           return (
             <SectionCard key={m.id} href={`/app/vault/${m.id}`} title={m.label[locale]} blurb={optOut ? tr(locale, "Opt-in. Only add if you want to share health data.", "वैकल्पिक। केवल तभी जोड़ें जब स्वास्थ्य डेटा साझा करना हो।") : m.blurb[locale]} icon={I ? <I className="size-6" strokeWidth={1.75} /> : null}

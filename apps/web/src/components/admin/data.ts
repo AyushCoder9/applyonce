@@ -35,3 +35,7 @@ export async function pingRedis() {
   try { const { redis } = await import("@praman/jobs"); const r = await Promise.race([redis().ping(), new Promise<never>((_, rej) => setTimeout(() => rej(new Error("timeout")), 2000))]); return { ok: r === "PONG", ms: Date.now() - t0 }; }
   catch (e) { return { ok: false, ms: Date.now() - t0, error: (e as Error).message }; }
 }
+
+export async function workerHealth() {
+  try {const {redis}=await import("@praman/jobs");const at=await Promise.race([redis().get("praman:worker:heartbeat"),new Promise<null>(resolve=>setTimeout(()=>resolve(null),2000))]);return {ok:!!at,note:at?"Heartbeat received":"No recent worker heartbeat"};} catch {return {ok:false,note:"Worker health unavailable"};}
+}

@@ -1,56 +1,87 @@
 # Praman — Verify once. Apply anywhere.
 
-**प्रमाण** · The verified-profile layer for India. Enter your details once, verify them against the issuer (DigiLocker, UIDAI, CBSE, Income Tax, ABDM…), then push them into any exam form, college application, scholarship, bank KYC, job or government scheme with one consent tap. Institutions get an **“Apply with Praman”** button and signed, verified JSON. A browser extension autofills portals that never integrated. Families manage minors and elders. A consent ledger and application tracker close the loop. Built for DPDP Act 2023.
+Praman turns a citizen's reusable facts and documents into a purpose-bound application. Each answer keeps its source; the citizen reviews exactly what an institution requests, confirms consent, and tracks the resulting application.
 
-Lineage: this repository previously held the single-app **ApplyOnce** prototype (history preserved; its docs live in `docs/legacy-applyonce/`, private notes in `private-context/`). Praman is the from-scratch rebuild as a monorepo.
+This is the audited successor to **ApplyOnce**, built as a TypeScript monorepo. It is a working local sandbox. The seeded institutions and issuer records are examples; live government, health and financial provider onboarding remains external work.
 
-## What’s inside
-| Path | What |
-|---|---|
-| `apps/web` | Next.js 16 app: citizen PWA (`/app`), onboarding (`/welcome`), share/consent flow (`/share/:token`), partner console (`/partner`), admin (`/admin`), public site |
-| `apps/worker` | BullMQ workers: DigiLocker sync, PAN/AA/ABHA, OCR, webhooks, reminders, export/erase |
-| `apps/demo-exam-portal` | “Bharat Test Agency — BTA-JEE 2026”: a realistic 48-field exam form with *Fill manually* vs *Apply with Praman* |
-| `apps/extension` | Chrome MV3 autofill extension with portal recipes |
-| `packages/schema` | **Canonical Citizen Schema** — the field registry (≈200 `fact_key`s, EN/HI labels, zod, purposes) |
-| `packages/db` | Drizzle schema + migrations + seed; `putFact()` (encryption + provenance), consent-invariant trigger |
-| `packages/providers` | Adapters: `mock` (deterministic fixtures) · `setu` (sandbox) · swap via env |
-| `packages/crypto` | Envelope encryption (per-user DEK), ES256 JWS, webhook HMAC |
-| `packages/sdk` | `@praman/sdk` for partners (button + Node helper) |
-| `packages/ui` | Design system composites (SourceChip, FactRow, FieldDiff, …) on HeroUI v3 |
-| `docs/` | PRD, architecture, data model, design system, API/flows, research, plans |
+## What you can demonstrate
 
-## Run it (5 minutes)
+- **Evidence readiness:** see missing, expired, conflicting and out-of-scope requirements before starting an application. Open the source details and follow repair links.
+- **Ask Praman:** English/Hindi local explanations work without an API key. An optional OpenAI Responses adapter explains the same deterministic result using derived information, without receiving raw facts or documents.
+- **Complete BTA application:** create a partner session → review exact fields → confirm OTP → exchange a signed payload → refresh/edit the saved review → submit → push status back to the citizen tracker.
+- **Citizen controls:** ten vault sections, document uploads and review, sample evidence previews, family scopes, consent receipts/revocation, export, cancellable erasure requests, and a stored declaration receipt.
+- **Partner and operations portals:** switch among seeded organizations; manage forms, applicants, team, keys and webhooks; inspect provider jobs, queues, audit events and data requests.
+- **Extension:** Chrome MV3 recipes, field matching and guarded fill plans for supported forms. Real portal compatibility requires separate live-site validation.
+
+## Run locally
+
+Requires Node 22+, pnpm 9 and Docker.
+
 ```bash
-corepack enable && corepack prepare pnpm@9.15.9 --activate   # or: npm i -g pnpm@9
-pnpm install
+corepack enable
+corepack prepare pnpm@9.15.9 --activate
+pnpm install --frozen-lockfile
 cp .env.example .env
-docker compose up -d            # postgres :5434 · redis :6380 · minio :9002
-pnpm db:reset                   # migrate + seed demo data
-pnpm dev                        # web :3300 · worker · demo portal :3301
+docker compose up -d
+pnpm db:migrate
+pnpm db:seed
+pnpm dev
 ```
-Open http://localhost:3300 → **Log in** with `9876543210`, OTP `123456` (mock SMS). Then open http://localhost:3301 and click **Apply with Praman**.
 
-Demo accounts (OTP `123456`): `9876543210` Aarav (student, DigiLocker-verified) · `9876500002` Sunita (parent; guardian of Riya 15 and Kamla 72) · `9123456780` Vikram (job seeker) · `9000000001` partner admin (BTA, Nova University, bank sandbox) · `9000000000` Praman admin.
+Open [Praman](http://localhost:3300) and the [BTA portal](http://localhost:3301). Root commands load `.env` for every workspace; explicit shell exports take precedence. Keep providers in `mock` for this demonstration. `db:seed` is idempotent; `db:refresh-demo` updates existing sample attachment hashes and supplies sample photo/signature records.
 
-## The 3-minute demo
-1. BTA portal → *Fill manually* → feel the 48 fields. Back → *Apply with Praman*.
-2. Consent screen: 44 fields requested · 36 verified by CBSE/UIDAI/Income Tax · 5 missing → fill 5 → passkey/OTP → back to BTA, everything filled with verified badges + attached marksheet & category certificate → submit.
-3. Praman → Track: the application appears. BTA admin pushes “Admit card released” → notification in Praman.
-4. Connections → see exactly what BTA received → revoke → BTA’s webhook fires.
-5. Switch profile to sister Riya → same form as guardian.
+| Phone | Persona | Purpose |
+|---|---|---|
+| `9876543210` | Aarav | Student/application demo |
+| `9876500002` | Sunita | Minor and scoped elder access |
+| `9123456780` | Vikram | Job-seeker vault |
+| `9000000001` | Partner admin | BTA, Nova University, bank console |
+| `9000000000` | Operations admin | Admin portal |
 
-## Principles
-- **Schema is the product.** `packages/schema` drives the vault, the form builder, the SDK payload, extension recipes and the DB.
-- **Every fact carries provenance.** `self_declared` · `document_extracted` · `issuer_verified` · `provider_verified`, always rendered with a `SourceChip`.
-- **No share without consent.** A Postgres trigger refuses any `shares` row without a valid, unrevoked, in-scope consent (tested).
-- **Providers are pluggable.** `PROVIDER_DIGILOCKER=mock|setu` — the UI never changes.
-- **Never store the Aadhaar number.** Only name/DOB/gender/address/last-4/XML hash/reference key from offline e-KYC.
+All mock accounts use OTP **123456**. Source badges on seeded records describe the simulated provider path, not a live issuer verification.
 
-## Commands
-`pnpm dev` · `pnpm test` · `pnpm typecheck` · `pnpm db:generate` / `db:migrate` / `db:seed` / `db:reset` · `pnpm --filter @praman/web test:e2e` · `pnpm graph` (graphify)
+## Two-minute pitch
 
-## Docs
-Start at `docs/00-README.md`. Product: `10-PRD-v2.md`, `07-USE-CASE-CATALOG.md`, `11-UX-FLOWS.md`. Tech: `02-ARCHITECTURE.md`, `03-DATA-MODEL.md`, `05-API-AND-FLOWS.md`, `08-INTEGRATIONS-PLAN.md`, `plans/2026-09-02-build-plan.md`, `RUNBOOK.md`. Business: `09-GTM-AND-BUSINESS.md`. Research: `docs/research/`.
+Use [the timed demo script](docs/DEMO-SCRIPT.md), including exact pages, clicks, speaking cues and rehearsal setup. The differentiator is **evidence readiness with a constrained explanation layer**: fast applications need trustworthy inputs, explicit sources and deliberate consent.
 
-## Status
-v0.9 (demo-ready). Providers run in `mock`; `setu` sandbox adapter is coded for DigiLocker + PAN and needs keys. Live DigiLocker/Aadhaar/AA/ABHA require organisation registration — see `docs/08-INTEGRATIONS-PLAN.md`.
+For production-mode rehearsal, build both apps, start the worker, and set `DEMO_ADMIN_ENABLED=1` when starting BTA to expose its sample status controls. See [the runbook](docs/RUNBOOK.md). This flag does not enable a real institution administration service.
+
+## Verify the build
+
+```bash
+pnpm typecheck
+pnpm test -- --concurrency=1
+pnpm build
+# With web, worker and BTA running against a disposable seeded database:
+pnpm audit:workflows
+node scripts/run.mjs pnpm --filter @praman/web test:e2e --workers=1
+pnpm inventory
+```
+
+The audit modifies demo facts, creates applications/uploads and schedules then cancels a deletion request. Run it only against disposable local fixtures. It writes a machine-readable report to `docs/audit-results.json`. Test and coverage details, known limits and exact results are in [AUDIT-REPORT.md](docs/AUDIT-REPORT.md).
+
+## Repository map
+
+| Path | Responsibility |
+|---|---|
+| `apps/web` | Next.js citizen, partner, admin and public surfaces; APIs |
+| `apps/demo-exam-portal` | Separate BTA app with signed SDK exchange and browser-bound review drafts |
+| `apps/worker` | BullMQ provider, document, webhook, reminder and data jobs |
+| `apps/extension` | MV3 autofill service worker, popup and recipes |
+| `packages/schema` | Canonical facts, EN/HI labels, validation and readiness |
+| `packages/db` | Drizzle/Postgres, access rules, provenance writes and consent trigger |
+| `packages/crypto` | Fact encryption, signed payloads and webhook signatures |
+| `packages/providers` | Deterministic mocks and partial live adapters |
+| `packages/sdk` | Partner session creation, token exchange and verification |
+| `packages/ui` | Shared source-aware UI components |
+
+## Current documentation
+
+- [Project context](docs/PROJECT-CONTEXT.md): architecture, workflows, boundaries and decisions.
+- [Audit report](docs/AUDIT-REPORT.md): findings, fixes, validation and remaining gaps.
+- [Current progress](docs/CURRENT-PROGRESS.md): delivered work and handoff checklist.
+- [Integrations and roadmap](docs/INTEGRATIONS-AND-ROADMAP.md): optional AI setup and prioritized next work.
+- [Runbook](docs/RUNBOOK.md): local setup, rehearsal and troubleshooting.
+- [Source inventory](docs/source-inventory.json): file hashes, line counts and extracted structure.
+
+Graphify was used to navigate the code graph; Ponytail's simple, explicit implementation approach guided the fixes. Historical PRDs, research and ApplyOnce documentation remain under `docs/`; treat them as design history where they differ from these current documents.

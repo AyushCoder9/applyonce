@@ -48,7 +48,7 @@ export function DevelopersPanel({ keys, hooks, deliveries, canManage, verified, 
             <li key={h.id} className="flex flex-wrap items-center gap-3 rounded-md border border-line p-3">
               <code className="min-w-0 flex-1 truncate font-mono">{h.url}</code>
               <span className="text-xs text-ink-3">{h.events.join(", ")}</span>
-              {canManage && <Switch isSelected={h.active} onChange={(v) => run(updateWebhook(h.id, { active: v }), () => undefined)} aria-label="Active"><Switch.Control><Switch.Thumb /></Switch.Control><Switch.Content>{h.active ? "active" : "paused"}</Switch.Content></Switch>}
+              {canManage && <Switch isSelected={h.active} onChange={(v) => run(updateWebhook(h.id, { active: v }), () => undefined)} aria-label="Active"><Switch.Content><Switch.Control><Switch.Thumb /></Switch.Control>{h.active ? "active" : "paused"}</Switch.Content></Switch>}
               <Button size="sm" variant="secondary" onPress={() => run(testWebhook(h.id), (d) => toast.success(`Queued ${d.deliveries} test.ping`))} isPending={busy}><Send className="size-4" />Test</Button>
               {canManage && <button type="button" onClick={() => run(deleteWebhook(h.id), () => toast.success("Removed"))} className="grid size-8 place-items-center rounded-pill text-ink-3 hover:bg-danger-50 hover:text-danger-500" aria-label="Delete"><Trash2 className="size-4" /></button>}
             </li>
@@ -58,7 +58,7 @@ export function DevelopersPanel({ keys, hooks, deliveries, canManage, verified, 
         {canManage && (
           <div className="mt-4 grid gap-3 border-t border-line pt-4">
             <TextField value={url} onChange={setUrl} type="url"><Label>Endpoint URL</Label><Input placeholder="https://portal.example/api/praman/webhook" /></TextField>
-            <div className="flex flex-wrap gap-4">{EVENTS.map((e) => <Checkbox key={e} isSelected={events.has(e)} onChange={(v) => setEvents((s) => { const n = new Set(s); if (v) n.add(e); else n.delete(e); return n; })}><Checkbox.Control><Checkbox.Indicator /></Checkbox.Control><Checkbox.Content><code className="font-mono text-xs">{e}</code></Checkbox.Content></Checkbox>)}</div>
+            <div className="flex flex-wrap gap-4">{EVENTS.map((e) => <Checkbox key={e} isSelected={events.has(e)} onChange={(v) => setEvents((s) => { const n = new Set(s); if (v) n.add(e); else n.delete(e); return n; })}><Checkbox.Content><Checkbox.Control><Checkbox.Indicator /></Checkbox.Control><code className="font-mono text-xs">{e}</code></Checkbox.Content></Checkbox>)}</div>
             <div><Button className="cta" isDisabled={!url || !events.size} isPending={busy} onPress={() => run(createWebhook({ url, events: [...events] }), (d) => { setShown({ kind: "secret", value: d.secret }); setUrl(""); })} data-testid="create-webhook">Add endpoint</Button></div>
           </div>
         )}

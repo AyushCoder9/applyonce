@@ -27,7 +27,7 @@ export function PrefsGrid({ initial, locale: l }: { initial: PrefMatrix; locale:
         <thead><tr className="border-b border-line text-left text-xs uppercase tracking-[0.04em] text-ink-3"><th className="px-4 py-3">{l === "hi" ? "श्रेणी" : "Category"}</th>{CHANNELS.map((ch) => <th key={ch} className="px-4 py-3 text-center">{CH[ch]?.[l]}</th>)}</tr></thead>
         <tbody>{CATEGORIES.map((c) => (
           <tr key={c} className="border-b border-line last:border-0"><td className="px-4 py-3"><div className="font-medium">{CAT[c]?.[l]}</div><div className="text-xs text-ink-3">{CAT[c]?.blurb[l]}</div></td>
-            {CHANNELS.map((ch) => <td key={ch} className="px-4 py-3 text-center"><Switch aria-label={`${CAT[c]?.en} via ${CH[ch]?.en}`} isSelected={m[ch][c]} isDisabled={ch === "inapp" && c === "consent"} onChange={(v) => set(ch, c, v)} className="inline-flex"><Switch.Control><Switch.Thumb /></Switch.Control></Switch></td>)}
+            {CHANNELS.map((ch) => <td key={ch} className="px-4 py-3 text-center"><Switch aria-label={`${CAT[c]?.en} via ${CH[ch]?.en}`} isSelected={m[ch][c]} isDisabled={ch === "inapp" && c === "consent"} onChange={(v) => set(ch, c, v)} className="inline-flex"><Switch.Content aria-label={`${CAT[c]?.en} via ${CH[ch]?.en}`}><Switch.Control><Switch.Thumb /></Switch.Control></Switch.Content></Switch></td>)}
           </tr>))}</tbody>
       </table>
       <div className="flex items-center justify-between gap-3 px-4 py-3"><p className="text-xs text-ink-3">{l === "hi" ? "सहमति सूचनाएँ ऐप में हमेशा चालू रहती हैं (DPDP)।" : "Consent notices are always on in-app (DPDP)."}</p><Button className="cta" onPress={save} isPending={busy}>{l === "hi" ? "सहेजें" : "Save"}</Button></div>

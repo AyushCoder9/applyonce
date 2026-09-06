@@ -9,7 +9,7 @@ import { sectionOf } from "../../../../_lib";
 export const GET = handler(async (req, { params }) => {
   const a = await citizen(req, { profileId: params.id });
   const key = decodeURIComponent(params.key!);
-  if (!isFactKey(key) || !scopeAllows(a.scope, sectionOf(key))) throw new ApiError(404, "UNKNOWN_KEY");
+  if (!isFactKey(key) || field(key).system || !scopeAllows(a.scope, sectionOf(key))) throw new ApiError(404, "UNKNOWN_KEY");
   const ri = Number(new URL(req.url).searchParams.get("repeatIndex") ?? 0);
   const row = await db.query.facts.findFirst({ where: and(eq(t.facts.profileId, a.profile.id), eq(t.facts.factKey, key), eq(t.facts.repeatIndex, ri)) });
   if (!row) return ok({ history: [] });

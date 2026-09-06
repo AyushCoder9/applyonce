@@ -1,0 +1,2 @@
+import Link from "next/link";
+export default function NotFound(){return <main className="mx-auto grid max-w-xl gap-4 p-8"><p className="text-sm text-ink-3">404</p><h1 className="font-display text-3xl font-bold">This page is unavailable.</h1><p className="text-ink-2">The link may have expired, or this record belongs to another account.</p><Link className="text-brand-700 underline" href="/app">Return to your home</Link></main>;}

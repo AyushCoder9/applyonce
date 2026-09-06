@@ -38,10 +38,15 @@ export const PATCH = handler(async (req, { params }) => {
     await log(session, "family.claim.link_sent", "relation", rel.id, { profileId: ward.id, phoneLast4: phone.slice(-4) });
     return ok({ sent: true, ...(process.env.PROVIDER_SMS !== "setu" ? { devLink: link } : {}) });
   }
+  if (rel.basis !== "minor") {
+    if (b.scope?.some((section) => !rel.scope.includes("*") && !rel.scope.includes(section))) throw new ApiError(403, "CONSENT_REQUIRED", "Ask the family member to approve wider access with a new invite.");
+    if (b.validUntil !== undefined && rel.validUntil && (!b.validUntil || new Date(b.validUntil) > rel.validUntil)) throw new ApiError(403, "CONSENT_REQUIRED", "Only the family member can approve a longer access period.");
+  }
   const set: Partial<typeof t.relations.$inferInsert> = {};
   if (b.scope) set.scope = b.scope;
   if (b.validUntil !== undefined) set.validUntil = b.validUntil ? new Date(b.validUntil) : null;
   if (rel.basis === "minor" && b.validUntil !== undefined) throw new ApiError(400, "MINOR_NO_EXPIRY", "Access to a minor lasts until they turn 18.");
+  if (!Object.keys(set).length) throw new ApiError(400, "NO_CHANGES");
   await db.update(t.relations).set(set).where(eq(t.relations.id, rel.id));
   await log(session, "family.relation.update", "relation", rel.id, { ...set, by: user.id });
   return ok({ relationId: rel.id, ...set });

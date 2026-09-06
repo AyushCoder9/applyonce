@@ -1,3 +1,5 @@
+import { sampleUrl } from "@/lib/document-preview";
+import { documentAllowed } from "@praman/schema";
 import { db, t, eq } from "@praman/db";
 import { handler, ok, ApiError } from "@/lib/api";
 import { extensionUser } from "../../../_auth";
@@ -10,10 +12,11 @@ export const GET = handler(async (req, { params }) => {
   if (!id) throw new ApiError(400, "BAD_REQUEST", "Missing document id");
   const { all, extSession } = await extensionUser(req);
   const doc = await db.query.documents.findFirst({ where: eq(t.documents.id, id) });
-  if (!doc || !all.some((p) => p.id === doc.profileId)) throw new ApiError(404, "DOCUMENT_NOT_FOUND");
+  const profile = all.find(p=>p.id===doc?.profileId);
+  if (!doc || !profile || doc.status!=="ready" || !documentAllowed(profile.scope,doc.docType)) throw new ApiError(404, "DOCUMENT_NOT_FOUND");
 
   if (!doc.storageKey || doc.storageKey.startsWith("mock/")) {
-    return ok({ url: `${appUrl()}/api/v1/extension/documents/${doc.id}/mock.pdf?token=${extSession.token}`, expiresIn: 300 });
+    return ok({ url: `${appUrl()}${sampleUrl(doc.id,extSession.id)}`, expiresIn: 300 });
   }
 
   const { S3Client, GetObjectCommand } = await import("@aws-sdk/client-s3");

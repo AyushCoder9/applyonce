@@ -1,3 +1,7 @@
+import { cookies } from "next/headers";
+import { randomUUID } from "node:crypto";
+import { getDraft, completeDraft, getApplication } from "@/lib/store";
+import { mapPayloadToRows } from "@/lib/payload-map";
 import { NextResponse } from "next/server";
 import { FIELDS } from "@/lib/fields";
 import { generateApplicationNumber, generateIdempotencyKey } from "@/lib/id";
@@ -13,28 +17,38 @@ import { normalizeDateInput, validateValue } from "@/lib/validation";
  */
 export async function POST(request: Request) {
   const form = await request.formData();
-  const pramanApplicationId = String(form.get("praman_application_id") ?? "");
-  const pramanConsentId = String(form.get("praman_consent_id") ?? "");
-  const pramanFormId = String(form.get("praman_form_id") ?? "");
-  let documents: DocumentRef[] = [];
-  try {
-    documents = JSON.parse(String(form.get("praman_documents") ?? "[]"));
-  } catch {
-    documents = [];
+  const draftToken = String(form.get("draft_token") ?? "");
+  const jar = await cookies();
+  const draft = jar.get("bta_draft")?.value === draftToken ? getDraft(draftToken) : undefined;
+  if (!draft) return NextResponse.json({ok:false,error:{code:"INVALID_REVIEW_SESSION",message:"Start again from the portal."}},{status:403});
+  if (draft.submittedRef) {
+    const existing = getApplication(draft.submittedRef);
+    if (!existing?.accessToken) return NextResponse.json({ok:false,error:{code:"APPLICATION_NOT_FOUND"}},{status:410});
+    const response = NextResponse.redirect(new URL(`/status/${draft.submittedRef}`,request.url),{status:303});
+    response.cookies.set("bta_access",existing.accessToken,{httpOnly:true,sameSite:"lax",secure:new URL(request.url).protocol === "https:",path:"/",maxAge:86400});
+    return response;
   }
+  const pramanApplicationId = draft.payload.application_id;
+  const pramanConsentId = draft.payload.consent_id;
+  const pramanFormId = draft.payload.form_id;
+  const mapped = mapPayloadToRows(draft.payload);
+  const documents: DocumentRef[] = mapped.documents;
 
   const fields: Record<string, unknown> = {};
   const errors: Record<string, string> = {};
   for (const spec of FIELDS) {
     if (spec.kind === "file") {
-      fields[spec.id] = String(form.get(spec.id) ?? "");
+      fields[spec.id] = mapped.rows.find(row=>row.spec.id === spec.id)?.raw ?? "";
+      if(spec.required && !fields[spec.id]) errors[spec.id] = "Required document was not shared. Start again and attach it.";
       continue;
     }
     const raw = form.get(spec.id);
     if (spec.isDate && typeof raw === "string" && raw) {
       const iso = normalizeDateInput(raw);
       if (!iso) { errors[spec.id] = "Enter a valid date."; continue; }
-      fields[spec.id] = iso;
+      const result = validateValue(spec, iso);
+      if (!result.ok) { errors[spec.id] = result.error ?? "Invalid date"; continue; }
+      fields[spec.id] = result.value;
       continue;
     }
     const value = spec.kind === "checkbox" ? raw === "on" || raw === "true" || raw === "Yes" : typeof raw === "string" ? raw : "";
@@ -52,6 +66,7 @@ export async function POST(request: Request) {
   const record: ApplicationRecord = {
     ref,
     source: "praman",
+    accessToken: randomUUID(),
     status: "submitted",
     createdAt: now,
     submittedAt: now,
@@ -64,6 +79,7 @@ export async function POST(request: Request) {
     history: [{ status: "submitted", note: "Application received via Apply with Praman", at: now, actor: "citizen" }],
   };
   saveApplication(record);
+  completeDraft(draftToken,ref);
 
   const cfg = loadPramanConfig();
   const idempotencyKey = generateIdempotencyKey();
@@ -79,5 +95,7 @@ export async function POST(request: Request) {
     saveApplication(record);
   }
 
-  return NextResponse.redirect(new URL(`/status/${ref}`, request.url), { status: 303 });
+  const response=NextResponse.redirect(new URL(`/status/${ref}`,request.url),{status:303});
+  response.cookies.set("bta_access",record.accessToken!,{httpOnly:true,sameSite:"lax",secure:new URL(request.url).protocol === "https:",path:"/",maxAge:86400});
+  return response;
 }

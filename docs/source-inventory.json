@@ -1,0 +1,5921 @@
+{
+  "at": "2026-09-06T15:09:44.601Z",
+  "files": 450,
+  "lines": 30732,
+  "inventory": [
+    {
+      "file": ".github/workflows/ci.yml",
+      "lines": 68,
+      "sha256": "828d8728db662de26bab3975501a81ee7e82929c7ecd56fc0ada80e72703dd06",
+      "kind": "source/configuration",
+      "route": false,
+      "exports": [],
+      "attention": []
+    },
+    {
+      "file": "CLAUDE.md",
+      "lines": 24,
+      "sha256": "b84d50893880035adcd10648fe80b4cfab53ae85b835a646fb4c7182c792eed6",
+      "kind": "documentation",
+      "route": false,
+      "exports": [],
+      "headings": [
+        "Praman — agent instructions",
+        "Standing rules",
+        "Commands",
+        "Structure"
+      ],
+      "attention": []
+    },
+    {
+      "file": "README.md",
+      "lines": 88,
+      "sha256": "9fe14d727c50f8daa0cf43eb1a0752b2b8d7efc4a88741046c59ca224b8cf9b5",
+      "kind": "documentation",
+      "route": false,
+      "exports": [],
+      "headings": [
+        "Praman — Verify once. Apply anywhere.",
+        "What you can demonstrate",
+        "Run locally",
+        "Two-minute pitch",
+        "Verify the build",
+        "With web, worker and BTA running against a disposable seeded database:",
+        "Repository map",
+        "Current documentation"
+      ],
+      "attention": []
+    },
+    {
+      "file": "apps/demo-exam-portal/FIELDS.md",
+      "lines": 115,
+      "sha256": "8d802318b0791ab7ef2b897800f678feed5db0729881929a9720f516c7908b30",
+      "kind": "documentation",
+      "route": false,
+      "exports": [],
+      "headings": [
+        "BTA-JEE 2026 — field map",
+        "Step 1 — Personal Details",
+        "Step 2 — Contact & Address",
+        "Step 3 — Parents & Income",
+        "Step 4 — Category & Eligibility",
+        "Step 5 — Education (Class 10 / 12)",
+        "Step 6 — Exam Preferences & Declaration (BTA-only custom questions)",
+        "Notes for the `bta-demo` extension recipe"
+      ],
+      "attention": []
+    },
+    {
+      "file": "apps/demo-exam-portal/README.md",
+      "lines": 114,
+      "sha256": "55d9d472abb36f9711bc3d005698feb321a12f81ff78a62db972613b04eb3e65",
+      "kind": "documentation",
+      "route": false,
+      "exports": [],
+      "headings": [
+        "Bharat Test Agency — BTA-JEE 2026 Registration (demo exam portal)",
+        "Run it",
+        "Env vars (from root `.env`)",
+        "DEMO_OFFLINE mode",
+        "The 3-minute demo script (docs/05-API-AND-FLOWS.md §4)",
+        "Routes",
+        "Storage",
+        "What depends on WP2"
+      ],
+      "attention": []
+    },
+    {
+      "file": "apps/demo-exam-portal/next.config.ts",
+      "lines": 4,
+      "sha256": "93c56a1578e0c2b708e83669623d2918a9ca219bedd8e368e9a3ab2563d12d50",
+      "kind": "source/configuration",
+      "route": false,
+      "exports": [],
+      "attention": []
+    },
+    {
+      "file": "apps/demo-exam-portal/package.json",
+      "lines": 30,
+      "sha256": "253725a37d3f0fd0f7e00adbf4883a283ad0712526658cbea2e2d496d04de015",
+      "kind": "source/configuration",
+      "route": false,
+      "exports": [],
+      "attention": []
+    },
+    {
+      "file": "apps/demo-exam-portal/postcss.config.mjs",
+      "lines": 2,
+      "sha256": "a1a188221f064d964dd9958c3d48b0c23252fabbeb6099d95ee8e15c764718b0",
+      "kind": "source/configuration",
+      "route": false,
+      "exports": [],
+      "attention": []
+    },
+    {
+      "file": "apps/demo-exam-portal/src/app/admin/webhooks/page.tsx",
+      "lines": 37,
+      "sha256": "fedce6d414919d23e8e1cc71f76c4e116e014e29095a8fb7bcfae27e9b797e71",
+      "kind": "source/configuration",
+      "route": true,
+      "exports": [
+        "metadata",
+        "dynamic"
+      ],
+      "attention": []
+    },
+    {
+      "file": "apps/demo-exam-portal/src/app/api/admin/push-status/route.ts",
+      "lines": 33,
+      "sha256": "e7b3c1bc92575d118c3500c541e0ff2fe9c38a88228642a0de61b5f36d3a84ac",
+      "kind": "source/configuration",
+      "route": true,
+      "exports": [
+        "POST"
+      ],
+      "attention": []
+    },
+    {
+      "file": "apps/demo-exam-portal/src/app/api/manual/submit/route.ts",
+      "lines": 69,
+      "sha256": "478bed4debd09ca8986187e26d64ee09f82879892885a27d7100a6f5ddcd0126",
+      "kind": "source/configuration",
+      "route": true,
+      "exports": [
+        "POST"
+      ],
+      "attention": []
+    },
+    {
+      "file": "apps/demo-exam-portal/src/app/api/praman/callback/route.ts",
+      "lines": 23,
+      "sha256": "6b08aa285dc3ccd37ca735a92c04757d67ab0179fab010df122386bd80737709",
+      "kind": "source/configuration",
+      "route": true,
+      "exports": [
+        "GET"
+      ],
+      "attention": []
+    },
+    {
+      "file": "apps/demo-exam-portal/src/app/api/praman/session/route.ts",
+      "lines": 26,
+      "sha256": "3307af85399238b4b4babbf6f2552399c7ce42511ba2480b95e7568d21db532f",
+      "kind": "source/configuration",
+      "route": true,
+      "exports": [
+        "POST"
+      ],
+      "attention": []
+    },
+    {
+      "file": "apps/demo-exam-portal/src/app/api/praman/webhook/route.ts",
+      "lines": 50,
+      "sha256": "6e40e2be30259214b6a823126afbd5e315e1fe47a13667790fca400b9ee5289a",
+      "kind": "source/configuration",
+      "route": true,
+      "exports": [
+        "POST"
+      ],
+      "attention": []
+    },
+    {
+      "file": "apps/demo-exam-portal/src/app/api/return/submit/route.ts",
+      "lines": 102,
+      "sha256": "7c8b255728f4e825d452c07b57095d3c943041860f21ad71c87582410a7a83c7",
+      "kind": "source/configuration",
+      "route": true,
+      "exports": [
+        "POST"
+      ],
+      "attention": []
+    },
+    {
+      "file": "apps/demo-exam-portal/src/app/apply/manual/ManualWizard.tsx",
+      "lines": 194,
+      "sha256": "1ba618ecfc3daba24afe881f26e2734cb985c031247a3f95fa7e611740db398c",
+      "kind": "source/configuration",
+      "route": false,
+      "exports": [
+        "ManualWizard"
+      ],
+      "attention": []
+    },
+    {
+      "file": "apps/demo-exam-portal/src/app/apply/manual/page.tsx",
+      "lines": 23,
+      "sha256": "438c7a34b0ea8c3f13d1c2b9c23e224a8d487e675f403d3134c840e357bd9526",
+      "kind": "source/configuration",
+      "route": true,
+      "exports": [
+        "metadata"
+      ],
+      "attention": []
+    },
+    {
+      "file": "apps/demo-exam-portal/src/app/apply/return/ReturnForm.tsx",
+      "lines": 109,
+      "sha256": "1d2d50b055b06b135cd5abdb231bd37da5996d3311bb4825921dd24bd0dae94e",
+      "kind": "source/configuration",
+      "route": false,
+      "exports": [
+        "ReturnForm"
+      ],
+      "attention": []
+    },
+    {
+      "file": "apps/demo-exam-portal/src/app/apply/return/page.tsx",
+      "lines": 32,
+      "sha256": "7dd4489018f681640176126f99e4cda0c2f159a0ece1b2df51082b6fb21389c9",
+      "kind": "source/configuration",
+      "route": true,
+      "exports": [
+        "metadata"
+      ],
+      "attention": []
+    },
+    {
+      "file": "apps/demo-exam-portal/src/app/globals.css",
+      "lines": 241,
+      "sha256": "e9bb4782ab0ef2ae2761ad1d1865a7bc8bbcb15433632ba620395288fecfb998",
+      "kind": "source/configuration",
+      "route": false,
+      "exports": [],
+      "attention": []
+    },
+    {
+      "file": "apps/demo-exam-portal/src/app/layout.tsx",
+      "lines": 22,
+      "sha256": "e58827e11ad7b51f55f56f09ab556f62cb1f983f67f57f73c22530d865f0ece1",
+      "kind": "source/configuration",
+      "route": false,
+      "exports": [
+        "metadata"
+      ],
+      "attention": []
+    },
+    {
+      "file": "apps/demo-exam-portal/src/app/page.tsx",
+      "lines": 72,
+      "sha256": "09d12d1f938e0a2164b97fb347caae434424ae3aa08d02bde234ad39c0c80bed",
+      "kind": "source/configuration",
+      "route": true,
+      "exports": [],
+      "attention": []
+    },
+    {
+      "file": "apps/demo-exam-portal/src/app/status/[ref]/page.tsx",
+      "lines": 97,
+      "sha256": "152f8f44f997ec08b2cd8dbb0228609d2ed5ffed76da76a9dfb4489540d1799c",
+      "kind": "source/configuration",
+      "route": true,
+      "exports": [
+        "generateMetadata"
+      ],
+      "attention": []
+    },
+    {
+      "file": "apps/demo-exam-portal/src/components/FieldInput.tsx",
+      "lines": 80,
+      "sha256": "4fcafcf9f70861233932a3acc1f4938d4daea84d6d042fbc546593f5fad7cd9a",
+      "kind": "source/configuration",
+      "route": false,
+      "exports": [
+        "FieldInput"
+      ],
+      "attention": [
+        "        <input type=\"text\" className=\"gov-input\" placeholder=\"DD/MM/YYYY\" inputMode=\"numeric\" maxLength={10} defaultValue={defaultValue} {...commonProps} />",
+        "      {spec.kind === \"tel\" && <input type=\"tel\" className=\"gov-input\" placeholder=\"9876543210\" maxLength={10} defaultValue={defaultValue} {...commonProps} />}",
+        "        <input type=\"text\" inputMode=\"decimal\" className=\"gov-input\" placeholder={spec.isPercentage ? \"e.g. 91.2\" : undefined} defaultValue={defaultValue} {...commonProps} />"
+      ]
+    },
+    {
+      "file": "apps/demo-exam-portal/src/components/GovFooter.tsx",
+      "lines": 11,
+      "sha256": "da6c927f95edd6df106da5f000e39986afaa986dce24dc40ae8093d231358223",
+      "kind": "source/configuration",
+      "route": false,
+      "exports": [
+        "GovFooter"
+      ],
+      "attention": []
+    },
+    {
+      "file": "apps/demo-exam-portal/src/components/GovHeader.tsx",
+      "lines": 28,
+      "sha256": "91fbb48f2f413b7a16be2935803131e4c9b308fb8756dc614fb82993a1290fb4",
+      "kind": "source/configuration",
+      "route": false,
+      "exports": [
+        "GovHeader"
+      ],
+      "attention": []
+    },
+    {
+      "file": "apps/demo-exam-portal/src/components/ProgressBar.tsx",
+      "lines": 17,
+      "sha256": "c20060993d2f42f34ea6fdebc14d4c2be419832a7fbab25cf2ab108cde1cdd51",
+      "kind": "source/configuration",
+      "route": false,
+      "exports": [
+        "ProgressBar"
+      ],
+      "attention": []
+    },
+    {
+      "file": "apps/demo-exam-portal/src/components/SourceBadge.tsx",
+      "lines": 42,
+      "sha256": "6526b778c591a672c14a6068423d8f154008d00250062c4f3e0d8bea6e7ca79e",
+      "kind": "source/configuration",
+      "route": false,
+      "exports": [
+        "SourceBadge"
+      ],
+      "attention": []
+    },
+    {
+      "file": "apps/demo-exam-portal/src/components/StatusTimeline.tsx",
+      "lines": 40,
+      "sha256": "fb9b743e1a16ba5c21db6f79726c33a342217f903d1d153615f878c827215044",
+      "kind": "source/configuration",
+      "route": false,
+      "exports": [
+        "StatusTimeline"
+      ],
+      "attention": []
+    },
+    {
+      "file": "apps/demo-exam-portal/src/lib/fields.ts",
+      "lines": 156,
+      "sha256": "3cd8d1919091a1b749b79ba4cf67e6a432e65970287bb286a8f59401eaf6069f",
+      "kind": "source/configuration",
+      "route": false,
+      "exports": [
+        "FieldKind",
+        "FieldOption",
+        "FieldSpec",
+        "StepDef",
+        "STEPS",
+        "FIELDS",
+        "FIELDS_BY_STEP",
+        "FIELD_BY_ID",
+        "FIELD_BY_REGISTRY_KEY",
+        "CUSTOM_FIELDS",
+        "TOTAL_STEPS",
+        "REVIEW_STEP"
+      ],
+      "attention": []
+    },
+    {
+      "file": "apps/demo-exam-portal/src/lib/fixtures.ts",
+      "lines": 108,
+      "sha256": "80dd9f54f3444ca844cdb4ff8697a53f5347799c5ff3b09e94dd580bd1699aa7",
+      "kind": "source/configuration",
+      "route": false,
+      "exports": [
+        "buildOfflinePayload"
+      ],
+      "attention": []
+    },
+    {
+      "file": "apps/demo-exam-portal/src/lib/id.ts",
+      "lines": 25,
+      "sha256": "45a2ae792f29c39735c23912a9e66a8e127a2fb7b663a0f625d0d8386934f121",
+      "kind": "source/configuration",
+      "route": false,
+      "exports": [
+        "generateApplicationNumber",
+        "generateIdempotencyKey"
+      ],
+      "attention": []
+    },
+    {
+      "file": "apps/demo-exam-portal/src/lib/jws-verify.ts",
+      "lines": 83,
+      "sha256": "2d0568346c76f4cd7aa8148849c2128f061c155748f1ff573502ffcf53926dc1",
+      "kind": "source/configuration",
+      "route": false,
+      "exports": [
+        "Jwk",
+        "Jwks",
+        "JwsHeader",
+        "JwsVerifyError",
+        "verifyEs256Jws"
+      ],
+      "attention": []
+    },
+    {
+      "file": "apps/demo-exam-portal/src/lib/payload-map.ts",
+      "lines": 75,
+      "sha256": "d135ba0d4982368d2bc2176033a817fdaa9f1c40774486c8147b339f9a183100",
+      "kind": "source/configuration",
+      "route": false,
+      "exports": [
+        "FieldRow",
+        "MappedPayload",
+        "mapPayloadToRows"
+      ],
+      "attention": []
+    },
+    {
+      "file": "apps/demo-exam-portal/src/lib/praman.ts",
+      "lines": 34,
+      "sha256": "ee2c007cbc50ec50e76964dbb10eb72afdc7733df5e95c949f17cb8076e2a6c2",
+      "kind": "source/configuration",
+      "route": false,
+      "exports": [
+        "PramanConfig",
+        "loadPramanConfig",
+        "ShareSessionResult",
+        "createShareSession",
+        "ExchangeResult",
+        "exchangeShareToken",
+        "verifyWebhookSignature",
+        "PushStatusInput",
+        "pushStatus"
+      ],
+      "attention": []
+    },
+    {
+      "file": "apps/demo-exam-portal/src/lib/store.ts",
+      "lines": 180,
+      "sha256": "244d840240681d83969a8ad858edfccbd14aa264f5c7bbf6a4f50daa383331d0",
+      "kind": "source/configuration",
+      "route": false,
+      "exports": [
+        "AppSource",
+        "DocumentRef",
+        "StatusEvent",
+        "ApplicationRecord",
+        "WebhookEventRecord",
+        "Draft",
+        "saveApplication",
+        "getApplication",
+        "applicationExists",
+        "findApplicationByPramanId",
+        "findApplicationByConsentId",
+        "appendHistory",
+        "markConsentRevoked",
+        "appendWebhookEvent",
+        "listWebhookEvents",
+        "rememberState",
+        "consumeState",
+        "saveDraft",
+        "getDraft",
+        "completeDraft"
+      ],
+      "attention": []
+    },
+    {
+      "file": "apps/demo-exam-portal/src/lib/validation.ts",
+      "lines": 125,
+      "sha256": "9a5701029ccee5dffed35cfaef0ea0c40bf64eff5d53feea6e211406ad4faeca",
+      "kind": "source/configuration",
+      "route": false,
+      "exports": [
+        "ValidationResult",
+        "parseDMY",
+        "formatDMY",
+        "normalizeDateInput",
+        "validateValue",
+        "FileCheckResult",
+        "validateFileMeta"
+      ],
+      "attention": []
+    },
+    {
+      "file": "apps/demo-exam-portal/tsconfig.json",
+      "lines": 2,
+      "sha256": "4744c6d2430482c96a88bb86cbc4d6a1e24d98b2062b647bf3a17ed06e880a26",
+      "kind": "source/configuration",
+      "route": false,
+      "exports": [],
+      "attention": []
+    },
+    {
+      "file": "apps/extension/README.md",
+      "lines": 112,
+      "sha256": "49a7cdc023aa657de509ce54d083517bdacea74bf33a46c96a753b0764487705",
+      "kind": "documentation",
+      "route": false,
+      "exports": [],
+      "headings": [
+        "Praman Autofill (Chrome MV3)",
+        "Load unpacked",
+        "Connect flow",
+        "How a page gets filled",
+        "Adding a recipe",
+        "What's verified vs. not"
+      ],
+      "attention": [
+        "   matches the visible label/placeholder text against a keyword table"
+      ]
+    },
+    {
+      "file": "apps/extension/manifest.config.ts",
+      "lines": 37,
+      "sha256": "42c0dd62060b6d634360ae109c63d8584ff22b9ca845804fcb8804f2ec28aff9",
+      "kind": "source/configuration",
+      "route": false,
+      "exports": [],
+      "attention": []
+    },
+    {
+      "file": "apps/extension/package.json",
+      "lines": 10,
+      "sha256": "0748467589365792b8cfa822ac33f405ac99e78e3b7304673de6d8d473b6a80e",
+      "kind": "source/configuration",
+      "route": false,
+      "exports": [],
+      "attention": []
+    },
+    {
+      "file": "apps/extension/src/background.ts",
+      "lines": 98,
+      "sha256": "82abc823e7cd1cef369b36fe4016785040b0488fbdb908e4a2d84a041b89e97e",
+      "kind": "source/configuration",
+      "route": false,
+      "exports": [],
+      "attention": []
+    },
+    {
+      "file": "apps/extension/src/content/fill.ts",
+      "lines": 324,
+      "sha256": "6775d38ea9be7a16a853b286840932f33a6f2cde3c99d6f585035b98138d8aae",
+      "kind": "source/configuration",
+      "route": false,
+      "exports": [],
+      "attention": [
+        "  const placeholder = (el as HTMLInputElement).placeholder;",
+        "  if (placeholder) return placeholder;"
+      ]
+    },
+    {
+      "file": "apps/extension/src/content/handshake.ts",
+      "lines": 34,
+      "sha256": "39edb3fa2bc313bbe6f83ccc76bd7cde7bd9ad7e1bcb9ec7eeae689736e2f1c5",
+      "kind": "source/configuration",
+      "route": false,
+      "exports": [],
+      "attention": []
+    },
+    {
+      "file": "apps/extension/src/lib/messages.ts",
+      "lines": 88,
+      "sha256": "8d033ce83c4dbf5f2635b10a04da44f9b7b8f51c3586a52e9c3b5ee2e64187f3",
+      "kind": "source/configuration",
+      "route": false,
+      "exports": [
+        "FillValue",
+        "AuthState",
+        "SetTokenMsg",
+        "DisconnectMsg",
+        "AuthStatusMsg",
+        "SetActiveProfileMsg",
+        "FillPlanMsg",
+        "FillPlanResult",
+        "DocumentsMsg",
+        "DocumentUrlMsg",
+        "CreateApplicationMsg",
+        "AuthChangedMsg",
+        "BackgroundRequest",
+        "ApiEnvelope",
+        "PageStatus",
+        "GetStatusMsg",
+        "ApplyFillMsg",
+        "FillSummary",
+        "sendToBackground",
+        "sendToTab"
+      ],
+      "attention": []
+    },
+    {
+      "file": "apps/extension/src/lib/select-match.ts",
+      "lines": 46,
+      "sha256": "839e9364fc7e591956f207d2c9266859fdad36679424901bbe66f626b355d126",
+      "kind": "source/configuration",
+      "route": false,
+      "exports": [
+        "SelectOption",
+        "matchOption",
+        "matchBoolOption"
+      ],
+      "attention": []
+    },
+    {
+      "file": "apps/extension/src/lib/transforms.ts",
+      "lines": 55,
+      "sha256": "bd043dbc68726115d20e85fc4bd640767ef23c75e80814d36e7e813934aebe50",
+      "kind": "source/configuration",
+      "route": false,
+      "exports": [
+        "TransformName",
+        "applyTransform",
+        "pickArrayIndex",
+        "isIsoDate"
+      ],
+      "attention": []
+    },
+    {
+      "file": "apps/extension/src/popup/Popup.tsx",
+      "lines": 210,
+      "sha256": "715aff4e67e48d9de6d1ef27026cda967a7b9711e506e65d658c034799e9d648",
+      "kind": "source/configuration",
+      "route": false,
+      "exports": [
+        "Popup"
+      ],
+      "attention": [
+        "            placeholder=\"Paste connection code\"",
+        "                  <input className=\"flex-1 rounded-sm border border-line px-2 py-1.5\" placeholder=\"123456\" value={otp} onChange={(e) => setOtp(e.target.value)} maxLength={6} />"
+      ]
+    },
+    {
+      "file": "apps/extension/src/popup/main.tsx",
+      "lines": 7,
+      "sha256": "afc3e67b9c6aaba373b3e2bf44013f05314015fb258196be9bcd6faa1bc136e1",
+      "kind": "source/configuration",
+      "route": false,
+      "exports": [],
+      "attention": []
+    },
+    {
+      "file": "apps/extension/src/recipes/bta-demo.json",
+      "lines": 203,
+      "sha256": "ede1ca74288c8abb79873d8f90e2e1dfc78243d67bb934de607cc80d088c364c",
+      "kind": "source/configuration",
+      "route": false,
+      "exports": [],
+      "attention": []
+    },
+    {
+      "file": "apps/extension/src/recipes/generic.json",
+      "lines": 24,
+      "sha256": "03a470ff5f5d5dc5263dc85769985abf632fd7189421f70ba08472a9d07c360e",
+      "kind": "source/configuration",
+      "route": false,
+      "exports": [],
+      "attention": []
+    },
+    {
+      "file": "apps/extension/src/recipes/index.ts",
+      "lines": 43,
+      "sha256": "6ab3b175e1cde4a5104e27e4262264449dd8e06b03b3c49f8f0510029397091f",
+      "kind": "source/configuration",
+      "route": false,
+      "exports": [
+        "RECIPES",
+        "matchRecipe",
+        "resolveFields",
+        "matchGenericLabel"
+      ],
+      "attention": [
+        "/** Generic recipe: match a field's visible label/placeholder text against the keyword table, in order; first hit wins. */"
+      ]
+    },
+    {
+      "file": "apps/extension/src/recipes/nsp.json",
+      "lines": 24,
+      "sha256": "40639e468aa0799e3e6d2621c8f1d11de81e9f607b3d3b609c4db085e106f84f",
+      "kind": "source/configuration",
+      "route": false,
+      "exports": [],
+      "attention": []
+    },
+    {
+      "file": "apps/extension/src/recipes/nta-jee.json",
+      "lines": 28,
+      "sha256": "4ed056f0ca03c2db4051ff19cbb90bcf25791000bfd87d69da55a8b2321a8684",
+      "kind": "source/configuration",
+      "route": false,
+      "exports": [],
+      "attention": []
+    },
+    {
+      "file": "apps/extension/src/recipes/types.ts",
+      "lines": 47,
+      "sha256": "3ec6473b37992e5455c2dc4e67fb50de93b65a3cc4a7f48453c8dbb9db0bc91e",
+      "kind": "source/configuration",
+      "route": false,
+      "exports": [
+        "RecipeField",
+        "RecipeCapture",
+        "LabelRule",
+        "Recipe",
+        "DocLike"
+      ],
+      "attention": [
+        "  /** Regex source, matched case-insensitively against a field's visible label/placeholder text. */"
+      ]
+    },
+    {
+      "file": "apps/extension/src/styles.css",
+      "lines": 43,
+      "sha256": "c404bd811a9e82a34ecb87988b9ce45bc7f08508213953042419a49a7a8e6967",
+      "kind": "source/configuration",
+      "route": false,
+      "exports": [],
+      "attention": []
+    },
+    {
+      "file": "apps/extension/test/recipes.test.ts",
+      "lines": 104,
+      "sha256": "7a9c871b701fd04df2f7e4d3f7c5a3e11080b6d7b6527d0d4c06194b504f6477",
+      "kind": "source/configuration",
+      "route": false,
+      "exports": [],
+      "attention": []
+    },
+    {
+      "file": "apps/extension/test/select-match.test.ts",
+      "lines": 50,
+      "sha256": "186f5d69b9d7550e990f6e388251483b5314101edce1e9ebee5a0e48ea00c449",
+      "kind": "source/configuration",
+      "route": false,
+      "exports": [],
+      "attention": []
+    },
+    {
+      "file": "apps/extension/test/transforms.test.ts",
+      "lines": 61,
+      "sha256": "3ff7ea2cdc2c0c219e92eebc2e80a6369493c327b68102c20128e64cbeb64161",
+      "kind": "source/configuration",
+      "route": false,
+      "exports": [],
+      "attention": []
+    },
+    {
+      "file": "apps/extension/tsconfig.json",
+      "lines": 2,
+      "sha256": "73a24709311221910d6c6247fe69b0dd915522419d1781888c4abb73c6acc97d",
+      "kind": "source/configuration",
+      "route": false,
+      "exports": [],
+      "attention": []
+    },
+    {
+      "file": "apps/extension/vite.config.ts",
+      "lines": 11,
+      "sha256": "ede23ed4f4f2cdaa614dffcc44e30d9df9b2c39d51e8b0e2113f2c3c9c96936c",
+      "kind": "source/configuration",
+      "route": false,
+      "exports": [],
+      "attention": []
+    },
+    {
+      "file": "apps/web/AGENTS.md",
+      "lines": 10,
+      "sha256": "63f2c50380ed6303237cce215ce27af1d620d094c215e28d1b1538a3c070e3bb",
+      "kind": "documentation",
+      "route": false,
+      "exports": [],
+      "headings": [
+        "This is NOT the Next.js you know"
+      ],
+      "attention": []
+    },
+    {
+      "file": "apps/web/CLAUDE.md",
+      "lines": 2,
+      "sha256": "336cc4fbf19beaada7ccf9986414fa91851a8d7a07dfb3ccbe800a69eed0ab49",
+      "kind": "documentation",
+      "route": false,
+      "exports": [],
+      "headings": [],
+      "attention": []
+    },
+    {
+      "file": "apps/web/e2e/workflows.spec.ts",
+      "lines": 107,
+      "sha256": "f56e26a3ec6f0d80bcfae58cbdb0e4258c19d985bb354223ef680614ec07c923",
+      "kind": "source/configuration",
+      "route": false,
+      "exports": [],
+      "attention": []
+    },
+    {
+      "file": "apps/web/e2e/wp1-vault.spec.ts",
+      "lines": 51,
+      "sha256": "96717fd8ec23cc32aab476ff5ea810acbc8b51fcf954fbe543c357fea0310595",
+      "kind": "source/configuration",
+      "route": false,
+      "exports": [],
+      "attention": []
+    },
+    {
+      "file": "apps/web/e2e/wp2-share.spec.ts",
+      "lines": 120,
+      "sha256": "54f8f513f84e324d97d69a1dfaf72c5953bfc28e62ca31c3658940f63d3f5059",
+      "kind": "source/configuration",
+      "route": false,
+      "exports": [],
+      "attention": []
+    },
+    {
+      "file": "apps/web/e2e/wp5-family.spec.ts",
+      "lines": 45,
+      "sha256": "da85b2c31e65dbdb348dff9deb49940978a539e877ab6b26ee30cfeda1abab5a",
+      "kind": "source/configuration",
+      "route": false,
+      "exports": [],
+      "attention": []
+    },
+    {
+      "file": "apps/web/next-env.d.ts",
+      "lines": 8,
+      "sha256": "0f70629890b72a0a82e91972cc032c04b658b26c265373cb711cf576bfbf8fcc",
+      "kind": "source/configuration",
+      "route": false,
+      "exports": [],
+      "attention": []
+    },
+    {
+      "file": "apps/web/next.config.ts",
+      "lines": 16,
+      "sha256": "fa391eb00b1bd5c6e0f7b8b09985bd156eb7456458e78e19c192f0b5c5b2e487",
+      "kind": "source/configuration",
+      "route": false,
+      "exports": [],
+      "attention": []
+    },
+    {
+      "file": "apps/web/package.json",
+      "lines": 59,
+      "sha256": "66dc1aae9415e27864053c0770c8dd76556cc05f74344609989e450a9c3b500e",
+      "kind": "source/configuration",
+      "route": false,
+      "exports": [],
+      "attention": []
+    },
+    {
+      "file": "apps/web/playwright.config.ts",
+      "lines": 11,
+      "sha256": "5b9151fd128463caaff87257231d5d56365e840cfb404ff06205d35f4b1dc766",
+      "kind": "source/configuration",
+      "route": false,
+      "exports": [],
+      "attention": []
+    },
+    {
+      "file": "apps/web/postcss.config.mjs",
+      "lines": 2,
+      "sha256": "a1a188221f064d964dd9958c3d48b0c23252fabbeb6099d95ee8e15c764718b0",
+      "kind": "source/configuration",
+      "route": false,
+      "exports": [],
+      "attention": []
+    },
+    {
+      "file": "apps/web/src/app/(public)/demo/page.tsx",
+      "lines": 33,
+      "sha256": "fcae22a45fffd158c93410c67a09f43d67607579c20f873b38b3471d6df6a26b",
+      "kind": "source/configuration",
+      "route": true,
+      "exports": [
+        "metadata"
+      ],
+      "attention": []
+    },
+    {
+      "file": "apps/web/src/app/(public)/dpo/actions.ts",
+      "lines": 17,
+      "sha256": "c1de72b6db28a7d5052fb65ead8c0315f802446527bb4cc5eb2cb8d15d84fa54",
+      "kind": "source/configuration",
+      "route": false,
+      "exports": [
+        "DpoState",
+        "submitDpoRequest"
+      ],
+      "attention": []
+    },
+    {
+      "file": "apps/web/src/app/(public)/dpo/page.tsx",
+      "lines": 25,
+      "sha256": "0a6a41803cba8914a215c550475e2aed07d701b3826d926f3905f36420299140",
+      "kind": "source/configuration",
+      "route": true,
+      "exports": [
+        "metadata",
+        "dynamic"
+      ],
+      "attention": []
+    },
+    {
+      "file": "apps/web/src/app/(public)/for-institutions/page.tsx",
+      "lines": 42,
+      "sha256": "31e0a6cbe801878773fa8ed8bd0982e5120db04cd063edcbcadf60a1e3cd7994",
+      "kind": "source/configuration",
+      "route": true,
+      "exports": [
+        "metadata"
+      ],
+      "attention": []
+    },
+    {
+      "file": "apps/web/src/app/(public)/layout.tsx",
+      "lines": 27,
+      "sha256": "b5219fae7df2e8d0855f48c1d3cf87d273e7a46b2c06bd3aa072943f74a11c12",
+      "kind": "source/configuration",
+      "route": false,
+      "exports": [],
+      "attention": []
+    },
+    {
+      "file": "apps/web/src/app/(public)/page.tsx",
+      "lines": 96,
+      "sha256": "8938f4285727b1e9681d15949890ee277fac2fc67310de2431e55223f00d3fea",
+      "kind": "source/configuration",
+      "route": true,
+      "exports": [
+        "metadata",
+        "revalidate"
+      ],
+      "attention": []
+    },
+    {
+      "file": "apps/web/src/app/(public)/privacy/page.tsx",
+      "lines": 12,
+      "sha256": "469f562d2e389af0d5f771a9d357f131d8ce75763cce358d238ed4977cf13e6b",
+      "kind": "source/configuration",
+      "route": true,
+      "exports": [
+        "metadata"
+      ],
+      "attention": []
+    },
+    {
+      "file": "apps/web/src/app/(public)/security/page.tsx",
+      "lines": 8,
+      "sha256": "2037402f537d810c288ec6f933d43c7cdf009a26a2bed78d34c168548ece5a55",
+      "kind": "source/configuration",
+      "route": true,
+      "exports": [
+        "metadata"
+      ],
+      "attention": []
+    },
+    {
+      "file": "apps/web/src/app/(public)/status/page.tsx",
+      "lines": 24,
+      "sha256": "194d7cad2016e36a03921135c4c0add1270bac4cc1384bc0058ccd13bae3fc4d",
+      "kind": "source/configuration",
+      "route": true,
+      "exports": [
+        "metadata",
+        "dynamic"
+      ],
+      "attention": []
+    },
+    {
+      "file": "apps/web/src/app/(public)/terms/page.tsx",
+      "lines": 4,
+      "sha256": "4c4890be3e791d14b91c22d1d42bb2923105b2a6a6d6189096b1416369581e8c",
+      "kind": "source/configuration",
+      "route": true,
+      "exports": [
+        "metadata"
+      ],
+      "attention": []
+    },
+    {
+      "file": "apps/web/src/app/admin/audit/page.tsx",
+      "lines": 24,
+      "sha256": "d1d412096c0371d3e7433f03a5d106fbdfe7863636006f31b9fa4e2e3faeef17",
+      "kind": "source/configuration",
+      "route": true,
+      "exports": [
+        "dynamic"
+      ],
+      "attention": [
+        "      <form className=\"mb-4 flex flex-wrap gap-2\"><input name=\"actor\" defaultValue={q.actor} placeholder=\"Actor user/partner id\" className={inp} /><input name=\"action\" defaultValue={q.action} placeholder=\"Action contains"
+      ]
+    },
+    {
+      "file": "apps/web/src/app/admin/flags/page.tsx",
+      "lines": 14,
+      "sha256": "534894dccb041f6649e9a2d719ac06e9d209f353c284a3f885c58a99b7935fba",
+      "kind": "source/configuration",
+      "route": true,
+      "exports": [
+        "dynamic"
+      ],
+      "attention": []
+    },
+    {
+      "file": "apps/web/src/app/admin/layout.tsx",
+      "lines": 8,
+      "sha256": "a68a48e30cdde3c9a35c194eabc3189940026b2ce7047490396f2b3400d45d95",
+      "kind": "source/configuration",
+      "route": false,
+      "exports": [],
+      "attention": []
+    },
+    {
+      "file": "apps/web/src/app/admin/page.tsx",
+      "lines": 24,
+      "sha256": "2b34f8e2fe6e4fc99cd6db99a146a7d0d1df5c3b804217b3ea762435073bcb8f",
+      "kind": "source/configuration",
+      "route": true,
+      "exports": [
+        "dynamic"
+      ],
+      "attention": []
+    },
+    {
+      "file": "apps/web/src/app/admin/partners/page.tsx",
+      "lines": 19,
+      "sha256": "9c0ce62f96d7dc61882856e73e30a866c779135ffe7c23e1ec9ddaf4c07352f5",
+      "kind": "source/configuration",
+      "route": true,
+      "exports": [
+        "dynamic"
+      ],
+      "attention": []
+    },
+    {
+      "file": "apps/web/src/app/admin/providers/page.tsx",
+      "lines": 21,
+      "sha256": "ce8dcedeab514556ed3d6dbcd58fd4769fd9cc405605ea4d8d3b685b5cc32da7",
+      "kind": "source/configuration",
+      "route": true,
+      "exports": [
+        "dynamic"
+      ],
+      "attention": []
+    },
+    {
+      "file": "apps/web/src/app/admin/queues/page.tsx",
+      "lines": 19,
+      "sha256": "2e465ea006c31be03d6768579a39a15b74276b2f2a0fe01b708fdbd0ecd6e4a0",
+      "kind": "source/configuration",
+      "route": true,
+      "exports": [
+        "dynamic"
+      ],
+      "attention": []
+    },
+    {
+      "file": "apps/web/src/app/admin/requests/actions.ts",
+      "lines": 15,
+      "sha256": "cc1351a413ed711e66e2adb2216f6fb55078f4331e92d826ef94d09941495e12",
+      "kind": "source/configuration",
+      "route": false,
+      "exports": [
+        "updateRequest"
+      ],
+      "attention": []
+    },
+    {
+      "file": "apps/web/src/app/admin/requests/page.tsx",
+      "lines": 26,
+      "sha256": "a9121739503b32fad85cf72b6b555fd8a104b08d9796d59ac58805933e119f52",
+      "kind": "source/configuration",
+      "route": true,
+      "exports": [
+        "dynamic"
+      ],
+      "attention": [
+        "            <td className=\"px-4 py-3\"><form action={updateRequest} className=\"flex flex-wrap gap-2\"><input type=\"hidden\" name=\"id\" value={r.id} /><select name=\"status\" defaultValue={r.status} className=\"rounded-md border"
+      ]
+    },
+    {
+      "file": "apps/web/src/app/api/auth/[...all]/route.ts",
+      "lines": 4,
+      "sha256": "4e993686dc4c4f110e69feb1faf0f6bbb896d666ae8fd30b25c8f80eb1c49d0e",
+      "kind": "source/configuration",
+      "route": true,
+      "exports": [],
+      "attention": []
+    },
+    {
+      "file": "apps/web/src/app/api/v1/admin/_auth.ts",
+      "lines": 11,
+      "sha256": "fd46b4b34d052da1c4a962dcf6c5dbc4a2d4b86500ad060bc671193263ffeb3d",
+      "kind": "source/configuration",
+      "route": false,
+      "exports": [
+        "adminApi"
+      ],
+      "attention": []
+    },
+    {
+      "file": "apps/web/src/app/api/v1/admin/flags/[key]/route.ts",
+      "lines": 13,
+      "sha256": "4af88c93ca0e3d00048616219a1c26a47b035f8dc405d086e9fc707f589984d1",
+      "kind": "source/configuration",
+      "route": true,
+      "exports": [
+        "PUT"
+      ],
+      "attention": []
+    },
+    {
+      "file": "apps/web/src/app/api/v1/admin/overview/route.ts",
+      "lines": 5,
+      "sha256": "f2821bd5cb969be4def849a2807dceaec0747dd3d5af19d811db89fdaa6735a8",
+      "kind": "source/configuration",
+      "route": true,
+      "exports": [
+        "GET"
+      ],
+      "attention": []
+    },
+    {
+      "file": "apps/web/src/app/api/v1/admin/partners/[id]/status/route.ts",
+      "lines": 13,
+      "sha256": "3537aa0c049ec37acbbab46be4bcf3ee5796c54b6b8a611119a625cf57b8d1d8",
+      "kind": "source/configuration",
+      "route": true,
+      "exports": [
+        "POST"
+      ],
+      "attention": []
+    },
+    {
+      "file": "apps/web/src/app/api/v1/admin/queues/route.ts",
+      "lines": 5,
+      "sha256": "4e70427dd372a238b31628e7468658d0525caf96243026f802f2cba3a08b10bf",
+      "kind": "source/configuration",
+      "route": true,
+      "exports": [
+        "GET"
+      ],
+      "attention": []
+    },
+    {
+      "file": "apps/web/src/app/api/v1/applications/[id]/documents/route.ts",
+      "lines": 17,
+      "sha256": "1aba09b4fdac56bd1aca149d69f72904b9049c0edc05301ac01b18e3f73a2413",
+      "kind": "source/configuration",
+      "route": true,
+      "exports": [
+        "POST"
+      ],
+      "attention": []
+    },
+    {
+      "file": "apps/web/src/app/api/v1/applications/[id]/events/route.ts",
+      "lines": 15,
+      "sha256": "e6416a013b65191b4c8408860c2e7bae48238a2467a15188122acf8e970c6447",
+      "kind": "source/configuration",
+      "route": true,
+      "exports": [
+        "POST"
+      ],
+      "attention": []
+    },
+    {
+      "file": "apps/web/src/app/api/v1/applications/[id]/route.ts",
+      "lines": 45,
+      "sha256": "1be0ae84d9e3b7f4b50dba8d60eb85b346fc0c9310c25dbdde82eec827ca076a",
+      "kind": "source/configuration",
+      "route": true,
+      "exports": [
+        "GET",
+        "PATCH"
+      ],
+      "attention": []
+    },
+    {
+      "file": "apps/web/src/app/api/v1/applications/route.ts",
+      "lines": 30,
+      "sha256": "0b03086bde0f5497d3a473904108cfbb64d2ce31f55dc9af1ccde3300cc6a49e",
+      "kind": "source/configuration",
+      "route": true,
+      "exports": [
+        "GET",
+        "POST"
+      ],
+      "attention": []
+    },
+    {
+      "file": "apps/web/src/app/api/v1/auth/step-up/route.ts",
+      "lines": 26,
+      "sha256": "04c73ff0527b6c6904dc8a9587baae2f451094ccc7b97176ed5e27dba70bd11e",
+      "kind": "source/configuration",
+      "route": true,
+      "exports": [
+        "POST"
+      ],
+      "attention": []
+    },
+    {
+      "file": "apps/web/src/app/api/v1/consents/[id]/revoke/route.ts",
+      "lines": 19,
+      "sha256": "6a84f93169f2f8be6ab4cf66a1863429a04bc67d928331402ae75fa3c117bd4c",
+      "kind": "source/configuration",
+      "route": true,
+      "exports": [
+        "POST"
+      ],
+      "attention": []
+    },
+    {
+      "file": "apps/web/src/app/api/v1/consents/route.ts",
+      "lines": 17,
+      "sha256": "ed124d774539576572d725466975fab5cdf37efb1328bec8e71a561d16ef4bb9",
+      "kind": "source/configuration",
+      "route": true,
+      "exports": [
+        "GET"
+      ],
+      "attention": []
+    },
+    {
+      "file": "apps/web/src/app/api/v1/declarations/route.ts",
+      "lines": 22,
+      "sha256": "f8d706ae29ac31c881de47c9ba15c242fd23bacf09881ddd8ca45dc89a709c08",
+      "kind": "source/configuration",
+      "route": true,
+      "exports": [
+        "POST"
+      ],
+      "attention": []
+    },
+    {
+      "file": "apps/web/src/app/api/v1/documents/[id]/complete/route.ts",
+      "lines": 21,
+      "sha256": "011643d20a6735776c966534a88fd12cb81220ad2c4e3218b28969fd3246b3df",
+      "kind": "source/configuration",
+      "route": true,
+      "exports": [
+        "POST"
+      ],
+      "attention": []
+    },
+    {
+      "file": "apps/web/src/app/api/v1/documents/[id]/download-url/route.ts",
+      "lines": 17,
+      "sha256": "794f0a337e992f6776b919d2ed08941b81655948aeaa16194a128915611cb825",
+      "kind": "source/configuration",
+      "route": true,
+      "exports": [
+        "GET"
+      ],
+      "attention": []
+    },
+    {
+      "file": "apps/web/src/app/api/v1/documents/[id]/extractions/[eid]/apply/route.ts",
+      "lines": 30,
+      "sha256": "c4984a66cfb87dd6d5ff7b1e7b32ab0858c662699fea851f48ab12fab53c23b2",
+      "kind": "source/configuration",
+      "route": true,
+      "exports": [
+        "POST"
+      ],
+      "attention": []
+    },
+    {
+      "file": "apps/web/src/app/api/v1/documents/[id]/route.ts",
+      "lines": 15,
+      "sha256": "6ea5408ec9262739e45c74d7f5bc9e2ac3e5ae1294b4d5c7b49ac875ec51b3f5",
+      "kind": "source/configuration",
+      "route": true,
+      "exports": [
+        "GET"
+      ],
+      "attention": []
+    },
+    {
+      "file": "apps/web/src/app/api/v1/documents/[id]/sample/route.ts",
+      "lines": 9,
+      "sha256": "2868bc4acd852622a5c43d009df21c56e2e29ec40b6400374b04a5a61570b4fb",
+      "kind": "source/configuration",
+      "route": true,
+      "exports": [
+        "GET"
+      ],
+      "attention": []
+    },
+    {
+      "file": "apps/web/src/app/api/v1/events/route.ts",
+      "lines": 26,
+      "sha256": "c164ee4950d3f041044b781b0bacea32e36b811dd4208861857a8c146746f971",
+      "kind": "source/configuration",
+      "route": true,
+      "exports": [
+        "dynamic",
+        "GET"
+      ],
+      "attention": []
+    },
+    {
+      "file": "apps/web/src/app/api/v1/extension/_auth.ts",
+      "lines": 26,
+      "sha256": "66e3e0fe60597ad3aaed2ed84bc69a0c5ad33c24767fc89d26dbd50cd927b803",
+      "kind": "source/configuration",
+      "route": false,
+      "exports": [
+        "extensionUser"
+      ],
+      "attention": []
+    },
+    {
+      "file": "apps/web/src/app/api/v1/extension/_pdf.ts",
+      "lines": 2,
+      "sha256": "ec7eef8a51292dbf003e2b0753c05de7e607306203c0017383a11651f6a77f51",
+      "kind": "source/configuration",
+      "route": false,
+      "exports": [],
+      "attention": []
+    },
+    {
+      "file": "apps/web/src/app/api/v1/extension/applications/route.ts",
+      "lines": 31,
+      "sha256": "dee7b8b170b693f41be4319cdac01d3485202a36462eb57dcf2ffc43d857e212",
+      "kind": "source/configuration",
+      "route": true,
+      "exports": [
+        "POST"
+      ],
+      "attention": []
+    },
+    {
+      "file": "apps/web/src/app/api/v1/extension/documents/[id]/mock.pdf/route.ts",
+      "lines": 25,
+      "sha256": "e906c44a4b14ecd59eb55e7f2d63297500456b29d21e7ce4ae23ce97970f0dcb",
+      "kind": "source/configuration",
+      "route": true,
+      "exports": [
+        "GET"
+      ],
+      "attention": []
+    },
+    {
+      "file": "apps/web/src/app/api/v1/extension/documents/[id]/url/route.ts",
+      "lines": 32,
+      "sha256": "f902828f36e71dd1febf0a2a3ca553be23246b68ff9a71ee2ac53b60d72cc04b",
+      "kind": "source/configuration",
+      "route": true,
+      "exports": [
+        "GET"
+      ],
+      "attention": []
+    },
+    {
+      "file": "apps/web/src/app/api/v1/extension/documents/route.ts",
+      "lines": 13,
+      "sha256": "90ff8a5a1608d9046c860c9c266a0363a74570d9a6bfe69a87b8e95857c1e0b9",
+      "kind": "source/configuration",
+      "route": true,
+      "exports": [
+        "GET"
+      ],
+      "attention": []
+    },
+    {
+      "file": "apps/web/src/app/api/v1/extension/fill-plan/route.ts",
+      "lines": 43,
+      "sha256": "cd4deaf85c507402f6e9bab32e527a11f3199af59d60ad82058a692f3ede29c7",
+      "kind": "source/configuration",
+      "route": true,
+      "exports": [
+        "GET"
+      ],
+      "attention": []
+    },
+    {
+      "file": "apps/web/src/app/api/v1/extension/token/route.ts",
+      "lines": 30,
+      "sha256": "22093c370c5c103af8e0c880e88b9f813b3d18d9a0d0f2911d85623e9e69026e",
+      "kind": "source/configuration",
+      "route": true,
+      "exports": [
+        "POST"
+      ],
+      "attention": []
+    },
+    {
+      "file": "apps/web/src/app/api/v1/family/[relationId]/route.ts",
+      "lines": 63,
+      "sha256": "182505a128852b8efc6b0b2300d28d37305b863cc090fc793490c0e64c8fabf8",
+      "kind": "source/configuration",
+      "route": true,
+      "exports": [
+        "PATCH",
+        "DELETE"
+      ],
+      "attention": [
+        "/** Revoke: pending invite → delete placeholder profile too; live relation → delete relation only (ward's data stays with its owner). */"
+      ]
+    },
+    {
+      "file": "apps/web/src/app/api/v1/family/_tokens.ts",
+      "lines": 12,
+      "sha256": "9944487ea729c298b33012f2bd7fb76cb096bd9a4a3c419b2c53ebb2ff2253e8",
+      "kind": "source/configuration",
+      "route": false,
+      "exports": [
+        "FamilyToken",
+        "signFamilyToken",
+        "verifyFamilyToken",
+        "appUrl"
+      ],
+      "attention": []
+    },
+    {
+      "file": "apps/web/src/app/api/v1/family/elder/accept/route.ts",
+      "lines": 52,
+      "sha256": "e4cf319d513c9b3f57746370ab161a80ba8a72db875e3547f277d95d36ab0782",
+      "kind": "source/configuration",
+      "route": true,
+      "exports": [
+        "POST"
+      ],
+      "attention": [
+        " *   and the placeholder is deleted; otherwise the placeholder is marked claimed by the elder.",
+        " * kind=claim (ward turned 18): placeholder becomes the ward's own (claimedByUserId); guardian keeps identity+education for 90 days.",
+        "  const placeholder = await db.query.profiles.findFirst({ where: eq(t.profiles.id, rel.wardProfileId) });",
+        "  if (!placeholder || !guardian) throw new ApiError(404, \"RELATION_NOT_FOUND\");",
+        "      if (own.displayName === \"You\") await db.update(t.profiles).set({ displayName: placeholder.displayName }).where(eq(t.profiles.id, own.id)); // fresh account: take the invited name",
+        "      await db.delete(t.profiles).where(eq(t.profiles.id, placeholder.id));",
+        "      await db.update(t.profiles).set({ claimedByUserId: user.id, status: \"active\" }).where(eq(t.profiles.id, placeholder.id));",
+        "    await enqueue(\"notify\", { userId: guardian.ownerUserId, category: \"consent\", title: `${user.name} accepted your request`, body: `You can now manage ${(tk.scope ?? rel.scope).join(\", \")} for ${placeholder.displayName}",
+        "    return ok({ relationId: rel.id, wardProfileId: own?.id ?? placeholder.id });",
+        "  if (placeholder.claimedByUserId) return ok({ relationId: rel.id, already: true });"
+      ]
+    },
+    {
+      "file": "apps/web/src/app/api/v1/family/elder/invite/route.ts",
+      "lines": 33,
+      "sha256": "78f7805cca821233c24c9a3a7805c9b9543473332b0759e1c478d6a96719e4e9",
+      "kind": "source/configuration",
+      "route": true,
+      "exports": [
+        "POST"
+      ],
+      "attention": [
+        "/** Invite an adult (elder/delegate): placeholder profile (status=invited) + relation with validUntil=epoch (pending). SMS carries a signed accept link. */"
+      ]
+    },
+    {
+      "file": "apps/web/src/app/api/v1/family/minor/route.ts",
+      "lines": 25,
+      "sha256": "b87228b33a473f98241cd2b7bc3cf4beab369e54558797e1431911c5638516aa",
+      "kind": "source/configuration",
+      "route": true,
+      "exports": [
+        "POST"
+      ],
+      "attention": []
+    },
+    {
+      "file": "apps/web/src/app/api/v1/family/route.ts",
+      "lines": 4,
+      "sha256": "2201711f2141a9145b43f74d64be0ed157b0b1f245e4ea41eac690635cb49a9d",
+      "kind": "source/configuration",
+      "route": true,
+      "exports": [
+        "GET"
+      ],
+      "attention": []
+    },
+    {
+      "file": "apps/web/src/app/api/v1/jwks/route.ts",
+      "lines": 7,
+      "sha256": "078a502ed9868e9d748518967850af72a03c37e31e289160a4d0955456911260",
+      "kind": "source/configuration",
+      "route": true,
+      "exports": [
+        "GET"
+      ],
+      "attention": []
+    },
+    {
+      "file": "apps/web/src/app/api/v1/me/audit/route.ts",
+      "lines": 14,
+      "sha256": "2e53a5fef33801fc238e4450319dd80d9edfe492278dca0696f47361a4a7cf5e",
+      "kind": "source/configuration",
+      "route": true,
+      "exports": [
+        "GET"
+      ],
+      "attention": []
+    },
+    {
+      "file": "apps/web/src/app/api/v1/me/erase/route.ts",
+      "lines": 24,
+      "sha256": "c10c393bbcace1a33b2f7a9f63d5009ec81179625d4cd18a91b0d81a773acd89",
+      "kind": "source/configuration",
+      "route": true,
+      "exports": [
+        "POST",
+        "DELETE"
+      ],
+      "attention": []
+    },
+    {
+      "file": "apps/web/src/app/api/v1/me/export/route.ts",
+      "lines": 14,
+      "sha256": "fe2781b955b47342b5e255819ea79c5730b7d42569b464b67c2ef5fe094b433c",
+      "kind": "source/configuration",
+      "route": true,
+      "exports": [
+        "POST"
+      ],
+      "attention": []
+    },
+    {
+      "file": "apps/web/src/app/api/v1/me/route.ts",
+      "lines": 13,
+      "sha256": "f2e50810f450accb739343779905c32f6aff4d1f04cafe9ac5a84dcfae9d7a66",
+      "kind": "source/configuration",
+      "route": true,
+      "exports": [
+        "PATCH"
+      ],
+      "attention": []
+    },
+    {
+      "file": "apps/web/src/app/api/v1/me/sessions/[id]/route.ts",
+      "lines": 12,
+      "sha256": "fd9aef9318f38012d3d63f7f1bde41bb278e3f17545fd5ee3b0c5329b9044839",
+      "kind": "source/configuration",
+      "route": true,
+      "exports": [
+        "DELETE"
+      ],
+      "attention": []
+    },
+    {
+      "file": "apps/web/src/app/api/v1/notifications/prefs/route.ts",
+      "lines": 25,
+      "sha256": "90bdf1b8bc0c9a926407bbf71de0fb3b5e8006b55c671d9fc7d8585c697657d3",
+      "kind": "source/configuration",
+      "route": true,
+      "exports": [
+        "GET",
+        "PUT"
+      ],
+      "attention": []
+    },
+    {
+      "file": "apps/web/src/app/api/v1/notifications/read/route.ts",
+      "lines": 13,
+      "sha256": "9920de4e74773dee33f7b0fa4c8dab154bad94185ef3e26793927b97ce5f3669",
+      "kind": "source/configuration",
+      "route": true,
+      "exports": [
+        "POST"
+      ],
+      "attention": []
+    },
+    {
+      "file": "apps/web/src/app/api/v1/notifications/route.ts",
+      "lines": 9,
+      "sha256": "5ad0e18582da6624da9d3a6f127164bad98e7fe8032769657c86ca52876d4d4d",
+      "kind": "source/configuration",
+      "route": true,
+      "exports": [
+        "GET"
+      ],
+      "attention": []
+    },
+    {
+      "file": "apps/web/src/app/api/v1/partner/applications/[id]/status/route.ts",
+      "lines": 14,
+      "sha256": "02e66def6513272e50ca883d77421b5d17c91178655ef317856cdda8a6e66749",
+      "kind": "source/configuration",
+      "route": true,
+      "exports": [
+        "POST"
+      ],
+      "attention": []
+    },
+    {
+      "file": "apps/web/src/app/api/v1/partner/forms/route.ts",
+      "lines": 18,
+      "sha256": "7a7d9b084a6eae41a9a47ad7b51c1c09a9569e6f73b37aef94c9e72f549272b0",
+      "kind": "source/configuration",
+      "route": true,
+      "exports": [
+        "GET",
+        "POST"
+      ],
+      "attention": []
+    },
+    {
+      "file": "apps/web/src/app/api/v1/partner/jwks/route.ts",
+      "lines": 3,
+      "sha256": "57d0bd912a97af39ef2e74a7b41ffcfb0caad1348e6197696ac548d326ced8ad",
+      "kind": "source/configuration",
+      "route": true,
+      "exports": [],
+      "attention": []
+    },
+    {
+      "file": "apps/web/src/app/api/v1/partner/share-sessions/[id]/exchange/route.ts",
+      "lines": 36,
+      "sha256": "f920250599c0014ac6953ac901bec5f1e054322c7cebae1a82a40bf422b5457c",
+      "kind": "source/configuration",
+      "route": true,
+      "exports": [
+        "POST"
+      ],
+      "attention": []
+    },
+    {
+      "file": "apps/web/src/app/api/v1/partner/share-sessions/route.ts",
+      "lines": 30,
+      "sha256": "c9e7732776eb20470ad77db2789fd5ad64d322e6f86929b5bdafabed091a056e",
+      "kind": "source/configuration",
+      "route": true,
+      "exports": [
+        "POST"
+      ],
+      "attention": []
+    },
+    {
+      "file": "apps/web/src/app/api/v1/partner/verification-requests/route.ts",
+      "lines": 17,
+      "sha256": "9166811b2ab181db7e3c4651fd8e41c30e74a3bf62b25c641d87ee313605aa11",
+      "kind": "source/configuration",
+      "route": true,
+      "exports": [
+        "POST"
+      ],
+      "attention": []
+    },
+    {
+      "file": "apps/web/src/app/api/v1/partner/webhooks/test/route.ts",
+      "lines": 15,
+      "sha256": "9f69579e45b0fc732847e97d35a5c37813f1854b7eb795bb4f7bbbffa0e97028",
+      "kind": "source/configuration",
+      "route": true,
+      "exports": [
+        "POST"
+      ],
+      "attention": []
+    },
+    {
+      "file": "apps/web/src/app/api/v1/profiles/[id]/documents/route.ts",
+      "lines": 12,
+      "sha256": "c40dda9ba1f8dc8511471e74808167bf9bf8d42b228f48d3a8c436ebcae02666",
+      "kind": "source/configuration",
+      "route": true,
+      "exports": [
+        "GET"
+      ],
+      "attention": []
+    },
+    {
+      "file": "apps/web/src/app/api/v1/profiles/[id]/documents/upload-url/route.ts",
+      "lines": 19,
+      "sha256": "a805f94f12a88bd6dbc3a49755e9e40ebe9bc50e7397fd36a6b3b3fa8396ffb6",
+      "kind": "source/configuration",
+      "route": true,
+      "exports": [
+        "DOC_TYPES",
+        "POST"
+      ],
+      "attention": []
+    },
+    {
+      "file": "apps/web/src/app/api/v1/profiles/[id]/facts/[key]/history/route.ts",
+      "lines": 23,
+      "sha256": "b04162dc3eb380168af8433be802a10fb8f610004a51274cbddd2c8c2c936a3b",
+      "kind": "source/configuration",
+      "route": true,
+      "exports": [
+        "GET"
+      ],
+      "attention": []
+    },
+    {
+      "file": "apps/web/src/app/api/v1/profiles/[id]/facts/[key]/route.ts",
+      "lines": 51,
+      "sha256": "b47c739dd6aeb55ab35396029c134eca3ff8b56216d40a5f58fed19953cccc56",
+      "kind": "source/configuration",
+      "route": true,
+      "exports": [
+        "PUT",
+        "DELETE"
+      ],
+      "attention": []
+    },
+    {
+      "file": "apps/web/src/app/api/v1/profiles/[id]/facts/route.ts",
+      "lines": 18,
+      "sha256": "1a912c584d9e24c4bb7603c7a925e00a17c24a0eb0d8d8fc93278e7caf16d1e9",
+      "kind": "source/configuration",
+      "route": true,
+      "exports": [
+        "GET"
+      ],
+      "attention": []
+    },
+    {
+      "file": "apps/web/src/app/api/v1/profiles/[id]/mismatches/[mid]/resolve/route.ts",
+      "lines": 19,
+      "sha256": "eb0a3af21f0a499a963d3f6bd9b8294dd9d4e6c01c32dad9ad7ef03d68aa418e",
+      "kind": "source/configuration",
+      "route": true,
+      "exports": [
+        "POST"
+      ],
+      "attention": []
+    },
+    {
+      "file": "apps/web/src/app/api/v1/profiles/[id]/mismatches/route.ts",
+      "lines": 12,
+      "sha256": "243beb340649c4b6aa7a5b23b85b35adab6aed270e6e94bb24a41ed6ff2c0595",
+      "kind": "source/configuration",
+      "route": true,
+      "exports": [
+        "GET"
+      ],
+      "attention": []
+    },
+    {
+      "file": "apps/web/src/app/api/v1/profiles/[id]/summary/route.ts",
+      "lines": 16,
+      "sha256": "08a7ff1912d94af7137ee2d82fd087323b1063354ae1891870ddf31b772ea0a8",
+      "kind": "source/configuration",
+      "route": true,
+      "exports": [
+        "GET"
+      ],
+      "attention": []
+    },
+    {
+      "file": "apps/web/src/app/api/v1/profiles/_lib.ts",
+      "lines": 38,
+      "sha256": "27ba64c00987e17c957b9436e0776adf3c37a0d71f8d2aececedc8e123ee6592",
+      "kind": "source/configuration",
+      "route": false,
+      "exports": [
+        "Access",
+        "FactOut",
+        "sectionOf",
+        "loadFacts",
+        "createJob",
+        "providerRef",
+        "appUrl",
+        "withJob"
+      ],
+      "attention": []
+    },
+    {
+      "file": "apps/web/src/app/api/v1/profiles/active/route.ts",
+      "lines": 12,
+      "sha256": "9300b9472cad1948eb539f957fa646b95daa53351de65516fc620cbf5c0e0637",
+      "kind": "source/configuration",
+      "route": true,
+      "exports": [
+        "POST"
+      ],
+      "attention": []
+    },
+    {
+      "file": "apps/web/src/app/api/v1/profiles/route.ts",
+      "lines": 7,
+      "sha256": "f6585ef0a7e5e0db122a7a4ac615801fb66da6e01a909617cbda557622e8945c",
+      "kind": "source/configuration",
+      "route": true,
+      "exports": [
+        "GET"
+      ],
+      "attention": []
+    },
+    {
+      "file": "apps/web/src/app/api/v1/providers/aa/consent/route.ts",
+      "lines": 36,
+      "sha256": "70a4106d541e598240e918342e238131d7bdef91ab4ee6a628246661308c2a3a",
+      "kind": "source/configuration",
+      "route": true,
+      "exports": [
+        "POST",
+        "GET"
+      ],
+      "attention": []
+    },
+    {
+      "file": "apps/web/src/app/api/v1/providers/abha/link/route.ts",
+      "lines": 38,
+      "sha256": "c41ca0c4e0e708e634c397c0cd41e569920d04b19b6b9e06fbcbdc6242d68498",
+      "kind": "source/configuration",
+      "route": true,
+      "exports": [
+        "POST",
+        "GET"
+      ],
+      "attention": []
+    },
+    {
+      "file": "apps/web/src/app/api/v1/providers/digilocker/callback/route.ts",
+      "lines": 33,
+      "sha256": "9bec2c30f1c370808a8dcaa729f5a07c2313cb4d600da28a423c0457c08890ca",
+      "kind": "source/configuration",
+      "route": true,
+      "exports": [
+        "GET"
+      ],
+      "attention": []
+    },
+    {
+      "file": "apps/web/src/app/api/v1/providers/digilocker/start/route.ts",
+      "lines": 16,
+      "sha256": "f1a2b0ea312a00ace040855df695ead0ee9919c7f295b0366596f48c7b9562e2",
+      "kind": "source/configuration",
+      "route": true,
+      "exports": [
+        "POST"
+      ],
+      "attention": []
+    },
+    {
+      "file": "apps/web/src/app/api/v1/providers/digilocker/sync/route.ts",
+      "lines": 14,
+      "sha256": "8e8827851aaf1833c5c2c387c337bc24d1cf58c946dca48ae8a2e82158743fcc",
+      "kind": "source/configuration",
+      "route": true,
+      "exports": [
+        "POST"
+      ],
+      "attention": []
+    },
+    {
+      "file": "apps/web/src/app/api/v1/providers/pan/verify/route.ts",
+      "lines": 16,
+      "sha256": "6592be364b22f00c8c050b5c8a876b67cfb6e99de995894e57ef7ea0cddce178",
+      "kind": "source/configuration",
+      "route": true,
+      "exports": [
+        "POST"
+      ],
+      "attention": []
+    },
+    {
+      "file": "apps/web/src/app/api/v1/readiness/route.ts",
+      "lines": 23,
+      "sha256": "2b1c687d6c2041b36705182376e25fe54c104da8f20d5fb02452a33a01908a72",
+      "kind": "source/configuration",
+      "route": true,
+      "exports": [
+        "POST"
+      ],
+      "attention": []
+    },
+    {
+      "file": "apps/web/src/app/api/v1/share/[token]/consent/route.ts",
+      "lines": 97,
+      "sha256": "581a805ea094fa112072c86f95c2a2afb0e6a5469316e077078add7757e0d1a8",
+      "kind": "source/configuration",
+      "route": true,
+      "exports": [
+        "POST"
+      ],
+      "attention": []
+    },
+    {
+      "file": "apps/web/src/app/api/v1/share/[token]/route.ts",
+      "lines": 33,
+      "sha256": "72b8c6d4852c21aa180ed82801cc7aed219148235c5095e3f53a1e5f7390ba6d",
+      "kind": "source/configuration",
+      "route": true,
+      "exports": [
+        "GET",
+        "DELETE"
+      ],
+      "attention": []
+    },
+    {
+      "file": "apps/web/src/app/api/v1/verification/jobs/[id]/route.ts",
+      "lines": 9,
+      "sha256": "39ec44d6473a52f6a875742d3f05c2e3d575b8ad1b1f6a8108f68fefda8dd618",
+      "kind": "source/configuration",
+      "route": true,
+      "exports": [
+        "GET"
+      ],
+      "attention": []
+    },
+    {
+      "file": "apps/web/src/app/app/applications/[id]/page.tsx",
+      "lines": 57,
+      "sha256": "267c39847fe1d09cbbc7062828af4f2229b988a2429c9a31b1465bb124348d3d",
+      "kind": "source/configuration",
+      "route": true,
+      "exports": [],
+      "attention": []
+    },
+    {
+      "file": "apps/web/src/app/app/applications/page.tsx",
+      "lines": 53,
+      "sha256": "f26d870cc1fa72d377cd949d09ae0f1a550ff304dc94ae33ad4d93016bc2df2c",
+      "kind": "source/configuration",
+      "route": true,
+      "exports": [
+        "metadata"
+      ],
+      "attention": []
+    },
+    {
+      "file": "apps/web/src/app/app/apply/[formSlug]/page.tsx",
+      "lines": 39,
+      "sha256": "bc11f84589d91a30f84740f6e126e47cc6ccb22eb75c1c7fe9a3d5aea811276e",
+      "kind": "source/configuration",
+      "route": true,
+      "exports": [],
+      "attention": []
+    },
+    {
+      "file": "apps/web/src/app/app/apply/page.tsx",
+      "lines": 59,
+      "sha256": "7a86af518b277302f1b999e6d72708f42f4ae75d9722816c9f0ef21afe67bc5d",
+      "kind": "source/configuration",
+      "route": true,
+      "exports": [
+        "metadata"
+      ],
+      "attention": [
+        "        <Search className=\"size-4 text-ink-3\" /><input name=\"q\" defaultValue={q} placeholder=\"Search exam, college, bank…\" aria-label=\"Search forms\" className=\"w-full bg-transparent text-[15px] outline-none\" />"
+      ]
+    },
+    {
+      "file": "apps/web/src/app/app/connections/[consentId]/page.tsx",
+      "lines": 64,
+      "sha256": "12ee8c1cfbfa5536d5b6716ff332a832463157b5e1f0472130aee5977e95bf00",
+      "kind": "source/configuration",
+      "route": true,
+      "exports": [],
+      "attention": []
+    },
+    {
+      "file": "apps/web/src/app/app/connections/page.tsx",
+      "lines": 44,
+      "sha256": "4d96a44f8826769c332b7e599c1d638188227b128dd963724ce0739f91ae8c10",
+      "kind": "source/configuration",
+      "route": true,
+      "exports": [
+        "metadata"
+      ],
+      "attention": []
+    },
+    {
+      "file": "apps/web/src/app/app/documents/[id]/page.tsx",
+      "lines": 32,
+      "sha256": "732acadf99ee7d774ac21b58c9e92557504740c686e87653cc523399473d9412",
+      "kind": "source/configuration",
+      "route": true,
+      "exports": [],
+      "attention": []
+    },
+    {
+      "file": "apps/web/src/app/app/documents/page.tsx",
+      "lines": 28,
+      "sha256": "d516d63677d9ee66c70642fc9c88f9217269ea6f712da785f8982c8f099cbb37",
+      "kind": "source/configuration",
+      "route": true,
+      "exports": [
+        "metadata"
+      ],
+      "attention": []
+    },
+    {
+      "file": "apps/web/src/app/app/extension/connect/connect-client.tsx",
+      "lines": 99,
+      "sha256": "868676dd133d518370dcd1d41c9f105b7c90d857b1d71f03540a82871bf273af",
+      "kind": "source/configuration",
+      "route": false,
+      "exports": [
+        "ConnectExtension"
+      ],
+      "attention": []
+    },
+    {
+      "file": "apps/web/src/app/app/extension/connect/page.tsx",
+      "lines": 10,
+      "sha256": "e8fd9a5d7ed679b5dd581bf809955544a565684d4f112396c38ac8eba3a86cf8",
+      "kind": "source/configuration",
+      "route": true,
+      "exports": [],
+      "attention": []
+    },
+    {
+      "file": "apps/web/src/app/app/extension/page.tsx",
+      "lines": 47,
+      "sha256": "ee56a6d3be64790d4aecf6cdbec7e0b8c773509ee5a4dcb1b89bd7bd11899e0d",
+      "kind": "source/configuration",
+      "route": true,
+      "exports": [
+        "metadata"
+      ],
+      "attention": []
+    },
+    {
+      "file": "apps/web/src/app/app/family/accept/page.tsx",
+      "lines": 20,
+      "sha256": "baad8b1f504ed319bb887c7d9b39a0ead451dba02b231159b233dc424a6b528c",
+      "kind": "source/configuration",
+      "route": true,
+      "exports": [
+        "metadata"
+      ],
+      "attention": []
+    },
+    {
+      "file": "apps/web/src/app/app/family/claim/page.tsx",
+      "lines": 20,
+      "sha256": "dfe8cdc9dfc5874c7c3578061d3cac79dbdef06e71400fba7522ffb54a251525",
+      "kind": "source/configuration",
+      "route": true,
+      "exports": [
+        "metadata"
+      ],
+      "attention": []
+    },
+    {
+      "file": "apps/web/src/app/app/family/page.tsx",
+      "lines": 22,
+      "sha256": "c0f30f1be7eb891b972a26ccc723a2d3b5a21603b29285d9079eb175648c2c4c",
+      "kind": "source/configuration",
+      "route": true,
+      "exports": [
+        "metadata"
+      ],
+      "attention": []
+    },
+    {
+      "file": "apps/web/src/app/app/layout.tsx",
+      "lines": 17,
+      "sha256": "40fc93054c8341d78db1576813607f9bfc6bde97f5296c162add19212e6328a0",
+      "kind": "source/configuration",
+      "route": false,
+      "exports": [],
+      "attention": []
+    },
+    {
+      "file": "apps/web/src/app/app/loading.tsx",
+      "lines": 11,
+      "sha256": "668cbb8ddc49ddafb5085239f520c08c9a05b8de6424e5df00e6080024141fd0",
+      "kind": "source/configuration",
+      "route": false,
+      "exports": [],
+      "attention": []
+    },
+    {
+      "file": "apps/web/src/app/app/notifications/page.tsx",
+      "lines": 18,
+      "sha256": "a5f7fd8ba48db89927be15fe8e6decd65810e981fd1e7692b8caa3bf34eda5d1",
+      "kind": "source/configuration",
+      "route": true,
+      "exports": [
+        "metadata"
+      ],
+      "attention": []
+    },
+    {
+      "file": "apps/web/src/app/app/page.tsx",
+      "lines": 112,
+      "sha256": "ebb5a5001ac78f78108ac87fc05a01c78e500e7bd73d1866ed46fe362768a601",
+      "kind": "source/configuration",
+      "route": true,
+      "exports": [
+        "metadata"
+      ],
+      "attention": []
+    },
+    {
+      "file": "apps/web/src/app/app/settings/notifications/page.tsx",
+      "lines": 14,
+      "sha256": "f89193c231b76b1c5e732d9106de883c7875657c6175ba6f45925cb83b02b6d7",
+      "kind": "source/configuration",
+      "route": true,
+      "exports": [
+        "metadata"
+      ],
+      "attention": []
+    },
+    {
+      "file": "apps/web/src/app/app/settings/page.tsx",
+      "lines": 26,
+      "sha256": "a9780179e3322f7a2a33636dc7cff56d252680e71abaf2c86a4712f0aca80e98",
+      "kind": "source/configuration",
+      "route": true,
+      "exports": [
+        "metadata"
+      ],
+      "attention": []
+    },
+    {
+      "file": "apps/web/src/app/app/sign/page.tsx",
+      "lines": 6,
+      "sha256": "be6566fa1d63bb53b68aac0a7340ce3e4307d3e342c59dd49c8f79922ed5d1e5",
+      "kind": "source/configuration",
+      "route": true,
+      "exports": [
+        "metadata"
+      ],
+      "attention": []
+    },
+    {
+      "file": "apps/web/src/app/app/vault/[section]/page.tsx",
+      "lines": 33,
+      "sha256": "313ee67ef5867dfca24d0a665d17fc487967157e466352c74a6dc11faf617f45",
+      "kind": "source/configuration",
+      "route": true,
+      "exports": [
+        "generateMetadata"
+      ],
+      "attention": []
+    },
+    {
+      "file": "apps/web/src/app/app/vault/page.tsx",
+      "lines": 35,
+      "sha256": "74d288b55d6b4ec3c494adefe033db809a102d6a7aec9e903af86da86dd4b6bf",
+      "kind": "source/configuration",
+      "route": true,
+      "exports": [
+        "metadata"
+      ],
+      "attention": []
+    },
+    {
+      "file": "apps/web/src/app/app/verify/page.tsx",
+      "lines": 33,
+      "sha256": "eb0f3a671611d2240b0aebf66144904c708135ce2cfd29c149743106dc4d8de4",
+      "kind": "source/configuration",
+      "route": true,
+      "exports": [
+        "metadata"
+      ],
+      "attention": []
+    },
+    {
+      "file": "apps/web/src/app/auth/login/login-form.tsx",
+      "lines": 71,
+      "sha256": "5f28c8f9fbaca821bb0f8feb406f8c7c2d9ea0da77bcd06e96025d79a42e664e",
+      "kind": "source/configuration",
+      "route": false,
+      "exports": [
+        "LoginForm"
+      ],
+      "attention": [
+        "            <div className=\"flex items-center gap-2\"><span className=\"rounded-md border border-line bg-surface-2 px-3 py-2.5 text-ink-2\">+91</span><Input placeholder=\"10-digit mobile\" className=\"flex-1\" /></div>"
+      ]
+    },
+    {
+      "file": "apps/web/src/app/auth/login/page.tsx",
+      "lines": 18,
+      "sha256": "1c00eefcbbbcea214a343ba74048ecfbaf99269f16b0e0616c81c4d459d93e06",
+      "kind": "source/configuration",
+      "route": true,
+      "exports": [
+        "metadata"
+      ],
+      "attention": []
+    },
+    {
+      "file": "apps/web/src/app/error.tsx",
+      "lines": 4,
+      "sha256": "38208d72d18384ada36da1775b9ed22d805518242cee82364f15f90f406a07be",
+      "kind": "source/configuration",
+      "route": false,
+      "exports": [],
+      "attention": []
+    },
+    {
+      "file": "apps/web/src/app/globals.css",
+      "lines": 67,
+      "sha256": "78f300bc864f9b97a6a8cf916acb7ea0c621a9dc73df28cb384229ec58e9ec6c",
+      "kind": "source/configuration",
+      "route": false,
+      "exports": [],
+      "attention": []
+    },
+    {
+      "file": "apps/web/src/app/layout.tsx",
+      "lines": 25,
+      "sha256": "bbc9ec0bf11555fdecc83d57595c56993e73f557c12665c7aaadd60a19773813",
+      "kind": "source/configuration",
+      "route": false,
+      "exports": [
+        "metadata",
+        "viewport"
+      ],
+      "attention": []
+    },
+    {
+      "file": "apps/web/src/app/mock/aa/page.tsx",
+      "lines": 7,
+      "sha256": "c6c3f12ca2706bb2abc0f270592ad74360635653fcd69af63e252636747b1f6e",
+      "kind": "source/configuration",
+      "route": true,
+      "exports": [
+        "metadata"
+      ],
+      "attention": []
+    },
+    {
+      "file": "apps/web/src/app/mock/abha/page.tsx",
+      "lines": 7,
+      "sha256": "c24b3acada731c397d5693db3662984a54810c2946b7ddc4c5777334f41620e9",
+      "kind": "source/configuration",
+      "route": true,
+      "exports": [
+        "metadata"
+      ],
+      "attention": []
+    },
+    {
+      "file": "apps/web/src/app/mock/digilocker/page.tsx",
+      "lines": 7,
+      "sha256": "b239aca26f4e21d637f85bf5cbb23927a1fca125eccbb8c1df7219990d33aaca",
+      "kind": "source/configuration",
+      "route": true,
+      "exports": [
+        "metadata"
+      ],
+      "attention": []
+    },
+    {
+      "file": "apps/web/src/app/mock/mock-consent.tsx",
+      "lines": 57,
+      "sha256": "8e61aeeefd33ff7ed2895036861fd5dd67ee1d02154ba709af5af1f5062cd5c7",
+      "kind": "source/configuration",
+      "route": false,
+      "exports": [
+        "MockConsent"
+      ],
+      "attention": []
+    },
+    {
+      "file": "apps/web/src/app/not-found.tsx",
+      "lines": 3,
+      "sha256": "c332fc8101aa2a0caaa6f98ce21a68b17c25154335c55b31fb505c14d518c158",
+      "kind": "source/configuration",
+      "route": false,
+      "exports": [],
+      "attention": []
+    },
+    {
+      "file": "apps/web/src/app/partner/applicants/page.tsx",
+      "lines": 32,
+      "sha256": "0e9176a2cf7a9abf9579a4e5c4d3166788f40f78a7f592e57f9b6c6dc62849a0",
+      "kind": "source/configuration",
+      "route": true,
+      "exports": [
+        "metadata"
+      ],
+      "attention": []
+    },
+    {
+      "file": "apps/web/src/app/partner/developers/page.tsx",
+      "lines": 23,
+      "sha256": "101f726bac6ae51914b380251a0a757e7886badf209a0cc0571cced1f494fc80",
+      "kind": "source/configuration",
+      "route": true,
+      "exports": [
+        "metadata"
+      ],
+      "attention": []
+    },
+    {
+      "file": "apps/web/src/app/partner/forms/[id]/page.tsx",
+      "lines": 43,
+      "sha256": "98abf8fd20224b233f825979064ac69956553bd880b677d3145bc42acf75413c",
+      "kind": "source/configuration",
+      "route": true,
+      "exports": [],
+      "attention": []
+    },
+    {
+      "file": "apps/web/src/app/partner/forms/new/page.tsx",
+      "lines": 16,
+      "sha256": "4426590ec2fca023da2bbb8a6fddd4ce39a61af8e623ae6c8b48c2ade600d456",
+      "kind": "source/configuration",
+      "route": true,
+      "exports": [
+        "metadata"
+      ],
+      "attention": []
+    },
+    {
+      "file": "apps/web/src/app/partner/forms/page.tsx",
+      "lines": 31,
+      "sha256": "4550755de27ad56f912d30917ff3b93367682ce74b70fd880569a004b5563f4e",
+      "kind": "source/configuration",
+      "route": true,
+      "exports": [
+        "metadata"
+      ],
+      "attention": []
+    },
+    {
+      "file": "apps/web/src/app/partner/layout.tsx",
+      "lines": 21,
+      "sha256": "b8833640bb7c7f563382c33be2124ab8a6687b0aa33c431f0b415846ce3adb6c",
+      "kind": "source/configuration",
+      "route": false,
+      "exports": [],
+      "attention": []
+    },
+    {
+      "file": "apps/web/src/app/partner/onboarding/page.tsx",
+      "lines": 18,
+      "sha256": "c780363d6c95875472efc49340a6d26abc8a85987e8d01945ab2ac7944536812",
+      "kind": "source/configuration",
+      "route": true,
+      "exports": [
+        "metadata"
+      ],
+      "attention": []
+    },
+    {
+      "file": "apps/web/src/app/partner/page.tsx",
+      "lines": 58,
+      "sha256": "575b1919b19d1f2962bf0236350f2fa1438c52ed3c5419899c54f9a9465692e5",
+      "kind": "source/configuration",
+      "route": true,
+      "exports": [
+        "metadata"
+      ],
+      "attention": []
+    },
+    {
+      "file": "apps/web/src/app/partner/settings/page.tsx",
+      "lines": 16,
+      "sha256": "bb7b9e03e97f9e59ed11e98d40cc1552d6c6a01372f8aea5584050182c012b4a",
+      "kind": "source/configuration",
+      "route": true,
+      "exports": [
+        "metadata"
+      ],
+      "attention": []
+    },
+    {
+      "file": "apps/web/src/app/partner/team/page.tsx",
+      "lines": 18,
+      "sha256": "bc93ccb11a3844e11b50e610702aecab1c20d5eeedd6d05ffb3e9074be4d8953",
+      "kind": "source/configuration",
+      "route": true,
+      "exports": [
+        "metadata"
+      ],
+      "attention": []
+    },
+    {
+      "file": "apps/web/src/app/providers.tsx",
+      "lines": 19,
+      "sha256": "687a8736ffa1d1d5633b3fcba718d8283f9d5b25c8f9477d1bcc5aa3895aa27e",
+      "kind": "source/configuration",
+      "route": false,
+      "exports": [
+        "Providers"
+      ],
+      "attention": []
+    },
+    {
+      "file": "apps/web/src/app/share/[token]/page.tsx",
+      "lines": 54,
+      "sha256": "89f424a6f7bf644e568b6895bb58998055773d974fbca6bcaacd6162b5a0e9ba",
+      "kind": "source/configuration",
+      "route": true,
+      "exports": [],
+      "attention": []
+    },
+    {
+      "file": "apps/web/src/app/share/layout.tsx",
+      "lines": 19,
+      "sha256": "7a0be011227ad5795592b76df09e5ff6f5fe0fe0aa839f7243850716f5eaf14e",
+      "kind": "source/configuration",
+      "route": false,
+      "exports": [
+        "metadata"
+      ],
+      "attention": []
+    },
+    {
+      "file": "apps/web/src/app/welcome/actions.ts",
+      "lines": 18,
+      "sha256": "41726213c5896c300c7793be531da6a7eddfe30d9d6189dba7c52df538d5bea1",
+      "kind": "source/configuration",
+      "route": false,
+      "exports": [
+        "saveNameAndLocale"
+      ],
+      "attention": []
+    },
+    {
+      "file": "apps/web/src/app/welcome/layout.tsx",
+      "lines": 4,
+      "sha256": "2aecaea4e5651a83d7aa509fb4355e1d674eec253d3bba97d746edea15fe7c66",
+      "kind": "source/configuration",
+      "route": false,
+      "exports": [
+        "metadata"
+      ],
+      "attention": []
+    },
+    {
+      "file": "apps/web/src/app/welcome/page.tsx",
+      "lines": 20,
+      "sha256": "ef8037a9d58c04fe39b9e205f85b0d8bd32f94fafa56335c68834f80541aa977",
+      "kind": "source/configuration",
+      "route": true,
+      "exports": [],
+      "attention": []
+    },
+    {
+      "file": "apps/web/src/components/admin/actions.tsx",
+      "lines": 33,
+      "sha256": "019d5711040dda3d5e33ec19f2a1fb1513a61e94159e7636da3b4ceccf2a3183",
+      "kind": "source/configuration",
+      "route": false,
+      "exports": [
+        "PartnerStatus",
+        "FlagToggle",
+        "NewFlag"
+      ],
+      "attention": [
+        "  return <div className=\"flex gap-2\"><input value={k} onChange={(e) => setK(e.target.value.replace(/[^a-z0-9_]/g, \"\"))} placeholder=\"new_flag_key\" className=\"rounded-md border border-line bg-surface px-3 py-2 text-sm\" />"
+      ]
+    },
+    {
+      "file": "apps/web/src/components/admin/data.ts",
+      "lines": 42,
+      "sha256": "497c3c70e8113c28495a651338690100c36778f897d00646f2eadd66d7ac8334",
+      "kind": "source/configuration",
+      "route": false,
+      "exports": [
+        "overviewStats",
+        "QueueCount",
+        "queueCounts",
+        "PROVIDER_ENV",
+        "providerModes",
+        "pingDb",
+        "pingRedis",
+        "workerHealth"
+      ],
+      "attention": []
+    },
+    {
+      "file": "apps/web/src/components/applications/consent-actions.tsx",
+      "lines": 43,
+      "sha256": "cb21cc7ad07ea1adc0226031b21dc26dd331e45f48002d8a8363f403971e6022",
+      "kind": "source/configuration",
+      "route": false,
+      "exports": [
+        "RevokeButton",
+        "RevealButton"
+      ],
+      "attention": []
+    },
+    {
+      "file": "apps/web/src/components/applications/detail-actions.tsx",
+      "lines": 38,
+      "sha256": "29eed41d8d95d2521af3c24caded2cf02862dca48b6d102197473cd192fdcaf1",
+      "kind": "source/configuration",
+      "route": false,
+      "exports": [
+        "DetailActions"
+      ],
+      "attention": [
+        "        <TextField value={note} onChange={setNote} className=\"flex-1\" aria-label=\"Add a note\"><Label className=\"sr-only\">Note</Label><Input placeholder=\"Add a note, e.g. “Paid fee ₹1000”\" /></TextField>"
+      ]
+    },
+    {
+      "file": "apps/web/src/components/applications/model.ts",
+      "lines": 19,
+      "sha256": "a4c68fcf0fbe5fe64f54b22141b176fd4bedeb10cc801041ca4f3d3fc2e783fb",
+      "kind": "source/configuration",
+      "route": false,
+      "exports": [
+        "serializeApp",
+        "AppDto",
+        "STATUS_META",
+        "KIND_LABEL"
+      ],
+      "attention": []
+    },
+    {
+      "file": "apps/web/src/components/applications/track-drawer.tsx",
+      "lines": 48,
+      "sha256": "eb654457c9eddc8ce8773bb6d7e26bf24354b6ca55f472fb7fbd3bb61c1339b0",
+      "kind": "source/configuration",
+      "route": false,
+      "exports": [
+        "TrackDrawer"
+      ],
+      "attention": [
+        "          <TextField value={f.title} onChange={set(\"title\")} isRequired><Label>What did you apply for?</Label><Input placeholder=\"e.g. NEET UG 2026\" /></TextField>",
+        "          <TextField value={f.org_name} onChange={set(\"org_name\")} isRequired><Label>Organisation</Label><Input placeholder=\"e.g. National Testing Agency\" /></TextField>",
+        "          <TextField value={f.external_ref} onChange={set(\"external_ref\")}><Label>Application / reference number</Label><Input placeholder=\"Optional\" /></TextField>",
+        "          <TextField value={f.portal_url} onChange={set(\"portal_url\")} type=\"url\"><Label>Portal link</Label><Input placeholder=\"https://…\" /></TextField>"
+      ]
+    },
+    {
+      "file": "apps/web/src/components/client-ui.tsx",
+      "lines": 4,
+      "sha256": "1db3eb3cc77e91918b98922258e98a710869c229d1ec5ef57eb52d843faa13f2",
+      "kind": "source/configuration",
+      "route": false,
+      "exports": [],
+      "attention": []
+    },
+    {
+      "file": "apps/web/src/components/declaration-form.tsx",
+      "lines": 16,
+      "sha256": "c31b17f3f7d65964c192d7e743d787e8863570f02a49ecf46ea8c096aced890b",
+      "kind": "source/configuration",
+      "route": false,
+      "exports": [
+        "DeclarationForm"
+      ],
+      "attention": [
+        "  }}>{dialog}<label className=\"grid gap-2 text-sm font-semibold\">Title<input name=\"title\" required minLength={3} maxLength={100} className=\"rounded-md border border-line bg-surface p-3 font-normal\" placeholder=\"Applicati"
+      ]
+    },
+    {
+      "file": "apps/web/src/components/documents/doc-types.ts",
+      "lines": 9,
+      "sha256": "55600aa7c89d931e100a3cecb760108599da02bbf1ec0386509df1b7d1a5a9e1",
+      "kind": "source/configuration",
+      "route": false,
+      "exports": [
+        "DOC_TYPE_LABELS",
+        "docTypeLabel",
+        "UPLOAD_TYPES"
+      ],
+      "attention": []
+    },
+    {
+      "file": "apps/web/src/components/documents/document-detail.tsx",
+      "lines": 131,
+      "sha256": "ee185b85746b0b6db296da47d12393df9d4ab809f1353be0a4ecddc50bac928d",
+      "kind": "source/configuration",
+      "route": false,
+      "exports": [
+        "DocDetail",
+        "Extraction",
+        "DocumentDetail"
+      ],
+      "attention": []
+    },
+    {
+      "file": "apps/web/src/components/documents/documents-view.tsx",
+      "lines": 74,
+      "sha256": "25989af6b0da5eadc9afccd52b7b550fbffd18be5b08f900176feba2e24a6538",
+      "kind": "source/configuration",
+      "route": false,
+      "exports": [
+        "DocItem",
+        "DocumentsView"
+      ],
+      "attention": []
+    },
+    {
+      "file": "apps/web/src/components/family/accept-client.tsx",
+      "lines": 37,
+      "sha256": "ffe7eba28f4a9aad49cc8f5b50552e8316e31ee2161a57aa656be55bf028710f",
+      "kind": "source/configuration",
+      "route": false,
+      "exports": [
+        "AcceptClient"
+      ],
+      "attention": []
+    },
+    {
+      "file": "apps/web/src/components/family/add-button.tsx",
+      "lines": 7,
+      "sha256": "9323768dd5dcfe1340f4eb04ccfe3ef7f81b4327bce23b74a04b2efa713a2347",
+      "kind": "source/configuration",
+      "route": false,
+      "exports": [
+        "AddButton"
+      ],
+      "attention": []
+    },
+    {
+      "file": "apps/web/src/components/family/data.ts",
+      "lines": 35,
+      "sha256": "2cf7a5998d5864f946960a9dc6498ca0406eac71ec81d1bbaaf3528f75fd87ad",
+      "kind": "source/configuration",
+      "route": false,
+      "exports": [
+        "CORE_SECTIONS",
+        "FamilyMember",
+        "familyList"
+      ],
+      "attention": []
+    },
+    {
+      "file": "apps/web/src/components/family/family-client.tsx",
+      "lines": 210,
+      "sha256": "044b3862b9d8eff68ea14ead381d63771ccdf4ef14fb2851461b271372fb24b0",
+      "kind": "source/configuration",
+      "route": false,
+      "exports": [
+        "FamilyClient"
+      ],
+      "attention": [
+        "                  <label className=\"grid gap-1\"><span className={lbl}>{l === \"hi\" ? \"उनका मोबाइल\" : \"Their mobile\"}</span><input name=\"phone\" type=\"tel\" inputMode=\"numeric\" pattern=\"[6-9][0-9]{9}\" required className={inp"
+      ]
+    },
+    {
+      "file": "apps/web/src/components/family/logic.test.ts",
+      "lines": 28,
+      "sha256": "d53b1e2cbc6e284314557f61fd38914163a43775c847e12b6d7cc18f0c04dd82",
+      "kind": "source/configuration",
+      "route": false,
+      "exports": [],
+      "attention": []
+    },
+    {
+      "file": "apps/web/src/components/family/logic.ts",
+      "lines": 31,
+      "sha256": "00492a5af9d35a681901d9935d8b9687dff22372db2924484600aff20c9ec849",
+      "kind": "source/configuration",
+      "route": false,
+      "exports": [
+        "MAJORITY_AGE",
+        "CLAIM_GRACE_DAYS",
+        "HANDOVER_SCOPE",
+        "PENDING",
+        "ageAt",
+        "isMinor",
+        "validDob",
+        "isHandoverDue",
+        "claimTransition",
+        "isPending",
+        "normPhone",
+        "validPhone"
+      ],
+      "attention": []
+    },
+    {
+      "file": "apps/web/src/components/onboarding/wizard.tsx",
+      "lines": 167,
+      "sha256": "ab7c5d2881578eb0abf447b6f6eedd1783f931fbd4fd557fbe77de64de30467f",
+      "kind": "source/configuration",
+      "route": false,
+      "exports": [
+        "OnboardingWizard"
+      ],
+      "attention": [
+        "          <Label>{tr(locale, \"Full name (as on Aadhaar)\", \"पूरा नाम (आधार अनुसार)\")}</Label><Input placeholder=\"e.g. Aarav Sharma\" /><Description>{tr(locale, \"We’ll replace this with the UIDAI-verified name when you conn"
+      ]
+    },
+    {
+      "file": "apps/web/src/components/partner/actions.ts",
+      "lines": 218,
+      "sha256": "eadb7afeb91d273afa61d34719c7bef5e090b374bc8cf2f2181b502257058601",
+      "kind": "source/configuration",
+      "route": false,
+      "exports": [
+        "switchOrganisation",
+        "registerOrganisation",
+        "saveFormAction",
+        "setFormStatus",
+        "createTestSession",
+        "createApiKey",
+        "revokeApiKey",
+        "createWebhook",
+        "updateWebhook",
+        "deleteWebhook",
+        "testWebhook",
+        "addMember",
+        "removeMember",
+        "updateSettings",
+        "pushStatusAction",
+        "requestVerificationAction",
+        "getApplicantPayload"
+      ],
+      "attention": []
+    },
+    {
+      "file": "apps/web/src/components/partner/applicants-table.tsx",
+      "lines": 101,
+      "sha256": "10418503d99380c88dcd9a762317b6066c2dc3ea654d433e5c470402611179ab",
+      "kind": "source/configuration",
+      "route": false,
+      "exports": [
+        "ApplicantRow",
+        "ApplicantsTable"
+      ],
+      "attention": [
+        "                    <TextField value={ref} onChange={setRef}><Label>Your reference</Label><Input placeholder=\"e.g. BTA-2026-001742\" /></TextField>",
+        "                  <TextField value={note} onChange={setNote}><Label>Note to the applicant</Label><Input placeholder=\"e.g. Admit card released — download from the portal\" /></TextField>",
+        "                      <TextField value={reason} onChange={setReason}><Label>Reason shown to the applicant</Label><Input placeholder=\"e.g. Category certificate looks expired\" /></TextField>"
+      ]
+    },
+    {
+      "file": "apps/web/src/components/partner/developers-panel.tsx",
+      "lines": 82,
+      "sha256": "b1af21459092a68d71705ae42f223128a49cf80eced50dcca2c49322b05d2465",
+      "kind": "source/configuration",
+      "route": false,
+      "exports": [
+        "KeyRow",
+        "HookRow",
+        "DeliveryRow",
+        "DevelopersPanel"
+      ],
+      "attention": [
+        "            <TextField value={label} onChange={setLabel} className=\"flex-1\"><Label>Label</Label><Input placeholder=\"e.g. Staging server\" /></TextField>",
+        "            <TextField value={url} onChange={setUrl} type=\"url\"><Label>Endpoint URL</Label><Input placeholder=\"https://portal.example/api/praman/webhook\" /></TextField>"
+      ]
+    },
+    {
+      "file": "apps/web/src/components/partner/form-builder.tsx",
+      "lines": 127,
+      "sha256": "c2fc49c7d235bd3ecdd6552f859d7f7e0cc26d75db80e190c498009175876825",
+      "kind": "source/configuration",
+      "route": false,
+      "exports": [
+        "BuilderInitial",
+        "FormBuilder",
+        "fieldLabel"
+      ],
+      "attention": [
+        "          <TextField value={name} onChange={setName} isRequired isInvalid={!!fieldErrs.name}><Label>Form name</Label><Input placeholder=\"e.g. BTA-JEE 2026 Registration\" /><Description>{fieldErrs.name ?? \"Citizens see thi",
+        "            <TextField value={slug} onChange={(v) => setSlug(v.toLowerCase())} isInvalid={!!fieldErrs.slug}><Label>Slug</Label><Input placeholder=\"auto from name\" /><Description>{fieldErrs.slug ?? \"Used in data-praman-fo",
+        "          <TextField value={description} onChange={setDescription}><Label>Description</Label><Input placeholder=\"One line shown in the catalog\" /></TextField>",
+        "              <input value={c.id} onChange={(e) => upd(i, { id: e.target.value.replace(/[^a-z0-9_]/g, \"\") })} placeholder=\"id\" className=\"rounded-sm border border-line px-2 py-1.5 font-mono text-xs\" aria-label=\"Question ",
+        "              <input value={c.label} onChange={(e) => upd(i, { label: e.target.value })} placeholder=\"Label\" className=\"rounded-sm border border-line px-2 py-1.5 text-sm\" aria-label=\"Question label\" />",
+        "              {c.type === \"enum\" && <input value={(c.options ?? []).join(\", \")} onChange={(e) => upd(i, { options: e.target.value.split(\",\").map((s) => s.trim()).filter(Boolean) })} placeholder=\"Options, comma separated\"",
+        "          <TextField value={redirectUrl} onChange={setRedirectUrl} type=\"url\" isRequired isInvalid={!!fieldErrs.redirect_url}><Label>Return URL</Label><Input placeholder=\"https://portal.example/apply/return\" /><Descripti",
+        "          <TextField value={webhookUrl} onChange={setWebhookUrl} type=\"url\" isInvalid={!!fieldErrs.webhook_url}><Label>Webhook URL (optional)</Label><Input placeholder=\"https://portal.example/api/praman/webhook\" /><Descr"
+      ]
+    },
+    {
+      "file": "apps/web/src/components/partner/form-tools.tsx",
+      "lines": 32,
+      "sha256": "4b995d45b340586609a18bc1419f3a6a05614a5ad191692c2af83d0de651ebaa",
+      "kind": "source/configuration",
+      "route": false,
+      "exports": [
+        "CopyButton",
+        "FormTools"
+      ],
+      "attention": []
+    },
+    {
+      "file": "apps/web/src/components/partner/forms.ts",
+      "lines": 59,
+      "sha256": "9470f87564682f6310ac78ca783ce4767a1a347c32cb179414af068fe93de3de",
+      "kind": "source/configuration",
+      "route": false,
+      "exports": [
+        "APP_KINDS",
+        "formInput",
+        "FormInput",
+        "slugify",
+        "checkRequestedKeys",
+        "saveForm",
+        "publicForm"
+      ],
+      "attention": []
+    },
+    {
+      "file": "apps/web/src/components/partner/onboarding-form.tsx",
+      "lines": 55,
+      "sha256": "342e1539cd17c5183d79a7151500d4e0fdc2c314b47d37afb8bc7253de39b05c",
+      "kind": "source/configuration",
+      "route": false,
+      "exports": [
+        "OnboardingForm"
+      ],
+      "attention": [
+        "          <TextField value={f.name} onChange={set(\"name\")} isRequired isInvalid={!!errs.name} autoFocus><Label>Organisation name</Label><Input placeholder=\"e.g. Bharat Test Agency\" /><Description>{errs.name ?? \"Shown to ",
+        "          <TextField value={f.website} onChange={set(\"website\")} type=\"url\" isRequired isInvalid={!!errs.website} autoFocus><Label>Website</Label><Input placeholder=\"https://\" /><Description>{errs.website ?? \"Must match ",
+        "          <TextField value={f.dpoEmail} onChange={set(\"dpoEmail\")} type=\"email\" isRequired isInvalid={!!errs.dpoEmail}><Label>Data Protection Officer email</Label><Input placeholder=\"dpo@…\" /><Description>{errs.dpoEmail "
+      ]
+    },
+    {
+      "file": "apps/web/src/components/partner/session.ts",
+      "lines": 23,
+      "sha256": "aae21666a1b4779602ad8a54a6a591cb7e54b85adb0b2a935b11b5d0aa83ce29",
+      "kind": "source/configuration",
+      "route": false,
+      "exports": [
+        "partnerMembership",
+        "requirePartnerMember",
+        "PartnerRole",
+        "canManage"
+      ],
+      "attention": []
+    },
+    {
+      "file": "apps/web/src/components/partner/settings-form.tsx",
+      "lines": 24,
+      "sha256": "1a94fa342d78cac23462ff32c4adff613269f03fe5d9674819733513856d0684",
+      "kind": "source/configuration",
+      "route": false,
+      "exports": [
+        "SettingsForm"
+      ],
+      "attention": [
+        "      <TextField value={f.logoUrl} onChange={set(\"logoUrl\")} type=\"url\" isDisabled={!canManage} isInvalid={!!errs.logoUrl}><Label>Logo URL</Label><Input placeholder=\"https://…/logo.png\" /><Description>{errs.logoUrl ?? \"S"
+      ]
+    },
+    {
+      "file": "apps/web/src/components/partner/team-form.tsx",
+      "lines": 31,
+      "sha256": "8c0b6fa84b34eb476200a16462df491000d8eecfff9efc41c95f29dcbfeaeda8",
+      "kind": "source/configuration",
+      "route": false,
+      "exports": [
+        "TeamForm"
+      ],
+      "attention": [
+        "            <TextField value={phone} onChange={(v) => setPhone(v.replace(/\\D/g, \"\").slice(0, 10))} type=\"tel\" isInvalid={!!err}><Label>Mobile number</Label><Input placeholder=\"10-digit mobile\" /><Description>{err ?? \"The"
+      ]
+    },
+    {
+      "file": "apps/web/src/components/public/autofill-demo.tsx",
+      "lines": 56,
+      "sha256": "563dd65d81b50d09ef3d3d626686d5a7094853b65d4d090b564e4a2e728de1ba",
+      "kind": "source/configuration",
+      "route": false,
+      "exports": [
+        "AutofillDemo"
+      ],
+      "attention": []
+    },
+    {
+      "file": "apps/web/src/components/public/blocks.tsx",
+      "lines": 30,
+      "sha256": "addfaba0dd1f99ddb8f26e150cdeb16d7871dbc1b9388059f1c47482df2a343f",
+      "kind": "source/configuration",
+      "route": false,
+      "exports": [
+        "Container",
+        "Section",
+        "Prose",
+        "H2",
+        "P",
+        "UL",
+        "Block",
+        "CtaLink"
+      ],
+      "attention": []
+    },
+    {
+      "file": "apps/web/src/components/public/dpo-form.tsx",
+      "lines": 22,
+      "sha256": "2c27072892a7899182551913501ee56953eaf7e99e2177007b75882f50ca6874",
+      "kind": "source/configuration",
+      "route": false,
+      "exports": [
+        "DpoForm"
+      ],
+      "attention": [
+        "      <label className=\"grid gap-1\"><span className=\"text-sm font-medium\">Details (optional)</span><textarea name=\"notes\" rows={3} maxLength={1000} className={inp} placeholder=\"Which field, which document, what's wrong…\""
+      ]
+    },
+    {
+      "file": "apps/web/src/components/readiness/readiness-panel.tsx",
+      "lines": 50,
+      "sha256": "e9ce43f1608973217e0b07c45b2cdd8f696cf093455a07cfb70b69e710e4c5d2",
+      "kind": "source/configuration",
+      "route": false,
+      "exports": [
+        "ReadinessPanel"
+      ],
+      "attention": []
+    },
+    {
+      "file": "apps/web/src/components/settings/notifications-list.tsx",
+      "lines": 57,
+      "sha256": "b456f228e40ed531d23afaaa6ef76ec037e781ce32bfad4a20c759e10ccb3091",
+      "kind": "source/configuration",
+      "route": false,
+      "exports": [
+        "Notif",
+        "NotificationsList"
+      ],
+      "attention": []
+    },
+    {
+      "file": "apps/web/src/components/settings/prefs-grid.tsx",
+      "lines": 37,
+      "sha256": "44a682a293cd035d0e554aca5d29aea9637df86c9107246dedfacf50eecc3ee5",
+      "kind": "source/configuration",
+      "route": false,
+      "exports": [
+        "PrefsGrid"
+      ],
+      "attention": []
+    },
+    {
+      "file": "apps/web/src/components/settings/prefs.test.ts",
+      "lines": 15,
+      "sha256": "2fc8fc02b0ca746eb9bd432224f5db55beebbd12051f13da5e0f70d40338edb9",
+      "kind": "source/configuration",
+      "route": false,
+      "exports": [],
+      "attention": []
+    },
+    {
+      "file": "apps/web/src/components/settings/prefs.ts",
+      "lines": 22,
+      "sha256": "522cc9fb107f6849796a018b6cab4daa822a30cd50021a26d8f364f6fe8fabca",
+      "kind": "source/configuration",
+      "route": false,
+      "exports": [
+        "CHANNELS",
+        "CATEGORIES",
+        "Channel",
+        "Category",
+        "PrefRow",
+        "PrefMatrix",
+        "defaultPrefs",
+        "mergePrefs",
+        "toRows"
+      ],
+      "attention": []
+    },
+    {
+      "file": "apps/web/src/components/settings/settings-client.tsx",
+      "lines": 157,
+      "sha256": "fa9a9db44bd5247731b617fec631bef93535c6284a41c935cb886b12b5e15c93",
+      "kind": "source/configuration",
+      "route": false,
+      "exports": [
+        "SessionRow",
+        "DataRequest",
+        "AuditRow",
+        "SettingsClient"
+      ],
+      "attention": []
+    },
+    {
+      "file": "apps/web/src/components/share/share-flow.tsx",
+      "lines": 179,
+      "sha256": "9386c6a8b60f04a1006285c1aa26d6cf6e89649f927cf84161271fb67f4f15f4",
+      "kind": "source/configuration",
+      "route": false,
+      "exports": [
+        "ShareFlowProps",
+        "ShareFlow"
+      ],
+      "attention": [
+        "    <Select selectedKey={value == null ? null : String(value)} onSelectionChange={(k) => onChange(k == null ? null : String(k))} isInvalid={!!error} placeholder={t(\"Choose\", \"चुनें\")} fullWidth>"
+      ]
+    },
+    {
+      "file": "apps/web/src/components/share/step-up-fallback.tsx",
+      "lines": 45,
+      "sha256": "648d9fea1bae8a8e2a5966e7af325be20064269399acd8df41902774c1462168",
+      "kind": "source/configuration",
+      "route": false,
+      "exports": [
+        "StepUpDialog"
+      ],
+      "attention": []
+    },
+    {
+      "file": "apps/web/src/components/shell/citizen-shell.tsx",
+      "lines": 58,
+      "sha256": "a9eff4eb964fe83f6996ad6388a99f163ffc596539b771c20c35ccdc5ddced68",
+      "kind": "source/configuration",
+      "route": false,
+      "exports": [
+        "CitizenShell"
+      ],
+      "attention": []
+    },
+    {
+      "file": "apps/web/src/components/shell/nav.ts",
+      "lines": 30,
+      "sha256": "4a48b7e3bf7f6ac6c89fead07809b93fe18144cef4ab773afdd291f456044980",
+      "kind": "source/configuration",
+      "route": false,
+      "exports": [
+        "CITIZEN_NAV",
+        "MOBILE_TABS",
+        "PARTNER_NAV",
+        "ADMIN_NAV"
+      ],
+      "attention": []
+    },
+    {
+      "file": "apps/web/src/components/shell/notifications-bell.tsx",
+      "lines": 12,
+      "sha256": "e6d10c418201ccc09e9bdf9ca0cdc2a5d5f884b70f6a14590481c2fe3248787d",
+      "kind": "source/configuration",
+      "route": false,
+      "exports": [
+        "NotificationsBell"
+      ],
+      "attention": []
+    },
+    {
+      "file": "apps/web/src/components/shell/profile-switcher.tsx",
+      "lines": 47,
+      "sha256": "8dec21b7262fa31970843becc536860bed99ea732e87fd7c7b2a971789439678",
+      "kind": "source/configuration",
+      "route": false,
+      "exports": [
+        "SwitchableProfile",
+        "ProfileSwitcher"
+      ],
+      "attention": []
+    },
+    {
+      "file": "apps/web/src/components/shell/side-shell.tsx",
+      "lines": 26,
+      "sha256": "1f7c5f6ca42ddfe3a9a8752135e26c3ece3ed57cf7d9dbfcd5cc50df19221648",
+      "kind": "source/configuration",
+      "route": false,
+      "exports": [
+        "SideShell"
+      ],
+      "attention": []
+    },
+    {
+      "file": "apps/web/src/components/vault/fact-sheet.tsx",
+      "lines": 87,
+      "sha256": "2914c5acf2c7e443600d4b7dd74038b3152f816802939ec82d621e6ece57d67b",
+      "kind": "source/configuration",
+      "route": false,
+      "exports": [
+        "FactSheetProps",
+        "FactSheet"
+      ],
+      "attention": []
+    },
+    {
+      "file": "apps/web/src/components/vault/history-drawer.tsx",
+      "lines": 53,
+      "sha256": "20cdcee78f90f172501aab4af70b836bf23c17262a1dd9eab6f904d8fbfe9174",
+      "kind": "source/configuration",
+      "route": false,
+      "exports": [
+        "HistoryDrawer"
+      ],
+      "attention": []
+    },
+    {
+      "file": "apps/web/src/components/vault/i18n.ts",
+      "lines": 16,
+      "sha256": "da09d6f2631bea6a9b5db33b369471b08e61fd42c9eb607cad8d2b6b2c48e5ff",
+      "kind": "source/configuration",
+      "route": false,
+      "exports": [
+        "localeOf",
+        "tr",
+        "SECTION_ICON",
+        "api",
+        "ApiErr"
+      ],
+      "attention": []
+    },
+    {
+      "file": "apps/web/src/components/vault/link-button.tsx",
+      "lines": 9,
+      "sha256": "25f4ce7792cfb90a87cc580a6af63ccc98304198f3c0406cc5c507ad3f345468",
+      "kind": "source/configuration",
+      "route": false,
+      "exports": [
+        "LinkButton"
+      ],
+      "attention": []
+    },
+    {
+      "file": "apps/web/src/components/vault/step-up-dialog.tsx",
+      "lines": 89,
+      "sha256": "450510a4840cf8f55da6186e21f545c3b75b887027adb9933ea6c71bad08b376",
+      "kind": "source/configuration",
+      "route": false,
+      "exports": [
+        "StepUpDialogProps",
+        "StepUpDialog",
+        "useStepUp"
+      ],
+      "attention": []
+    },
+    {
+      "file": "apps/web/src/components/vault/use-events.ts",
+      "lines": 17,
+      "sha256": "b1a82d51092575d7e976ac8c2bbe11ad39a4085203497203e761b285d21ae5e7",
+      "kind": "source/configuration",
+      "route": false,
+      "exports": [
+        "JobEvent",
+        "NotificationEvent",
+        "useEvents"
+      ],
+      "attention": []
+    },
+    {
+      "file": "apps/web/src/components/vault/vault-section.tsx",
+      "lines": 126,
+      "sha256": "c63196ea68ba527c73a5ef7de1b97fa1b8835d2a5e16c509b6ca18b69b73d284",
+      "kind": "source/configuration",
+      "route": false,
+      "exports": [
+        "FactOut",
+        "VaultSection"
+      ],
+      "attention": []
+    },
+    {
+      "file": "apps/web/src/components/vault/verify-hub.tsx",
+      "lines": 140,
+      "sha256": "6a4ad1d3ba32729bda488e9c4e0adc483c01adf07d06affc18f1c449373a8913",
+      "kind": "source/configuration",
+      "route": false,
+      "exports": [
+        "LinkRow",
+        "Mismatch",
+        "VerifyHub"
+      ],
+      "attention": []
+    },
+    {
+      "file": "apps/web/src/instrumentation.ts",
+      "lines": 8,
+      "sha256": "bb97730e02955d4c3c1a6f856845dd1b371580af85ff325af672bb13b41a9261",
+      "kind": "source/configuration",
+      "route": false,
+      "exports": [
+        "register"
+      ],
+      "attention": []
+    },
+    {
+      "file": "apps/web/src/lib/api.ts",
+      "lines": 72,
+      "sha256": "cdbb25e2d9d3557ab8c00083c1f42ed4a7861f409f8cb72f6e8a32b603581a9b",
+      "kind": "source/configuration",
+      "route": false,
+      "exports": [
+        "ApiError",
+        "ok",
+        "fail",
+        "handler",
+        "body",
+        "citizen",
+        "partner",
+        "idempotent",
+        "log"
+      ],
+      "attention": []
+    },
+    {
+      "file": "apps/web/src/lib/auth-client.ts",
+      "lines": 9,
+      "sha256": "c6b206e41c7f59e882df52d0e631f62b201648fba65a5c1d48e4d099223006b1",
+      "kind": "source/configuration",
+      "route": false,
+      "exports": [
+        "authClient"
+      ],
+      "attention": []
+    },
+    {
+      "file": "apps/web/src/lib/auth.ts",
+      "lines": 50,
+      "sha256": "eee6c3524450b1560d53323504809b0761f2cf0398f09fdbe8990c3c2ce96f72",
+      "kind": "source/configuration",
+      "route": false,
+      "exports": [
+        "auth",
+        "Auth"
+      ],
+      "attention": []
+    },
+    {
+      "file": "apps/web/src/lib/demo-portal.test.ts",
+      "lines": 19,
+      "sha256": "411475b5b010b754b64e640ec0512662834331959d8860b5684053edae10fba8",
+      "kind": "source/configuration",
+      "route": false,
+      "exports": [],
+      "attention": [
+        "beforeAll(async()=>{dir=mkdtempSync(join(tmpdir(),'praman-portal-test-'));vi.stubEnv('DEMO_DATA_DIR',dir);store=await import('../../../demo-exam-portal/src/lib/store');});",
+        "afterAll(()=>{vi.unstubAllEnvs();rmSync(dir,{recursive:true,force:true});});"
+      ]
+    },
+    {
+      "file": "apps/web/src/lib/document-preview.ts",
+      "lines": 29,
+      "sha256": "103574d4a3cb734d666ce501bdd010288ba8f093487f41b946d92e462335974e",
+      "kind": "source/configuration",
+      "route": false,
+      "exports": [
+        "sampleUrl",
+        "authorizeSample"
+      ],
+      "attention": []
+    },
+    {
+      "file": "apps/web/src/lib/inline-jobs.ts",
+      "lines": 124,
+      "sha256": "cdbaa2a7daf8ac77ed7795656bfa4d9c5df4104d1828b5b3517bb3045ca8c425",
+      "kind": "source/configuration",
+      "route": false,
+      "exports": [
+        "runInline",
+        "registerInlineJobs"
+      ],
+      "attention": []
+    },
+    {
+      "file": "apps/web/src/lib/readiness-advice.test.ts",
+      "lines": 22,
+      "sha256": "98c9d981868a83450edf44282676d4b114babd228750637af4a8793082177b94",
+      "kind": "source/configuration",
+      "route": false,
+      "exports": [],
+      "attention": [
+        "afterEach(()=>{vi.unstubAllEnvs();vi.unstubAllGlobals();});",
+        "  it('works without an AI service',async()=>{vi.stubEnv('OPENAI_API_KEY','');expect((await explainReadiness(report,'next','en')).mode).toBe('Local evidence guide');});",
+        "    vi.stubEnv('OPENAI_API_KEY','unit-test-key');vi.stubEnv('OPENAI_MODEL','configured-model');",
+        "    const fetcher=vi.fn(async()=>Response.json({output:[{content:[{type:'output_text',text:JSON.stringify({summary:'Add the missing name.',steps:['Open your identity vault.']})}]}]}));vi.stubGlobal('fetch',fetcher);",
+        "    vi.stubEnv('OPENAI_API_KEY','test');vi.stubEnv('OPENAI_MODEL','configured-model');",
+        "    vi.stubGlobal('fetch',vi.fn(async()=>Response.json({output:[{content:[{type:'output_text',text:'{\"invented\":true}'}]}]})));"
+      ]
+    },
+    {
+      "file": "apps/web/src/lib/readiness-advice.ts",
+      "lines": 22,
+      "sha256": "e60b7c7ed5159680f40a3a14ab9c7e850e4afa45f955c528c9bcf76f1e5246ee",
+      "kind": "source/configuration",
+      "route": false,
+      "exports": [
+        "explainReadiness"
+      ],
+      "attention": []
+    },
+    {
+      "file": "apps/web/src/lib/session.ts",
+      "lines": 43,
+      "sha256": "0abfa1168d3e47e145192b5507187f20c51618615c7503f5a692f01ab3435ba1",
+      "kind": "source/configuration",
+      "route": false,
+      "exports": [
+        "STEP_UP_WINDOW_MS",
+        "getSession",
+        "Session",
+        "requireUser",
+        "requireAdmin",
+        "isSteppedUp",
+        "listProfiles",
+        "requireProfileAccess",
+        "AccessError",
+        "scopeAllows"
+      ],
+      "attention": []
+    },
+    {
+      "file": "apps/web/src/lib/share.test.ts",
+      "lines": 55,
+      "sha256": "07a3f31ac6e32338e49aa5d759459391be9d5916311c4f78e5e90690a534b84e",
+      "kind": "source/configuration",
+      "route": false,
+      "exports": [],
+      "attention": []
+    },
+    {
+      "file": "apps/web/src/lib/share.ts",
+      "lines": 54,
+      "sha256": "f572cc355d4483e64f40679edf401bd559b37cdadc56c04979bca22d3e57ba16",
+      "kind": "source/configuration",
+      "route": false,
+      "exports": [
+        "FormLike",
+        "buildDiff",
+        "diffSummary",
+        "withQuery",
+        "newShareToken",
+        "shareTokenSessionId",
+        "hashToken",
+        "SESSION_TTL_MS",
+        "SHARE_TTL_MS",
+        "loadShareSession"
+      ],
+      "attention": []
+    },
+    {
+      "file": "apps/web/src/lib/signing.test.ts",
+      "lines": 31,
+      "sha256": "67fb0aea7209ae55fe85cf7e7f6ca70885f8a74b2293a0fc01b8968aaeb65d3d",
+      "kind": "source/configuration",
+      "route": false,
+      "exports": [],
+      "attention": []
+    },
+    {
+      "file": "apps/web/src/lib/signing.ts",
+      "lines": 36,
+      "sha256": "3bab353b90d52ba68344f1d34ff849d03a6d18fa27b5598399f6d4a81b71cd1c",
+      "kind": "source/configuration",
+      "route": false,
+      "exports": [
+        "getSigningKey",
+        "signSharePayload",
+        "publicJwks",
+        "decodeJws"
+      ],
+      "attention": []
+    },
+    {
+      "file": "apps/web/src/lib/sse.ts",
+      "lines": 39,
+      "sha256": "6d6657f11666eacef9ba18e3c3afa7b3472fd991886c871a4e257f70ad2c40f3",
+      "kind": "source/configuration",
+      "route": false,
+      "exports": [
+        "SseEvent",
+        "formatSse",
+        "SSE_HEADERS",
+        "sseResponse"
+      ],
+      "attention": []
+    },
+    {
+      "file": "apps/web/src/lib/storage.ts",
+      "lines": 26,
+      "sha256": "8a8b60b3f7825565cd272cb4b1d4c89e021ddcec58d87165a1c237a24057ed55",
+      "kind": "source/configuration",
+      "route": false,
+      "exports": [
+        "s3",
+        "bucket",
+        "isMockKey",
+        "docKey",
+        "presignPut",
+        "presignGet",
+        "getBytes"
+      ],
+      "attention": []
+    },
+    {
+      "file": "apps/web/src/lib/webhooks.ts",
+      "lines": 60,
+      "sha256": "4efbe7a0226b6e7fc829a81215dfe381a2bb4de046c64d35c4c7e4637d321b97",
+      "kind": "source/configuration",
+      "route": false,
+      "exports": [
+        "queueWebhook",
+        "flushDeliveries",
+        "dispatchWebhook",
+        "partnerApplication",
+        "pushApplicationStatus",
+        "createVerificationRequest",
+        "STATUS_LABEL"
+      ],
+      "attention": []
+    },
+    {
+      "file": "apps/web/src/lib/wp1.test.ts",
+      "lines": 39,
+      "sha256": "e5f43b82c08c4b0c42576a00eb016691ce8d6a1a881f116ad3e3d5e920bba9c1",
+      "kind": "source/configuration",
+      "route": false,
+      "exports": [],
+      "attention": []
+    },
+    {
+      "file": "apps/web/src/proxy.ts",
+      "lines": 14,
+      "sha256": "869dca4afa14ba74b101c100d9989d28bd5bb07c00386913746a9a800b1b604c",
+      "kind": "source/configuration",
+      "route": false,
+      "exports": [
+        "proxy",
+        "config"
+      ],
+      "attention": []
+    },
+    {
+      "file": "apps/web/tsconfig.json",
+      "lines": 7,
+      "sha256": "94b3c7a06329081c3f8f683a4ed00d8c7354c186115a22b559eea5de284c3d55",
+      "kind": "source/configuration",
+      "route": false,
+      "exports": [],
+      "attention": []
+    },
+    {
+      "file": "apps/web/vitest.config.ts",
+      "lines": 7,
+      "sha256": "7d92a78e41709e8a1043abe1a6f9ada085495e3d57bf48790ed315ab0815b1bd",
+      "kind": "source/configuration",
+      "route": false,
+      "exports": [],
+      "attention": []
+    },
+    {
+      "file": "apps/worker/package.json",
+      "lines": 13,
+      "sha256": "b714c606284d7976757452f12c504ca0fee37bc3be84dce7370d694d39644242",
+      "kind": "source/configuration",
+      "route": false,
+      "exports": [],
+      "attention": []
+    },
+    {
+      "file": "apps/worker/src/handlers/data.ts",
+      "lines": 71,
+      "sha256": "11048723d49673c39458c39509dbc9cb19fd4083a5d76224590c1f63d72f00bc",
+      "kind": "source/configuration",
+      "route": false,
+      "exports": [
+        "dataExport",
+        "dataErase"
+      ],
+      "attention": []
+    },
+    {
+      "file": "apps/worker/src/handlers/documents.ts",
+      "lines": 46,
+      "sha256": "f0e1e58ea3c87a912a54dcb58cf4ff2cf87c7c7b33cdc83f04479a5c74110df3",
+      "kind": "source/configuration",
+      "route": false,
+      "exports": [
+        "documentProcess"
+      ],
+      "attention": [
+        "/** documents queue: document.process (AV stub + OCR -> proposed facts) */"
+      ]
+    },
+    {
+      "file": "apps/worker/src/handlers/index.ts",
+      "lines": 27,
+      "sha256": "a41ddd8f6c0478c17ada00152fdf5a6fb33210ca5fe6b7fb19b22f69f59736a8",
+      "kind": "source/configuration",
+      "route": false,
+      "exports": [
+        "handlers"
+      ],
+      "attention": []
+    },
+    {
+      "file": "apps/worker/src/handlers/notifications.ts",
+      "lines": 41,
+      "sha256": "e0e0f35aee24f830b10d5129bd5e159e4426ccaaa945f7fa5039b94f439e2a5d",
+      "kind": "source/configuration",
+      "route": false,
+      "exports": [
+        "notify"
+      ],
+      "attention": []
+    },
+    {
+      "file": "apps/worker/src/handlers/scheduled.ts",
+      "lines": 98,
+      "sha256": "38694c25c5f35bdadd0ecd0a1d10f7c5ddfe6faf0e6dd1bbdf6653caa122086d",
+      "kind": "source/configuration",
+      "route": false,
+      "exports": [
+        "scanExpiries",
+        "scanMismatches",
+        "scanHandover18",
+        "scanDeadlines",
+        "registerSchedulers"
+      ],
+      "attention": []
+    },
+    {
+      "file": "apps/worker/src/handlers/verification.ts",
+      "lines": 119,
+      "sha256": "fe5c56634bb844373b75624bebd2f4f55b2c1776970384dcaeace71e13229930",
+      "kind": "source/configuration",
+      "route": false,
+      "exports": [
+        "digilockerSync",
+        "panVerify",
+        "aaIncome",
+        "abhaLink"
+      ],
+      "attention": []
+    },
+    {
+      "file": "apps/worker/src/handlers/webhooks.ts",
+      "lines": 48,
+      "sha256": "8dba0dd3eb49e0d3ddc587768b1a67ae89fd608f6feb3abfa4b14d134c46dcb5",
+      "kind": "source/configuration",
+      "route": false,
+      "exports": [
+        "webhookDeliver"
+      ],
+      "attention": []
+    },
+    {
+      "file": "apps/worker/src/index.ts",
+      "lines": 57,
+      "sha256": "df84ac6708d51f1c70333644742bb6dc438a840e75e14832aeb823c64af30a20",
+      "kind": "source/configuration",
+      "route": false,
+      "exports": [],
+      "attention": []
+    },
+    {
+      "file": "apps/worker/src/inline.ts",
+      "lines": 16,
+      "sha256": "56fdc1718968b08c4f7163bc17d9e40ad21202d5fa6f6f28db7385fa868aa6a7",
+      "kind": "source/configuration",
+      "route": false,
+      "exports": [
+        "runInline"
+      ],
+      "attention": []
+    },
+    {
+      "file": "apps/worker/src/logger.ts",
+      "lines": 8,
+      "sha256": "b9c274c09a06b6376899329b12430e09fbb6609edda33319b5865a8fd4410bf2",
+      "kind": "source/configuration",
+      "route": false,
+      "exports": [
+        "logger"
+      ],
+      "attention": []
+    },
+    {
+      "file": "apps/worker/src/s3.ts",
+      "lines": 32,
+      "sha256": "de74147323100a6392848725b960efd016841ce6fb81c0c15f1a3620a05261a6",
+      "kind": "source/configuration",
+      "route": false,
+      "exports": [
+        "s3",
+        "BUCKET",
+        "putObject",
+        "getObject",
+        "presignGet"
+      ],
+      "attention": []
+    },
+    {
+      "file": "apps/worker/test/digilocker.test.ts",
+      "lines": 41,
+      "sha256": "bd3eff66e31cdebd1654afce514408fe2c20ea9b57633a21d11ca3a656f1c00a",
+      "kind": "source/configuration",
+      "route": false,
+      "exports": [],
+      "attention": []
+    },
+    {
+      "file": "apps/worker/test/scheduled.test.ts",
+      "lines": 43,
+      "sha256": "e7c6e4924a22e048e6ad9d03897c063348d815903e96fa277c1741a871f865d0",
+      "kind": "source/configuration",
+      "route": false,
+      "exports": [],
+      "attention": []
+    },
+    {
+      "file": "apps/worker/test/setup.ts",
+      "lines": 21,
+      "sha256": "f6458aa720149454fe824cf9df84c8623c1c2b399254c9904522c3cc31386e1c",
+      "kind": "source/configuration",
+      "route": false,
+      "exports": [],
+      "attention": []
+    },
+    {
+      "file": "apps/worker/test/webhook.test.ts",
+      "lines": 61,
+      "sha256": "839b1a3784c88be28b80b987ca84e5fc09ef4f6a2d30e9a6b6ca0739f46fadca",
+      "kind": "source/configuration",
+      "route": false,
+      "exports": [],
+      "attention": []
+    },
+    {
+      "file": "apps/worker/tsconfig.json",
+      "lines": 2,
+      "sha256": "28bac1fcd9cdca6794a7f01bf9049dcd83e420dc5e3624793eeb7e89083cc970",
+      "kind": "source/configuration",
+      "route": false,
+      "exports": [],
+      "attention": []
+    },
+    {
+      "file": "apps/worker/vitest.config.ts",
+      "lines": 3,
+      "sha256": "ee14bd00cc093070c325a24807da5e45dc7e3d74f9b0e802535a1ad58e913439",
+      "kind": "source/configuration",
+      "route": false,
+      "exports": [],
+      "attention": []
+    },
+    {
+      "file": "docker-compose.demo.yml",
+      "lines": 20,
+      "sha256": "3ad04740429c363fe780ccc3820efa32d979134ff4e6ffb191c36cb058639ccd",
+      "kind": "source/configuration",
+      "route": false,
+      "exports": [],
+      "attention": []
+    },
+    {
+      "file": "docker-compose.yml",
+      "lines": 26,
+      "sha256": "476ebc4cbbde6fa468119d8adf1de355b884016f5631d39a35fd85f12209908f",
+      "kind": "source/configuration",
+      "route": false,
+      "exports": [],
+      "attention": []
+    },
+    {
+      "file": "docs/00-README.md",
+      "lines": 41,
+      "sha256": "28a6c41b64e068e1d924653fa00d1551420779e7d8e3e79030a37dfd1f132b50",
+      "kind": "documentation",
+      "route": false,
+      "exports": [],
+      "headings": [
+        "Documentation index",
+        "Praman — build kit",
+        "The one-paragraph pitch",
+        "Honest constraints baked into the plan"
+      ],
+      "attention": []
+    },
+    {
+      "file": "docs/01-PRD.md",
+      "lines": 123,
+      "sha256": "f03410dcf18f0ee505673434a6bed7aa73ba662ce61f80093c429b929a157762",
+      "kind": "documentation",
+      "route": false,
+      "exports": [],
+      "headings": [
+        "01 — Product Requirements Document: Praman",
+        "1. Problem",
+        "2. Vision",
+        "3. Personas",
+        "4. Use-case map (extensive)",
+        "4.1 Education",
+        "4.2 Identity & civic",
+        "4.3 Financial & KYC",
+        "4.4 Health",
+        "4.5 Employment",
+        "4.6 Family & delegation",
+        "4.7 Housing, travel, daily life",
+        "4.8 Institution side (the other half of the marketplace)",
+        "5. Feature list (Phase 1 = shippable product)",
+        "Citizen app",
+        "Partner console",
+        "Platform",
+        "6. Non-goals (Phase 1)",
+        "7. Success metrics",
+        "8. Risks & mitigations"
+      ],
+      "attention": []
+    },
+    {
+      "file": "docs/02-ARCHITECTURE.md",
+      "lines": 98,
+      "sha256": "3191e3394388b21ac55f7024245e1e873084d58823bdb22e15a57bb79a804ca0",
+      "kind": "documentation",
+      "route": false,
+      "exports": [],
+      "headings": [
+        "02 — Architecture",
+        "1. Principles",
+        "2. Stack (decided)",
+        "3. Monorepo layout",
+        "4. Core domains (bounded contexts inside the monolith)",
+        "5. Provider adapter layer (`packages/providers`)",
+        "6. Security & privacy",
+        "7. Scalability notes",
+        "8. Environments"
+      ],
+      "attention": []
+    },
+    {
+      "file": "docs/03-DATA-MODEL.md",
+      "lines": 134,
+      "sha256": "cfd37bd1a9e82aa2a3831e94dabb1658cdf82a961be9dcb5442caaa8cf0848de",
+      "kind": "documentation",
+      "route": false,
+      "exports": [],
+      "headings": [
+        "03 — Data model",
+        "1. Canonical Citizen Schema (`packages/schema`)",
+        "identity",
+        "contact",
+        "address (repeating, role-tagged)",
+        "family (repeating relation rows; each relation may link to a real profile)",
+        "category & eligibility",
+        "education (repeating rows by `level`)",
+        "employment (repeating)",
+        "health (opt-in section; strongest consent gating)",
+        "bank",
+        "preferences",
+        "2. Purposes & scopes (consent vocabulary)",
+        "3. Postgres schema (Drizzle; abbreviated but complete in intent)",
+        "4. Seed data (mock env)"
+      ],
+      "attention": []
+    },
+    {
+      "file": "docs/04-DESIGN-SYSTEM.md",
+      "lines": 118,
+      "sha256": "8cb58f7bdeb32db2006630fcbf57141d6b37f98e128544b36d20ae8cc0562e78",
+      "kind": "documentation",
+      "route": false,
+      "exports": [],
+      "headings": [
+        "04 — Design system (\"Praman Bright\")",
+        "1. Personality",
+        "2. Tokens (Tailwind v4 `@theme` + HeroUI theme)",
+        "3. Colour usage rules",
+        "4. Motion",
+        "5. Components (HeroUI v3 base → composed in `packages/ui`)",
+        "6. Layouts",
+        "7. Complete page list",
+        "Public (`/`)",
+        "Auth (`/auth`)",
+        "Onboarding (`/welcome`, wizard)",
+        "Citizen app (`/app`)",
+        "Share flow (`/share/[token]`, embeddable)",
+        "Partner console (`/partner`)",
+        "Admin (`/admin`, internal)",
+        "Demo exam portal (`apps/demo-exam-portal`, `bta.demo`)",
+        "8. Copy voice"
+      ],
+      "attention": [
+        "Forms: labels above inputs, helper text below, errors inline in danger with icon, never placeholder-as-label. Indian-specific inputs: `PincodeInput` (auto-fills district/state), `AadhaarLast4`, `PanInput` (uppercase mask"
+      ]
+    },
+    {
+      "file": "docs/05-API-AND-FLOWS.md",
+      "lines": 85,
+      "sha256": "af59589ea773216eb622c186b735ff284a702fe265fa23baae089e081d4a59ff",
+      "kind": "documentation",
+      "route": false,
+      "exports": [],
+      "headings": [
+        "05 — API, user flows, partner protocol, extension",
+        "1. API surface (Next.js route handlers, `/api/v1`)",
+        "Auth",
+        "Profiles & facts",
+        "Documents",
+        "Providers / verification",
+        "Consent & share (citizen side)",
+        "Applications",
+        "Partner API (Bearer key)",
+        "Data principal",
+        "2. End-to-end flows",
+        "F1 — Onboarding (target 6 min)",
+        "F2 — Apply with Praman (partner-initiated)",
+        "F3 — Extension autofill (no partner integration)",
+        "F4 — Upload → OCR → facts",
+        "F5 — Family / delegation",
+        "F6 — Expiry & mismatch",
+        "3. `@praman/sdk` (partner-facing, tiny)",
+        "4. Demo exam portal script (what judges see, ~3 min)"
+      ],
+      "attention": []
+    },
+    {
+      "file": "docs/06-CLAUDE-CODE-PLAYBOOK.md",
+      "lines": 72,
+      "sha256": "d990c3f848582bd4829f5b748028039f5eb02df0f6c2c1c6c1c0c2df1b7faac3",
+      "kind": "documentation",
+      "route": false,
+      "exports": [],
+      "headings": [
+        "06 — Claude Code playbook",
+        "0. Setup (once)",
+        "in your existing repo (or a fresh one)",
+        "1. Session rhythm (every phase)",
+        "2. Phase prompts",
+        "P0 — Audit the current build (if a repo exists)",
+        "P1 — Monorepo + schema (the foundation)",
+        "P2 — Design system + shell",
+        "P3 — Auth + profiles + vault",
+        "P4 — Providers + onboarding + documents",
+        "P5 — Consent, share, partner console, SDK",
+        "P6 — Demo exam portal + applications tracker",
+        "P7 — Extension",
+        "P8 — Family, notifications, settings, data rights",
+        "P9 — Hardening & ship",
+        "3. Cost/quality guardrails",
+        "4. Definition of done (product)"
+      ],
+      "attention": [
+        "> Implement packages/providers interfaces from docs/02 §5 with `mock` implementations returning the seeded fixtures, plus a `setu` sandbox implementation behind env flags (read Setu DigiLocker + Offline Aadhaar docs; do "
+      ]
+    },
+    {
+      "file": "docs/07-USE-CASE-CATALOG.md",
+      "lines": 158,
+      "sha256": "9e3a07f2263048ace5f372357d2d3e0bf324c4538836d749372e159eee8751b6",
+      "kind": "documentation",
+      "route": false,
+      "exports": [],
+      "headings": [
+        "07 — Use-Case Catalog",
+        "1. How to read this catalog",
+        "2. Top-40 fields by cross-form frequency",
+        "3. Life-stage catalogue",
+        "3.1 Birth to 5",
+        "3.2 School (6–17)",
+        "3.3 Higher education (18–24)",
+        "3.4 Early career (21–30)",
+        "3.5 Adult life (25–50)",
+        "3.6 Senior citizens (50+/60+)",
+        "3.7 Cross-cutting (all ages) & DBT schemes",
+        "4. Special-population product rules"
+      ],
+      "attention": []
+    },
+    {
+      "file": "docs/08-INTEGRATIONS-PLAN.md",
+      "lines": 43,
+      "sha256": "8f72ffd7668896ffabc8be095a0bdf0c11d13787684e76d6918bac70ed401b86",
+      "kind": "documentation",
+      "route": false,
+      "exports": [],
+      "headings": [
+        "08 — Integrations Plan",
+        "1. Provider-by-provider plan",
+        "2. DPDP Act 2025 compliance checklist → product features",
+        "3. 12-month provider roadmap"
+      ],
+      "attention": []
+    },
+    {
+      "file": "docs/09-GTM-AND-BUSINESS.md",
+      "lines": 103,
+      "sha256": "fb31ed5b20985c30df9c45257d6ca09ee661011c73b194e0564329102a8d948d",
+      "kind": "documentation",
+      "route": false,
+      "exports": [],
+      "headings": [
+        "09 — GTM and Business",
+        "1. Global analogs — what to copy",
+        "2. India landscape",
+        "3. Business model & pricing",
+        "4. TAM / SAM / SOM",
+        "5. Moats",
+        "6. Risks (§F)",
+        "7. 12-month GTM plan (§G)",
+        "8. The pitch (one paragraph)",
+        "9. Investor objections, answered",
+        "10. KPIs to track from day one"
+      ],
+      "attention": []
+    },
+    {
+      "file": "docs/10-PRD-v2.md",
+      "lines": 116,
+      "sha256": "24d4f23c9d8977f85bb56fb5f8478d9816c2b7bbbee2aaf8f7737df45a9f12aa",
+      "kind": "documentation",
+      "route": false,
+      "exports": [],
+      "headings": [
+        "10 — PRD v2 (supersedes 01-PRD.md, kept consistent with it)",
+        "1. Problem",
+        "2. Vision",
+        "3. Personas & jobs-to-be-done",
+        "4. Feature list by surface (MoSCoW + acceptance criteria)",
+        "4.1 Citizen web/PWA",
+        "4.2 Partner console",
+        "4.3 Admin",
+        "4.4 Demo exam portal (`apps/demo-exam-portal`)",
+        "4.5 Extension (Chrome MV3)",
+        "4.6 SDK (`@praman/sdk`)",
+        "5. Non-goals (v0.9–v1.5)",
+        "6. Success metrics",
+        "7. Release plan",
+        "8. Open questions"
+      ],
+      "attention": []
+    },
+    {
+      "file": "docs/11-UX-FLOWS.md",
+      "lines": 193,
+      "sha256": "9a30f4faaae4bf226ebb69d7c6d26aaa2691aa70b8ca04149aa08a16ee8c20a3",
+      "kind": "documentation",
+      "route": false,
+      "exports": [],
+      "headings": [
+        "11 — UX Flows",
+        "F1 — Onboarding",
+        "F2 — DigiLocker connect",
+        "F3 — Upload → OCR review",
+        "F4 — Apply with Praman (partner-initiated)",
+        "F5 — Extension autofill",
+        "F6 — Family: add minor / add elder / handover at 18",
+        "F7 — Revoke consent",
+        "F8 — Expiry reminder → re-fetch",
+        "F9 — Data export / erase",
+        "F10 — Partner onboarding → form builder → first share → status push"
+      ],
+      "attention": []
+    },
+    {
+      "file": "docs/AUDIT-REPORT.md",
+      "lines": 126,
+      "sha256": "83276d892a1a34e80b7a35d64bded313b7017fb712f129556d7c97f2ae31ab14",
+      "kind": "documentation",
+      "route": false,
+      "exports": [],
+      "headings": [
+        "Praman audit and implementation report",
+        "Method and environment",
+        "Findings corrected",
+        "New feature: evidence readiness and explanation",
+        "Validation results",
+        "Coverage map",
+        "Dependency check",
+        "Remaining limitations and production work"
+      ],
+      "attention": [
+        "| e-Sign placeholder | Disabled feature offered no working alternative | OTP-confirmed full-text declaration receipt stored in Documents |"
+      ]
+    },
+    {
+      "file": "docs/CURRENT-PROGRESS.md",
+      "lines": 45,
+      "sha256": "62360e206a99eabcb49688ae3f644fb7d2c7ecb81d1e9dcc96cd4f331de175ae",
+      "kind": "documentation",
+      "route": false,
+      "exports": [],
+      "headings": [
+        "Current progress and handoff",
+        "Delivered in this audit",
+        "Runtime/configuration",
+        "Validation evidence",
+        "Next work requiring deployment or external validation",
+        "Where to continue"
+      ],
+      "attention": []
+    },
+    {
+      "file": "docs/DEMO-SCRIPT.md",
+      "lines": 43,
+      "sha256": "0e44391f68ae1492a65be13a35624c371c9d3631aa90f504f54bad37a77f800c",
+      "kind": "documentation",
+      "route": false,
+      "exports": [],
+      "headings": [
+        "The two-minute Praman pitch",
+        "The story",
+        "Prepare before the clock starts",
+        "Exact on-screen flow and speech",
+        "Rehearsal notes",
+        "Backup demonstration"
+      ],
+      "attention": []
+    },
+    {
+      "file": "docs/INTEGRATIONS-AND-ROADMAP.md",
+      "lines": 46,
+      "sha256": "140b752fd0b776fc5c3ed175f00137e469dc53d8bc336b0afb5cbded5eeb4541",
+      "kind": "documentation",
+      "route": false,
+      "exports": [],
+      "headings": [
+        "Integrations and improvement roadmap",
+        "What works now",
+        "Optional AI setup",
+        "Why this AI boundary",
+        "Next improvements, in order",
+        "Deliberately avoided"
+      ],
+      "attention": []
+    },
+    {
+      "file": "docs/PROJECT-CONTEXT.md",
+      "lines": 105,
+      "sha256": "2d7935af75c4d9f07e0861d44ec1ff3bbfc6390c5107b68db62cb288841813b5",
+      "kind": "documentation",
+      "route": false,
+      "exports": [],
+      "headings": [
+        "Praman: current project context",
+        "Product and problem",
+        "Runtime map",
+        "Architecture",
+        "Shared packages and invariants",
+        "End-to-end application path",
+        "New differentiator: evidence readiness",
+        "Family and access",
+        "Documents and declaration receipts",
+        "Operational behavior",
+        "What requires external work"
+      ],
+      "attention": [
+        "Seeded evidence has deterministic viewable sample attachments. Sample photograph and signature placeholders have the correct document types and are visibly synthetic. Preview URLs have a five-minute, document-bound ticke",
+        "Live identity/financial/health verification, production SMS/email, licensed e-Sign, real OCR, managed KMS, encrypted object storage, malware scanning, data lifecycle cleanup and operational/legal review remain deployment"
+      ]
+    },
+    {
+      "file": "docs/RUNBOOK.md",
+      "lines": 65,
+      "sha256": "9b51d4886cf780b47cc2b07a9733ea9295c7c205be14f16db8e4b67444fef508",
+      "kind": "documentation",
+      "route": false,
+      "exports": [],
+      "headings": [
+        "Local operations and demo runbook",
+        "First run",
+        "Production-mode local rehearsal",
+        "Separate terminals, repository root:",
+        "Isolated audit ports and data",
+        "Fixture maintenance",
+        "Troubleshooting",
+        "Production work still required"
+      ],
+      "attention": []
+    },
+    {
+      "file": "docs/legacy-applyonce/README-applyonce.md",
+      "lines": 381,
+      "sha256": "d9c0ce35220968a4c83da132fdab1c45f2cea1560678341afebad90e64e28d91",
+      "kind": "documentation",
+      "route": false,
+      "exports": [],
+      "headings": [
+        "ApplyOnce",
+        "Live product",
+        "The citizen journey",
+        "The partner journey",
+        "What is implemented",
+        "Citizen product",
+        "Partner product",
+        "Platform foundation",
+        "Honest integration status",
+        "Architecture",
+        "Data model",
+        "Repository structure",
+        "Agent handoff",
+        "Local setup",
+        "Commands",
+        "API surface",
+        "Public hosted forms",
+        "Citizen APIs",
+        "Partner APIs",
+        "Security boundary",
+        "Testing and release checklist",
+        "Logo and brand assets",
+        "Roadmap",
+        "License",
+        "Contributing"
+      ],
+      "attention": [
+        "npm run audit:interactions # Reject placeholder links, empty actions, and false receipt claims"
+      ]
+    },
+    {
+      "file": "docs/legacy-applyonce/agent-context/00-index.md",
+      "lines": 74,
+      "sha256": "993432e62c61d33e48aae0d4e0c057fab4419764618740c3aab0b4749e8bf2fa",
+      "kind": "documentation",
+      "route": false,
+      "exports": [],
+      "headings": [
+        "ApplyOnce agent handoff",
+        "Read order",
+        "One-minute orientation",
+        "Repository facts",
+        "Rules for the next agent",
+        "Start here",
+        "Context hygiene"
+      ],
+      "attention": []
+    },
+    {
+      "file": "docs/legacy-applyonce/agent-context/01-product-and-problem.md",
+      "lines": 81,
+      "sha256": "e11703ce56393fba9d75f17bb879052bfe8ab25a7d9926ea811a8d684b019da0",
+      "kind": "documentation",
+      "route": false,
+      "exports": [],
+      "headings": [
+        "Product, problem, and scope",
+        "Problem",
+        "Product promise",
+        "First launch audience",
+        "Broader domain packs",
+        "Three delivery rails",
+        "What ApplyOnce does not do",
+        "Hackathon story and production story",
+        "Success measures"
+      ],
+      "attention": []
+    },
+    {
+      "file": "docs/legacy-applyonce/agent-context/02-current-reality.md",
+      "lines": 96,
+      "sha256": "6326d122e8eb9d8d3e93e1d2a50b8a0f8772592019007c2d3a94e9b51a7b4e46",
+      "kind": "documentation",
+      "route": false,
+      "exports": [],
+      "headings": [
+        "Current implementation truth",
+        "Verified repository state",
+        "Verified public runtime",
+        "Implemented product areas",
+        "Integration state from the registry",
+        "Current production-shaped limitations",
+        "Do not regress these truths"
+      ],
+      "attention": [
+        "- Interaction audit that rejects placeholder links, empty click handlers, and misleading receipt language.",
+        "- Browser extension, Android AutofillService, and Apple Safari extension are not implemented."
+      ]
+    },
+    {
+      "file": "docs/legacy-applyonce/agent-context/03-architecture-and-data.md",
+      "lines": 137,
+      "sha256": "230ab503f94dc375ac8bf8e3ccc88308880e1bf7b68348c5e9255364ba5719b1",
+      "kind": "documentation",
+      "route": false,
+      "exports": [],
+      "headings": [
+        "Architecture, routes, data, and API contracts",
+        "Current runtime architecture",
+        "Important route groups",
+        "Data model currently in use",
+        "Target universal model",
+        "Invariants",
+        "Claim resolution",
+        "Application submission transaction",
+        "API contract direction"
+      ],
+      "attention": []
+    },
+    {
+      "file": "docs/legacy-applyonce/agent-context/04-user-flows-and-ui.md",
+      "lines": 99,
+      "sha256": "e391356d3a71e86e9c50ad7cd76e97ad8577f2fc71003fc34c56d8e7e8ef6012",
+      "kind": "documentation",
+      "route": false,
+      "exports": [],
+      "headings": [
+        "User flows and UI contract",
+        "Product visual language",
+        "Citizen onboarding",
+        "Citizen application",
+        "My Profile",
+        "Consent sheet",
+        "Partner onboarding and workspace",
+        "Hosted form behavior",
+        "Control contract",
+        "Motion rules"
+      ],
+      "attention": []
+    },
+    {
+      "file": "docs/legacy-applyonce/agent-context/05-security-integrations-operations.md",
+      "lines": 89,
+      "sha256": "d2fb6457be86bb0bf6ae2698caa7ace953a610f2e3a00aaca1bc7a53131536de",
+      "kind": "documentation",
+      "route": false,
+      "exports": [],
+      "headings": [
+        "Security, integrations, and operations",
+        "Security baseline",
+        "Official connector policy",
+        "Planned production infrastructure",
+        "Browser and mobile autofill",
+        "Operational targets"
+      ],
+      "attention": []
+    },
+    {
+      "file": "docs/legacy-applyonce/agent-context/06-testing-release-and-commands.md",
+      "lines": 101,
+      "sha256": "9d7d40328efb9a69b563ce18e3c39554b0f13f0df6f5f963049feeb5f0e3cdfd",
+      "kind": "documentation",
+      "route": false,
+      "exports": [],
+      "headings": [
+        "Testing, verification, and release commands",
+        "Local commands",
+        "What the checks cover today",
+        "Required future coverage",
+        "Public release sequence",
+        "Release truth checklist"
+      ],
+      "attention": [
+        "- Interaction audit catches placeholder links, empty handlers, and misleading external-receipt claims."
+      ]
+    },
+    {
+      "file": "docs/legacy-applyonce/agent-context/07-next-workstreams.md",
+      "lines": 73,
+      "sha256": "5d258271e802075209d8f17c85b35a9f436bc0aaf19074f543522725a8307870",
+      "kind": "documentation",
+      "route": false,
+      "exports": [],
+      "headings": [
+        "Ordered next workstreams",
+        "1. Foundation and contracts",
+        "2. Identity, people, and claims",
+        "3. Citizen web",
+        "4. Partner platform",
+        "5. Hosted forms and API product",
+        "6. Integration framework",
+        "7. Autofill clients",
+        "8. Production infrastructure and operations",
+        "9. Intelligence",
+        "Recommended execution order"
+      ],
+      "attention": []
+    },
+    {
+      "file": "docs/legacy-applyonce/agent-context/08-decision-log.md",
+      "lines": 53,
+      "sha256": "6d126bb0ecc1d07e218199967123901fb7f47adceb5d71cce776df515bd54efe",
+      "kind": "documentation",
+      "route": false,
+      "exports": [],
+      "headings": [
+        "Decision log",
+        "Product",
+        "Truth and trust",
+        "Technology",
+        "Storage and region plan",
+        "Privacy and compliance direction",
+        "Collaboration"
+      ],
+      "attention": []
+    },
+    {
+      "file": "docs/plans/2026-09-02-build-plan.md",
+      "lines": 72,
+      "sha256": "ca833504c53917ca8e04905f411a45a4826ea687664b2ece3df772933a5c11f3",
+      "kind": "documentation",
+      "route": false,
+      "exports": [],
+      "headings": [
+        "Build plan — Praman v0.9 (2026-09-02)",
+        "0. Decisions already made (do not re-litigate)",
+        "1. Conventions",
+        "2. Work packages (parallel, disjoint ownership)",
+        "WP1 — Citizen core: Home · Vault · Documents · Verify · Onboarding",
+        "WP2 — Consent & share · Partner console · Partner API · SDK · Tracker · Connections",
+        "WP3 — Demo exam portal (Bharat Test Agency)",
+        "WP4 — Worker",
+        "WP5 — Family · Notifications · Settings · Data rights · Admin · Public site",
+        "WP6 — Chrome extension",
+        "WP7 — QA & ship (after WP1–6)",
+        "3. API surface (from docs/05, authoritative) — implement exactly these paths under `/api/v1`",
+        "4. Definition of done (v0.9 demo)",
+        "5. Dependency requests (append here; do not install)"
+      ],
+      "attention": [
+        "Owns: `apps/demo-exam-portal/**`. Deliver docs/04 §7 #19 + docs/05 §4: 6-step 48-field manual form with timer, \"Apply with Praman\" via `@praman/sdk` (server route creates share session against `PRAMAN_API_URL` with `BTA_",
+        "Owns: `apps/worker/**`. Deliver BullMQ workers for every `JobMap` entry: `digilocker.sync` (list docs → store bytes to S3/MinIO via `@aws-sdk/client-s3` → `documents` rows → `docToFacts` → `putFact(issuer_verified)` with"
+      ]
+    },
+    {
+      "file": "docs/plans/2026-09-02-wp1-citizen-core.md",
+      "lines": 23,
+      "sha256": "658d702193b6d82565f9e18495f384ff0508d2513cd354d8af75f329332a2b51",
+      "kind": "documentation",
+      "route": false,
+      "exports": [],
+      "headings": [
+        "WP1 — Citizen core (Home · Vault · Documents · Verify · Onboarding · APIs · SSE · step-up)",
+        "Files",
+        "Decisions",
+        "Verify"
+      ],
+      "attention": [
+        "- Mock provider docs keep `storageKey=mock/…` (no S3 write); viewer shows placeholder card."
+      ]
+    },
+    {
+      "file": "docs/plans/2026-09-02-wp2-consent-share.md",
+      "lines": 22,
+      "sha256": "23808368ef89954e6120c9d4df5a80745ddaf95048add655877530d8351d24f4",
+      "kind": "documentation",
+      "route": false,
+      "exports": [],
+      "headings": [
+        "WP2 plan — consent & share · partner API · console · SDK · tracker · connections (2026-09-02)",
+        "Files",
+        "Decisions"
+      ],
+      "attention": []
+    },
+    {
+      "file": "docs/plans/2026-09-02-wp4-worker.md",
+      "lines": 25,
+      "sha256": "e51e733a0554e2fcb987cf6a7f9fa63c50ebdd58532e0013192b015770991a84",
+      "kind": "documentation",
+      "route": false,
+      "exports": [],
+      "headings": [
+        "WP4 — background worker (apps/worker)",
+        "Files",
+        "Tests (`test/*.test.ts`, vitest, real local DB+redis via `test/setup.ts`)",
+        "Verify"
+      ],
+      "attention": [
+        "- `src/handlers/documents.ts` — document.process (AV stub + OCR → extractions)"
+      ]
+    },
+    {
+      "file": "docs/plans/2026-09-02-wp5-family-settings-admin-public.md",
+      "lines": 18,
+      "sha256": "53915b06f2ae631234a8a44b55bdf8cc52fd39e6c59499481dae17cac1e1d045",
+      "kind": "documentation",
+      "route": false,
+      "exports": [],
+      "headings": [
+        "WP5 — Family · Notifications · Settings & data rights · Admin · Public site (2026-09-02)",
+        "Approach (ponytail)",
+        "Files"
+      ],
+      "attention": [
+        "- Elder accept: if the accepting user already has a `self` profile, the relation's `wardProfileId` is repointed to that profile and the placeholder profile is deleted; else the placeholder becomes `claimedByUserId=user`."
+      ]
+    },
+    {
+      "file": "docs/plans/2026-09-02-wp6-extension.md",
+      "lines": 32,
+      "sha256": "fca02e2cedf58aea83cf46d78251f3c23251978a38600c244f5af900662ddc7c",
+      "kind": "documentation",
+      "route": false,
+      "exports": [],
+      "headings": [
+        "WP6 — Chrome MV3 autofill extension (2026-09-02)",
+        "Web endpoints (`apps/web/src/app/api/v1/extension`)",
+        "Extension (`apps/extension`)",
+        "Verify"
+      ],
+      "attention": []
+    },
+    {
+      "file": "docs/plans/2026-09-06-audit-and-demo.md",
+      "lines": 23,
+      "sha256": "37cacd0adedcf4effc2ef249a29425af8532cb64f85472fe579cf08ff9979030",
+      "kind": "documentation",
+      "route": false,
+      "exports": [],
+      "headings": [
+        "Full audit and demo completion — 2026-09-06",
+        "Scope and approach",
+        "Execution plan",
+        "Validation",
+        "Dependencies",
+        "Delivery"
+      ],
+      "attention": []
+    },
+    {
+      "file": "docs/plans/2026-09-06-validation-notes.md",
+      "lines": 33,
+      "sha256": "7764dbac4c3b279f1bab0316d93bbcc4a977398b4541799fc7a2fd672c4163cc",
+      "kind": "documentation",
+      "route": false,
+      "exports": [],
+      "headings": [
+        "Validation notes",
+        "Production validation progression"
+      ],
+      "attention": []
+    },
+    {
+      "file": "docs/research/01-integrations-india-dpi.md",
+      "lines": 202,
+      "sha256": "e0b26fea8f39eabe70411ef9f57321542a8ed6cb88141dfdf8ecd9ab1655c0c6",
+      "kind": "documentation",
+      "route": false,
+      "exports": [],
+      "headings": [
+        "India DPI & KYC Integration Landscape for Praman (2026)",
+        "1. DigiLocker — API Setu, Entity Locker, MeriPehchaan",
+        "2. Aadhaar — Offline XML, Online OTP eKYC, Vault, Legal Boundaries",
+        "3. PAN Verification",
+        "4. ABHA / ABDM (Ayushman Bharat Digital Mission)",
+        "5. Account Aggregator (Sahamati / ReBIT / RBI)",
+        "6. APAAR ID / ABC / NAD / DigiLocker Education Documents",
+        "7. e-Sign (Aadhaar-based Digital Signature)",
+        "8. CKYC (CERSAI)",
+        "9. Government Portals — API vs. DigiLocker-only vs. Manual",
+        "10. Exam & Admission Bodies",
+        "11. KYC/Identity Aggregators (2026 comparison)",
+        "12. Legal — DPDP Act 2023 + DPDP Rules 2025",
+        "13. Auth Tech for Citizens",
+        "Recommended integration path for Praman v1 (2026)"
+      ],
+      "attention": []
+    },
+    {
+      "file": "docs/research/02-use-cases-and-forms.md",
+      "lines": 338,
+      "sha256": "a608a82b0910468daaf9ad3616e426a5edb5a4b30a4da4c56a8e20f97ea4d963",
+      "kind": "documentation",
+      "route": false,
+      "exports": [],
+      "headings": [
+        "Research 02 — Use Cases and Forms Across an Indian Citizen's Life",
+        "Part A — Life-stage use-case map (150+ application types)",
+        "A1. Birth to 5",
+        "A2. School (6–17)",
+        "A3. 18–24 Higher Education",
+        "A4. 21–30 Jobs & Early Career",
+        "A5. 25–50 Adult Life",
+        "A6. 50+ / Senior Citizens",
+        "A7. Cross-cutting (all ages)",
+        "Part B — Field-level analysis of 14 real forms",
+        "B1. Field list per form (from official bulletins/portals)",
+        "B2. Frequency table (field → # of 14 forms → canonical key)",
+        "Part C — Pain-point evidence",
+        "Part D — Special populations",
+        "Part E — Ranked prioritisation for Praman v1 (top 10 by frequency × pain × feasibility)"
+      ],
+      "attention": []
+    },
+    {
+      "file": "docs/research/03-ui-libraries-and-design.md",
+      "lines": 450,
+      "sha256": "6d55cd690041e413c2633a18173491b4185c4db8007616275c8498cc81841316",
+      "kind": "documentation",
+      "route": false,
+      "exports": [],
+      "headings": [
+        "UI Component Libraries & Design Direction — Praman (Sept 2026)",
+        "Part A — Library comparison (2026 state)",
+        "Context: the ground shifted twice in 2026",
+        "Live data snapshot (pulled 2026-09-02, npm + GitHub APIs)",
+        "Per-library notes",
+        "Scored matrix (0–5, 5 = best)",
+        "Recommendation for Praman: **HeroUI v3** (`@heroui/react` + `@heroui/styles`)",
+        "Part B — HeroUI v3 integration notes (verified against the published npm packages, 2026-09-02)",
+        "Packages & install",
+        "pnpm add @heroui/styles @heroui/react",
+        "yarn add @heroui/styles @heroui/react",
+        "bun add @heroui/styles @heroui/react",
+        "Tailwind v4 CSS setup",
+        "Provider",
+        "Theming — real CSS variable names (pulled from the published `@heroui/styles@3.2.4` package source)",
+        "Component inventory (85 importable modules in `@heroui/react@3.2.4`)",
+        "Code snippets (verbatim from official docs, [heroui.com/docs/react/components](https://heroui.com/docs/react/components/button))",
+        "Part C — Design references (12 best-in-class, bright-but-trustworthy)",
+        "Font pairings (EN + Devanagari)",
+        "Part D — Product-specific patterns (concrete rules)",
+        "Part E — Motion (the `motion` package, v13, React 19)",
+        "Sequential field-autofill highlight — concrete implementation",
+        "Sources consulted"
+      ],
+      "attention": [
+        "  <Input placeholder=\"user@example.com\" />",
+        "<Select className=\"w-64\" placeholder=\"Select one\">",
+        "  <ComboBox.InputGroup><Input placeholder=\"Search bank...\" /><ComboBox.Trigger /></ComboBox.InputGroup>",
+        "- Three-state upload card: uploading (progress ring) → processing/OCR (pulsing skeleton over extracted-field placeholders) → review (extracted fields shown editable, each with a confidence-flagged border: default border ",
+        "- Never rely on placeholder text as the only label (fails when a field is filled or for screen readers) — every HeroUI `TextField` should always pair `Input` with a visible `Label`, not just `placeholder`."
+      ]
+    },
+    {
+      "file": "docs/research/04-market-competitors-gtm.md",
+      "lines": 137,
+      "sha256": "db4f5743a739ce9d55f20b280692e1eb2e1fc1d1d53b021974ca02dad89ecc1d",
+      "kind": "documentation",
+      "route": false,
+      "exports": [],
+      "headings": [
+        "Praman — Market, Competitors, Business Model & GTM Research",
+        "A. Global analogs",
+        "B. India landscape",
+        "C. Private competitors and adjacents",
+        "D. Business model options and TAM/SAM/SOM",
+        "E. Regulatory sequencing and GTM enablers",
+        "F. Risks and moats",
+        "G. Recommended 12-month GTM plan"
+      ],
+      "attention": []
+    },
+    {
+      "file": "docs/research/05-stack-verified-notes.md",
+      "lines": 788,
+      "sha256": "0beb7d332b67189943b26a6ff588938998854623fc9de3f9e29b8d5d3f4957e8",
+      "kind": "documentation",
+      "route": false,
+      "exports": [
+        "proxy",
+        "config",
+        "GET",
+        "updateOrder",
+        "createPost",
+        "GET",
+        "register",
+        "onRequestError",
+        "moodEnum",
+        "users",
+        "dbRelations",
+        "auth",
+        "authClient",
+        "Providers",
+        "register",
+        "onRequestError"
+      ],
+      "headings": [
+        "Stack Verified Notes (2026-09-02)",
+        "1. Next.js 16.3.x (App Router, React 19.2, Node 22)",
+        "2. Tailwind CSS 4.3",
+        "3. HeroUI 3.2.x",
+        "4. Drizzle ORM 0.45 + drizzle-kit 0.31",
+        "5. better-auth 1.7",
+        "6. @simplewebauthn/server & browser v14",
+        "7. BullMQ 6 + ioredis 6",
+        "8. jose 6",
+        "9. zod 4.5",
+        "10. turbo 2.10 + pnpm workspaces",
+        "pnpm-workspace.yaml",
+        "11. motion 13",
+        "12. @tanstack/react-query 5 (Next.js App Router)",
+        "13. vitest 4 + Playwright 1.62",
+        "14. Chrome MV3 extension (Vite 6/7 + React)",
+        "15. Node crypto (AES-256-GCM, HKDF, argon2, HMAC)",
+        "16. react-hook-form 7.87 + zod resolver",
+        "17. pino 10 + Sentry (@sentry/nextjs)",
+        "Version pin table",
+        "Gotchas checklist"
+      ],
+      "attention": [
+        "  <Input placeholder=\"Enter your email\" />",
+        "    : <input key={f.name} type={f.type} placeholder={f.label}"
+      ]
+    },
+    {
+      "file": "package.json",
+      "lines": 33,
+      "sha256": "20c80edf87b31724a0654c08f95448f50bb0a112a1021d8e068054cf16e03832",
+      "kind": "source/configuration",
+      "route": false,
+      "exports": [],
+      "attention": []
+    },
+    {
+      "file": "packages/config/package.json",
+      "lines": 2,
+      "sha256": "6db764a46635ae46af2163ecbda16df6b3737fa37c00a8837b83abda841360e3",
+      "kind": "source/configuration",
+      "route": false,
+      "exports": [],
+      "attention": []
+    },
+    {
+      "file": "packages/config/tsconfig.base.json",
+      "lines": 21,
+      "sha256": "08c0e9e66ffc9651e766e12113cd245137f4d5d0e671dfc625bc02be07e19116",
+      "kind": "source/configuration",
+      "route": false,
+      "exports": [],
+      "attention": []
+    },
+    {
+      "file": "packages/config/tsconfig.next.json",
+      "lines": 10,
+      "sha256": "af1ce548f64906873a70c5372d86e651bb262530762e5556d2cb75c7870a640e",
+      "kind": "source/configuration",
+      "route": false,
+      "exports": [],
+      "attention": []
+    },
+    {
+      "file": "packages/crypto/package.json",
+      "lines": 11,
+      "sha256": "96211ff6c87cf40b716c2cbfddecc871a55d175348d41bab22b432230ad726c3",
+      "kind": "source/configuration",
+      "route": false,
+      "exports": [],
+      "attention": []
+    },
+    {
+      "file": "packages/crypto/src/envelope.ts",
+      "lines": 53,
+      "sha256": "403b0b2dcfaec0ce79fd6d20e2f18c36374e05dc847118b9f9dd5833b154f863",
+      "kind": "source/configuration",
+      "route": false,
+      "exports": [
+        "newDek",
+        "encrypt",
+        "decrypt",
+        "decryptString",
+        "encryptJson",
+        "decryptJson",
+        "kekFromEnv",
+        "wrapDek",
+        "unwrapDek",
+        "blindIndex",
+        "sha256",
+        "hkdf",
+        "safeEqual",
+        "randomToken",
+        "canonicalHash"
+      ],
+      "attention": []
+    },
+    {
+      "file": "packages/crypto/src/index.ts",
+      "lines": 3,
+      "sha256": "e1a539c381921d06142f4e2f8d2eb71609876cbd90a2ea8d9225009cabdad4de",
+      "kind": "source/configuration",
+      "route": false,
+      "exports": [],
+      "attention": []
+    },
+    {
+      "file": "packages/crypto/src/jws.ts",
+      "lines": 34,
+      "sha256": "2d94bc889cd7b1ac5f3c614dcd1130a5a6476c1eb6e902d54d53543dfa243a51",
+      "kind": "source/configuration",
+      "route": false,
+      "exports": [
+        "SigningKey",
+        "generateSigningKey",
+        "signPayload",
+        "verifyPayload",
+        "signWebhook",
+        "verifyWebhook"
+      ],
+      "attention": []
+    },
+    {
+      "file": "packages/crypto/test/crypto.test.ts",
+      "lines": 43,
+      "sha256": "179270428440ee5dce3b4df41f34d6f5c25712d8d73c68822ee0f464520d8f4a",
+      "kind": "source/configuration",
+      "route": false,
+      "exports": [],
+      "attention": []
+    },
+    {
+      "file": "packages/crypto/tsconfig.json",
+      "lines": 2,
+      "sha256": "bdc29a037705400d630e5ce71b4688d2890e4806a867fcff7168a080117ffc78",
+      "kind": "source/configuration",
+      "route": false,
+      "exports": [],
+      "attention": []
+    },
+    {
+      "file": "packages/crypto/vitest.config.ts",
+      "lines": 3,
+      "sha256": "f82a551ef4da1c9cbf17985a3bee96eee450a3e4a46bff0d96c6150263121eff",
+      "kind": "source/configuration",
+      "route": false,
+      "exports": [],
+      "attention": []
+    },
+    {
+      "file": "packages/db/drizzle.config.ts",
+      "lines": 9,
+      "sha256": "5d2ce3f0b06f00ff32f833afb39a3b3a7cb28119551997350524084b15da4e83",
+      "kind": "source/configuration",
+      "route": false,
+      "exports": [],
+      "attention": []
+    },
+    {
+      "file": "packages/db/drizzle/0000_init.sql",
+      "lines": 537,
+      "sha256": "81db67ed1faf38f72fe474f5cd8e85f2698dbdbcf874229d2763bc06ef56f927",
+      "kind": "source/configuration",
+      "route": false,
+      "exports": [],
+      "attention": []
+    },
+    {
+      "file": "packages/db/drizzle/0001_consent_invariant.sql",
+      "lines": 24,
+      "sha256": "3a127d23d50fcdf9352202bb8a32e4117d33e21d48cabefcf0df0c11c80f7a5e",
+      "kind": "source/configuration",
+      "route": false,
+      "exports": [],
+      "attention": []
+    },
+    {
+      "file": "packages/db/drizzle/meta/0000_snapshot.json",
+      "lines": 3873,
+      "sha256": "f82ea1477952d53c3c9525e5def73d627aba666bce858123473935759e02368e",
+      "kind": "source/configuration",
+      "route": false,
+      "exports": [],
+      "attention": []
+    },
+    {
+      "file": "packages/db/drizzle/meta/0001_snapshot.json",
+      "lines": 3873,
+      "sha256": "a64f956f201cfc25c54b67279c03eba3e2ab685e28f1739b97bdcc1e8bf997ee",
+      "kind": "source/configuration",
+      "route": false,
+      "exports": [],
+      "attention": []
+    },
+    {
+      "file": "packages/db/drizzle/meta/_journal.json",
+      "lines": 20,
+      "sha256": "288d6f4856b1b6d8910a08cdfcda21b2c2c4df979ee60d99cf4afd64ef18b77d",
+      "kind": "source/configuration",
+      "route": false,
+      "exports": [],
+      "attention": []
+    },
+    {
+      "file": "packages/db/package.json",
+      "lines": 33,
+      "sha256": "e142ca64d811d6f92444b96b6b84ed3acde130b604ddf79afe81a86e0b667a7d",
+      "kind": "source/configuration",
+      "route": false,
+      "exports": [],
+      "attention": []
+    },
+    {
+      "file": "packages/db/src/access.ts",
+      "lines": 23,
+      "sha256": "4bf766788161b3eae8000b06390ffd4a25530ea6e88a86e6ac9aca0e1f7a1f24",
+      "kind": "source/configuration",
+      "route": false,
+      "exports": [
+        "listAccessibleProfiles"
+      ],
+      "attention": []
+    },
+    {
+      "file": "packages/db/src/audit.ts",
+      "lines": 16,
+      "sha256": "cf5a04843ab401caf1281f18e3b6dd6c511e2f18468c12f6301a3836f964d92c",
+      "kind": "source/configuration",
+      "route": false,
+      "exports": [
+        "AuditInput",
+        "audit"
+      ],
+      "attention": []
+    },
+    {
+      "file": "packages/db/src/client.ts",
+      "lines": 11,
+      "sha256": "69ff8634d5524fbc6f0e436842e47e139e27049fb787b1f985c002d5d04ef45c",
+      "kind": "source/configuration",
+      "route": false,
+      "exports": [
+        "sql",
+        "db",
+        "Db",
+        "Tx"
+      ],
+      "attention": []
+    },
+    {
+      "file": "packages/db/src/facts.ts",
+      "lines": 123,
+      "sha256": "83d9a956b6d4be2e3b397d076d9377aa464ef8d6c70b00d2fc40f1a44a2cd86b",
+      "kind": "source/configuration",
+      "route": false,
+      "exports": [
+        "PutFact",
+        "PutResult",
+        "putFact",
+        "readValue",
+        "getFacts",
+        "deleteFact",
+        "mask",
+        "isSource",
+        "completion"
+      ],
+      "attention": []
+    },
+    {
+      "file": "packages/db/src/index.ts",
+      "lines": 10,
+      "sha256": "019866d03d932693fd4d49c2b44dbb5165dc37d15dd369144e2570295f19eb3b",
+      "kind": "source/configuration",
+      "route": false,
+      "exports": [],
+      "attention": []
+    },
+    {
+      "file": "packages/db/src/keys.ts",
+      "lines": 32,
+      "sha256": "8c975d569d96457bb8fc3e13bd3d7f00574e00f250c63e4205e97373ffcac1e5",
+      "kind": "source/configuration",
+      "route": false,
+      "exports": [
+        "getDek",
+        "systemDek"
+      ],
+      "attention": []
+    },
+    {
+      "file": "packages/db/src/migrate.ts",
+      "lines": 7,
+      "sha256": "650e25e39e922ad4812e419b3688d13af5f7a3ec6c55e147ea8ec5bda514a439",
+      "kind": "source/configuration",
+      "route": false,
+      "exports": [],
+      "attention": []
+    },
+    {
+      "file": "packages/db/src/refresh-demo.ts",
+      "lines": 25,
+      "sha256": "d6ecc16f8d379aa5f909785db209ecde6f5a41ebabf11bdeb2172890b6000390",
+      "kind": "source/configuration",
+      "route": false,
+      "exports": [],
+      "attention": []
+    },
+    {
+      "file": "packages/db/src/reset.ts",
+      "lines": 7,
+      "sha256": "56e71eb8059db9bdc37d6ee96e11040891621ea812fc4682801f8551b691f14b",
+      "kind": "source/configuration",
+      "route": false,
+      "exports": [],
+      "attention": []
+    },
+    {
+      "file": "packages/db/src/schema/_common.ts",
+      "lines": 8,
+      "sha256": "be3ddb22930e4f3507e446a8db14d00eb3847d8e1fb632a701ea9bc908e9bc35",
+      "kind": "source/configuration",
+      "route": false,
+      "exports": [
+        "bytea",
+        "ts",
+        "id",
+        "createdAt",
+        "updatedAt"
+      ],
+      "attention": []
+    },
+    {
+      "file": "packages/db/src/schema/auth.ts",
+      "lines": 77,
+      "sha256": "f7fcaa3ccf18b232009a2accc33b2b56b9105065687c9d2c9fc7d13a81e5a3f5",
+      "kind": "source/configuration",
+      "route": false,
+      "exports": [
+        "user",
+        "session",
+        "account",
+        "verification",
+        "passkey",
+        "userKeys"
+      ],
+      "attention": []
+    },
+    {
+      "file": "packages/db/src/schema/core.ts",
+      "lines": 406,
+      "sha256": "d6e1a9122df80135601b8121dedea790c6d55acfb7d9f1c527d9c4fbe84347e5",
+      "kind": "source/configuration",
+      "route": false,
+      "exports": [
+        "profileKind",
+        "relationBasis",
+        "factSource",
+        "docOrigin",
+        "docStatus",
+        "providerName",
+        "jobStatus",
+        "purposeEnum",
+        "appStatus",
+        "appSource",
+        "appKind",
+        "partnerKind",
+        "partnerStatus",
+        "partnerRole",
+        "keyEnv",
+        "dataRequestKind",
+        "profiles",
+        "relations",
+        "facts",
+        "factHistory",
+        "documents",
+        "documentExtractions",
+        "providerLinks",
+        "verificationJobs",
+        "mismatches",
+        "partners",
+        "partnerMembers",
+        "partnerApiKeys",
+        "forms",
+        "partnerWebhooks",
+        "webhookDeliveries",
+        "shareSessions",
+        "consents",
+        "applications",
+        "shares",
+        "applicationEvents",
+        "applicationDocuments",
+        "partnerStatusPushes",
+        "verificationRequests",
+        "dataRequests",
+        "notifications",
+        "notificationPrefs",
+        "notificationDeliveries",
+        "auditLog",
+        "flags",
+        "systemKeys",
+        "idempotencyKeys"
+      ],
+      "attention": []
+    },
+    {
+      "file": "packages/db/src/schema/index.ts",
+      "lines": 3,
+      "sha256": "9c5efd20f13459f18c1ebd94c47744b3a900018710d1df85099cd867c9632836",
+      "kind": "source/configuration",
+      "route": false,
+      "exports": [],
+      "attention": []
+    },
+    {
+      "file": "packages/db/src/seed.ts",
+      "lines": 122,
+      "sha256": "65e4e070e42588a6c90baf08338a931cda6b553ad26b8129e80d990de4507d8d",
+      "kind": "source/configuration",
+      "route": false,
+      "exports": [],
+      "attention": []
+    },
+    {
+      "file": "packages/db/test/invariants.test.ts",
+      "lines": 92,
+      "sha256": "6eadcd331d3f1821195d557b9f3f1e13dc0b00a426b47c4928718e6fc98d1c83",
+      "kind": "source/configuration",
+      "route": false,
+      "exports": [],
+      "attention": []
+    },
+    {
+      "file": "packages/db/tsconfig.json",
+      "lines": 2,
+      "sha256": "94af99d6f92e76c0cc098bd96869773db67ae82e8df0b5a1e29315a10a25f759",
+      "kind": "source/configuration",
+      "route": false,
+      "exports": [],
+      "attention": []
+    },
+    {
+      "file": "packages/db/vitest.config.ts",
+      "lines": 3,
+      "sha256": "046ee50347c22da8c60958d975fb982c8a5b109150c7d934a39d86c3b36ef4cd",
+      "kind": "source/configuration",
+      "route": false,
+      "exports": [],
+      "attention": []
+    },
+    {
+      "file": "packages/jobs/package.json",
+      "lines": 11,
+      "sha256": "3af8a7d2a8d8040896fc16779b5e5c835de568fb731d9ebddbab0fdba31f0fa3",
+      "kind": "source/configuration",
+      "route": false,
+      "exports": [],
+      "attention": []
+    },
+    {
+      "file": "packages/jobs/src/index.ts",
+      "lines": 57,
+      "sha256": "cd4190bc2c39fee98fc71c1328a1cbe7b6ff2f453e826b8318044eb34385aa7a",
+      "kind": "source/configuration",
+      "route": false,
+      "exports": [
+        "redisUrl",
+        "redis",
+        "JobMap",
+        "JobName",
+        "QUEUES",
+        "QueueName",
+        "queueFor",
+        "queue",
+        "enqueue"
+      ],
+      "attention": [
+        "  \"document.process\": { documentId: string; userId: string; profileId: string };       // AV stub + OCR → proposed facts"
+      ]
+    },
+    {
+      "file": "packages/jobs/tsconfig.json",
+      "lines": 2,
+      "sha256": "5df8290e6b648b020af4f02349c0b57886c2145423344d08822b9195fe3d0155",
+      "kind": "source/configuration",
+      "route": false,
+      "exports": [],
+      "attention": []
+    },
+    {
+      "file": "packages/providers/package.json",
+      "lines": 11,
+      "sha256": "d12ca8291edfd9d1bdb9963545812ed0a9f7a9cd8232561ed9861764bd740b10",
+      "kind": "source/configuration",
+      "route": false,
+      "exports": [],
+      "attention": []
+    },
+    {
+      "file": "packages/providers/src/fixtures.ts",
+      "lines": 130,
+      "sha256": "f3cc94fc97df048e44bcfe044626cb46da26920d3f67adc45cf614923e6ce299",
+      "kind": "source/configuration",
+      "route": false,
+      "exports": [
+        "DemoPerson",
+        "AARAV",
+        "SUNITA",
+        "RIYA",
+        "KAMLA",
+        "VIKRAM",
+        "DEMO_PEOPLE",
+        "byPhone",
+        "byRef",
+        "MOCK_OTP",
+        "docToFacts"
+      ],
+      "attention": []
+    },
+    {
+      "file": "packages/providers/src/index.ts",
+      "lines": 18,
+      "sha256": "39f11efe479bc75117ba2afab353c8ce241c8e654fec858ffe05309893846295",
+      "kind": "source/configuration",
+      "route": false,
+      "exports": [
+        "getProviders",
+        "providers"
+      ],
+      "attention": []
+    },
+    {
+      "file": "packages/providers/src/mock/index.ts",
+      "lines": 59,
+      "sha256": "d7da8a8c45fbf30370e341995849de319af05a18b0114bb69f6a201b47a9ec54",
+      "kind": "source/configuration",
+      "route": false,
+      "exports": [
+        "mockProviders"
+      ],
+      "attention": []
+    },
+    {
+      "file": "packages/providers/src/sample-document.ts",
+      "lines": 34,
+      "sha256": "12034e4c869d516a467bd247ed551c762564fa3d2b5d003b4f5b1b5913fb9ab2",
+      "kind": "source/configuration",
+      "route": false,
+      "exports": [
+        "tinyPdf",
+        "sampleDocument"
+      ],
+      "attention": []
+    },
+    {
+      "file": "packages/providers/src/setu/index.ts",
+      "lines": 61,
+      "sha256": "d1b5852485e5878f62319c4003c189e31d2f37a5760113b8d69e1f4187073ad1",
+      "kind": "source/configuration",
+      "route": false,
+      "exports": [
+        "setuDigilocker",
+        "setuPan",
+        "setuProviders"
+      ],
+      "attention": []
+    },
+    {
+      "file": "packages/providers/src/types.ts",
+      "lines": 50,
+      "sha256": "92f37d7ba727612a0d2d1e738282e0beb0a7b803e740cbb5df4749842dda7a3c",
+      "kind": "source/configuration",
+      "route": false,
+      "exports": [
+        "IssuedDoc",
+        "AadhaarOfflineKyc",
+        "DigiLockerProvider",
+        "PanProvider",
+        "AbhaProvider",
+        "AaProvider",
+        "EsignProvider",
+        "OcrProvider",
+        "SmsProvider",
+        "EmailProvider",
+        "Providers"
+      ],
+      "attention": []
+    },
+    {
+      "file": "packages/providers/test/mock.test.ts",
+      "lines": 26,
+      "sha256": "d298150406b0ca946de7d7020291008f866855cdc36d133ade603c12d697e2a1",
+      "kind": "source/configuration",
+      "route": false,
+      "exports": [],
+      "attention": []
+    },
+    {
+      "file": "packages/providers/tsconfig.json",
+      "lines": 2,
+      "sha256": "bdc29a037705400d630e5ce71b4688d2890e4806a867fcff7168a080117ffc78",
+      "kind": "source/configuration",
+      "route": false,
+      "exports": [],
+      "attention": []
+    },
+    {
+      "file": "packages/providers/vitest.config.ts",
+      "lines": 3,
+      "sha256": "f82a551ef4da1c9cbf17985a3bee96eee450a3e4a46bff0d96c6150263121eff",
+      "kind": "source/configuration",
+      "route": false,
+      "exports": [],
+      "attention": []
+    },
+    {
+      "file": "packages/schema/package.json",
+      "lines": 11,
+      "sha256": "8add1fdc9241026a724c4bfe9a138c57212bf900fb3fb584e910d5e2ab7384ff",
+      "kind": "source/configuration",
+      "route": false,
+      "exports": [],
+      "attention": []
+    },
+    {
+      "file": "packages/schema/src/consent.ts",
+      "lines": 37,
+      "sha256": "19deeb3683b2c009ccf94f5a123b77be7d69f7974dc73051225d9c647f184ed8",
+      "kind": "source/configuration",
+      "route": false,
+      "exports": [
+        "canShare",
+        "scopeForPurpose",
+        "isSubset",
+        "PURPOSE_LABELS"
+      ],
+      "attention": []
+    },
+    {
+      "file": "packages/schema/src/documents.ts",
+      "lines": 16,
+      "sha256": "ba6873c1a36f3dfabf3b3255ebcb764ed9c42ff36d9285fa01c4ad54d6f2bcc9",
+      "kind": "source/configuration",
+      "route": false,
+      "exports": [
+        "MAX_DOCUMENT_BYTES",
+        "DOCUMENT_MIMES",
+        "documentTypeForKey",
+        "documentAllowed",
+        "detectedMime"
+      ],
+      "attention": []
+    },
+    {
+      "file": "packages/schema/src/enums.ts",
+      "lines": 34,
+      "sha256": "3c7bc7bf372ee4c2606446b0b4e92af8655237c3445bbfe292c85c55f75aa8d8",
+      "kind": "source/configuration",
+      "route": false,
+      "exports": [
+        "GENDER",
+        "SOCIAL_CATEGORY",
+        "BLOOD_GROUP",
+        "MARITAL",
+        "NATIONALITY",
+        "RELIGION",
+        "BOARD",
+        "STREAM",
+        "MEDIUM",
+        "DEGREE_STATUS",
+        "EXAM",
+        "PWD_TYPE",
+        "SECTOR",
+        "ACCOUNT_TYPE",
+        "RELATION",
+        "LANGUAGE",
+        "OCCUPATION",
+        "EDU_LEVEL",
+        "INDIA_STATES",
+        "ENUM_LABELS"
+      ],
+      "attention": []
+    },
+    {
+      "file": "packages/schema/src/index.ts",
+      "lines": 12,
+      "sha256": "1498126054bd11fb7dd20aa3736d08deb0e621a93bda1c442759105780205f12",
+      "kind": "source/configuration",
+      "route": false,
+      "exports": [],
+      "attention": []
+    },
+    {
+      "file": "packages/schema/src/payload.ts",
+      "lines": 70,
+      "sha256": "6d59ed891e670e84fa2265ed4dbe85d9cd77d145e1c31e03a041b526765092de",
+      "kind": "source/configuration",
+      "route": false,
+      "exports": [
+        "CustomField",
+        "FormDef",
+        "SharedFact",
+        "PramanPayload",
+        "FieldDiffRow",
+        "ApplicationStatus",
+        "APPLICATION_STATUSES",
+        "WebhookEvent"
+      ],
+      "attention": []
+    },
+    {
+      "file": "packages/schema/src/readiness.ts",
+      "lines": 57,
+      "sha256": "89e5ad2288de3d9b01b4a653df70dcc70499853715eb96ec09c1ba1b5462afd8",
+      "kind": "source/configuration",
+      "route": false,
+      "exports": [
+        "ReadinessStatus",
+        "ReadinessForm",
+        "hasValue",
+        "scopeContains",
+        "assessReadiness",
+        "customAnswerErrors"
+      ],
+      "attention": []
+    },
+    {
+      "file": "packages/schema/src/registry.ts",
+      "lines": 234,
+      "sha256": "a91c882c5ba5ea2c460ff67cb2fc74e51bc69a8c038bc63115735d24f18f8f46",
+      "kind": "source/configuration",
+      "route": false,
+      "exports": [
+        "REGISTRY",
+        "REGISTRY_MAP",
+        "FACT_KEYS",
+        "FactKey",
+        "field",
+        "isFactKey",
+        "fieldsInSection",
+        "SHAREABLE_KEYS",
+        "REPEAT_GROUPS"
+      ],
+      "attention": []
+    },
+    {
+      "file": "packages/schema/src/sections.ts",
+      "lines": 18,
+      "sha256": "811fba00f70543484cac92c1198cdeb4aa227051a3f993bbfcdf9b6c53d4997d",
+      "kind": "source/configuration",
+      "route": false,
+      "exports": [
+        "SectionMeta",
+        "SECTION_META",
+        "sectionMeta"
+      ],
+      "attention": []
+    },
+    {
+      "file": "packages/schema/src/types.ts",
+      "lines": 75,
+      "sha256": "d9682cfe8eac9bf711da8315fec4f482071454342d5b50a75edb010220a50b84",
+      "kind": "source/configuration",
+      "route": false,
+      "exports": [
+        "SECTIONS",
+        "Section",
+        "SOURCES",
+        "Source",
+        "VERIFIERS",
+        "Verifier",
+        "FACT_TYPES",
+        "FactType",
+        "PURPOSES",
+        "Purpose",
+        "Label",
+        "FieldDef",
+        "FactValue",
+        "Fact"
+      ],
+      "attention": []
+    },
+    {
+      "file": "packages/schema/src/validate.ts",
+      "lines": 60,
+      "sha256": "cbded264a0d8d0b8e38aa519033b491887890a4ebeb30813673bbe466f2a6a8a",
+      "kind": "source/configuration",
+      "route": false,
+      "exports": [
+        "RE",
+        "zodFor",
+        "validateFact",
+        "zodForKeys",
+        "registryJsonSchema",
+        "coerce"
+      ],
+      "attention": []
+    },
+    {
+      "file": "packages/schema/test/readiness.test.ts",
+      "lines": 25,
+      "sha256": "a95f90acae8fdf1c29ccd24f3c14da6c8bc8f782b4e49c24e39167793268a0c7",
+      "kind": "source/configuration",
+      "route": false,
+      "exports": [],
+      "attention": []
+    },
+    {
+      "file": "packages/schema/test/registry.test.ts",
+      "lines": 96,
+      "sha256": "de379806d31fa4247653afd26b660f2a599bdfdaf765389e2411bd990f5ef1fa",
+      "kind": "source/configuration",
+      "route": false,
+      "exports": [],
+      "attention": []
+    },
+    {
+      "file": "packages/schema/tsconfig.json",
+      "lines": 2,
+      "sha256": "bdc29a037705400d630e5ce71b4688d2890e4806a867fcff7168a080117ffc78",
+      "kind": "source/configuration",
+      "route": false,
+      "exports": [],
+      "attention": []
+    },
+    {
+      "file": "packages/schema/vitest.config.ts",
+      "lines": 3,
+      "sha256": "f82a551ef4da1c9cbf17985a3bee96eee450a3e4a46bff0d96c6150263121eff",
+      "kind": "source/configuration",
+      "route": false,
+      "exports": [],
+      "attention": []
+    },
+    {
+      "file": "packages/sdk/README.md",
+      "lines": 60,
+      "sha256": "06e0a63887b34d984b4cbc3e1fe58626528ab60bb5b054ddccc1a121dcf04376",
+      "kind": "documentation",
+      "route": false,
+      "exports": [
+        "POST"
+      ],
+      "headings": [
+        "@praman/sdk",
+        "Browser button",
+        "Server (Node 20+)",
+        "Webhooks",
+        "Payload (`PramanPayload`, from `@praman/schema`)",
+        "Errors"
+      ],
+      "attention": []
+    },
+    {
+      "file": "packages/sdk/package.json",
+      "lines": 11,
+      "sha256": "98cb35145fcefe778111e158e94f6ada410e46d304b0d8df648c1c2e79e190dc",
+      "kind": "source/configuration",
+      "route": false,
+      "exports": [],
+      "attention": []
+    },
+    {
+      "file": "packages/sdk/src/browser.ts",
+      "lines": 67,
+      "sha256": "50bfb0c03e235241e785f6749c5aa584701134b1b63529dc1a1c3aaaee019432",
+      "kind": "source/configuration",
+      "route": false,
+      "exports": [
+        "PramanInit",
+        "start",
+        "init",
+        "Praman"
+      ],
+      "attention": []
+    },
+    {
+      "file": "packages/sdk/src/index.ts",
+      "lines": 98,
+      "sha256": "9cef562d629daf6464783b3a870c9430bb80e03791db8dd694c63cb598b9a490",
+      "kind": "source/configuration",
+      "route": false,
+      "exports": [
+        "PramanOptions",
+        "ShareSession",
+        "Exchange",
+        "WebhookEnvelope",
+        "PramanError",
+        "verifyWebhookSignature",
+        "createPraman",
+        "Praman"
+      ],
+      "attention": []
+    },
+    {
+      "file": "packages/sdk/test/sdk.test.ts",
+      "lines": 62,
+      "sha256": "193e06b25c1ac0ef57957239d7128fef97f27527bc3b3a3c939614f872a28608",
+      "kind": "source/configuration",
+      "route": false,
+      "exports": [],
+      "attention": []
+    },
+    {
+      "file": "packages/sdk/tsconfig.json",
+      "lines": 2,
+      "sha256": "bdc29a037705400d630e5ce71b4688d2890e4806a867fcff7168a080117ffc78",
+      "kind": "source/configuration",
+      "route": false,
+      "exports": [],
+      "attention": []
+    },
+    {
+      "file": "packages/ui/package.json",
+      "lines": 36,
+      "sha256": "48660d92fe5f5156840ebb736293d1dffc235a93dd71efd4cc0939a11516d9a7",
+      "kind": "source/configuration",
+      "route": false,
+      "exports": [],
+      "attention": []
+    },
+    {
+      "file": "packages/ui/src/callout.tsx",
+      "lines": 10,
+      "sha256": "94712b151c5af8dbcd4f6024c0c4a486c140ff200309460f30528bdb41d2b313",
+      "kind": "source/configuration",
+      "route": false,
+      "exports": [
+        "Callout"
+      ],
+      "attention": []
+    },
+    {
+      "file": "packages/ui/src/consent-sheet.tsx",
+      "lines": 88,
+      "sha256": "fb788186fd646354f8eb32fa1f3a35449e935ebe750b3a50dd8edc1a724b4644",
+      "kind": "source/configuration",
+      "route": false,
+      "exports": [
+        "ConsentPartner",
+        "ConsentSummary",
+        "PartnerIdentity",
+        "ConsentSummaryChips",
+        "ConsentFieldList",
+        "ConsentActions",
+        "ConsentReceipt"
+      ],
+      "attention": []
+    },
+    {
+      "file": "packages/ui/src/data-table.tsx",
+      "lines": 75,
+      "sha256": "b1c10ea77829d9beff35051fea5e58d13427b508f86d0be4dc496f7e2ed36363",
+      "kind": "source/configuration",
+      "route": false,
+      "exports": [
+        "DataColumn",
+        "DataTable"
+      ],
+      "attention": [
+        "                  {hasFilters && <div className=\"mt-1\">{c.filter && <input aria-label={`Filter ${c.header}`} value={filters[c.id] ?? \"\"} onChange={(e) => setFilters((f) => ({ ...f, [c.id]: e.target.value }))} placeholder"
+      ]
+    },
+    {
+      "file": "packages/ui/src/doc-card.tsx",
+      "lines": 27,
+      "sha256": "3bf903be30c13723a955162e7e864fe9f192074f3ccf6dbcff15720cf92bf864",
+      "kind": "source/configuration",
+      "route": false,
+      "exports": [
+        "DocCardData",
+        "DocCard"
+      ],
+      "attention": []
+    },
+    {
+      "file": "packages/ui/src/doc-upload.tsx",
+      "lines": 110,
+      "sha256": "5caa05a3c17ac810048c38d8adb993571528bdbf8f88bad11171de459aa245f1",
+      "kind": "source/configuration",
+      "route": false,
+      "exports": [
+        "DocUploadProps",
+        "DocUpload"
+      ],
+      "attention": [
+        "              <Select selectedKey={docType} onSelectionChange={(k) => setDocType(k == null ? null : String(k))} placeholder={hi ? \"यह कौन-सा दस्तावेज़ है?\" : \"What document is this?\"} fullWidth>"
+      ]
+    },
+    {
+      "file": "packages/ui/src/empty-state.tsx",
+      "lines": 13,
+      "sha256": "f5d06e62977f1f6924bcaf225304006c02e776d8b4920d46f2aeed19b4b5fdb8",
+      "kind": "source/configuration",
+      "route": false,
+      "exports": [
+        "EmptyState"
+      ],
+      "attention": []
+    },
+    {
+      "file": "packages/ui/src/fact-editor.tsx",
+      "lines": 119,
+      "sha256": "b584fe02539e9bec891869eacbe87c031ac5256379cbfd7eefdff6ee3b1d2518",
+      "kind": "source/configuration",
+      "route": false,
+      "exports": [
+        "FactEditorProps",
+        "enumGroup",
+        "optionLabel",
+        "coerceInput",
+        "rawFor",
+        "FactEditor"
+      ],
+      "attention": [
+        "        <Select selectedKey={value == null ? null : String(value)} onSelectionChange={(k) => onChange(k == null ? null : String(k))} isInvalid={!!error} placeholder={locale === \"hi\" ? \"चुनें\" : \"Choose\"} fullWidth autoFo",
+        "        <Select selectedKey={value == null ? null : String(value)} onSelectionChange={(k) => onChange(k == null ? null : String(k))} isInvalid={!!error} placeholder={locale === \"hi\" ? \"दस्तावेज़ चुनें\" : \"Pick a document"
+      ]
+    },
+    {
+      "file": "packages/ui/src/fact-row.tsx",
+      "lines": 53,
+      "sha256": "d9a6fbff63f97cf1ebdcdc87fe87503ea1956f84a481d6edc46e1651198a7859",
+      "kind": "source/configuration",
+      "route": false,
+      "exports": [
+        "FactRowProps",
+        "FactRow"
+      ],
+      "attention": []
+    },
+    {
+      "file": "packages/ui/src/field-diff.tsx",
+      "lines": 28,
+      "sha256": "dd02a7d44bd79368afa97b073f6f9ae1db9183cc57b8f1eca791b0ed41b373f4",
+      "kind": "source/configuration",
+      "route": false,
+      "exports": [
+        "FieldDiff"
+      ],
+      "attention": []
+    },
+    {
+      "file": "packages/ui/src/format.ts",
+      "lines": 38,
+      "sha256": "8b637db6fca24cdd38f68b24fa62c645733f56f2683498dc8d128527861678c1",
+      "kind": "source/configuration",
+      "route": false,
+      "exports": [
+        "Locale",
+        "fmtDate",
+        "fmtMoney",
+        "daysUntil",
+        "label",
+        "purposeLabel",
+        "fmtValue",
+        "SOURCE_META",
+        "VERIFIER_NAMES",
+        "verifierName",
+        "initials",
+        "cx"
+      ],
+      "attention": []
+    },
+    {
+      "file": "packages/ui/src/index.ts",
+      "lines": 19,
+      "sha256": "eb6b8a714bfa539dc3714e65352c7e96d5302206b7c0f955d6e92884f7bb6d0d",
+      "kind": "source/configuration",
+      "route": false,
+      "exports": [],
+      "attention": []
+    },
+    {
+      "file": "packages/ui/src/inputs-india.tsx",
+      "lines": 66,
+      "sha256": "ee24417139e47ec90c9f719ba0f1cb0b425b18ec0fc762f645c2bc5c4ea05acb",
+      "kind": "source/configuration",
+      "route": false,
+      "exports": [
+        "IndiaInputProps",
+        "PIN_PREFIX",
+        "lookupPincode",
+        "MobileInput",
+        "PincodeInput",
+        "PanInput",
+        "IfscInput"
+      ],
+      "attention": [
+        "      <div className=\"flex items-center gap-2\"><span className=\"rounded-md border border-line bg-surface-2 px-3 py-2.5 text-ink-2\">+91</span><Input placeholder=\"10-digit mobile\" className=\"flex-1\" /></div>",
+        "      <Input placeholder=\"6-digit PIN\" />",
+        "      <Input placeholder=\"ABCDE1234F\" className=\"font-mono uppercase tracking-[0.12em]\" autoCapitalize=\"characters\" spellCheck={false} />",
+        "      <Input placeholder=\"SBIN0001234\" className=\"font-mono uppercase tracking-[0.12em]\" autoCapitalize=\"characters\" spellCheck={false} />"
+      ]
+    },
+    {
+      "file": "packages/ui/src/page-header.tsx",
+      "lines": 16,
+      "sha256": "fc569f3f8d32a9521c7fe81d2164e3864fd321ebc2973f977b16ea379de95d45",
+      "kind": "source/configuration",
+      "route": false,
+      "exports": [
+        "PageHeader"
+      ],
+      "attention": []
+    },
+    {
+      "file": "packages/ui/src/progress-ring.tsx",
+      "lines": 15,
+      "sha256": "cfa5ff7d6a7996b714bade9ba2596bd0948b693c081875a98f35236679adf4f4",
+      "kind": "source/configuration",
+      "route": false,
+      "exports": [
+        "ProgressRing"
+      ],
+      "attention": []
+    },
+    {
+      "file": "packages/ui/src/section-card.tsx",
+      "lines": 23,
+      "sha256": "f54bbf92721c693638a09277d3e62b793eba105b384f83cc5a97dfba0259d614",
+      "kind": "source/configuration",
+      "route": false,
+      "exports": [
+        "SectionCard"
+      ],
+      "attention": []
+    },
+    {
+      "file": "packages/ui/src/source-chip.tsx",
+      "lines": 27,
+      "sha256": "4d2485ea2ae1dcdfbca7440f931a2bc22782dd216c4dceb01c31042851dd2821",
+      "kind": "source/configuration",
+      "route": false,
+      "exports": [
+        "SourceChip"
+      ],
+      "attention": []
+    },
+    {
+      "file": "packages/ui/src/stat-tile.tsx",
+      "lines": 6,
+      "sha256": "d1df7823786758f3cd262bb9e57b5ba8d71fc75dbf5511d3cc9e82dae6d3b045",
+      "kind": "source/configuration",
+      "route": false,
+      "exports": [
+        "StatTile"
+      ],
+      "attention": []
+    },
+    {
+      "file": "packages/ui/src/timeline.tsx",
+      "lines": 18,
+      "sha256": "7e709d4a86bd835962a2caadca83901976131e440b935d700d14aea10cbe378b",
+      "kind": "source/configuration",
+      "route": false,
+      "exports": [
+        "TimelineEvent",
+        "ApplicationTimeline"
+      ],
+      "attention": []
+    },
+    {
+      "file": "packages/ui/src/wizard-shell.tsx",
+      "lines": 58,
+      "sha256": "b8e1b1abb1b62cac8e93ade6d0ca51760ce90353991ed7c0dbecbb46d174e0a7",
+      "kind": "source/configuration",
+      "route": false,
+      "exports": [
+        "WizardStep",
+        "WizardShellProps",
+        "WizardShell"
+      ],
+      "attention": []
+    },
+    {
+      "file": "packages/ui/tsconfig.json",
+      "lines": 2,
+      "sha256": "1da7de3075a1d2af3c37c10f118f07424235a61d1d1d10e227182902dba38e41",
+      "kind": "source/configuration",
+      "route": false,
+      "exports": [],
+      "attention": []
+    },
+    {
+      "file": "pnpm-workspace.yaml",
+      "lines": 49,
+      "sha256": "4b9be4e649acd1a406a7cab8b60e38aa7bffebffb1e9fd58a07b2731460ad556",
+      "kind": "source/configuration",
+      "route": false,
+      "exports": [],
+      "attention": []
+    },
+    {
+      "file": "private-context/00-private-index.md",
+      "lines": 39,
+      "sha256": "359157ba566be8641079a7ce0594fd0db8902e4df08459f7b8700e5c80bec312",
+      "kind": "documentation",
+      "route": false,
+      "exports": [],
+      "headings": [
+        "ApplyOnce private engineering handoff",
+        "Read this first",
+        "Privacy boundary",
+        "One-line product context",
+        "Canonical links",
+        "Immediate rule for future agents"
+      ],
+      "attention": []
+    },
+    {
+      "file": "private-context/conversation-summary.md",
+      "lines": 76,
+      "sha256": "c97722e40e7f25e18fdfdf75c4acec4f7ef7daabe08c23e99f42c6e4d47aa2b0",
+      "kind": "documentation",
+      "route": false,
+      "exports": [],
+      "headings": [
+        "ApplyOnce conversation and request chronology",
+        "1. Explore real public-service problems",
+        "2. Government scheme discovery direction",
+        "3. Broader public-service opportunity search",
+        "4. Universal citizen profile idea",
+        "5. Product planning request",
+        "6. Hackathon submission work",
+        "7. Product hardening requests",
+        "8. Top-250 product direction",
+        "9. Locked safety decisions",
+        "10. Current request"
+      ],
+      "attention": []
+    },
+    {
+      "file": "private-context/current-state.md",
+      "lines": 74,
+      "sha256": "853fb28b3796b20ea1d5f14b88710a1e36f8c0dcddfade3c783ceafffbe9e969",
+      "kind": "documentation",
+      "route": false,
+      "exports": [],
+      "headings": [
+        "Exact current state",
+        "Repository and Git",
+        "Live deployment",
+        "Public checks that passed",
+        "Integration registry snapshot",
+        "Current environment truth",
+        "Next safe command sequence"
+      ],
+      "attention": []
+    },
+    {
+      "file": "private-context/hackathon-brief-full.md",
+      "lines": 125,
+      "sha256": "f8d316c222ec0cd0d16c9e7e7ef02ae3a6818a294004f92ae090d4b8d49771ba",
+      "kind": "documentation",
+      "route": false,
+      "exports": [],
+      "headings": [
+        "Full builder brief retained for private project history",
+        "The challenge",
+        "What we want you to build",
+        "What a strong build looks like",
+        "What not to do",
+        "What to submit",
+        "How builds will be judged",
+        "What happens next",
+        "Stage 1: shortlist of 250",
+        "Stage 2: 250 to 10",
+        "Prizes described in the brief",
+        "Frequently asked questions retained from the brief",
+        "Registering",
+        "Scope",
+        "Tools and rules",
+        "Submission and judging",
+        "Event",
+        "Data and rights",
+        "ApplyOnce interpretation"
+      ],
+      "attention": []
+    },
+    {
+      "file": "private-context/next-agent-runbook.md",
+      "lines": 58,
+      "sha256": "7781d2d0f9fc84204c08300463c1cab83020b19f259368a7a97a1f66c820ac4c",
+      "kind": "documentation",
+      "route": false,
+      "exports": [],
+      "headings": [
+        "Next-agent runbook",
+        "Before changing code",
+        "Safe implementation rules",
+        "Suggested next milestone",
+        "Verification before handoff",
+        "If blocked"
+      ],
+      "attention": []
+    },
+    {
+      "file": "private-context/progress-ledger.md",
+      "lines": 98,
+      "sha256": "4ea1132b19ef0371661b4a88b13e153097d0e8af7c15cdf49507f3810e29a753",
+      "kind": "documentation",
+      "route": false,
+      "exports": [],
+      "headings": [
+        "ApplyOnce progress ledger",
+        "Completed and verified",
+        "Product foundation",
+        "Citizen journey",
+        "Partner journey",
+        "Trust and safety",
+        "Verification evidence",
+        "Completed repository actions",
+        "In progress or release-gated",
+        "Do not mark complete without evidence"
+      ],
+      "attention": [
+        "- Interaction audit for placeholder links, empty handlers, and false external-receipt claims.",
+        "- Browser extension: not implemented.",
+        "- Android AutofillService: not implemented.",
+        "- Apple Safari WebExtension: not implemented."
+      ]
+    },
+    {
+      "file": "private-context/project-plan.md",
+      "lines": 104,
+      "sha256": "57495e7915c6ad08f5613558709dd3f9b4aa96711764ad9062871af68f196b35",
+      "kind": "documentation",
+      "route": false,
+      "exports": [],
+      "headings": [
+        "ApplyOnce full product plan",
+        "Product definition",
+        "Personas",
+        "Domain packs",
+        "Required citizen capabilities",
+        "Required partner capabilities",
+        "Target universal data model",
+        "Target production architecture",
+        "Safety and intelligence",
+        "Production gates"
+      ],
+      "attention": []
+    },
+    {
+      "file": "private-context/source-builder-brief.md",
+      "lines": 51,
+      "sha256": "321a75b444be22bad213cb2b10354ca465ffb82008c391ed20729b6ca047917b",
+      "kind": "documentation",
+      "route": false,
+      "exports": [],
+      "headings": [
+        "Original builder brief captured for private handoff",
+        "Challenge",
+        "Build requirements",
+        "Prohibited behavior",
+        "Submission format",
+        "Judging",
+        "ApplyOnce interpretation"
+      ],
+      "attention": []
+    },
+    {
+      "file": "private-context/visual-evidence/README.md",
+      "lines": 10,
+      "sha256": "6a132b4284c8c57bafc10aa4f17972475128625aff4bf6e056c3d4ae286d2c2b",
+      "kind": "documentation",
+      "route": false,
+      "exports": [],
+      "headings": [
+        "Visual evidence"
+      ],
+      "attention": []
+    },
+    {
+      "file": "scripts/audit.mjs",
+      "lines": 71,
+      "sha256": "97ee897dc410344d0a301d32254c6f148ad27d3bdf48c535d274a143e1b8eb15",
+      "kind": "source/configuration",
+      "route": false,
+      "exports": [],
+      "attention": []
+    },
+    {
+      "file": "scripts/inventory.mjs",
+      "lines": 9,
+      "sha256": "c488cf793ef0cbb8ec819f85c90b01bcd12928ca12d5d144f6098bc648f8eca1",
+      "kind": "source/configuration",
+      "route": false,
+      "exports": [],
+      "attention": [
+        "for(const file of files){try{const source=await readFile(file,'utf8');inventory.push({file,lines:source.split('\\n').length,sha256:createHash('sha256').update(source).digest('hex'),kind:file.endsWith('.md')?'documentation"
+      ]
+    },
+    {
+      "file": "scripts/run.mjs",
+      "lines": 16,
+      "sha256": "7ebb481d50269c9c19f2a0cf9994c2bbf19100d9f94e72d7fe54d300ce44166d",
+      "kind": "source/configuration",
+      "route": false,
+      "exports": [],
+      "attention": []
+    },
+    {
+      "file": "turbo.json",
+      "lines": 53,
+      "sha256": "6385a2b60c1b5be4241e34e22ff5644f07ae522b9b0bbce9da947f961fd06092",
+      "kind": "source/configuration",
+      "route": false,
+      "exports": [],
+      "attention": []
+    }
+  ]
+}

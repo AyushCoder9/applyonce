@@ -16,7 +16,7 @@ export async function POST(request: Request) {
 
   const verified = verifyWebhookSignature(cfg, rawBody, signature, timestamp);
   if (!verified) {
-    appendWebhookEvent({ id: randomUUID(), type: "unknown", receivedAt: new Date().toISOString(), verified: false, payload: safeParse(rawBody), note: "Rejected: invalid signature or stale timestamp" });
+    appendWebhookEvent({ id: randomUUID(), type: "unknown", receivedAt: new Date().toISOString(), verified: false, payload: null, note: "Rejected: invalid signature or stale timestamp" });
     return NextResponse.json({ ok: false, error: { code: "invalid_signature", message: "HMAC verification failed" } }, { status: 401 });
   }
 

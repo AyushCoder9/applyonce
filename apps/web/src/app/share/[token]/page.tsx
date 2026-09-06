@@ -1,3 +1,4 @@
+import { documentAllowed } from "@praman/schema";
 import Link from "next/link";
 import { redirect } from "next/navigation";
 import { AlertTriangle } from "lucide-react";
@@ -36,8 +37,8 @@ export default async function SharePage({ params }: { params: Promise<{ token: s
   try { access = await requireProfileAccess(s, activeId ?? self?.id); } catch { access = await requireProfileAccess(s, all[0]?.id); }
   const keys = loaded.form.requestedFields.map((r) => r.key);
   const facts = await getFacts(await getDek(access.ownerUserId), access.profile.id, { keys });
-  const rows = buildDiff(facts, loaded.form, { maskSensitive: true });
-  const documents = await db.select({ id: t.documents.id, title: t.documents.title }).from(t.documents).where(and(eq(t.documents.profileId, access.profile.id), eq(t.documents.status, "ready")));
+  const rows = buildDiff(facts, loaded.form, { maskSensitive: true, scope: access.scope });
+  const documents = await db.select({ id: t.documents.id, title: t.documents.title, docType: t.documents.docType }).from(t.documents).where(and(eq(t.documents.profileId, access.profile.id), eq(t.documents.status, "ready")));
   const locale = ((s.user as { locale?: string }).locale === "hi" ? "hi" : "en") as "en" | "hi";
   return (
     <ShareFlow
@@ -46,7 +47,7 @@ export default async function SharePage({ params }: { params: Promise<{ token: s
       form={{ id: loaded.form.id, name: loaded.form.name, purpose: loaded.form.purpose, retentionDays: loaded.form.retentionDays, customFields: loaded.form.customFields, deadlineAt: loaded.form.deadlineAt?.toISOString() ?? null }}
       session={{ id: loaded.session.id, returnUrl: loaded.session.returnUrl, state: loaded.session.state, expiresAt: loaded.session.expiresAt.toISOString(), env: loaded.session.env }}
       profiles={all.map((p) => ({ id: p.id, displayName: p.displayName, kind: p.kind, role: p.role }))}
-      initial={{ profileId: access.profile.id, rows, summary: diffSummary(rows), documents }}
+      initial={{ profileId: access.profile.id, rows, summary: diffSummary(rows), documents:documents.filter(d=>documentAllowed(access.scope,d.docType)) }}
     />
   );
 }

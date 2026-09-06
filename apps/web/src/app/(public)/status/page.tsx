@@ -1,17 +1,16 @@
 import type { Metadata } from "next";
 import { Container } from "@/components/public/blocks";
-import { pingDb, pingRedis, providerModes, queueCounts } from "@/components/admin/data";
+import { pingDb, pingRedis, providerModes, workerHealth } from "@/components/admin/data";
 export const metadata: Metadata = { title: "Status", description: "Live status of Praman services and integration modes." };
 export const dynamic = "force-dynamic";
 export default async function Status() {
-  const [db, redis, q] = await Promise.all([pingDb(), pingRedis(), queueCounts()]);
-  const worker = q.every((x) => x.counts) ? { ok: true, note: `${q.reduce((a, x) => a + (x.counts?.active ?? 0), 0)} active jobs` } : { ok: false, note: "queues unreachable" };
-  const allOk = db.ok && redis.ok;
+  const [db, redis, worker] = await Promise.all([pingDb(), pingRedis(), workerHealth()]);
+  const allOk = db.ok && redis.ok && worker.ok;
   const Dot = ({ ok }: { ok: boolean }) => <span className={`inline-block size-2.5 rounded-pill ${ok ? "bg-verified-500" : "bg-danger-500"}`} />;
   return (
     <Container className="py-14 md:py-20">
       <h1 className="font-display text-4xl font-bold">Status</h1>
-      <div className={`mt-6 rounded-lg p-5 text-lg font-semibold ${allOk ? "bg-verified-50 text-verified-700" : "bg-danger-50 text-danger-500"}`}><Dot ok={allOk} /> <span className="ml-2">{allOk ? "All systems operational" : "Degraded — some services are unreachable"}</span></div>
+      <div className={`mt-6 rounded-lg p-5 text-lg font-semibold ${allOk ? "bg-verified-50 text-verified-700" : "bg-danger-50 text-danger-500"}`}><Dot ok={allOk} /> <span className="ml-2">{allOk ? "Core services operational" : "Degraded — some services are unreachable"}</span></div>
       <ul className="card mt-6 divide-y divide-line">
         {[["Web app", true, "this page rendered"], ["Database (Postgres)", db.ok, db.ok ? `${db.ms} ms` : db.error ?? "down"], ["Queue (Redis)", redis.ok, redis.ok ? `${redis.ms} ms` : redis.error ?? "down"], ["Worker", worker.ok, worker.note]].map(([n, ok, note]) => <li key={String(n)} className="flex items-center justify-between px-5 py-3"><span className="flex items-center gap-3"><Dot ok={!!ok} />{n}</span><span className="text-sm text-ink-3">{note}</span></li>)}
       </ul>

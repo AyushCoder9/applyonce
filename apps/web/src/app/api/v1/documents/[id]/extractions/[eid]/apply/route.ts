@@ -1,3 +1,4 @@
+import { documentAllowed } from "@praman/schema";
 import { z } from "zod";
 import { db, t, eq, and, getDek, putFact } from "@praman/db";
 import { coerce, isFactKey } from "@praman/schema";
@@ -8,6 +9,7 @@ export const POST = handler(async (req, { params }) => {
   const doc = await db.query.documents.findFirst({ where: eq(t.documents.id, params.id!) });
   if (!doc) throw new ApiError(404, "NOT_FOUND");
   const a = await citizen(req, { profileId: doc.profileId });
+  if (!documentAllowed(a.scope, doc.docType)) throw new ApiError(403, "DOCUMENT_SCOPE_FORBIDDEN");
   const ex = await db.query.documentExtractions.findFirst({ where: and(eq(t.documentExtractions.id, params.eid!), eq(t.documentExtractions.documentId, doc.id)) });
   if (!ex) throw new ApiError(404, "NOT_FOUND");
   const { accept } = await body(req, z.object({ accept: z.array(z.string()).max(100) }));

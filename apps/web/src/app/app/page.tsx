@@ -1,10 +1,9 @@
 import Link from "next/link";
 import { LinkButton } from "@/components/vault/link-button";
 import { redirect } from "next/navigation";
-import { Button } from "@heroui/react";
 import { Send, Upload, BadgeCheck, AlertTriangle, CalendarClock, ScanLine, ArrowRight, Sparkles } from "lucide-react";
 import { db, t, eq, and, isNull, desc, inArray, getDek, getFacts, completion } from "@praman/db";
-import { fieldsInSection } from "@praman/schema";
+import { fieldsInSection, field, scopeContains, documentAllowed } from "@praman/schema";
 import { ProgressRing, SourceChip, fmtDate, daysUntil, label, EmptyState } from "@praman/ui";
 import { requireUser, requireProfileAccess, scopeAllows } from "@/lib/session";
 import { localeOf, tr } from "@/components/vault/i18n";
@@ -18,7 +17,7 @@ export default async function Home() {
   const locale = localeOf(s.user);
   const a = await requireProfileAccess(s);
   const dek = await getDek(a.ownerUserId);
-  const facts = await getFacts(dek, a.profile.id);
+  const facts = (await getFacts(dek, a.profile.id)).filter(f=>scopeContains(a.scope,f.key) && !field(f.key).system);
   // brand-new user (only the OTP-verified mobile) → onboarding
   if (a.profile.kind === "self" && a.profile.ownerUserId === s.user.id && !facts.some((f) => f.key !== "contact.mobile_primary")) redirect("/welcome");
 
@@ -30,15 +29,15 @@ export default async function Home() {
   const open = apps.filter((x) => !DONE.includes(x.status));
   const soon = open.filter((x) => x.deadlineAt && (daysUntil(x.deadlineAt) ?? 99) <= 7);
   const upcoming = open.filter((x) => x.deadlineAt && (daysUntil(x.deadlineAt) ?? -1) >= 0).sort((x, y) => +new Date(x.deadlineAt!) - +new Date(y.deadlineAt!)).slice(0, 5);
-  const docs = await db.select({ id: t.documents.id, title: t.documents.title }).from(t.documents).where(eq(t.documents.profileId, a.profile.id));
-  const toReview = docs.length ? await db.select({ documentId: t.documentExtractions.documentId }).from(t.documentExtractions).where(and(inArray(t.documentExtractions.documentId, docs.map((d) => d.id)), isNull(t.documentExtractions.reviewedAt))) : [];
+  const docs = await db.select({ id: t.documents.id, title: t.documents.title, docType:t.documents.docType }).from(t.documents).where(eq(t.documents.profileId, a.profile.id));
+  const toReview = docs.length ? await db.select({ documentId: t.documentExtractions.documentId }).from(t.documentExtractions).where(and(inArray(t.documentExtractions.documentId, docs.filter(d=>documentAllowed(a.scope,d.docType)).map((d) => d.id)), isNull(t.documentExtractions.reviewedAt))) : [];
   const running = await db.select({ id: t.verificationJobs.id }).from(t.verificationJobs).where(and(eq(t.verificationJobs.profileId, a.profile.id), inArray(t.verificationJobs.status, ["queued", "running"])));
 
   const name = String(facts.find((f) => f.key === "identity.first_name")?.value ?? a.profile.displayName.split(" ")[0]);
   const h = new Date().getHours();
   const greet = locale === "hi" ? "नमस्ते" : h < 12 ? "Good morning" : h < 17 ? "Good afternoon" : "Good evening";
   const attention: { icon: React.ReactNode; title: string; body?: React.ReactNode; href: string; tone: "danger" | "pending" | "info" }[] = [
-    ...mismatches.map((m) => ({ icon: <AlertTriangle className="size-5" />, tone: "danger" as const, href: "/app/verify#mismatches", title: tr(locale, `${label(m.factKey, locale)} doesn’t match the issuer`, `${label(m.factKey, locale)} जारीकर्ता से मेल नहीं खाता`), body: `${m.valueA} · ${m.valueB}` })),
+    ...mismatches.filter(m=>scopeContains(a.scope,m.factKey)).map((m) => ({ icon: <AlertTriangle className="size-5" />, tone: "danger" as const, href: "/app/verify#mismatches", title: tr(locale, `${label(m.factKey, locale)} doesn’t match the issuer`, `${label(m.factKey, locale)} जारीकर्ता से मेल नहीं खाता`), body: tr(locale,"Review the conflicting sources before sharing.","साझा करने से पहले स्रोतों की जाँच करें।") })),
     ...soon.map((x) => ({ icon: <CalendarClock className="size-5" />, tone: "danger" as const, href: `/app/applications/${x.id}`, title: tr(locale, `${x.title} closes in ${daysUntil(x.deadlineAt)} days`, `${x.title} ${daysUntil(x.deadlineAt)} दिन में बंद`), body: x.orgName })),
     ...expiring.map((f) => ({ icon: <CalendarClock className="size-5" />, tone: "pending" as const, href: "/app/verify#expiry", title: tr(locale, `${label(f.key, locale).replace(/ valid until$| expiry$/i, "")} ${(daysUntil(f.expiresAt) ?? 0) < 0 ? "has expired" : `expires in ${daysUntil(f.expiresAt)} days`}`, `${label(f.key, locale).replace(/ वैधता$| समाप्ति$/, "")} ${(daysUntil(f.expiresAt) ?? 0) < 0 ? "समाप्त हो गया" : `${daysUntil(f.expiresAt)} दिन में समाप्त`}`), body: <SourceChip source={f.source} verifiedBy={f.verifiedBy} expiresAt={f.expiresAt} locale={locale} /> })),
     ...(toReview.length ? [{ icon: <ScanLine className="size-5" />, tone: "info" as const, href: `/app/documents/${toReview[0]!.documentId}`, title: tr(locale, `${toReview.length} document${toReview.length > 1 ? "s" : ""} with facts to review`, `${toReview.length} दस्तावेज़ में तथ्य समीक्षा हेतु`), body: tr(locale, "We read them — confirm what to add to your vault.", "हमने पढ़ लिया — पुष्टि करें क्या जोड़ना है।") }] : []),

@@ -1,6 +1,6 @@
 import { z } from "zod";
 import { headers } from "next/headers";
-import { db, t, eq, count } from "@praman/db";
+import { db, t, eq } from "@praman/db";
 import { handler, citizen, body, ok, ApiError, log } from "@/lib/api";
 import { auth } from "@/lib/auth";
 import { STEP_UP_WINDOW_MS } from "@/lib/session";
@@ -15,10 +15,8 @@ export const POST = handler(async (req) => {
     try { await auth.api.verifyPhoneNumber({ body: { phoneNumber: phone, code: b.code, disableSession: true }, headers: await headers() }); }
     catch { throw new ApiError(401, "INVALID_OTP", "Wrong code. Check and try again."); }
   } else {
-    // client completed authClient.signIn.passkey() just now → this session is brand new; trust only a fresh one
-    const [{ n } = { n: 0 }] = await db.select({ n: count() }).from(t.passkey).where(eq(t.passkey.userId, user.id));
-    const fresh = Date.now() - new Date(session.session.createdAt).getTime() < 2 * 60 * 1000;
-    if (!n || !fresh) throw new ApiError(401, "PASSKEY_REQUIRED", "Sign in with your passkey again to continue.");
+    const row = await db.query.session.findFirst({where:eq(t.session.id,session.session.id)});
+    if (!row?.steppedUpAt || Date.now() - row.steppedUpAt.getTime() >= STEP_UP_WINDOW_MS) throw new ApiError(401,"PASSKEY_REQUIRED","Sign in with your passkey again to continue.");
   }
   const at = new Date();
   await db.update(t.session).set({ steppedUpAt: at }).where(eq(t.session.id, session.session.id));

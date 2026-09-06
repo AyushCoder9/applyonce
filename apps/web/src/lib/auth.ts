@@ -3,7 +3,7 @@ import { drizzleAdapter } from "@better-auth/drizzle-adapter";
 import { phoneNumber } from "better-auth/plugins";
 import { nextCookies } from "better-auth/next-js";
 import { passkey } from "@better-auth/passkey";
-import { db, t, getDek, putFact, audit } from "@praman/db";
+import { db, t, eq, getDek, putFact, audit } from "@praman/db";
 import { providers, MOCK_OTP } from "@praman/providers";
 
 const mockSms = (process.env.PROVIDER_SMS ?? "mock") === "mock";
@@ -19,7 +19,7 @@ export const auth = betterAuth({
     additionalFields: { steppedUpAt: { type: "date", required: false, input: false }, activeProfileId: { type: "string", required: false, input: false } },
     expiresIn: 60 * 60 * 24 * 30, updateAge: 60 * 60 * 24,
   },
-  rateLimit: { enabled: true, window: 60, max: 60, customRules: { "/phone-number/send-otp": { window: 60, max: 3 }, "/phone-number/verify": { window: 60, max: 5 } } },
+  rateLimit: { enabled: true, window: 60, max: 60, customRules: { "/phone-number/send-otp": { window: 60, max: mockSms ? 30 : 3 }, "/phone-number/verify": { window: 60, max: mockSms ? 30 : 5 } } },
   plugins: [
     phoneNumber({
       otpLength: 6, expiresIn: 300, allowedAttempts: 5,
@@ -32,6 +32,10 @@ export const auth = betterAuth({
     nextCookies(),
   ],
   databaseHooks: {
+    session: { create: { after: async (session, context) => {
+      // This hook runs after the passkey assertion has been verified by better-auth.
+      if (context?.path === "/passkey/verify-authentication") await db.update(t.session).set({steppedUpAt:new Date()}).where(eq(t.session.id,session.id));
+    } } },
     user: { create: { after: async (user) => {
       // every user gets a self profile + a data key
       const [p] = await db.insert(t.profiles).values({ ownerUserId: user.id, kind: "self", displayName: user.name === "New user" ? "You" : user.name }).returning();

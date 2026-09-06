@@ -1,15 +1,15 @@
 "use client";
 import Link from "next/link";
 import { usePathname } from "next/navigation";
-import * as Icons from "lucide-react";
+import { House, Vault, Send, ListChecks, FileText, BadgeCheck, Link2, Users, Settings, Menu, type LucideIcon } from "lucide-react";
+const icons: Record<string, LucideIcon> = { House, Vault, Send, ListChecks, FileText, BadgeCheck, Link2, Users, Settings, Menu };
 import { Avatar } from "@heroui/react";
 import { CITIZEN_NAV, MOBILE_TABS } from "./nav";
 import { ProfileSwitcher, type SwitchableProfile } from "./profile-switcher";
 import { NotificationsBell } from "./notifications-bell";
 
-type IconName = keyof typeof Icons;
 const Icon = ({ name, className }: { name: string; className?: string }) => {
-  const C = Icons[name as IconName] as React.ComponentType<{ className?: string; strokeWidth?: number }>;
+  const C = icons[name];
   return C ? <C className={className} strokeWidth={1.75} /> : null;
 };
 
@@ -29,8 +29,14 @@ export function CitizenShell({ children, user, profiles, activeProfileId, unread
         <div className="mt-auto px-2 text-xs text-ink-3">v0.9 · <Link href="/privacy" className="underline">Privacy</Link> · <Link href="/dpo" className="underline">Your rights</Link></div>
       </aside>
       <div className="flex min-h-dvh flex-col">
-        <header className="sticky top-0 z-30 flex h-14 items-center gap-3 border-b border-line bg-surface/90 px-4 backdrop-blur lg:px-8">
-          <Link href="/app" className="lg:hidden flex items-center gap-2"><img src="/icon.svg" alt="" className="size-7 rounded-md" /><span className="font-display font-bold">Praman</span></Link>
+        <header className="sticky top-0 z-30 flex h-14 items-center gap-2 border-b border-line bg-surface/90 px-3 backdrop-blur sm:px-4 lg:px-8">
+          <Link href="/app" className="lg:hidden flex items-center gap-2"><img src="/icon.svg" alt="" className="size-7 rounded-md" /><span className="hidden font-display font-bold sm:inline">Praman</span></Link>
+          <details className="relative lg:hidden">
+            <summary aria-label="All pages" className="cursor-pointer list-none rounded-md p-2"><Icon name="Menu" className="size-5" /></summary>
+            <nav aria-label="All pages" className="absolute left-0 top-10 z-50 grid min-w-52 gap-1 rounded-xl border border-line bg-surface p-2 shadow-lg">
+              {CITIZEN_NAV.map(n => <Link key={n.href} href={n.href} onClick={event => event.currentTarget.closest("details")?.removeAttribute("open")} className="flex items-center gap-3 rounded-md px-3 py-2.5 text-sm hover:bg-surface-2"><Icon name={n.icon} className="size-4" />{n.label}</Link>)}
+            </nav>
+          </details>
           <div className="ml-auto flex items-center gap-2">
             <ProfileSwitcher profiles={profiles} activeId={activeProfileId} />
             <NotificationsBell unread={unread} />

@@ -1,4 +1,4 @@
-import { Chip } from "@heroui/react";
+import { Chip } from "@/components/client-ui";
 import { db, t, desc, and, eq, or, dsql } from "@praman/db";
 import { PageHeader } from "@praman/ui";
 export const dynamic = "force-dynamic";

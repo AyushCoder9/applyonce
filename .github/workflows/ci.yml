@@ -13,6 +13,13 @@ jobs:
       BETTER_AUTH_SECRET: ci-secret-ci-secret-ci-secret-ci-secret
       BETTER_AUTH_URL: http://localhost:3300
       NEXT_PUBLIC_APP_URL: http://localhost:3300
+      NEXT_PUBLIC_DEMO_PORTAL_URL: http://localhost:3301
+      PRAMAN_API_URL: http://localhost:3300
+      BTA_PRAMAN_API_KEY: pk_sandbox_bta_demo_key_0001
+      BTA_PRAMAN_FORM_ID: bta-jee-2026
+      BTA_WEBHOOK_SECRET: whsec_bta_demo_0001
+      DEMO_ADMIN_ENABLED: "1"
+      DEMO_OFFLINE: "0"
       S3_ENDPOINT: http://localhost:9002
       S3_REGION: us-east-1
       S3_BUCKET: praman-docs
@@ -31,7 +38,30 @@ jobs:
           sleep 5
           docker run --rm --network host --entrypoint sh minio/mc -c "mc alias set ci http://localhost:9002 praman praman123 && mc mb -p ci/praman-docs"
       - run: pnpm install --frozen-lockfile
+      - run: pnpm audit --prod --audit-level=moderate
       - run: pnpm db:migrate && pnpm db:seed
       - run: pnpm typecheck
-      - run: pnpm test
-      - run: pnpm --filter @praman/web build
+      - run: pnpm test -- --concurrency=1
+      - run: pnpm build
+      - run: pnpm --filter @praman/web exec playwright install --with-deps chromium
+      - name: Start production-mode sandbox
+        run: |
+          node scripts/run.mjs pnpm --filter @praman/web start > /tmp/praman-web.log 2>&1 &
+          node scripts/run.mjs pnpm --filter @praman/demo-exam-portal start > /tmp/praman-bta.log 2>&1 &
+          node scripts/run.mjs pnpm --filter @praman/worker start > /tmp/praman-worker.log 2>&1 &
+          for attempt in $(seq 1 60); do
+            if curl -fsS http://localhost:3300/status > /dev/null && curl -fsS http://localhost:3301 > /dev/null; then exit 0; fi
+            sleep 2
+          done
+          exit 1
+      - run: pnpm audit:workflows
+      - run: node scripts/run.mjs pnpm --filter @praman/web test:e2e --workers=1
+      - name: Retain audit evidence
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: audit-evidence
+          path: |
+            docs/audit-results.json
+            apps/web/test-results
+            /tmp/praman-*.log

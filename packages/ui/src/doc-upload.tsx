@@ -29,6 +29,8 @@ function putWithProgress(url: string, file: File, onProgress: (pct: number) => v
     xhr.setRequestHeader("Content-Type", file.type);
     xhr.upload.onprogress = (e) => e.lengthComputable && onProgress(Math.round((e.loaded / e.total) * 100));
     xhr.onload = () => (xhr.status >= 200 && xhr.status < 300 ? resolve() : reject(new Error(`Upload failed (${xhr.status})`)));
+    xhr.timeout = 120_000;
+    xhr.ontimeout = () => reject(new Error("Upload timed out. Try again."));
     xhr.onerror = () => reject(new Error("Upload failed — check your connection"));
     xhr.send(file);
   });

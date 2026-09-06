@@ -1,6 +1,6 @@
 import "server-only";
 import { db, t, eq, getDek, getFacts, completion } from "@praman/db";
-import { fieldsInSection, type Section } from "@praman/schema";
+import { fieldsInSection, scopeContains, type Section } from "@praman/schema";
 import { listProfiles } from "@/lib/session";
 import { isHandoverDue, isPending } from "./logic";
 
@@ -21,7 +21,7 @@ export async function familyList(userId: string): Promise<{ selfProfileId: strin
   const members: FamilyMember[] = [];
   for (const { r, p } of rows) {
     let c = { filled: 0, total: CORE_KEYS.length, verified: 0 };
-    try { const dek = await getDek(p.ownerUserId); c = completion(await getFacts(dek, p.id, { keys: CORE_KEYS }), CORE_KEYS); } catch { /* no facts yet */ }
+    try { const keys=CORE_KEYS.filter(key=>scopeContains(r.scope,key)); const valid=!r.validUntil || r.validUntil.getTime()>Date.now(); const dek = await getDek(p.ownerUserId); c = completion(valid?await getFacts(dek, p.id, { keys }):[], keys); } catch { /* no facts yet */ }
     members.push({
       relationId: r.id, profileId: p.id, displayName: p.displayName, dobYear: p.dobYear, relation: r.relation, basis: r.basis, scope: r.scope,
       validUntil: r.validUntil && !isPending(r.validUntil) ? r.validUntil.toISOString() : null, status: p.status,

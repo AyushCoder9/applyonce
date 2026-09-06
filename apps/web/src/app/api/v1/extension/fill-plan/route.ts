@@ -1,5 +1,5 @@
 import { getDek, getFacts } from "@praman/db";
-import { field, isFactKey } from "@praman/schema";
+import { field, isFactKey, scopeContains } from "@praman/schema";
 import { fmtValue } from "@praman/ui";
 import { MOCK_OTP } from "@praman/providers";
 import { handler, ok, ApiError } from "@/lib/api";
@@ -13,13 +13,13 @@ import { extensionUser } from "../_auth";
  * this route does not implement live step-up itself (ponytail: out of WP6 scope).
  */
 export const GET = handler(async (req) => {
-  const { profile, ownerUserId } = await extensionUser(req);
+  const { profile, ownerUserId, extSession } = await extensionUser(req);
   const url = new URL(req.url);
   const keys = (url.searchParams.get("keys") ?? "").split(",").map((k) => k.trim()).filter(Boolean);
   if (!keys.length) throw new ApiError(400, "KEYS_REQUIRED", "Pass ?keys=fact.key,fact.key2");
-  const stepUp = url.searchParams.get("stepUp") ?? "";
+  const stepUp = req.headers.get("x-praman-step-up") ?? "";
   const mockSms = (process.env.PROVIDER_SMS ?? "mock") === "mock";
-  const steppedUp = mockSms && stepUp === MOCK_OTP;
+  const steppedUp = (mockSms && stepUp === MOCK_OTP) || (!!extSession.steppedUpAt && Date.now()-extSession.steppedUpAt.getTime()<300000);
 
   const dek = await getDek(ownerUserId);
   const facts = await getFacts(dek, profile.id, { keys });
@@ -30,9 +30,9 @@ export const GET = handler(async (req) => {
   const missing: string[] = [];
 
   for (const key of keys) {
-    if (!isFactKey(key)) { missing.push(key); continue; }
+    if (!isFactKey(key) || field(key).system || !scopeContains(profile.scope,key)) { missing.push(key); continue; }
     const fact = byKey.get(key);
-    if (!fact || fact.value == null || fact.value === "") { missing.push(key); continue; }
+    if (!fact || (fact.expiresAt && new Date(fact.expiresAt).getTime() <= Date.now()) || fact.value == null || fact.value === "") { missing.push(key); continue; }
     if (field(key).sensitive && !steppedUp) { missing.push(key); continue; }
     values[key] = { value: fact.value, source: fact.source, verifiedBy: fact.verifiedBy ?? null };
     labels[key] = fmtValue(key, fact.value);

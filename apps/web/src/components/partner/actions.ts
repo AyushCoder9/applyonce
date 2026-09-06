@@ -1,6 +1,7 @@
 "use server";
 /** Partner console mutations. Console-only operations have no path in docs/05 §3, so they are server actions rather than new API routes. */
 import { randomUUID } from "node:crypto";
+import { cookies } from "next/headers";
 import { revalidatePath } from "next/cache";
 import { z } from "zod";
 import { db, t, and, eq, audit, systemDek } from "@praman/db";
@@ -25,6 +26,15 @@ const wrap = async <T>(fn: () => Promise<T>): Promise<R<T>> => {
   }
 };
 const manager = async () => { const m = await requirePartnerMember(); if (!canManage(m.role)) throw new ApiError(403, "FORBIDDEN", "Owners and admins only"); return m; };
+
+export async function switchOrganisation(form: FormData) {
+  const session = await requireUser("/partner");
+  const id = z.uuid().parse(form.get("partnerId"));
+  const member = await db.query.partnerMembers.findFirst({where:and(eq(t.partnerMembers.partnerId,id),eq(t.partnerMembers.userId,session.user.id))});
+  if (!member) throw new ApiError(403,"FORBIDDEN");
+  (await cookies()).set("praman_partner", id, {httpOnly:true,sameSite:"lax",secure:process.env.NODE_ENV==="production",path:"/",maxAge:86400*30});
+  revalidatePath("/partner","layout");
+}
 
 // ---------- onboarding ----------
 const orgInput = z.object({ name: z.string().trim().min(3).max(120), kind: z.enum(["exam_board", "university", "school", "employer", "bank", "hospital", "government", "other"]), regType: z.enum(["CIN", "UDISE", "AISHE", "GSTIN", "OTHER"]), regNo: z.string().trim().min(3).max(40), website: z.url(), dpoEmail: z.email() });
@@ -139,6 +149,8 @@ export async function addMember(raw: { phone: string; role: "admin" | "developer
     const i = z.object({ phone: z.string().regex(/^[6-9]\d{9}$/, "10-digit mobile"), role: z.enum(["admin", "developer", "reviewer"]) }).parse(raw);
     const u = await db.query.user.findFirst({ where: eq(t.user.phoneNumber, `+91${i.phone}`) });
     if (!u) throw new ApiError(404, "USER_NOT_FOUND", "Ask them to sign up at Praman with this number first", { phone: "No Praman account" });
+    const existing = await db.query.partnerMembers.findFirst({where:and(eq(t.partnerMembers.partnerId,partner.id),eq(t.partnerMembers.userId,u.id))});
+    if (existing?.role === "owner") throw new ApiError(403,"OWNER_PROTECTED","The organization owner cannot be demoted here.");
     await db.insert(t.partnerMembers).values({ partnerId: partner.id, userId: u.id, role: i.role }).onConflictDoUpdate({ target: [t.partnerMembers.partnerId, t.partnerMembers.userId], set: { role: i.role } });
     await audit({ actorUserId: session.user.id, actorPartnerId: partner.id, action: "member.add", targetType: "user", targetId: u.id, meta: { role: i.role } });
     revalidatePath("/partner/team");
@@ -149,6 +161,8 @@ export async function removeMember(userId: string): Promise<R> {
   return wrap(async () => {
     const { partner, session } = await manager();
     if (userId === session.user.id) throw new ApiError(409, "CANNOT_REMOVE_SELF", "Transfer ownership before leaving");
+    const existing = await db.query.partnerMembers.findFirst({where:and(eq(t.partnerMembers.partnerId,partner.id),eq(t.partnerMembers.userId,userId))});
+    if (existing?.role === "owner") throw new ApiError(403,"OWNER_PROTECTED","The organization owner cannot be removed here.");
     await db.delete(t.partnerMembers).where(and(eq(t.partnerMembers.partnerId, partner.id), eq(t.partnerMembers.userId, userId)));
     await audit({ actorUserId: session.user.id, actorPartnerId: partner.id, action: "member.remove", targetType: "user", targetId: userId });
     revalidatePath("/partner/team"); return undefined;
@@ -195,6 +209,7 @@ export async function getApplicantPayload(applicationId: string): Promise<R<{ pa
     const share = await db.query.shares.findFirst({ where: eq(t.shares.applicationId, applicationId) });
     if (!share) throw new ApiError(404, "NO_SHARE", "This application has no Praman payload");
     const consent = (await db.query.consents.findFirst({ where: eq(t.consents.id, share.consentId) }))!;
+    if (!consent || consent.revokedAt || consent.expiresAt.getTime() <= Date.now()) throw new ApiError(403,"CONSENT_INACTIVE","Access ended. Ask the citizen for a new consent.");
     const payload = decodeJws<PramanPayload>(decryptString(systemDek(), share.payloadEnc, `share:${share.id}`));
     await audit({ actorUserId: session.user.id, actorPartnerId: partner.id, action: "share.view", targetType: "share", targetId: share.id });
     return { payload, exchanged_at: share.exchangedAt?.toISOString() ?? null, consent_status: consent.revokedAt ? "revoked" : consent.expiresAt.getTime() < Date.now() ? "expired" : "active" };

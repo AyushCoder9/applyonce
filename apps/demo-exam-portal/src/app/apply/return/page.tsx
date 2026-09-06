@@ -1,6 +1,8 @@
 import Link from "next/link";
 import { exchangeShareToken, loadPramanConfig } from "@/lib/praman";
-import { consumeState } from "@/lib/store";
+import { getDraft } from "@/lib/store";
+import { cookies } from "next/headers";
+import { redirect } from "next/navigation";
 import { mapPayloadToRows } from "@/lib/payload-map";
 import { ReturnForm } from "./ReturnForm";
 
@@ -18,40 +20,12 @@ function ErrorCard({ title, children }: { title: string; children: React.ReactNo
   );
 }
 
-export default async function ApplyReturnPage({ searchParams }: { searchParams: Promise<{ share_token?: string; state?: string }> }) {
-  const { share_token, state } = await searchParams;
-
-  if (!share_token) {
-    return <ErrorCard title="Missing share token">This page must be reached via the "Apply with Praman" button.</ErrorCard>;
-  }
-
-  const cfg = loadPramanConfig();
-  const consumedSessionId = consumeState(state);
-  const isOfflineToken = share_token.startsWith("offline:");
-  const sessionId = consumedSessionId ?? (isOfflineToken ? share_token.slice("offline:".length) : null);
-
-  if (!sessionId && !cfg.offline) {
-    return (
-      <ErrorCard title="This link has expired or was already used">
-        Share links are single-use and expire after 10 minutes. Please go back and click "Apply with Praman" again.
-      </ErrorCard>
-    );
-  }
-
-  try {
-    const { payload, verified, offline } = await exchangeShareToken(cfg, sessionId ?? "sess_offline", share_token);
-    const mapped = mapPayloadToRows(payload);
-    return (
-      <div>
-        <h1 style={{ fontSize: 20, marginBottom: 4 }}>Confirm your BTA-JEE 2026 application</h1>
-        <p style={{ marginTop: 0, marginBottom: 18, color: "var(--color-gov-ink-2)", fontSize: 13 }}>
-          Review what Praman shared. Fields you didn&apos;t verify yourself are still shown with their source — every value BTA receives is
-          traceable back to where it came from.
-        </p>
-        <ReturnForm payload={payload} mapped={mapped} verified={verified} offline={offline} />
-      </div>
-    );
-  } catch (err) {
-    return <ErrorCard title="Could not verify this application">{(err as Error).message}</ErrorCard>;
-  }
+export default async function ApplyReturnPage({ searchParams }: { searchParams: Promise<{ draft?: string; error?: string }> }) {
+  const { draft: token, error } = await searchParams;
+  const jar = await cookies();
+  const draft = token && jar.get("bta_draft")?.value === token ? getDraft(token) : undefined;
+  if (!draft) return <ErrorCard title="Start a new application">{error === "denied" ? "You declined the share. No profile was shared with BTA." : "Your review session has expired or is unavailable. Start again from the portal."}</ErrorCard>;
+  if (draft.submittedRef) redirect(`/status/${draft.submittedRef}`);
+  const { payload, verified, offline } = draft;
+  return <div><h1 style={{fontSize:20,marginBottom:4}}>Confirm your BTA-JEE 2026 application</h1><p style={{color:"var(--color-gov-ink-2)",fontSize:13}}>Review every answer before submitting. This review survives a page refresh for 30 minutes.</p><ReturnForm draftToken={token!} payload={payload} mapped={mapPayloadToRows(payload)} verified={verified} offline={offline}/></div>;
 }

@@ -1,7 +1,6 @@
 import { notFound } from "next/navigation";
 import { LinkButton } from "@/components/vault/link-button";
 import Link from "next/link";
-import { Button } from "@heroui/react";
 import { db, t, eq, completion } from "@praman/db";
 import { SECTIONS, sectionMeta, fieldsInSection, type Section } from "@praman/schema";
 import { PageHeader, EmptyState, ProgressRing } from "@praman/ui";
