@@ -4,6 +4,7 @@
  */
 import { test, expect, type APIRequestContext } from "@playwright/test";
 import { jwtVerify, createLocalJWKSet } from "jose";
+import { createHash } from "node:crypto";
 
 const BASE = process.env.PLAYWRIGHT_BASE_URL ?? "http://localhost:3300";
 const KEY = process.env.BTA_APPLYONCE_API_KEY ?? "pk_sandbox_bta_demo_key_0001";
@@ -104,6 +105,27 @@ test("partner session → consent → exchange → replay 409 → revoke", async
   await page.goto(`${BASE}/app/connections/${consentId}`);
   await expect(page.getByTestId("consent-status")).toContainText("active", SLOW);
   await expect(page.getByTestId("shared-facts").locator('[data-testid="source-chip"]').first()).toBeVisible();
+  await expect(page.getByTestId("download-consent-receipt")).toBeVisible();
+  const deniedReceipt = await request.get(`${BASE}/api/v1/consents/${consentId}/receipt`, { timeout: 600_000 });
+  expect(deniedReceipt.status()).toBe(401);
+  const downloadEvent = page.waitForEvent("download");
+  await page.getByTestId("download-consent-receipt").click();
+  const download = await downloadEvent;
+  expect(download.suggestedFilename()).toBe(`applyonce-consent-${consentId}.json`);
+  const receiptResponse = await page.request.get(`${BASE}/api/v1/consents/${consentId}/receipt`, { timeout: 600_000 });
+  expect(receiptResponse.status()).toBe(200);
+  expect(receiptResponse.headers()["content-disposition"]).toContain(`applyonce-consent-${consentId}.json`);
+  const receiptBody = await receiptResponse.json();
+  const { payload: receipt } = await jwtVerify(receiptBody.signature, createLocalJWKSet(jwks), { issuer: "applyonce" });
+  expect(receipt.receipt_type).toBe("applyonce-consent-evidence/v1");
+  expect(receipt.consent_id).toBe(consentId);
+  expect(receipt.application_id).toBe(data.application_id);
+  expect(receipt.partner_payload_sha256).toBe(createHash("sha256").update(data.payload_jws).digest("hex"));
+  expect(receiptBody.receipt).toEqual(receipt);
+  expect(receiptBody.verification.jwks_url).toBe(`${BASE}/api/v1/jwks`);
+  expect(receipt).not.toHaveProperty("facts");
+  expect(receipt).not.toHaveProperty("custom");
+  expect(receipt).not.toHaveProperty("profile");
   const rev = await page.request.post(`${BASE}/api/v1/consents/${consentId}/revoke`, { timeout: 600_000 });
   expect(rev.status()).toBe(200);
   await page.reload();

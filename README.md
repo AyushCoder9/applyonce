@@ -11,13 +11,13 @@ Live reviewer surfaces: [ApplyOnce](https://applyonce-silk.vercel.app) and the i
 - **Evidence readiness:** see missing, expired, conflicting and out-of-scope requirements before starting an application. Open the source details and follow repair links.
 - **Ask ApplyOnce:** English/Hindi local explanations work without an API key. An optional OpenAI Responses adapter explains the same deterministic result using derived information, without receiving raw facts or documents.
 - **Complete BTA application:** create a partner session → review exact fields → confirm OTP → exchange a signed payload → refresh/edit the saved review → submit → push status back to the citizen tracker.
-- **Citizen controls:** ten vault sections, document uploads and review, sample evidence previews, family scopes, consent receipts/revocation, export, cancellable erasure requests, and a stored declaration receipt.
+- **Citizen controls:** ten vault sections, document uploads and review, sample evidence previews, family scopes, consent receipts/revocation, export, cancellable erasure requests, and a stored declaration receipt. Consent receipts download as value-free ES256 evidence that verifies against the public JWKS.
 - **Partner and operations portals:** switch among seeded organizations; manage forms, applicants, team, keys and webhooks; inspect provider jobs, queues, audit events and data requests.
 - **Extension:** Chrome MV3 recipes, field matching and guarded fill plans for supported forms. Real portal compatibility requires separate live-site validation.
 
 ## Run locally
 
-Requires Node 22+, pnpm 9 and Docker.
+Requires Node 24 LTS, pnpm 9 and Docker.
 
 ```bash
 corepack enable

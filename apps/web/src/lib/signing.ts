@@ -1,7 +1,7 @@
 /** ES256 signing key for partner payloads. Lives in `system_keys` (private JWK encrypted with the system DEK); generated on first use. */
 import type { JWK } from "jose";
 import { db, t, and, eq, systemDek } from "@applyonce/db";
-import { generateSigningKey, signPayload, encryptJson, decryptJson, type SigningKey } from "@applyonce/crypto";
+import { generateSigningKey, signEvidence, signPayload, encryptJson, decryptJson, type SigningKey } from "@applyonce/crypto";
 import type { ApplyOncePayload } from "@applyonce/schema";
 
 const g = globalThis as unknown as { __applyonceSigningKey?: SigningKey };
@@ -23,6 +23,9 @@ export async function getSigningKey(): Promise<SigningKey> {
 
 /** JWS (JWT compact) over the payload; exchange TTL 10 min. `iat`/`exp` are set by the signer. */
 export const signSharePayload = async (payload: ApplyOncePayload, ttlSeconds = 600) => signPayload(await getSigningKey(), payload as unknown as Record<string, unknown>, ttlSeconds);
+
+/** Durable proof only; this signature is never accepted as an access token. */
+export const signReceiptPayload = async (payload: Record<string, unknown>) => signEvidence(await getSigningKey(), payload);
 
 /** Every active public key (rotation-safe). */
 export async function publicJwks(): Promise<{ keys: JWK[] }> {

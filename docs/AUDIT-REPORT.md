@@ -15,9 +15,11 @@ The submitted ApplyOnce alias and the independent BTA portal were deployed as se
 | BTA → ApplyOnce handshake | Fresh partner session returns HTTP 303 to a one-time ApplyOnce share URL |
 | Complete SDK journey | Consent, OTP, signed exchange, BTA review reload, edited submission, external reference and status callback passed |
 | Backend persistence | Profile edit survived reload and was restored; BTA review/application survived reload; partner form, feature flag and preferences survived reload |
-| Route/control browser sweep | **12/12 passed** across public, citizen, partner, operations and BTA pages |
-| Automated package tests | **107/107 passed** across crypto, schema, providers, SDK, extension, database, web and worker suites |
+| Route/control browser sweep | **17/17 passed** across public, citizen, partner, operations and BTA pages |
+| Automated package tests | **109/109 passed** across crypto, schema, providers, SDK, extension, database, web and worker suites |
 | Production health | ApplyOnce Postgres operational; BTA Redis and upstream ApplyOnce checks operational |
+| Public backend proof | Demo page refreshes sanitized ApplyOnce/Postgres/BTA/Redis status and deployed commit |
+| Consent evidence | Authenticated JSON download verifies with ES256/JWKS, matches the exchanged payload hash and contains no citizen values |
 
 All issuer, SMS, email, OCR and government-provider adapters remain explicitly labelled `mock`. This green result applies to the public synthetic sandbox, not to unapproved government connectivity or a real-data launch.
 
@@ -38,12 +40,12 @@ Final release evidence on 7 September 2026:
 
 | Check | Result |
 |---|---|
-| Unit and database integration suites | **107/107 passed** across eight package tasks |
+| Unit and database integration suites | **109/109 passed** across eight package tasks |
 | TypeScript | **11/11 tasks passed** |
 | Optimized production build | **3/3 passed** in 1m 14.81s: web, BTA and extension |
-| Browser workflows in production mode | **16/16 passed** in 59.2s |
+| Browser workflows in production mode | **17/17 passed** in 1.3m |
 | API, authorization, persistence and route audit in production mode | **83/83 passed** |
-| ESLint and interaction source gates | **Passed with zero warnings**; 117 TSX files checked for stale controls |
+| ESLint and interaction source gates | **Passed with zero warnings**; 118 TSX files checked for stale controls |
 | Production dependency audit | **0 known vulnerabilities** |
 | Warm localhost response sample | Authenticated pages **16–26ms total**; BTA homepage **1.5–2.5ms total** |
 | Runtime health | Public status page reports web, Postgres, Redis and worker heartbeat operational |

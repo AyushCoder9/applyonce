@@ -1,6 +1,6 @@
 import Link from "next/link";
 import { notFound } from "next/navigation";
-import { Lock } from "lucide-react";
+import { Download, Lock } from "lucide-react";
 import { db, t, eq, systemDek, mask } from "@applyonce/db";
 import { decryptString } from "@applyonce/crypto";
 import { field, type ApplyOncePayload } from "@applyonce/schema";
@@ -28,7 +28,7 @@ export default async function ConsentPage({ params }: { params: Promise<{ consen
     <>
       <PageHeader back={{ href: "/app/connections", label: "Connections" }} eyebrow="Consent receipt" title={form?.name ?? partner.name}
         subtitle={<span className="inline-flex flex-wrap items-center gap-2"><span className={`rounded-pill px-2.5 py-0.5 text-sm font-medium ${st === "active" ? "bg-verified-50 text-verified-700" : st === "revoked" ? "bg-danger-50 text-danger-500" : "bg-surface-2 text-ink-2"}`} data-testid="consent-status">{st}</span><span className="text-sm">Consent ID <code className="font-mono" data-testid="consent-id">{c.id}</code></span></span>}
-        actions={<div className="flex gap-2">{share?.applicationId && <Link href={`/app/applications/${share.applicationId}`} className="rounded-pill border border-line px-4 py-2 text-sm font-medium hover:bg-surface-2">Application</Link>}{st === "active" && <RevokeButton consentId={c.id} partnerName={partner.name} />}</div>} />
+        actions={<div className="flex flex-wrap gap-2"><a href={`/api/v1/consents/${c.id}/receipt`} download className="inline-flex items-center gap-2 rounded-pill border border-line px-4 py-2 text-sm font-medium hover:bg-surface-2" data-testid="download-consent-receipt"><Download className="size-4" />Download signed receipt</a>{share?.applicationId && <Link href={`/app/applications/${share.applicationId}`} className="rounded-pill border border-line px-4 py-2 text-sm font-medium hover:bg-surface-2">Application</Link>}{st === "active" && <RevokeButton consentId={c.id} partnerName={partner.name} />}</div>} />
       <div className="grid gap-6 lg:grid-cols-[1fr_300px]">
         <div className="grid gap-4">
           <PartnerIdentity partner={{ name: partner.name, kind: partner.kind, logoUrl: partner.logoUrl, website: partner.website, verified: partner.status === "verified" }} purpose={c.purpose} retentionDays={form?.retentionDays ?? Math.round((c.expiresAt.getTime() - c.grantedAt.getTime()) / 864e5)} locale={locale} />

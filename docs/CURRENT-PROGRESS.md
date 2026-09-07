@@ -1,6 +1,6 @@
 # Current progress and handoff
 
-Updated 6 September 2026. Repository: AyushCoder9/test-applyonce-aks. This update continues the ApplyOnce monorepo already on main; it preserves the ApplyOnce history.
+Updated 7 September 2026. Repository: AyushCoder9/applyonce. This update continues the ApplyOnce monorepo already on main; it preserves the ApplyOnce history.
 
 ## Delivered in this audit
 
@@ -12,6 +12,9 @@ Updated 6 September 2026. Repository: AyushCoder9/test-applyonce-aks. This updat
 6. Exposed all citizen destinations on mobile, constrained layouts at 390/320 px, corrected public claims, added error/not-found pages and fixed production client-component boundaries. Repaired HeroUI checkbox/switch interactions across partner, admin and settings pages.
 7. Added repeatable API/route audit, regression tests and native browser tests; expanded CI to run builds, local sandbox audit and browser workflows.
 8. Rewrote README/runbook and supplied a 228-word, precisely staged two-minute demo script.
+9. Added a public, refreshable backend proof on the demo page; it reports the sanitized status and commit of ApplyOnce/Postgres and the separate Redis-backed BTA handoff.
+10. Made deterministic evidence guidance instant when the optional model adapter is not configured, removing an unnecessary database/auth/Redis round trip.
+11. Added downloadable, durable ES256 consent evidence. The receipt signs the persisted recipient, application, field-key scope, confirmation and payload hash without including citizen values.
 
 ## Runtime/configuration
 
@@ -21,7 +24,7 @@ This audit ran isolated services on 3400/3401 and a separate database, Redis ind
 
 ## Validation evidence
 
-The final unit suite passed 106 tests across eight packages; all 11 TypeScript tasks and all three production builds passed. The production API audit passed 83/83 assertions. All 11 browser workflows passed against the final production build in 25.9 seconds. The audit report records coverage and remaining limits. `docs/audit-results.json` contains each production HTTP assertion. Native Playwright traces are retained on failures and test reports describe the actual browser runs. Source inventory captures file hashes/structure; graph output supports navigation rather than proving correctness.
+The latest unit suite passed 109 tests across eight packages; all 11 TypeScript tasks and all three production builds passed. The production API audit passed 83/83 assertions. All 17 browser workflows passed against the optimized production build in 1.3 minutes. The receipt workflow additionally rejects unauthenticated access, downloads through the real control, verifies the ES256 signature and confirms that no citizen values are present. The audit report records coverage and remaining limits. `docs/audit-results.json` contains each production HTTP assertion. Native Playwright traces are retained on failures and test reports describe the actual browser runs. Source inventory captures file hashes/structure; graph output supports navigation rather than proving correctness.
 
 ## Next work requiring deployment or external validation
 

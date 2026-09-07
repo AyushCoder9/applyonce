@@ -1,5 +1,5 @@
 import { describe, it, expect } from "vitest";
-import { newDek, encrypt, decrypt, encryptJson, decryptJson, wrapDek, unwrapDek, blindIndex, generateSigningKey, signPayload, verifyPayload, signWebhook, verifyWebhook, canonicalHash } from "../src";
+import { newDek, encrypt, decrypt, encryptJson, decryptJson, wrapDek, unwrapDek, blindIndex, generateSigningKey, signEvidence, signPayload, verifyPayload, signWebhook, verifyWebhook, canonicalHash } from "../src";
 
 describe("envelope", () => {
   const kek = Buffer.alloc(32, 7), dek = newDek();
@@ -32,6 +32,14 @@ describe("jws", () => {
     await expect(verifyPayload(jws, { keys: [key.publicJwk] }, { audience: "partner-2" })).rejects.toThrow();
     const other = await generateSigningKey();
     await expect(verifyPayload(jws, { keys: [other.publicJwk] })).rejects.toThrow();
+  });
+  it("signs durable evidence without turning it into an expiring access token", async () => {
+    const key = await generateSigningKey("receipt-key");
+    const jws = await signEvidence(key, { iss: "applyonce", receipt_type: "applyonce-consent-evidence/v1", consent_id: "c1" });
+    const p = await verifyPayload<{ consent_id: string; receipt_type: string; exp?: number }>(jws, { keys: [key.publicJwk] });
+    expect(p.consent_id).toBe("c1");
+    expect(p.receipt_type).toBe("applyonce-consent-evidence/v1");
+    expect(p.exp).toBeUndefined();
   });
   it("webhook hmac", () => {
     const { ts, sig } = signWebhook("s", '{"x":1}');
