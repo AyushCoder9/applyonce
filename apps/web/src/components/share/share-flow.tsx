@@ -40,6 +40,13 @@ export function ShareFlow({ token, locale, phone, partner, form, session, profil
   const [err, setErr] = useState<string | null>(null);
   const [receipt, setReceipt] = useState<{ consent_id: string; application_id: string; return_url: string; shared: number } | null>(null);
   const [countdown, setCountdown] = useState(4);
+  const [hydrated, setHydrated] = useState(false);
+
+  // This route is server-rendered, so its buttons can be visible a moment before
+  // React attaches their handlers on a cold production load. Keep the primary
+  // consent action disabled until hydration finishes rather than accepting and
+  // silently dropping a citizen's first click.
+  useEffect(() => setHydrated(true), []);
 
   const profile = profiles.find((p) => p.id === profileId) ?? profiles[0]!;
   const missingRequired = useMemo(() => rows.filter((r) => r.status === "missing" && r.required), [rows]);
@@ -124,7 +131,7 @@ export function ShareFlow({ token, locale, phone, partner, form, session, profil
           <ConsentSummaryChips s={summary} locale={locale} />
           <ConsentFieldList rows={rows} locale={locale} selected={selected} onToggle={toggle} />
           <p className="text-xs text-ink-3">{t(`* required by ${partner.name}. Untick any optional field to keep it private. Sensitive values stay masked here and are sent over an encrypted connection.`, `* ${partner.name} द्वारा आवश्यक। निजी रखने के लिए वैकल्पिक फ़ील्ड अनचेक करें।`)}</p>
-          <ConsentActions locale={locale} onShare={onShare} onDeny={deny} busy={busy} disabled={rows.some(r => r.required && r.status === "blocked")} shareLabel={needsFill ? t(`Continue · ${missingRequired.length} to fill`, `जारी रखें · ${missingRequired.length} भरें`) : t(`Share ${shareCount} fields`, `${shareCount} फ़ील्ड साझा करें`)} hint={t("You’ll confirm with an OTP or passkey before anything is shared.", "साझा करने से पहले आप OTP या पासकी से पुष्टि करेंगे।")} />
+          <ConsentActions locale={locale} onShare={onShare} onDeny={deny} busy={busy} disabled={!hydrated || rows.some(r => r.required && r.status === "blocked")} shareLabel={needsFill ? t(`Continue · ${missingRequired.length} to fill`, `जारी रखें · ${missingRequired.length} भरें`) : t(`Share ${shareCount} fields`, `${shareCount} फ़ील्ड साझा करें`)} hint={t("You’ll confirm with an OTP or passkey before anything is shared.", "साझा करने से पहले आप OTP या पासकी से पुष्टि करेंगे।")} />
         </>
       )}
 
@@ -148,7 +155,7 @@ export function ShareFlow({ token, locale, phone, partner, form, session, profil
               <div className="mt-4 grid gap-4">{missingOptional.map((r) => <FactEditor key={r.key} def={field(r.key)} value={values[r.key]} onChange={(v) => setValues((s) => ({ ...s, [r.key]: v }))} locale={locale} documents={documents} />)}</div>
             </details>
           )}
-          <ConsentActions locale={locale} onShare={onShare} onDeny={deny} busy={busy} disabled={rows.some(r => r.required && r.status === "blocked")} shareLabel={t(`Share ${shareCount} fields`, `${shareCount} फ़ील्ड साझा करें`)} hint={t("You’ll confirm with an OTP or passkey before anything is shared.", "साझा करने से पहले आप OTP या पासकी से पुष्टि करेंगे।")} />
+          <ConsentActions locale={locale} onShare={onShare} onDeny={deny} busy={busy} disabled={!hydrated || rows.some(r => r.required && r.status === "blocked")} shareLabel={t(`Share ${shareCount} fields`, `${shareCount} फ़ील्ड साझा करें`)} hint={t("You’ll confirm with an OTP or passkey before anything is shared.", "साझा करने से पहले आप OTP या पासकी से पुष्टि करेंगे।")} />
         </>
       )}
 
