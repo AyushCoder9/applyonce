@@ -4,7 +4,7 @@ import { useRouter } from "next/navigation";
 import Link from "next/link";
 import { Button, Chip, toast } from "@heroui/react";
 import { Bell, CheckCheck, Settings2 } from "lucide-react";
-import { EmptyState, type Locale } from "@applyonce/ui";
+import { EmptyState, dateInputValue, type Locale } from "@applyonce/ui";
 import { CATEGORIES, type Category } from "./prefs";
 
 export type Notif = { id: string; category: string; title: string; body: string | null; link: string | null; readAt: string | null; createdAt: string };
@@ -18,8 +18,9 @@ export function NotificationsList({ items, locale: l, renderedAt }: { items: Not
   const [cat, setCat] = useState<Category | "all">("all");
   const [read, setRead] = useState<Set<string>>(new Set());
   const list = useMemo(() => items.filter((n) => cat === "all" || n.category === cat), [items, cat]);
-  const dayStart = new Date(renderedAt); dayStart.setHours(0, 0, 0, 0);
-  const today = list.filter((n) => new Date(n.createdAt) >= dayStart), earlier = list.filter((n) => new Date(n.createdAt) < dayStart);
+  const productDate = dateInputValue(renderedAt);
+  const today = list.filter((n) => dateInputValue(n.createdAt) === productDate);
+  const earlier = list.filter((n) => dateInputValue(n.createdAt) !== productDate);
   const isUnread = (n: Notif) => !n.readAt && !read.has(n.id);
   const mark = async (body: { ids?: string[]; all?: boolean }) => {
     const r = await fetch("/api/v1/notifications/read", { method: "POST", headers: { "content-type": "application/json" }, body: JSON.stringify(body) });

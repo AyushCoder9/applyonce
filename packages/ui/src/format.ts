@@ -18,7 +18,7 @@ export const fmtDateTime = (d?: string | Date | null, locale: Locale = "en") => 
   timeZone: PRODUCT_TIME_ZONE,
 }) : "—");
 
-export function dateInputValue(d: string | Date): string {
+export function dateInputValue(d: string | number | Date): string {
   const parts = new Intl.DateTimeFormat("en-IN", {
     timeZone: PRODUCT_TIME_ZONE,
     year: "numeric",
