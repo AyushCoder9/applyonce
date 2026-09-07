@@ -56,6 +56,8 @@ test("public demo exposes refreshable live backend proof", async ({ page }) => {
   await expect(page.getByText("Core services operational", { exact: true })).toBeVisible();
   await expect(page.getByText("BTA application state", { exact: true })).toBeVisible();
   await expect(page.locator("body")).not.toContainText("redis timeout");
+  await page.getByRole("button", { name: "Refresh status" }).click();
+  await expect(page.getByText("Core services operational", { exact: true })).toBeVisible({ timeout: 15_000 });
 });
 
 test("all citizen workspace pages render with labelled controls", async ({ page }) => {

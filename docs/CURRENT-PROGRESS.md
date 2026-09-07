@@ -15,7 +15,7 @@ Updated 7 September 2026. Repository: AyushCoder9/applyonce. This update continu
 9. Added a public, refreshable backend proof on the demo page; it reports the sanitized status and commit of ApplyOnce/Postgres and the separate Redis-backed BTA handoff.
 10. Made deterministic evidence guidance instant when the optional model adapter is not configured, removing an unnecessary database/auth/Redis round trip.
 11. Added downloadable, durable ES256 consent evidence. The receipt signs the persisted recipient, application, field-key scope, confirmation and payload hash without including citizen values.
-12. Replaced the public status page's obsolete optional main-app Redis timeout with the real independent BTA health probe, so it now reports the deployed web build, Postgres, Redis-backed BTA state and worker truth.
+12. Converted the public status route into an immediate static shell with asynchronous live evidence. It now checks the deployed build, Postgres, Redis-backed BTA state and worker truth without blocking page navigation on network probes.
 
 ## Runtime/configuration
 

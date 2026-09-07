@@ -1,5 +1,5 @@
 import { NextResponse } from "next/server";
-import { pingDb, workerHealth } from "@/components/admin/data";
+import { pingDb, providerModes, workerHealth } from "@/components/admin/data";
 import { checkDemoPortal } from "@/lib/demo-system";
 
 export const dynamic = "force-dynamic";
@@ -16,6 +16,7 @@ export async function GET() {
       region: process.env.VERCEL_REGION ?? "local",
     },
     services: { database: { ok: database.ok, ms: database.ms }, worker, portal },
+    providers: Object.fromEntries(providerModes().map(({ name, mode }) => [name, mode])),
     durationMs: Date.now() - started,
   }, { status: ok ? 200 : 503 });
   response.headers.set("Cache-Control", "no-store");
