@@ -29,10 +29,15 @@ export async function queueCounts(): Promise<QueueCount[]> {
 export const PROVIDER_ENV = [["digilocker", "PROVIDER_DIGILOCKER"], ["aadhaar_offline", "PROVIDER_AADHAAR"], ["pan", "PROVIDER_PAN"], ["abha", "PROVIDER_ABHA"], ["aa", "PROVIDER_AA"], ["ocr", "PROVIDER_OCR"], ["sms", "PROVIDER_SMS"], ["email", "PROVIDER_EMAIL"]] as const;
 export const providerModes = () => PROVIDER_ENV.map(([name, env]) => ({ name, env, mode: process.env[env] ?? "mock" }));
 
-export async function pingDb() { const t0 = Date.now(); try { await db.execute(dsql`select 1`); return { ok: true, ms: Date.now() - t0 }; } catch (e) { return { ok: false, ms: Date.now() - t0, error: (e as Error).message }; } }
+const within = <T>(promise: Promise<T>, ms: number, label: string) => Promise.race([
+  promise,
+  new Promise<never>((_, reject) => setTimeout(() => reject(new Error(`${label} timeout`)), ms)),
+]);
+
+export async function pingDb() { const t0 = Date.now(); try { await within(db.execute(dsql`select 1`), 2000, "database"); return { ok: true, ms: Date.now() - t0 }; } catch (e) { return { ok: false, ms: Date.now() - t0, error: (e as Error).message }; } }
 export async function pingRedis() {
   const t0 = Date.now();
-  try { const { redis } = await import("@applyonce/jobs"); const r = await Promise.race([redis().ping(), new Promise<never>((_, rej) => setTimeout(() => rej(new Error("timeout")), 2000))]); return { ok: r === "PONG", ms: Date.now() - t0 }; }
+  try { const { redis } = await import("@applyonce/jobs"); const r = await within(redis().ping(), 2000, "redis"); return { ok: r === "PONG", ms: Date.now() - t0 }; }
   catch (e) { return { ok: false, ms: Date.now() - t0, error: (e as Error).message }; }
 }
 

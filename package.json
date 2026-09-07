@@ -3,7 +3,7 @@
   "private": true,
   "packageManager": "pnpm@9.15.9",
   "engines": {
-    "node": ">=22"
+    "node": "24.x"
   },
   "scripts": {
     "dev": "node scripts/run.mjs turbo dev",
@@ -19,7 +19,8 @@
     "db:refresh-demo": "node scripts/run.mjs pnpm --filter @applyonce/db exec tsx src/refresh-demo.ts",
     "inventory": "node scripts/inventory.mjs",
     "audit:workflows": "node scripts/run.mjs node scripts/audit.mjs",
-    "audit:interactions": "node scripts/audit-interactions.mjs"
+    "audit:interactions": "node scripts/audit-interactions.mjs",
+    "perf:smoke": "node scripts/perf-smoke.mjs"
   },
   "devDependencies": {
     "@typescript-eslint/parser": "catalog:",

@@ -3,7 +3,7 @@ import { useState } from "react";
 import { useRouter } from "next/navigation";
 import { Button, TextField, Label, Input, Select, ListBox, Checkbox, Alert, Switch, toast } from "@heroui/react";
 import { KeyRound, Webhook, Trash2, Send } from "lucide-react";
-import { fmtDate } from "@applyonce/ui";
+import { fmtDate, fmtDateTime } from "@applyonce/ui";
 import { createApiKey, revokeApiKey, createWebhook, updateWebhook, deleteWebhook, testWebhook } from "./actions";
 import { CopyButton } from "./form-tools";
 
@@ -73,7 +73,7 @@ export function DevelopersPanel({ keys, hooks, deliveries, canManage, verified, 
         <h2 className="mb-2 font-display text-lg font-bold">Request log</h2>
         {!deliveries.length ? <p className="text-sm text-ink-2">No deliveries yet. Send a test from an endpoint above.</p> : (
           <div className="overflow-x-auto"><table className="w-full text-sm"><thead><tr className="text-left text-xs uppercase tracking-[0.04em] text-ink-3"><th className="py-1 pr-3">When</th><th className="py-1 pr-3">Event</th><th className="py-1 pr-3">Endpoint</th><th className="py-1 pr-3">Status</th><th className="py-1 pr-3">Attempts</th><th className="py-1">HTTP</th></tr></thead>
-            <tbody>{deliveries.map((d) => <tr key={d.id} className="border-t border-line"><td className="py-1.5 pr-3 text-ink-3">{new Date(d.createdAt).toLocaleString("en-IN")}</td><td className="py-1.5 pr-3 font-mono text-xs">{d.event}</td><td className="max-w-[240px] truncate py-1.5 pr-3 font-mono text-xs">{d.url}</td><td className="py-1.5 pr-3"><span className={`rounded-pill px-2 py-0.5 text-xs ${d.status === "delivered" || d.status === "succeeded" ? "bg-verified-50 text-verified-700" : d.status === "failed" ? "bg-danger-50 text-danger-500" : "bg-pending-50 text-pending-700"}`}>{d.status}</span>{d.lastError && <span className="ml-2 text-xs text-ink-3">{d.lastError.slice(0, 60)}</span>}</td><td className="py-1.5 pr-3 tabular">{d.attempts}</td><td className="py-1.5 tabular">{d.responseStatus ?? "—"}</td></tr>)}</tbody></table></div>
+            <tbody>{deliveries.map((d) => <tr key={d.id} className="border-t border-line"><td className="py-1.5 pr-3 text-ink-3">{fmtDateTime(d.createdAt)}</td><td className="py-1.5 pr-3 font-mono text-xs">{d.event}</td><td className="max-w-[240px] truncate py-1.5 pr-3 font-mono text-xs">{d.url}</td><td className="py-1.5 pr-3"><span className={`rounded-pill px-2 py-0.5 text-xs ${d.status === "delivered" || d.status === "succeeded" ? "bg-verified-50 text-verified-700" : d.status === "failed" ? "bg-danger-50 text-danger-500" : "bg-pending-50 text-pending-700"}`}>{d.status}</span>{d.lastError && <span className="ml-2 text-xs text-ink-3">{d.lastError.slice(0, 60)}</span>}</td><td className="py-1.5 pr-3 tabular">{d.attempts}</td><td className="py-1.5 tabular">{d.responseStatus ?? "—"}</td></tr>)}</tbody></table></div>
         )}
       </section>
     </div>

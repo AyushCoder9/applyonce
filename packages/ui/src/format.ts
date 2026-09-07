@@ -1,7 +1,33 @@
 import { field, ENUM_LABELS, type FactValue, type Source, PURPOSE_LABELS, type Purpose } from "@applyonce/schema";
 export type Locale = "en" | "hi";
 
-export const fmtDate = (d?: string | Date | null, locale: Locale = "en") => (d ? new Date(d).toLocaleDateString(locale === "hi" ? "hi-IN" : "en-IN", { day: "numeric", month: "short", year: "numeric" }) : "—");
+export const PRODUCT_TIME_ZONE = "Asia/Kolkata";
+const localeName = (locale: Locale) => (locale === "hi" ? "hi-IN" : "en-IN");
+
+/** Keep server HTML and browser hydration identical across deployment regions. */
+export const fmtDate = (d?: string | Date | null, locale: Locale = "en") => (d ? new Date(d).toLocaleDateString(localeName(locale), {
+  day: "numeric",
+  month: "short",
+  year: "numeric",
+  timeZone: PRODUCT_TIME_ZONE,
+}) : "—");
+
+export const fmtDateTime = (d?: string | Date | null, locale: Locale = "en") => (d ? new Date(d).toLocaleString(localeName(locale), {
+  dateStyle: "medium",
+  timeStyle: "short",
+  timeZone: PRODUCT_TIME_ZONE,
+}) : "—");
+
+export function dateInputValue(d: string | Date): string {
+  const parts = new Intl.DateTimeFormat("en-IN", {
+    timeZone: PRODUCT_TIME_ZONE,
+    year: "numeric",
+    month: "2-digit",
+    day: "2-digit",
+  }).formatToParts(new Date(d));
+  const value = Object.fromEntries(parts.map(({ type, value: part }) => [type, part]));
+  return `${value.year}-${value.month}-${value.day}`;
+}
 export const fmtMoney = (n: number) => `₹${n.toLocaleString("en-IN")}`;
 export const daysUntil = (d?: string | Date | null) => (d ? Math.ceil((new Date(d).getTime() - Date.now()) / 864e5) : null);
 export const label = (key: string, locale: Locale = "en") => { try { return field(key).label[locale]; } catch { return key; } };

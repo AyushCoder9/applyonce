@@ -4,7 +4,7 @@ import { useRouter } from "next/navigation";
 import Link from "next/link";
 import { Button, Chip, Switch, Tabs, toast } from "@heroui/react";
 import { Download, Trash2, KeyRound, Smartphone, Languages, ShieldCheck, Plus } from "lucide-react";
-import { fmtDate, type Locale } from "@applyonce/ui";
+import { fmtDate, fmtDateTime, type Locale } from "@applyonce/ui";
 import { authClient } from "@/lib/auth-client";
 import { StepUpDialog } from "@/components/vault/step-up-dialog";
 
@@ -146,7 +146,7 @@ function Audit({ locale: l, initial }: { locale: Locale; initial: AuditRow[] }) 
       {rows.length === 0 ? <p className="p-5 text-sm text-ink-2">{l === "hi" ? "अभी कोई गतिविधि नहीं।" : "No activity yet."}</p> : (
         <ul className="divide-y divide-line">{rows.map((r) => (
           <li key={r.id} className="px-4 py-3">
-            <details><summary className="flex cursor-pointer list-none items-center gap-3 text-sm"><Chip size="sm" variant="soft" color={tone(r.action)}>{r.action}</Chip><span className="text-ink-2">{r.targetType}{r.targetId ? ` · ${r.targetId.slice(0, 8)}…` : ""}</span><span className="ml-auto text-xs text-ink-3 tabular">{new Date(r.at).toLocaleString(l === "hi" ? "hi-IN" : "en-IN")}</span></summary>
+            <details><summary className="flex cursor-pointer list-none items-center gap-3 text-sm"><Chip size="sm" variant="soft" color={tone(r.action)}>{r.action}</Chip><span className="text-ink-2">{r.targetType}{r.targetId ? ` · ${r.targetId.slice(0, 8)}…` : ""}</span><span className="ml-auto text-xs text-ink-3 tabular">{fmtDateTime(r.at, l)}</span></summary>
               <pre className="mt-2 overflow-x-auto rounded-md bg-surface-2 p-3 text-xs">{JSON.stringify(r.meta ?? {}, null, 2)}</pre></details>
           </li>))}</ul>)}
       {cursor && <div className="p-3 text-center"><Button variant="ghost" size="sm" onPress={more}>{l === "hi" ? "और दिखाएँ" : "Load more"}</Button></div>}

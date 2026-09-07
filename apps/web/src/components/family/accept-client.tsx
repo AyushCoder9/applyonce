@@ -5,6 +5,7 @@ import Link from "next/link";
 import { Button, Alert } from "@heroui/react";
 import { ShieldCheck } from "lucide-react";
 import { SECTION_META } from "@applyonce/schema";
+import { fmtDate } from "@applyonce/ui";
 
 /** Shared by /app/family/accept (invite) and /app/family/claim (handover). */
 export function AcceptClient({ token, kind, guardianName, wardName, scope, phoneLast4, until }: { token: string; kind: "invite" | "claim"; guardianName: string; wardName: string; scope: string[]; phoneLast4: string; until: string | null }) {
@@ -27,7 +28,7 @@ export function AcceptClient({ token, kind, guardianName, wardName, scope, phone
       {kind === "invite" && (
         <ul className="grid gap-2">{scope.map((s) => <li key={s} className="flex items-center gap-2 rounded-md border border-line px-3 py-2"><ShieldCheck className="size-4 text-brand-600" />{SECTION_META.find((m) => m.id === s)?.label.en ?? s}<span className="ml-auto text-xs text-ink-3">{SECTION_META.find((m) => m.id === s)?.blurb.en}</span></li>)}</ul>
       )}
-      <p className="text-ink-2">{kind === "claim" ? "You turned 18. Your guardian created this profile; accepting makes it yours. Your guardian keeps read access to identity and education for 90 days." : `Valid ${until ? `until ${new Date(until).toLocaleDateString("en-IN")}` : "until you revoke it"}. You can withdraw any time from Family. Nothing is shared with anyone without your consent.`}</p>
+      <p className="text-ink-2">{kind === "claim" ? "You turned 18. Your guardian created this profile; accepting makes it yours. Your guardian keeps read access to identity and education for 90 days." : `Valid ${until ? `until ${fmtDate(until)}` : "until you revoke it"}. You can withdraw any time from Family. Nothing is shared with anyone without your consent.`}</p>
       <p className="text-xs text-ink-3">Linked to the mobile ending {phoneLast4}. This is your DPDP consent record; every use is in your audit log.</p>
       {err && <Alert status="danger"><Alert.Indicator /><Alert.Content><Alert.Title>{err}</Alert.Title></Alert.Content></Alert>}
       <div className="flex gap-2"><Button className="cta" size="lg" onPress={go} isPending={busy}>{kind === "claim" ? "Claim profile" : "Allow"}</Button><Button variant="outline" size="lg" onPress={() => router.push("/app")}>Not now</Button></div>

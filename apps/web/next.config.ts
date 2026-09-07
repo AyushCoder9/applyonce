@@ -1,6 +1,8 @@
 import type { NextConfig } from "next";
 const config: NextConfig = {
   reactStrictMode: true,
+  poweredByHeader: false,
+  compress: true,
   serverExternalPackages: ["postgres", "bullmq", "ioredis", "pino", "pino-pretty"],
   experimental: { serverActions: { bodySizeLimit: "10mb" } },
   async headers() {

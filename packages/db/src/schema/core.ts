@@ -32,7 +32,10 @@ export const profiles = pgTable("profiles", {
   claimedByUserId: text("claimed_by_user_id").references(() => user.id), // dependent who took over at 18
   status: text("status").notNull().default("active"),
   createdAt: createdAt(),
-}, (t) => [index("profiles_owner_idx").on(t.ownerUserId)]);
+}, (t) => [
+  index("profiles_owner_idx").on(t.ownerUserId),
+  index("profiles_claimed_status_idx").on(t.claimedByUserId, t.status),
+]);
 
 export const relations = pgTable("relations", {
   id: id(),
@@ -43,7 +46,10 @@ export const relations = pgTable("relations", {
   scope: text("scope").array().notNull().default(sql`'{*}'::text[]`), // sections or '*'
   validUntil: ts("valid_until"),
   createdAt: createdAt(),
-}, (t) => [uniqueIndex("relations_pair_uq").on(t.guardianProfileId, t.wardProfileId)]);
+}, (t) => [
+  uniqueIndex("relations_pair_uq").on(t.guardianProfileId, t.wardProfileId),
+  index("relations_ward_idx").on(t.wardProfileId),
+]);
 
 // ---------- facts ----------
 export const facts = pgTable("facts", {
@@ -109,7 +115,7 @@ export const documentExtractions = pgTable("document_extractions", {
   reviewedAt: ts("reviewed_at"),
   reviewedBy: text("reviewed_by"),
   createdAt: createdAt(),
-});
+}, (t) => [index("document_extractions_document_idx").on(t.documentId, t.reviewedAt)]);
 
 // ---------- verification ----------
 export const providerLinks = pgTable("provider_links", {
@@ -149,7 +155,7 @@ export const mismatches = pgTable("mismatches", {
   resolvedAt: ts("resolved_at"),
   resolution: text("resolution"),
   createdAt: createdAt(),
-});
+}, (t) => [index("mismatches_profile_resolved_idx").on(t.profileId, t.resolvedAt)]);
 
 // ---------- partners ----------
 export const partners = pgTable("partners", {
@@ -275,7 +281,10 @@ export const applications = pgTable("applications", {
   portalUrl: text("portal_url"),
   createdAt: createdAt(),
   updatedAt: updatedAt(),
-}, (t) => [index("applications_profile_status_idx").on(t.profileId, t.status, t.deadlineAt)]);
+}, (t) => [
+  index("applications_profile_status_idx").on(t.profileId, t.status, t.deadlineAt),
+  index("applications_profile_updated_idx").on(t.profileId, t.updatedAt),
+]);
 
 export const shares = pgTable("shares", {
   id: id(),
@@ -289,7 +298,10 @@ export const shares = pgTable("shares", {
   exchangedAt: ts("exchanged_at"),
   expiresAt: ts("expires_at").notNull(),
   createdAt: createdAt(),
-});
+}, (t) => [
+  index("shares_application_idx").on(t.applicationId),
+  index("shares_consent_idx").on(t.consentId),
+]);
 
 export const applicationEvents = pgTable("application_events", {
   id: id(),
@@ -338,7 +350,7 @@ export const dataRequests = pgTable("data_requests", {
   notes: text("notes"),
   requestedAt: createdAt(),
   fulfilledAt: ts("fulfilled_at"),
-});
+}, (t) => [index("data_requests_user_requested_idx").on(t.userId, t.requestedAt)]);
 
 // ---------- notifications & audit ----------
 export const notifications = pgTable("notifications", {

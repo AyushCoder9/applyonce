@@ -10,7 +10,7 @@ import { CATEGORIES, type Category } from "./prefs";
 export type Notif = { id: string; category: string; title: string; body: string | null; link: string | null; readAt: string | null; createdAt: string };
 const CAT: Record<Category | "all", { en: string; hi: string }> = { all: { en: "All", hi: "सभी" }, application: { en: "Applications", hi: "आवेदन" }, verification: { en: "Verification", hi: "सत्यापन" }, expiry: { en: "Expiry", hi: "समाप्ति" }, consent: { en: "Consent", hi: "सहमति" }, system: { en: "System", hi: "सिस्टम" } };
 const COLOR: Record<string, "accent" | "success" | "warning" | "danger" | "default"> = { application: "accent", verification: "success", expiry: "warning", consent: "danger", system: "default" };
-const rel = (d: string, l: Locale, now: number) => { const m = Math.round((now - new Date(d).getTime()) / 60000); if (m < 60) return l === "hi" ? `${m} मिनट पहले` : `${m}m ago`; const h = Math.round(m / 60); if (h < 24) return l === "hi" ? `${h} घंटे पहले` : `${h}h ago`; return new Date(d).toLocaleDateString(l === "hi" ? "hi-IN" : "en-IN", { day: "numeric", month: "short" }); };
+const rel = (d: string, l: Locale, now: number) => { const m = Math.round((now - new Date(d).getTime()) / 60000); if (m < 60) return l === "hi" ? `${m} मिनट पहले` : `${m}m ago`; const h = Math.round(m / 60); if (h < 24) return l === "hi" ? `${h} घंटे पहले` : `${h}h ago`; return new Date(d).toLocaleDateString(l === "hi" ? "hi-IN" : "en-IN", { day: "numeric", month: "short", timeZone: "Asia/Kolkata" }); };
 
 export function NotificationsList({ items, locale: l, renderedAt }: { items: Notif[]; locale: Locale; renderedAt: number }) {
   const router = useRouter();

@@ -78,6 +78,7 @@ The audit modifies demo facts, creates applications/uploads and schedules then c
 ## Current documentation
 
 - [Project context](docs/PROJECT-CONTEXT.md): architecture, workflows, boundaries and decisions.
+- [Production deployment](docs/PRODUCTION-DEPLOYMENT.md): verified current topology, latency budgets, Mumbai target and migration gates.
 - [Audit report](docs/AUDIT-REPORT.md): findings, fixes, validation and remaining gaps.
 - [Current progress](docs/CURRENT-PROGRESS.md): delivered work and handoff checklist.
 - [Integrations and roadmap](docs/INTEGRATIONS-AND-ROADMAP.md): optional AI setup and prioritized next work.

@@ -26,7 +26,7 @@ const api = async (url: string, method: string, data?: unknown) => {
 };
 const secLabel = (s: string, l: Locale) => (s === "*" ? T.all[l] : SECTION_META.find((m) => m.id === s)?.label[l] ?? s);
 
-export function FamilyClient({ members, locale, openAdd, activeProfileId }: { members: FamilyMember[]; locale: Locale; openAdd: boolean; activeProfileId: string }) {
+export function FamilyClient({ members, locale, openAdd, activeProfileId, today, defaultAccessUntil }: { members: FamilyMember[]; locale: Locale; openAdd: boolean; activeProfileId: string; today: string; defaultAccessUntil: string }) {
   const l = locale;
   const router = useRouter();
   const [, start] = useTransition();
@@ -88,14 +88,14 @@ export function FamilyClient({ members, locale, openAdd, activeProfileId }: { me
       )}
       <p className="mt-6 text-xs text-ink-3">{l === "hi" ? "बच्चों का डेटा (DPDP नियम 10): आप अभिभावक के रूप में सहमति देते हैं। बच्चे के 18 होने पर प्रोफ़ाइल उसे सौंपी जाती है।" : "Children's data (DPDP Rule 10): you consent as the verifiable parent/guardian. At 18 the profile is handed over to them."} <Link href="/privacy" className="underline">{l === "hi" ? "गोपनीयता सूचना" : "Privacy notice"}</Link></p>
 
-      <AddDrawer open={add} onOpenChange={setAdd} locale={l} onDone={refresh} />
+      <AddDrawer open={add} onOpenChange={setAdd} locale={l} onDone={refresh} today={today} defaultAccessUntil={defaultAccessUntil} />
       {edit && <EditModal m={edit} locale={l} onClose={() => setEdit(null)} onDone={refresh} />}
       {claim && <ClaimModal m={claim} locale={l} onClose={() => setClaim(null)} onDone={refresh} />}
     </>
   );
 }
 
-function AddDrawer({ open, onOpenChange, locale: l, onDone }: { open: boolean; onOpenChange: (o: boolean) => void; locale: Locale; onDone: () => void }) {
+function AddDrawer({ open, onOpenChange, locale: l, onDone, today, defaultAccessUntil }: { open: boolean; onOpenChange: (o: boolean) => void; locale: Locale; onDone: () => void; today: string; defaultAccessUntil: string }) {
   const [busy, setBusy] = useState(false);
   const [err, setErr] = useState<string | null>(null);
   const [tab, setTab] = useState<"minor" | "elder">("minor");
@@ -126,7 +126,7 @@ function AddDrawer({ open, onOpenChange, locale: l, onDone }: { open: boolean; o
               <form onSubmit={submit} className="grid gap-4" data-testid="add-minor-form">
                 <label className="grid gap-1"><span className={lbl}>{l === "hi" ? "पूरा नाम (जन्म प्रमाण पत्र / आधार अनुसार)" : "Full name (as on birth certificate / Aadhaar)"}</span><input name="name" required minLength={2} className={inp} autoFocus /></label>
                 <div className="grid gap-4 sm:grid-cols-2">
-                  <label className="grid gap-1"><span className={lbl}>{l === "hi" ? "जन्म तिथि" : "Date of birth"}</span><input name="dob" type="date" required max={new Date().toISOString().slice(0, 10)} className={inp} /><span className="text-xs text-ink-3">{l === "hi" ? "18 से कम होना चाहिए" : "Must be under 18"}</span></label>
+                  <label className="grid gap-1"><span className={lbl}>{l === "hi" ? "जन्म तिथि" : "Date of birth"}</span><input name="dob" type="date" required max={today} className={inp} /><span className="text-xs text-ink-3">{l === "hi" ? "18 से कम होना चाहिए" : "Must be under 18"}</span></label>
                   <label className="grid gap-1"><span className={lbl}>{l === "hi" ? "लिंग" : "Gender"}</span><select name="gender" required className={inp} defaultValue="">{[<option key="" value="" disabled>—</option>, ...GENDER.map((g) => <option key={g} value={g}>{ENUM_LABELS.gender?.[g]?.[l] ?? g}</option>)]}</select></label>
                 </div>
                 <label className="grid gap-1"><span className={lbl}>{l === "hi" ? "आपका रिश्ता" : "They are your"}</span><select name="relation" className={inp} defaultValue="child">{RELATION.map((r) => <option key={r} value={r}>{REL[r]?.[l] ?? r}</option>)}</select></label>
@@ -144,7 +144,7 @@ function AddDrawer({ open, onOpenChange, locale: l, onDone }: { open: boolean; o
                   <div className="grid grid-cols-2 gap-2 sm:grid-cols-3">{SECTIONS.map((s) => <label key={s} className="flex items-center gap-2 rounded-md border border-line px-3 py-2 text-sm has-checked:border-brand-500 has-checked:bg-brand-50"><input type="checkbox" name="scope" value={s} defaultChecked={s === "identity"} />{SECTION_META.find((m) => m.id === s)?.label[l]}</label>)}</div>
                 </fieldset>
                 <div className="grid gap-4 sm:grid-cols-2">
-                  <label className="grid gap-1"><span className={lbl}>{l === "hi" ? "पहुँच समाप्ति" : "Access until"}</span><input name="validUntil" type="date" min={new Date().toISOString().slice(0, 10)} className={inp} defaultValue={new Date(Date.now() + 365 * 864e5).toISOString().slice(0, 10)} /></label>
+                  <label className="grid gap-1"><span className={lbl}>{l === "hi" ? "पहुँच समाप्ति" : "Access until"}</span><input name="validUntil" type="date" min={today} className={inp} defaultValue={defaultAccessUntil} /></label>
                   <label className="grid gap-1"><span className={lbl}>{l === "hi" ? "रिश्ता" : "Relation"}</span><select name="relation" className={inp} defaultValue="grandparent">{RELATION.map((r) => <option key={r} value={r}>{REL[r]?.[l] ?? r}</option>)}</select></label>
                 </div>
                 <p className="text-sm text-ink-2">{l === "hi" ? "उन्हें SMS मिलेगा। वे अपने नंबर से लॉगिन कर सहमति देंगे। आप कभी भी हटा सकते हैं।" : "They get an SMS, log in with their own number and consent. You can remove access any time."}</p>
