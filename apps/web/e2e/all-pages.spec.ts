@@ -45,6 +45,15 @@ test("all public pages render with labelled controls", async ({ page }) => {
   }
 });
 
+test("public demo exposes refreshable live backend proof", async ({ page }) => {
+  await page.goto(`${BASE}/demo`);
+  await expect(page.getByTestId("demo-proof-status")).toHaveText("Operational", { timeout: 15_000 });
+  await expect(page.locator('[data-service="Persistent profiles"]')).toContainText("Postgres");
+  await expect(page.locator('[data-service="BTA signed handoff"]')).toContainText("Redis-backed");
+  await page.getByRole("button", { name: "Refresh live backend proof" }).click();
+  await expect(page.getByTestId("demo-proof-status")).toHaveText("Operational", { timeout: 15_000 });
+});
+
 test("all citizen workspace pages render with labelled controls", async ({ page }) => {
   await login(page, "9876543210");
   const paths = [

@@ -1,5 +1,5 @@
 import { describe, it, expect } from 'vitest';
-import { assessReadiness, customAnswerErrors, type Fact } from '../src';
+import { assessReadiness, buildReadinessGuide, customAnswerErrors, type Fact } from '../src';
 const now = Date.parse('2026-09-06T12:00:00Z');
 const fact = (key: string, value: Fact['value'], extra: Partial<Fact> = {}): Fact => ({ key, value, repeatIndex: 0, source: 'issuer_verified', ...extra });
 const form = { purpose: 'exam_application' as const, requestedFields: [{ key: 'identity.full_name', required: true }, { key: 'category.pwd', required: true }] };
@@ -20,5 +20,12 @@ describe('evidence readiness', () => {
   });
   it('rejects tampered custom answers', () => {
     expect(customAnswerErrors([{id:'city',label:'City',type:'enum',options:['Delhi'],required:true}, {id:'agree',label:'Agree',type:'bool',required:true}], {city:'Moon',agree:'true'})).toEqual({city:'Choose one of the listed options',agree:'Confirm this declaration'});
+  });
+  it('builds value-free local guidance from deterministic checks', () => {
+    const report = assessReadiness([], form, { now });
+    const guide = buildReadinessGuide(report, 'next', 'en');
+    expect(guide.summary).toContain('0 of 2');
+    expect(guide.steps[0]).toContain('Full name');
+    expect(JSON.stringify(guide)).not.toContain('Private Name');
   });
 });

@@ -23,7 +23,8 @@ async function fillConsent(page:Page){
 }
 test('readiness guide and mobile navigation',async({page},testInfo)=>{
  await login(page);await page.goto('/app/apply/bta-jee-2026');await expect(page.getByTestId('readiness-panel')).toBeVisible();
- await page.getByRole('button',{name:'What should I do first?'}).click();await expect(page.getByText('Local evidence guide',{exact:true})).toBeVisible();
+ let readinessApiCalls=0;page.on('request',request=>{if(new URL(request.url()).pathname==='/api/v1/readiness')readinessApiCalls++;});
+ await page.getByRole('button',{name:'What should I do first?'}).click();await expect(page.getByText('Local evidence guide · instant',{exact:true})).toBeVisible();expect(readinessApiCalls).toBe(0);
  await page.screenshot({path:testInfo.outputPath('readiness-desktop.png'),fullPage:true});
  await page.setViewportSize({width:390,height:844});await page.getByLabel('All pages',{exact:true}).first().click();await page.getByRole('navigation',{name:'All pages'}).getByRole('link',{name:'Documents'}).click();await expect(page).toHaveURL(/\/app\/documents$/);await expect(page.getByRole('heading',{name:'Documents',exact:true})).toBeVisible();
  await page.screenshot({path:testInfo.outputPath('documents-mobile.png'),fullPage:true});

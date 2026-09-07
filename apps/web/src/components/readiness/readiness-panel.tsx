@@ -4,15 +4,19 @@ import Link from 'next/link';
 import { ArrowRight, CheckCircle2, ShieldCheck, Sparkles, AlertTriangle, Clock3 } from 'lucide-react';
 import { Button } from '@heroui/react';
 import { SourceChip } from '@applyonce/ui';
-import type { assessReadiness } from '@applyonce/schema';
+import { buildReadinessGuide, type ReadinessIntent, type ReadinessReport } from '@applyonce/schema';
 
-type Report = ReturnType<typeof assessReadiness>;
 const names = { verified:'Verified evidence', self:'Self-declared', extracted:'Review document source', missing:'Needs an answer', expired:'Evidence expired', conflict:'Sources disagree', blocked:'Outside allowed scope' };
-export function ReadinessPanel({ report, formId, profileId, aiEnabled, locale = 'en' }: { report: Report; formId: string; profileId: string; aiEnabled: boolean; locale?: 'en'|'hi' }) {
+export function ReadinessPanel({ report, formId, profileId, aiEnabled, locale = 'en' }: { report: ReadinessReport; formId: string; profileId: string; aiEnabled: boolean; locale?: 'en'|'hi' }) {
   const [advice, setAdvice] = useState<{ mode: string; summary: string; steps: string[] } | null>(null);
   const [busy, setBusy] = useState(false);
   const [error, setError] = useState('');
-  async function explain(intent: string) {
+  async function explain(intent: ReadinessIntent) {
+    if (!aiEnabled) {
+      setError('');
+      setAdvice({ mode: 'Local evidence guide · instant', ...buildReadinessGuide(report, intent, locale) });
+      return;
+    }
     setBusy(true); setError('');
     try {
       const response = await fetch('/api/v1/readiness', {method:'POST',headers:{'content-type':'application/json'},body:JSON.stringify({formId,profileId,intent,locale})});
@@ -39,7 +43,7 @@ export function ReadinessPanel({ report, formId, profileId, aiEnabled, locale = 
         {report.expiring.length > 0 && <div className="mt-4 rounded-lg bg-pending-50 p-4 text-sm text-pending-700"><p className="flex items-center gap-2 font-semibold"><Clock3 className="size-4"/>Keep an eye on expiry</p>{report.expiring.map(c => <p key={c.key} className="mt-2">{c.label[locale]} · {c.expiresInDays} days remaining</p>)}<Link href="/app/verify" className="mt-3 inline-block font-semibold underline">Review evidence</Link></div>}
       </section>
       <aside className="card flex flex-col p-5 sm:p-6"><div className="flex items-center gap-2"><Sparkles className="size-5 text-brand-600"/><h3 className="font-display text-xl font-bold">Ask ApplyOnce</h3></div><p className="mt-2 text-sm text-ink-2">A clear explanation, grounded in this form’s evidence checks.</p><p className="mt-2 text-xs font-medium text-brand-700">{aiEnabled ? 'AI explanations available' : 'Local guide · works without an AI key'}</p>
-        <div className="mt-4 flex flex-wrap gap-2">{[['next','What should I do first?'],['privacy','What will be shared?'],['trust','What does verified mean?']].map(([intent,label])=><Button key={intent} variant="outline" size="sm" isDisabled={busy} onPress={()=>explain(intent!)}>{label}</Button>)}</div>
+        <div className="mt-4 flex flex-wrap gap-2">{([['next','What should I do first?'],['privacy','What will be shared?'],['trust','What does verified mean?']] as const).map(([intent,label])=><Button key={intent} variant="outline" size="sm" isDisabled={busy} onPress={()=>explain(intent)}>{label}</Button>)}</div>
         <div aria-live="polite" className="mt-4">{busy && <p className="text-sm text-ink-2">Checking the evidence…</p>}{error && <p role="alert" className="text-sm text-danger-500">{error}</p>}{advice && <div className="rounded-lg bg-surface-2 p-4"><p className="mb-2 text-xs font-semibold text-ink-3">{advice.mode}</p><p className="text-sm leading-relaxed">{advice.summary}</p><ol className="mt-3 list-inside list-decimal space-y-2 text-sm text-ink-2">{advice.steps.map((step,i)=><li key={i}>{step}</li>)}</ol></div>}</div>
         <p className="mt-auto pt-5 text-xs leading-relaxed text-ink-3">{aiEnabled ? 'Only field labels and check results are sent for explanations. Names, values and documents stay out of the prompt.' : 'All checks and guidance run locally. No profile data is sent to an AI provider.'} Guidance cannot change evidence or submit an application.</p>
       </aside>
