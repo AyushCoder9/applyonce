@@ -19,6 +19,7 @@ Updated 7 September 2026. Repository: AyushCoder9/applyonce. This update continu
 13. Hardened CI after that rendering change: Node 24 now matches production, lint and stale-control checks are required, startup waits on both real health endpoints, and performance smoke evidence includes the static status route.
 14. Reframed the citizen data workspace as “My profile,” added a persistent synthetic-sandbox marker to citizen, partner and operations shells, and exposed each mock provider mode directly on its source card. This removes the remaining implication that public demo records came from live government systems.
 15. Made public health endpoints safe to expose during outages by stripping raw dependency errors, and aligned the independent BTA portal with the app’s baseline browser security headers.
+16. Bound BTA callbacks to the origin the citizen actually opened, so preview aliases and local audit ports remain in the same browser session; the repeatable audit now handles an already-running export without weakening duplicate protection.
 
 ## Runtime/configuration
 
@@ -28,7 +29,7 @@ This audit ran isolated services on 3400/3401 and a separate database, Redis ind
 
 ## Validation evidence
 
-The latest unit suite passed 109 tests across eight packages; all 11 TypeScript tasks and all three production builds passed. The production API audit passed 83/83 assertions. All 17 browser workflows passed against the optimized production build in 1.3 minutes. The receipt workflow additionally rejects unauthenticated access, downloads through the real control, verifies the ES256 signature and confirms that no citizen values are present. The audit report records coverage and remaining limits. `docs/audit-results.json` contains each production HTTP assertion. Native Playwright traces are retained on failures and test reports describe the actual browser runs. Source inventory captures file hashes/structure; graph output supports navigation rather than proving correctness.
+The latest unit suite passed 109 tests across eight packages; all 11 TypeScript tasks and all three production builds passed. The production API audit passed 84/84 assertions. All 17 browser workflows passed against the optimized production build in 1.3 minutes. The receipt workflow additionally rejects unauthenticated access, downloads through the real control, verifies the ES256 signature and confirms that no citizen values are present. The audit report records coverage and remaining limits. `docs/audit-results.json` contains each production HTTP assertion. Native Playwright traces are retained on failures and test reports describe the actual browser runs. Source inventory captures file hashes/structure; graph output supports navigation rather than proving correctness.
 
 ## Next work requiring deployment or external validation
 

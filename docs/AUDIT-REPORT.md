@@ -45,7 +45,7 @@ Final release evidence on 7 September 2026:
 | TypeScript | **11/11 tasks passed** |
 | Optimized production build | **3/3 passed** in 1m 14.81s: web, BTA and extension |
 | Browser workflows in production mode | **17/17 passed** in 1.3m |
-| API, authorization, persistence and route audit in production mode | **83/83 passed** |
+| API, authorization, persistence and route audit in production mode | **84/84 passed** |
 | ESLint and interaction source gates | **Passed with zero warnings**; 119 TSX files checked for stale controls |
 | Production dependency audit | **0 known vulnerabilities** |
 | Warm localhost response sample | Authenticated pages **16–26ms total**; BTA homepage **1.5–2.5ms total** |
@@ -131,7 +131,7 @@ Final local results on 6 September 2026:
 | Unit and integration suites | **106 passed**, eight package tasks | Crypto 6, schema 13, providers 3, SDK 4, extension 41, database 6, web 30, worker 3; all rerun after the dependency patch |
 | TypeScript | **11/11 tasks passed** | No cache hits; final production builds also complete application type checks |
 | Production build | **3/3 passed** | Web, BTA and extension; no cache hits, root build completed in 6m 41.9s on the audit workstation |
-| Production API / route audit | **83/83 passed** | Individual assertions in `audit-results.json`; local database, queue, worker, object storage and both apps |
+| Production API / route audit | **84/84 passed** | Individual assertions in `audit-results.json`; local database, queue, worker, object storage and both apps |
 | Chromium browser workflows | **11/11 passed in 25.9s** | Final rebuilt applications; full workflow list below |
 | Production dependency audit | **0 known advisories** | 398 dependencies; targeted esbuild patch plus successful Drizzle configuration check |
 | Mobile layout | **390px and 320px checks passed** | Full mobile navigation and document-page overflow regression |
