@@ -107,12 +107,13 @@ test('notification switches persist and consent notices stay protected',async({p
 });
 
 test('DigiLocker demo connection is callback-bound and can be disconnected',async({page})=>{
- await login(page,'9876543999');await page.goto('/app/verify');
+ await login(page,'9876543999');await page.request.delete('/api/v1/providers/digilocker');await page.goto('/app/verify');
+ const disconnect=page.getByRole('button',{name:'Disconnect',exact:true});
  await page.getByTestId('connect-digilocker').click();
  await expect(page.getByText('synthetic test client',{exact:false})).toBeVisible();
  await page.getByTestId('mock-allow').click();
- await expect(page.getByRole('button',{name:'Disconnect',exact:true})).toBeVisible({timeout:30_000});
+ await expect(disconnect).toBeVisible({timeout:30_000});await expect(disconnect).toBeEnabled({timeout:30_000});
  page.once('dialog',dialog=>dialog.accept());
- await page.getByRole('button',{name:'Disconnect',exact:true}).click();
+ await disconnect.click();
  await expect(page.getByTestId('connect-digilocker')).toBeVisible();
 });

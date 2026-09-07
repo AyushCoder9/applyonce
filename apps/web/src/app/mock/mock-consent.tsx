@@ -18,13 +18,9 @@ export function MockConsent({ provider, redirectUri, state, handle }: { provider
   const b = BRAND[provider];
   const [phone, setPhone] = useState(PEOPLE[0]!.phone);
   const [busy, setBusy] = useState(false);
-  const go = (allow: boolean) => {
-    setBusy(true);
-    const u = new URL(redirectUri, window.location.origin);
-    if (provider === "aa") { u.searchParams.set("handle", allow ? handle ?? "" : ""); }
-    else { u.searchParams.set("state", state ?? ""); if (allow) u.searchParams.set("code", phone); else u.searchParams.set("error", "access_denied"); }
-    window.location.href = u.toString();
-  };
+  const denied = provider === "aa"
+    ? `${redirectUri}?handle=`
+    : `${redirectUri}?${new URLSearchParams({ state: state ?? "", error: "access_denied" })}`;
   return (
     <main className="min-h-dvh bg-[#f3f4f6] text-[#111827]" style={{ fontFamily: "system-ui, sans-serif" }}>
       <header className="text-white" style={{ background: b.color }}>
@@ -34,20 +30,23 @@ export function MockConsent({ provider, redirectUri, state, handle }: { provider
         <div className="rounded-lg border border-[#e5e7eb] bg-white p-6 shadow-sm">
           <div className="flex items-center gap-3"><img src="/icon.svg" alt="" className="size-10 rounded-lg" /><div><div className="font-semibold">ApplyOnce wants to access your {b.name} demo account</div><div className="text-sm text-[#6b7280]">applyonce.in · synthetic test client</div></div></div>
           <ul className="mt-5 grid gap-2 text-sm">{b.scopes.map((s) => <li key={s} className="flex items-start gap-2"><ShieldCheck className="mt-0.5 size-4 shrink-0" style={{ color: b.color }} />{s}</li>)}</ul>
-          <fieldset className="mt-6">
-            <legend className="text-sm font-semibold">Sign in as (demo)</legend>
-            <div className="mt-2 grid gap-2">{PEOPLE.map((p) => (
-              <label key={p.phone} className={`flex cursor-pointer items-center gap-3 rounded-md border p-3 ${phone === p.phone ? "border-[#1f5fa8] bg-[#eff6ff]" : "border-[#e5e7eb]"}`}>
-                <input type="radio" name="person" value={p.phone} checked={phone === p.phone} onChange={() => setPhone(p.phone)} className="size-4" />
-                <span className="min-w-0 flex-1"><span className="block font-medium">{p.name}</span><span className="block text-xs text-[#6b7280]">+91 {p.phone} · {p.hint}</span></span>
-              </label>
-            ))}</div>
-          </fieldset>
-          <p className="mt-5 flex items-center gap-2 text-xs text-[#6b7280]"><Lock className="size-3.5" />ApplyOnce receives a reference token only. You can revoke this any time from {b.name}.</p>
-          <div className="mt-6 grid gap-2 sm:grid-cols-2">
-            <button type="button" onClick={() => go(false)} disabled={busy} className="min-h-11 rounded-md border border-[#d1d5db] bg-white font-medium hover:bg-[#f9fafb]">Deny</button>
-            <button type="button" onClick={() => go(true)} disabled={busy} data-testid="mock-allow" className="inline-flex min-h-11 items-center justify-center gap-1 rounded-md font-semibold text-white disabled:opacity-60" style={{ background: b.color }}>{busy ? "Redirecting…" : "Allow"}<ChevronRight className="size-4" /></button>
-          </div>
+          <form action={redirectUri} method="get" onSubmit={() => setBusy(true)}>
+            {provider === "aa" ? <input type="hidden" name="handle" value={handle ?? ""} /> : <input type="hidden" name="state" value={state ?? ""} />}
+            <fieldset className="mt-6">
+              <legend className="text-sm font-semibold">Sign in as (demo)</legend>
+              <div className="mt-2 grid gap-2">{PEOPLE.map((p) => (
+                <label key={p.phone} className={`flex cursor-pointer items-center gap-3 rounded-md border p-3 ${phone === p.phone ? "border-[#1f5fa8] bg-[#eff6ff]" : "border-[#e5e7eb]"}`}>
+                  <input type="radio" name={provider === "aa" ? undefined : "code"} value={p.phone} checked={phone === p.phone} onChange={() => setPhone(p.phone)} className="size-4" />
+                  <span className="min-w-0 flex-1"><span className="block font-medium">{p.name}</span><span className="block text-xs text-[#6b7280]">+91 {p.phone} · {p.hint}</span></span>
+                </label>
+              ))}</div>
+            </fieldset>
+            <p className="mt-5 flex items-center gap-2 text-xs text-[#6b7280]"><Lock className="size-3.5" />ApplyOnce receives a reference token only. You can revoke this any time from {b.name}.</p>
+            <div className="mt-6 grid gap-2 sm:grid-cols-2">
+              <a href={denied} aria-disabled={busy} className="inline-flex min-h-11 items-center justify-center rounded-md border border-[#d1d5db] bg-white font-medium hover:bg-[#f9fafb] aria-disabled:pointer-events-none aria-disabled:opacity-60">Deny</a>
+              <button type="submit" disabled={busy} data-testid="mock-allow" className="inline-flex min-h-11 items-center justify-center gap-1 rounded-md font-semibold text-white disabled:opacity-60" style={{ background: b.color }}>{busy ? "Redirecting…" : "Allow"}<ChevronRight className="size-4" /></button>
+            </div>
+          </form>
         </div>
         <p className="mt-4 text-center text-xs text-[#6b7280]">This is a simulated consent screen used when PROVIDER_* = mock. No real {b.name} call is made.</p>
       </div>
