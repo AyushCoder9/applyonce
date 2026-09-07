@@ -35,7 +35,7 @@ Aurora PostgreSQL is selected over Aurora DSQL because the existing Drizzle sche
 | Cached public page | 100 ms | 400 ms | No database call on a cache hit |
 | Authenticated read | 250 ms | 800 ms | At most two sequential database stages after session resolution |
 | Authenticated write | 400 ms | 1,000 ms | One transaction, idempotent retries |
-| Health endpoint | 250 ms | 1,500 ms | 1.2 s database and 750 ms queue timeouts |
+| Health endpoint | 250 ms | 1,500 ms | 1.2 s critical database timeout; optional queue probe stays on `/status` |
 | External provider | provider-specific | provider-specific | Async workflow; never block page rendering |
 
 Run `pnpm perf:smoke -- <url>` to collect p50 and p95 samples. `APPLYONCE_P95_BUDGET_MS` changes the health budget for controlled tests.

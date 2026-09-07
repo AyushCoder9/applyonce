@@ -4,7 +4,7 @@ import { pingDb, pingRedis, providerModes, workerHealth } from "@/components/adm
 export const metadata: Metadata = { title: "Status", description: "Live status of ApplyOnce services and integration modes." };
 export const dynamic = "force-dynamic";
 export default async function Status() {
-  const [db, redis, worker] = await Promise.all([pingDb(), pingRedis(), workerHealth()]);
+  const [db, redis, worker] = await Promise.all([pingDb(), pingRedis(true), workerHealth()]);
   const queueOk = redis.ok || !redis.required;
   const allOk = db.ok && queueOk && worker.ok;
   const Dot = ({ ok }: { ok: boolean }) => <span className={`inline-block size-2.5 rounded-pill ${ok ? "bg-verified-500" : "bg-danger-500"}`} />;

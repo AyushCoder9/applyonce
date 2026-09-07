@@ -1,6 +1,7 @@
 import "server-only";
 import { db, t, eq, gt, and, count, dsql, inArray } from "@applyonce/db";
-import { QUEUES, queue } from "@applyonce/jobs";
+
+const QUEUES = ["verification", "documents", "webhooks", "notifications", "scheduled", "data"] as const;
 
 const n = async (q: Promise<{ n: number }[]>) => (await q)[0]?.n ?? 0;
 export async function overviewStats() {
@@ -20,6 +21,7 @@ export async function overviewStats() {
 
 export type QueueCount = { name: string; counts: Record<string, number> | null; error?: string };
 export async function queueCounts(): Promise<QueueCount[]> {
+  const { queue } = await import("@applyonce/jobs");
   return Promise.all(QUEUES.map(async (name) => {
     try { const counts = await Promise.race([queue(name).getJobCounts(), new Promise<never>((_, rej) => setTimeout(() => rej(new Error("redis timeout")), 2500))]); return { name, counts }; }
     catch (e) { return { name, counts: null, error: (e as Error).message }; }
@@ -37,9 +39,10 @@ const within = <T>(promise: Promise<T>, ms: number, label: string) => Promise.ra
 export const queueRequired = () => process.env.APPLYONCE_INLINE_JOBS !== "1";
 
 export async function pingDb() { const t0 = Date.now(); try { await within(db.execute(dsql`select 1`), 1200, "database"); return { ok: true, ms: Date.now() - t0 }; } catch (e) { return { ok: false, ms: Date.now() - t0, error: (e as Error).message }; } }
-export async function pingRedis() {
+export async function pingRedis(probeOptional = false) {
   const t0 = Date.now();
   const required = queueRequired();
+  if (!required && !probeOptional) return { ok: true, required, skipped: true, ms: 0, note: "Optional while inline processing is enabled" };
   try { const { redis } = await import("@applyonce/jobs"); const r = await within(redis().ping(), 750, "redis"); return { ok: r === "PONG", required, ms: Date.now() - t0 }; }
   catch (e) { return { ok: false, required, ms: Date.now() - t0, error: (e as Error).message }; }
 }
