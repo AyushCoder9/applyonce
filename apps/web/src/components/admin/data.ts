@@ -1,5 +1,6 @@
 import "server-only";
 import { db, t, eq, gt, and, count, dsql, inArray } from "@applyonce/db";
+import { providerReadiness } from "@applyonce/providers";
 
 const QUEUES = ["verification", "documents", "webhooks", "notifications", "scheduled", "data"] as const;
 
@@ -28,8 +29,7 @@ export async function queueCounts(): Promise<QueueCount[]> {
   }));
 }
 
-export const PROVIDER_ENV = [["digilocker", "PROVIDER_DIGILOCKER"], ["aadhaar_offline", "PROVIDER_AADHAAR"], ["pan", "PROVIDER_PAN"], ["abha", "PROVIDER_ABHA"], ["aa", "PROVIDER_AA"], ["ocr", "PROVIDER_OCR"], ["sms", "PROVIDER_SMS"], ["email", "PROVIDER_EMAIL"]] as const;
-export const providerModes = () => PROVIDER_ENV.map(([name, env]) => ({ name, env, mode: process.env[env] ?? "mock" }));
+export const providerModes = () => providerReadiness().map((provider) => ({ ...provider, name: provider.id }));
 
 const within = <T>(promise: Promise<T>, ms: number, label: string) => Promise.race([
   promise,

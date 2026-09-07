@@ -19,12 +19,36 @@ export interface AadhaarOfflineKyc {
   last4: string; referenceKey: string; xmlHash: string; generatedAt: string;
 }
 
+/**
+ * Short-lived OAuth material that belongs to one browser authorization attempt.
+ * The web app must keep this server-confidential and bind it to the callback.
+ */
+export interface ProviderAuthTransaction {
+  state: string;
+  redirectUri: string;
+  codeVerifier?: string;
+}
+
+export interface ProviderAuthStart {
+  url: string;
+  transaction: ProviderAuthTransaction;
+}
+
+export interface ProviderAuthResult {
+  /** Opaque, encrypted-at-rest provider session material. */
+  providerRef: string;
+  name?: string;
+  dob?: string;
+}
+
 export interface DigiLockerProvider {
-  startAuth(userId: string, redirectUri: string): Promise<{ url: string; state: string }>;
-  completeAuth(state: string, code: string): Promise<{ providerRef: string; name?: string; dob?: string }>;
+  startAuth(userId: string, redirectUri: string): Promise<ProviderAuthStart>;
+  completeAuth(transaction: ProviderAuthTransaction, code: string): Promise<ProviderAuthResult>;
   listIssuedDocs(providerRef: string): Promise<IssuedDoc[]>;
   fetchDoc(providerRef: string, uri: string): Promise<{ bytes: Uint8Array; mime: string; data?: Record<string, unknown> }>;
   fetchAadhaarXml(providerRef: string): Promise<AadhaarOfflineKyc>;
+  refresh?(providerRef: string): Promise<{ providerRef: string }>;
+  revoke?(providerRef: string): Promise<void>;
 }
 
 export interface PanProvider {

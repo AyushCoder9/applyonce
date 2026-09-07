@@ -73,7 +73,7 @@ The audit modifies demo facts, creates applications/uploads and schedules then c
 | `packages/schema` | Canonical facts, EN/HI labels, validation and readiness |
 | `packages/db` | Drizzle/Postgres, access rules, provenance writes and consent trigger |
 | `packages/crypto` | Fact encryption, signed payloads and webhook signatures |
-| `packages/providers` | Deterministic mocks and partial live adapters |
+| `packages/providers` | Deterministic demos, readiness registry, Setu sandbox adapters and direct DigiLocker Requester OAuth/PKCE adapter |
 | `packages/sdk` | Partner session creation, token exchange and verification |
 | `packages/ui` | Shared source-aware UI components |
 
@@ -83,7 +83,10 @@ The audit modifies demo facts, creates applications/uploads and schedules then c
 - [Production deployment](docs/PRODUCTION-DEPLOYMENT.md): verified current topology, latency budgets, Mumbai target and migration gates.
 - [Audit report](docs/AUDIT-REPORT.md): findings, fixes, validation and remaining gaps.
 - [Current progress](docs/CURRENT-PROGRESS.md): delivered work and handoff checklist.
-- [Integrations and roadmap](docs/INTEGRATIONS-AND-ROADMAP.md): optional AI setup and prioritized next work.
+- [Government integration register](docs/integrations/README.md): current official access paths, implemented boundaries and blockers.
+- [External approval register](docs/integrations/APPROVAL-REGISTER.md): organization evidence and approval work that code cannot complete.
+- [DigiLocker runbook](docs/integrations/DIGILOCKER-RUNBOOK.md): exact configuration and production-proof gate.
+- [Integrations and roadmap](docs/INTEGRATIONS-AND-ROADMAP.md): optional AI setup and prioritized engineering work.
 - [Runbook](docs/RUNBOOK.md): local setup, rehearsal and troubleshooting.
 - [Source inventory](docs/source-inventory.json): file hashes, line counts and extracted structure.
 

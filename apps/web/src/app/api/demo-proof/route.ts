@@ -16,7 +16,7 @@ export async function GET() {
       region: process.env.VERCEL_REGION ?? "local",
     },
     services: { database: { ok: database.ok, ms: database.ms }, worker, portal },
-    providers: Object.fromEntries(providerModes().map(({ name, mode }) => [name, mode])),
+    providers: Object.fromEntries(providerModes().map(({ name, mode, state }) => [name, { mode, state }])),
     durationMs: Date.now() - started,
   }, { status: ok ? 200 : 503 });
   response.headers.set("Cache-Control", "no-store");

@@ -18,12 +18,12 @@ async function call<T>(path: string, init: RequestInit = {}): Promise<T> {
 export const setuDigilocker: DigiLockerProvider = {
   async startAuth(_userId, redirectUri) {
     const r = await call<{ id: string; url: string }>("/api/digilocker", { method: "POST", body: JSON.stringify({ redirectUrl: redirectUri, docType: "AADHAAR" }) });
-    return { url: r.url, state: r.id };
+    return { url: r.url, transaction: { state: r.id, redirectUri } };
   },
-  async completeAuth(state) {
-    const s = await call<{ status: string }>(`/api/digilocker/${state}/status`);
+  async completeAuth(transaction) {
+    const s = await call<{ status: string }>(`/api/digilocker/${transaction.state}/status`);
     if (s.status !== "authenticated") throw new Error(`setu digilocker status ${s.status}`);
-    return { providerRef: state };
+    return { providerRef: transaction.state };
   },
   async listIssuedDocs(ref) {
     const r = await call<{ documents: { docType: string; name: string; orgId: string; orgName: string; uri: string; date?: string }[] }>(`/api/digilocker/${ref}/documents`);
@@ -43,6 +43,8 @@ export const setuDigilocker: DigiLockerProvider = {
       address: { house: adr.house, street: adr.street, landmark: adr.landmark, locality: adr.locality, vtc: adr.vtc ?? adr.city ?? "", district: adr.district ?? "", state: adr.state ?? "", pincode: adr.pincode ?? "", country: "India" },
     };
   },
+  async refresh(providerRef) { return { providerRef }; },
+  async revoke(ref) { await call(`/api/digilocker/${ref}/revoke`, { method: "POST" }); },
 };
 const mapDocType = (t: string) => ({ ADHAR: "aadhaar", PANCR: "pan", SSCER: "marksheet_10", HSCER: "marksheet_12", DRVLC: "dl", CTCER: "category_cert", INCER: "income_cert", DMCER: "domicile_cert", DEGCR: "degree" } as Record<string, string>)[t] ?? t.toLowerCase();
 const normDate = (d: string) => (/^\d{2}-\d{2}-\d{4}$/.test(d) ? d.split("-").reverse().join("-") : d);

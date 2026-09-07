@@ -11,7 +11,8 @@ export const redis = () => (g.__applyonceRedis ??= new IORedis(redisUrl(), { max
 
 export type JobMap = {
   // verification
-  "digilocker.sync": { jobId: string; userId: string; profileId: string; providerRef: string };
+  /** providerRef is accepted only for deterministic test fixtures; production jobs resolve the encrypted ref from Postgres. */
+  "digilocker.sync": { jobId: string; userId: string; profileId: string; providerRef?: string };
   "pan.verify": { jobId: string; userId: string; profileId: string; pan: string };
   "aa.income": { jobId: string; userId: string; profileId: string; consentHandle: string };
   "abha.link": { jobId: string; userId: string; profileId: string; providerRef: string };

@@ -3,7 +3,7 @@
 import { useEffect, useState } from "react";
 import { useRouter } from "next/navigation";
 import { Button, Chip, ProgressBar, toast } from "@heroui/react";
-import { ShieldCheck, CreditCard, HeartPulse, Landmark, PenTool, RotateCw, Check, AlertTriangle, CalendarClock, Loader2 } from "lucide-react";
+import { ShieldCheck, CreditCard, HeartPulse, Landmark, PenTool, RotateCw, Unplug, Check, AlertTriangle, CalendarClock, Loader2 } from "lucide-react";
 import type { Fact } from "@applyonce/schema";
 import { PanInput, SourceChip, fmtDate, daysUntil, label, verifierName, cx } from "@applyonce/ui";
 import { api, tr, type Locale } from "./i18n";
@@ -21,7 +21,7 @@ const PROVIDERS = [
   { id: "esign", icon: PenTool, en: "e-Sign", hi: "ई-साइन", blurbEn: "Sign declarations with Aadhaar e-Sign. Create an OTP-confirmed sandbox declaration receipt.", blurbHi: "आधार ई-साइन से घोषणाएँ हस्ताक्षरित करें। सैंडबॉक्स घोषणा रसीद बनाएँ।" },
 ] as const;
 
-export function VerifyHub({ profileId, links, jobs: initialJobs, mismatches, expiring, modes, locale = "en", focusJobId, error }: { profileId: string; links: LinkRow[]; jobs: Job[]; mismatches: Mismatch[]; expiring: Fact[]; modes: Record<string, string>; locale?: Locale; focusJobId?: string | null; error?: string | null }) {
+export function VerifyHub({ profileId, links, jobs: initialJobs, mismatches, expiring, modes, locale = "en", focusJobId, error }: { profileId: string; links: LinkRow[]; jobs: Job[]; mismatches: Mismatch[]; expiring: Fact[]; modes: Record<string, { state: string; blocker?: string; onboardingUrl?: string }>; locale?: Locale; focusJobId?: string | null; error?: string | null }) {
   const router = useRouter();
   const [jobs, setJobs] = useState<Record<string, Job>>(() => Object.fromEntries(initialJobs.map((j) => [j.id, j])));
   const [busy, setBusy] = useState<string | null>(null);
@@ -43,6 +43,16 @@ export function VerifyHub({ profileId, links, jobs: initialJobs, mismatches, exp
     catch (e) { toast.danger((e as Error).message); }
     finally { setBusy(null); }
   };
+  const disconnectDigiLocker = async () => {
+    if (!window.confirm(tr(locale, "Disconnect DigiLocker from ApplyOnce? Existing submitted applications will not be changed.", "ApplyOnce से DigiLocker डिस्कनेक्ट करें? पहले जमा किए गए आवेदन नहीं बदलेंगे।"))) return;
+    setBusy("digilocker-disconnect");
+    try {
+      const result = await api<{ providerWarning?: string | null }>("/providers/digilocker", { method: "DELETE" });
+      toast.success(tr(locale, "DigiLocker disconnected", "DigiLocker डिस्कनेक्ट हुआ"), { description: result.providerWarning ?? undefined });
+      router.refresh();
+    } catch (e) { toast.danger((e as Error).message); }
+    finally { setBusy(null); }
+  };
   const verifyPan = async () => {
     setBusy("pan");
     try { const r = await api<{ jobId: string }>("/providers/pan/verify", { method: "POST", json: { pan } }); setJobs((m) => ({ ...m, [r.jobId]: { id: r.jobId, profileId, provider: "pan", kind: "verify_pan", status: "queued", progress: { step: "Queued", pct: 0, log: [] }, createdAt: new Date().toISOString() } })); setPan(""); }
@@ -62,15 +72,18 @@ export function VerifyHub({ profileId, links, jobs: initialJobs, mismatches, exp
         {PROVIDERS.map((p) => {
           const link = linkOf(p.id), job = activeJob(p.id), running = job && (job.status === "queued" || job.status === "running"), I = p.icon;
           const linked = link?.status === "linked";
-          const mode = p.id === "esign" ? "sandbox" : modes[p.id] ?? "unavailable";
+          const readiness = modes[p.id] ?? { state: "unavailable", blocker: "This connector is not available in this environment." };
+          const mode = readiness.state;
+          const blocked = mode === "approval_pending" || mode === "unavailable" || mode === "misconfigured";
           return (
             <article key={p.id} className={cx("card flex flex-col gap-3 p-5", focusJobId && job?.id === focusJobId && "ring-2 ring-brand-500/40")} data-provider={p.id}>
               <div className="flex items-start gap-3">
                 <span className={cx("grid size-11 shrink-0 place-items-center rounded-md", linked ? "bg-verified-50 text-verified-700" : "bg-brand-50 text-brand-600")}><I className="size-6" strokeWidth={1.75} /></span>
                 <div className="min-w-0 flex-1">
-                  <div className="flex flex-wrap items-center gap-2"><h3 className="font-display text-lg font-bold">{locale === "hi" ? p.hi : p.en}</h3><Chip size="sm" variant="soft" color={mode === "mock" || mode === "sandbox" ? "warning" : "default"}>{mode === "mock" ? tr(locale, "Mock source", "नकली स्रोत") : mode === "sandbox" ? tr(locale, "Sandbox", "सैंडबॉक्स") : mode.replaceAll("_", " ")}</Chip>
+                  <div className="flex flex-wrap items-center gap-2"><h3 className="font-display text-lg font-bold">{locale === "hi" ? p.hi : p.en}</h3><Chip size="sm" variant="soft" color={mode === "demo" || mode === "sandbox" ? "warning" : mode === "live" ? "success" : mode === "misconfigured" ? "danger" : "default"}>{mode === "demo" ? tr(locale, "Synthetic demo", "सिंथेटिक डेमो") : mode === "sandbox" ? tr(locale, "Sandbox", "सैंडबॉक्स") : mode.replaceAll("_", " ")}</Chip>
                     {linked ? <Chip size="sm" color="success" variant="soft"><span className="inline-flex items-center gap-1"><Check className="size-3.5" />{tr(locale, "Connected", "जुड़ा")}</span></Chip> : p.id === "esign" ? <Chip size="sm" variant="soft">{tr(locale, "Sandbox", "सैंडबॉक्स")}</Chip> : <Chip size="sm" color="warning" variant="soft">{tr(locale, "Not connected", "नहीं जुड़ा")}</Chip>}</div>
-                  <p className="mt-0.5 text-sm text-ink-2">{locale === "hi" ? p.blurbHi : p.blurbEn}</p>
+                  <p className="mt-0.5 text-sm text-ink-2">{mode === "demo" ? tr(locale, `Synthetic demo: ${p.blurbEn}`, `सिंथेटिक डेमो: ${p.blurbHi}`) : locale === "hi" ? p.blurbHi : p.blurbEn}</p>
+                  {blocked && readiness.blocker && <p className="mt-2 rounded-md bg-surface-2 px-3 py-2 text-xs text-ink-2">{readiness.blocker}{readiness.onboardingUrl && <a href={readiness.onboardingUrl} target="_blank" rel="noreferrer" className="ml-1 font-semibold text-brand-700 hover:underline">Official onboarding ↗</a>}</p>}
                   {linked && link?.lastSyncAt && <p className="mt-1 text-xs text-ink-3">{tr(locale, "Last sync", "अंतिम सिंक")} {fmtDate(link.lastSyncAt, locale)}</p>}
                 </div>
               </div>
@@ -84,17 +97,17 @@ export function VerifyHub({ profileId, links, jobs: initialJobs, mismatches, exp
               )}
               <div className="mt-auto flex flex-wrap items-center gap-2">
                 {p.id === "digilocker" && (linked
-                  ? <Button variant="outline" onPress={sync} isDisabled={!!running || busy === "digilocker"} isPending={busy === "digilocker"}><RotateCw className="size-4" />{tr(locale, "Re-sync", "फिर सिंक करें")}</Button>
-                  : <Button className="cta" onPress={() => go("/providers/digilocker/start", "digilocker")} isPending={busy === "digilocker"} data-testid="connect-digilocker">{tr(locale, "Connect DigiLocker", "DigiLocker जोड़ें")}</Button>)}
+                  ? <><Button variant="outline" onPress={sync} isDisabled={!!running || busy === "digilocker-disconnect"} isPending={busy === "digilocker"}><RotateCw className="size-4" />{tr(locale, "Re-sync", "फिर सिंक करें")}</Button><Button variant="outline" onPress={disconnectDigiLocker} isDisabled={!!running || busy === "digilocker"} isPending={busy === "digilocker-disconnect"}><Unplug className="size-4" />{tr(locale, "Disconnect", "डिस्कनेक्ट")}</Button></>
+                  : <Button className="cta" onPress={() => go("/providers/digilocker/start", "digilocker")} isPending={busy === "digilocker"} isDisabled={blocked} data-testid="connect-digilocker">{tr(locale, "Connect DigiLocker", "DigiLocker जोड़ें")}</Button>)}
                 {p.id === "pan" && (
                   <div className="grid w-full gap-2 sm:grid-cols-[1fr_auto] sm:items-end">
                     <PanInput label={linked ? tr(locale, "Verify another PAN", "अन्य पैन सत्यापित करें") : tr(locale, "PAN number", "पैन नंबर")} value={pan} onChange={setPan} locale={locale} />
-                    <Button variant={linked ? "outline" : "primary"} onPress={verifyPan} isDisabled={!/^[A-Z]{5}\d{4}[A-Z]$/.test(pan) || !!running} isPending={busy === "pan"}>{tr(locale, "Verify", "सत्यापित करें")}</Button>
+                    <Button variant={linked ? "outline" : "primary"} onPress={verifyPan} isDisabled={blocked || !/^[A-Z]{5}\d{4}[A-Z]$/.test(pan) || !!running} isPending={busy === "pan"}>{tr(locale, "Verify", "सत्यापित करें")}</Button>
                   </div>
                 )}
-                {p.id === "abha" && <Button variant="outline" onPress={() => go("/providers/abha/link", "abha")} isPending={busy === "abha"} isDisabled={!!running}>{linked ? tr(locale, "Re-link", "फिर जोड़ें") : tr(locale, "Link ABHA", "आभा जोड़ें")}</Button>}
-                {p.id === "aa" && <Button variant="outline" onPress={() => go("/providers/aa/consent", "aa")} isPending={busy === "aa"} isDisabled={!!running}>{linked ? tr(locale, "Refresh income", "आय ताज़ा करें") : tr(locale, "Give consent", "सहमति दें")}</Button>}
-                {p.id === "esign" && <a href="/app/sign" className="rounded-md border border-line px-4 py-2 text-sm font-semibold">{tr(locale,"Create a declaration","घोषणा बनाएँ")}</a>}
+                {p.id === "abha" && <Button variant="outline" onPress={() => go("/providers/abha/link", "abha")} isPending={busy === "abha"} isDisabled={blocked || !!running}>{linked ? tr(locale, "Re-link", "फिर जोड़ें") : tr(locale, "Link ABHA", "आभा जोड़ें")}</Button>}
+                {p.id === "aa" && <Button variant="outline" onPress={() => go("/providers/aa/consent", "aa")} isPending={busy === "aa"} isDisabled={blocked || !!running}>{linked ? tr(locale, "Refresh income", "आय ताज़ा करें") : tr(locale, "Give consent", "सहमति दें")}</Button>}
+                {p.id === "esign" && (blocked ? <span aria-disabled="true" className="rounded-md border border-line bg-surface-2 px-4 py-2 text-sm font-semibold text-ink-3">{tr(locale,"Declaration unavailable","घोषणा उपलब्ध नहीं")}</span> : <a href="/app/sign" className="rounded-md border border-line px-4 py-2 text-sm font-semibold">{tr(locale,"Create a declaration","घोषणा बनाएँ")}</a>)}
               </div>
             </article>
           );

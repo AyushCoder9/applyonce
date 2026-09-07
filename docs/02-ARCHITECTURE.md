@@ -74,7 +74,7 @@ interface AaProvider      { createConsent(userId, purpose): Promise<{ url }>; fe
 interface EsignProvider   { sign(pdf, signer): Promise<{ signedPdf; certInfo }> }
 interface OcrProvider     { extract(bytes, docType): Promise<{ fields: Record<string,string>; confidence }> }
 ```
-Env: `PROVIDER_DIGILOCKER=mock|setu|apisetu`, same per provider. Mock returns deterministic fixtures for seeded demo users (e.g., `Aarav Sharma`, DOB 2007-03-14, CBSE 2025 marks). Sandbox = Setu/Cashfree keys. Live = API Setu once org ToS is signed. Live Aadhaar data: **store** name, DOB, gender, photo, address, last-4, XML hash, reference key; **never** the 12-digit number.
+Env: `PROVIDER_DIGILOCKER=mock|setu|apisetu`. Mock returns deterministic fixtures for seeded demo users. `apisetu` selects the direct OAuth/PKCE Requester adapter, but runtime readiness remains `configured_unverified` until the organization, scopes, callback and production proof are approved. Real Aadhaar offline/App-VC verification additionally requires UIDAI OVSE registration. Store only expressly permitted attributes/output; never store the full Aadhaar number or biometric templates.
 
 ## 6. Security & privacy
 - **Encryption**: per-user data key (DEK) generated at signup, wrapped by KMS master key (KEK). Sensitive fact values and documents are encrypted with the DEK (AES-256-GCM). DB search on plaintext is limited to non-sensitive columns + blind indexes (HMAC) for lookups (e.g., phone).

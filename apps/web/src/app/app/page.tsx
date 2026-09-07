@@ -74,7 +74,7 @@ export default async function Home() {
           </Link>
           <Link href="/app/verify" className="card group flex flex-col justify-between gap-4 p-5 transition-shadow hover:shadow-pop">
             <span className="grid size-11 place-items-center rounded-md bg-verified-50 text-verified-700"><BadgeCheck className="size-5" /></span>
-            <span><span className="block font-display text-lg font-bold">{tr(locale, "Verify", "सत्यापन")}</span><span className="text-sm text-ink-2">{tr(locale, "Mock sources in this demo.", "इस डेमो में नकली स्रोत।")}</span></span>
+            <span><span className="block font-display text-lg font-bold">{tr(locale, "Verify", "सत्यापन")}</span><span className="text-sm text-ink-2">{tr(locale, "Synthetic sources are clearly labelled in this demo.", "इस डेमो में सिंथेटिक स्रोत स्पष्ट रूप से चिह्नित हैं।")}</span></span>
           </Link>
         </section>
       </div>

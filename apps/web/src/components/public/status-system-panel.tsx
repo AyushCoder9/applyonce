@@ -13,7 +13,7 @@ type Proof = {
     worker: { ok: boolean; note: string };
     portal: { ok: boolean; configured: boolean; redis: { ok: boolean; ms: number | null } };
   };
-  providers: Record<string, string>;
+  providers: Record<string, { mode: string; state: string }>;
 };
 
 export function StatusSystemPanel() {
@@ -57,8 +57,8 @@ export function StatusSystemPanel() {
       </ul>}
       {error && <p className="mt-3 rounded-md bg-danger-50 px-4 py-3 text-sm text-danger-500" role="alert">{error}</p>}
       <h2 className="mt-10 font-display text-2xl font-bold">Integrations</h2>
-      <p className="mt-1 text-sm text-ink-2"><code>mock</code> means simulated for the public demo. It is not a live issuer connection.</p>
-      {proof ? <ul className="mt-4 grid gap-2 sm:grid-cols-2 lg:grid-cols-4">{Object.entries(proof.providers).map(([name, mode]) => <li key={name} className="card flex items-center justify-between px-4 py-3 text-sm"><span className="font-medium">{name}</span><span className={`rounded-pill px-2 py-0.5 text-xs font-semibold ${mode === "mock" ? "bg-surface-2 text-ink-2" : "bg-verified-50 text-verified-700"}`}>{mode}</span></li>)}</ul> : <div className="mt-4 h-24 animate-pulse rounded-lg bg-surface-2" aria-label="Loading integration status" />}
+      <p className="mt-1 text-sm text-ink-2"><code>demo</code> means simulated, <code>configured unverified</code> means credentials exist but production proof is incomplete, and only <code>live</code> means an approved end-to-end connection has been verified.</p>
+      {proof ? <ul className="mt-4 grid gap-2 sm:grid-cols-2 lg:grid-cols-4">{Object.entries(proof.providers).map(([name, provider]) => <li key={name} className="card flex items-center justify-between gap-3 px-4 py-3 text-sm"><span className="font-medium">{name}</span><span className={`rounded-pill px-2 py-0.5 text-right text-xs font-semibold ${provider.state === "live" ? "bg-verified-50 text-verified-700" : provider.state === "misconfigured" ? "bg-danger-50 text-danger-500" : provider.state === "demo" || provider.state === "sandbox" ? "bg-pending-50 text-pending-700" : "bg-surface-2 text-ink-2"}`}>{provider.state.replaceAll("_", " ")}</span></li>)}</ul> : <div className="mt-4 h-24 animate-pulse rounded-lg bg-surface-2" aria-label="Loading integration status" />}
       <p className="mt-8 text-xs text-ink-3">{proof ? `Checked ${new Date(proof.checkedAt).toLocaleString("en-IN", { timeZone: "Asia/Kolkata" })} IST · build ${proof.deployment.commit}` : "Connecting to live services…"} · Incidents: status@applyonce.in</p>
     </div>
   );

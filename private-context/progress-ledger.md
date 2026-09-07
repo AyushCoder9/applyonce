@@ -95,3 +95,35 @@ Status date: 2026-09-02
 - “DigiLocker connected” requires official approval, credentials, consent, retrieval, error/revocation, and end-to-end verification.
 - “Application submitted externally” requires a verified external receipt.
 - “Secure” requires threat-model coverage, tested controls, monitoring, and known residual-risk documentation.
+
+## 8 September 2026 — government integration and release-truth pass
+
+### Implemented
+
+- Added a direct DigiLocker Requester adapter with OAuth authorization code, S256 PKCE, state binding, token exchange, refresh, revocation, issued-document retrieval, eAadhaar XML retrieval, response-HMAC validation, network timeouts, and active-content rejection.
+- Added a sealed, expiring, user-bound OAuth transaction cookie; stopped putting provider tokens in background-job payloads.
+- Added fail-closed provider selection: unknown or incomplete production modes cannot silently fall back to mock data.
+- Added runtime readiness states and exact blockers for DigiLocker, Aadhaar OVSE/online auth, PAN, ABHA, Account Aggregator, eSign, OCR, SMS, and email.
+- Added a working DigiLocker disconnect route and citizen UI with remote-revocation warning plus local deletion/audit semantics.
+- Reworked citizen and operator connector screens so only an evidence-backed production integration may appear green/live.
+- Added canonical integration research, a DigiLocker production runbook, and an external approval register under `docs/integrations/`.
+- Corrected stale claims that Aadhaar offline/VC verification required no organization registration; the current path requires UIDAI OVSE registration.
+- Added adapter, cryptographic callback, HMAC, active-content, readiness, and browser-flow tests.
+
+### Evidence captured before final release pass
+
+- `pnpm test`: 117 tests passed.
+- `pnpm typecheck`: passed.
+- `pnpm lint`: passed; interaction audit covered 119 TSX files.
+- `pnpm build`: passed for web, portal, and extension workspaces.
+- Local production workflow audit: 84/84 checks passed.
+- Playwright production-mode flows: 18 checks passed, including DigiLocker connect/callback/disconnect.
+- Live API Setu signup inspection confirmed DigiLocker-MeriPehchaan identity is the entry rail; no application was submitted.
+
+### Still externally gated
+
+- API Setu/DigiLocker organization and requester approval, agreement, credentials, scopes, callback, and production proof.
+- UIDAI OVSE registration or the substantially heavier AUA/KUA/Sub-AUA path.
+- MeriPehchaan application-owner onboarding, eSign ASP/ESP agreement, PAN production authorization, and all publisher-specific API Setu approvals.
+- Legal entity/signatory evidence, controlled domain, privacy/retention pack, verified email domain, and production compliance review.
+- Production Mumbai PII/database and malware-scanned S3 document cutover remain unverified plans, not completed infrastructure.

@@ -19,7 +19,7 @@ export default async function VerifyPage({ searchParams }: { searchParams: Promi
   const facts = await loadFacts(a);
   const expiring = facts.filter((f) => f.expiresAt).sort((x, y) => (daysUntil(x.expiresAt) ?? 0) - (daysUntil(y.expiresAt) ?? 0));
   const verified = facts.filter((f) => f.source === "issuer_verified" || f.source === "provider_verified").length;
-  const modes = Object.fromEntries(providerModes().map(({ name, mode }) => [name, mode]));
+  const modes = Object.fromEntries(providerModes().map(({ name, state, blocker, onboardingUrl }) => [name, { state, blocker, onboardingUrl }]));
   return (
     <div>
       <PageHeader title={tr(locale, "Verify", "सत्यापन")} subtitle={tr(locale, `${verified} of ${facts.length} facts are verified by their issuer. Connect more sources to turn amber into green.`, `${facts.length} में से ${verified} तथ्य जारीकर्ता-सत्यापित हैं। और स्रोत जोड़कर पीले को हरा करें।`)} />

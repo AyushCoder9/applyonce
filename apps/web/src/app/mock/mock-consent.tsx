@@ -11,7 +11,7 @@ const PEOPLE = [
 const BRAND = {
   digilocker: { name: "DigiLocker", org: "National e-Governance Division · MeitY", color: "#1f5fa8", scopes: ["Issued documents (Aadhaar, PAN, CBSE, e-District)", "Aadhaar e-KYC (name, DOB, gender, address, photo)", "Pull documents on your behalf when you re-sync"] },
   abha: { name: "ABHA", org: "Ayushman Bharat Digital Mission · NHA", color: "#0f766e", scopes: ["ABHA number and address", "Basic profile (name, DOB, gender, blood group)"] },
-  aa: { name: "Account Aggregator", org: "RBI-regulated NBFC-AA (sandbox)", color: "#7c3aed", scopes: ["Bank statement summary, last 12 months", "Income estimate for scholarship eligibility", "Consent valid 30 days · one-time fetch"] },
+  aa: { name: "Account Aggregator", org: "Synthetic regulated-flow demonstration", color: "#7c3aed", scopes: ["Synthetic bank statement summary, last 12 months", "Synthetic income evidence for the demo", "Demo consent valid 30 days · one-time fetch"] },
 } as const;
 
 export function MockConsent({ provider, redirectUri, state, handle }: { provider: keyof typeof BRAND; redirectUri: string; state?: string; handle?: string }) {
@@ -32,7 +32,7 @@ export function MockConsent({ provider, redirectUri, state, handle }: { provider
       </header>
       <div className="mx-auto max-w-lg px-5 py-8">
         <div className="rounded-lg border border-[#e5e7eb] bg-white p-6 shadow-sm">
-          <div className="flex items-center gap-3"><img src="/icon.svg" alt="" className="size-10 rounded-lg" /><div><div className="font-semibold">ApplyOnce wants to access your {b.name} account</div><div className="text-sm text-[#6b7280]">applyonce.in · verified partner</div></div></div>
+          <div className="flex items-center gap-3"><img src="/icon.svg" alt="" className="size-10 rounded-lg" /><div><div className="font-semibold">ApplyOnce wants to access your {b.name} demo account</div><div className="text-sm text-[#6b7280]">applyonce.in · synthetic test client</div></div></div>
           <ul className="mt-5 grid gap-2 text-sm">{b.scopes.map((s) => <li key={s} className="flex items-start gap-2"><ShieldCheck className="mt-0.5 size-4 shrink-0" style={{ color: b.color }} />{s}</li>)}</ul>
           <fieldset className="mt-6">
             <legend className="text-sm font-semibold">Sign in as (demo)</legend>

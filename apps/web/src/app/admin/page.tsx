@@ -5,7 +5,7 @@ export const dynamic = "force-dynamic";
 export default async function AdminHome() {
   const [s, q] = await Promise.all([overviewStats(), queueCounts()]);
   const failedJobs = q.reduce((a, x) => a + (x.counts?.failed ?? 0), 0);
-  const live = providerModes().filter((p) => p.mode !== "mock").length;
+  const live = providerModes().filter((p) => p.state === "live").length;
   return (
     <>
       <PageHeader title="Overview" subtitle="ApplyOnce internal ops. Every action here is audited." />

@@ -66,7 +66,7 @@ test("all citizen workspace pages render with labelled controls", async ({ page 
   await expect(page.getByRole("heading", { name: "My profile" })).toBeVisible();
   await expect(page.getByText("Synthetic sandbox", { exact: true }).first()).toBeVisible();
   await page.goto(`${BASE}/app/verify`);
-  await expect(page.getByText("Mock source", { exact: true }).first()).toBeVisible();
+  await expect(page.getByText("Synthetic demo", { exact: true }).first()).toBeVisible();
   const paths = [
     "/app", "/app/vault", "/app/vault/identity", "/app/vault/contact", "/app/vault/address",
     "/app/vault/family", "/app/vault/category", "/app/vault/education", "/app/vault/employment",

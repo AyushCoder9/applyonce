@@ -8,9 +8,9 @@ const pdfStub = (title: string) => new TextEncoder().encode(`%PDF-1.4\n% ApplyOn
 const digilocker: DigiLockerProvider = {
   async startAuth(userId, redirectUri) {
     const state = `mock_${userId}_${Date.now().toString(36)}`;
-    return { url: `/mock/digilocker?state=${encodeURIComponent(state)}&redirect_uri=${encodeURIComponent(redirectUri)}`, state };
+    return { url: `/mock/digilocker?state=${encodeURIComponent(state)}&redirect_uri=${encodeURIComponent(redirectUri)}`, transaction: { state, redirectUri } };
   },
-  async completeAuth(_state, code) {
+  async completeAuth(_transaction, code) {
     const p = byPhone(code) ?? DEMO_PEOPLE[0]!;
     await sleep(300);
     return { providerRef: `dl_${p.id}`, name: p.name, dob: p.dob };
@@ -23,6 +23,8 @@ const digilocker: DigiLockerProvider = {
     return { bytes: pdfStub(doc.name), mime: doc.mime, data: doc.data };
   },
   async fetchAadhaarXml(ref) { await sleep(300); return (byRef(ref) ?? DEMO_PEOPLE[0]!).aadhaar; },
+  async refresh(providerRef) { return { providerRef }; },
+  async revoke() { await sleep(100); },
 };
 
 export const mockProviders: Providers = {

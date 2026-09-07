@@ -7,7 +7,7 @@ export async function GET() {
   const startedAt = Date.now();
   const [database, redis, worker] = await Promise.all([pingDb(), pingRedis(), workerHealth()]);
   const ok = database.ok && worker.ok && (redis.ok || !redis.required);
-  const providers = Object.fromEntries(providerModes().map(({ name, mode }) => [name, mode]));
+  const providers = Object.fromEntries(providerModes().map(({ name, mode, state }) => [name, { mode, state }]));
   // This endpoint is public. Keep timing and availability evidence, but never
   // echo driver, host or credential-bearing dependency errors to the client.
   const publicDatabase = { ok: database.ok, ms: database.ms };

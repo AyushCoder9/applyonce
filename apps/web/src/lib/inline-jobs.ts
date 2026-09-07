@@ -6,7 +6,7 @@ import { db, t, eq, and, getDek, putFact, getFacts } from "@applyonce/db";
 import type { JobMap, JobName } from "@applyonce/jobs";
 import { providers, docToFacts } from "@applyonce/providers";
 import { isFactKey, field } from "@applyonce/schema";
-import { encrypt, sha256 } from "@applyonce/crypto";
+import { decryptString, encrypt, sha256 } from "@applyonce/crypto";
 import { getBytes, isMockKey } from "./storage";
 
 type Progress = { step: string; pct: number; log: string[] };
@@ -27,8 +27,11 @@ async function digilockerSync({ jobId, userId, profileId, providerRef }: JobMap[
   const log: string[] = [];
   const step = (s: string, pct: number) => { log.push(s); return progress(jobId, { step: s, pct, log: log.slice(-12) }); };
   const dek = await getDek(userId);
+  const link = await db.query.providerLinks.findFirst({ where: and(eq(t.providerLinks.userId, userId), eq(t.providerLinks.provider, "digilocker")) });
+  const ref = providerRef ?? (link?.providerRefEnc ? decryptString(dek, link.providerRefEnc, `provider:${userId}:digilocker`) : null);
+  if (!ref) throw new Error("No DigiLocker connection is available for this user");
   await step("Connecting to DigiLocker…", 5);
-  const [docs, aadhaar] = await Promise.all([providers.digilocker.listIssuedDocs(providerRef), providers.digilocker.fetchAadhaarXml(providerRef).catch(() => null)]);
+  const [docs, aadhaar] = await Promise.all([providers.digilocker.listIssuedDocs(ref), providers.digilocker.fetchAadhaarXml(ref).catch(() => null)]);
   await step(`Found ${docs.length} issued documents`, 15);
   let factCount = 0;
   for (const [i, d] of docs.entries()) {
@@ -36,7 +39,7 @@ async function digilockerSync({ jobId, userId, profileId, providerRef }: JobMap[
     const existing = await db.query.documents.findFirst({ where: and(eq(t.documents.profileId, profileId), eq(t.documents.docUri, d.uri)) });
     let docId = existing?.id;
     if (!docId) {
-      const fetched = await providers.digilocker.fetchDoc(providerRef, d.uri).catch(() => null);
+      const fetched = await providers.digilocker.fetchDoc(ref, d.uri).catch(() => null);
       const [ins] = await db.insert(t.documents).values({ profileId, docType: d.docType, title: d.name, issuerId: d.issuerId, issuerName: d.issuerName, docUri: d.uri, storageKey: `mock/${userId}/${d.uri}.pdf`, mime: d.mime, size: fetched?.bytes.length ?? 0, sha256: fetched ? sha256(Buffer.from(fetched.bytes)) : null, origin: "digilocker", issuedAt: d.issuedAt ? new Date(d.issuedAt) : null, validUntil: d.validUntil ? new Date(d.validUntil) : null, status: "ready", meta: d.data ?? {} }).returning({ id: t.documents.id });
       docId = ins!.id;
     }
