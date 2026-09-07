@@ -25,6 +25,7 @@ export async function GET() {
       durationMs: Math.round(performance.now() - started),
     });
   } catch (error) {
-    return NextResponse.json({ ok: false, status: "degraded", checkedAt: new Date().toISOString(), error: (error as Error).message, durationMs: Math.round(performance.now() - started) }, { status: 503 });
+    console.error("[health] dependency check failed", error);
+    return NextResponse.json({ ok: false, status: "degraded", checkedAt: new Date().toISOString(), error: "A required service is unavailable", durationMs: Math.round(performance.now() - started) }, { status: 503 });
   }
 }
