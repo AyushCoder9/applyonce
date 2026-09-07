@@ -2,7 +2,9 @@
 
 This is `apps/demo-exam-portal` (WP3): a deliberately dated, dense, white/blue/grey
 government-exam-portal look-alike, built to make the "Apply with ApplyOnce" flow feel like a
-magic trick by contrast. It is a ApplyOnce **partner**, not part of ApplyOnce itself.
+magic trick by contrast. It is an ApplyOnce **partner**, not part of ApplyOnce itself.
+
+Public sandbox: [applyonce-bta-demo.vercel.app](https://applyonce-bta-demo.vercel.app)
 
 ## Run it
 
@@ -22,13 +24,13 @@ pnpm --filter @applyonce/demo-exam-portal dev   # http://localhost:3301
 | `BTA_APPLYONCE_FORM_ID` | `bta-jee-2026` — the seeded form slug this portal requests |
 | `BTA_WEBHOOK_SECRET` | HMAC secret for verifying `/api/applyonce/webhook` deliveries |
 | `NEXT_PUBLIC_DEMO_PORTAL_URL` | This portal's own base URL, `http://localhost:3301` |
+| `REDIS_URL` | Authenticated TLS Redis connection for review sessions, applications, status history and webhook logs |
 | `DEMO_OFFLINE` | Set to `1` to skip the live ApplyOnce API entirely (see below) |
 
 ### DEMO_OFFLINE mode
 
-As of this writing WP2 (ApplyOnce's partner API — `/api/v1/partner/*`, `/api/v1/jwks`) has not
-shipped yet (`apps/web/src/app/api/v1` doesn't exist and `packages/sdk/src/index.ts` is still
-`export {}`). Set `DEMO_OFFLINE=1` and this portal works standalone end to end:
+The deployed portal uses ApplyOnce's live sandbox partner API. `DEMO_OFFLINE=1` is retained
+only for isolated UI development when the main application is intentionally unavailable:
 
 - **"Apply with ApplyOnce"** skips the (nonexistent) live share-session call and redirects
   straight to `/apply/return` with a synthetic `share_token`.
@@ -42,23 +44,14 @@ shipped yet (`apps/web/src/app/api/v1` doesn't exist and `packages/sdk/src/index
   to ApplyOnce (`console.log`) instead of POSTing, and still update this portal's own status
   page/timeline.
 
-Even with `DEMO_OFFLINE` unset, a real `fetch` connection failure (`ECONNREFUSED` etc. —
-i.e. WP2 genuinely isn't running) is caught and falls back to the same offline behaviour
-automatically; only non-network errors (bad auth, validation) surface as real errors. Once
-WP2 ships, just leave `DEMO_OFFLINE` unset (or `0`) — no code change needed.
-
-`src/lib/applyonce.ts` is a hand-written client against docs/05-API-AND-FLOWS.md §1/§3, kept
-close to `@applyonce/sdk`'s planned shape (`createShareSession`, `exchange`, `verifyWebhook`,
-`pushStatus`) so swapping to the real SDK later should be close to a drop-in replacement.
-JWS verification (`src/lib/jws-verify.ts`) is hand-rolled with Web Crypto — `jose` (a
-dependency of `@applyonce/sdk` and `@applyonce/crypto`) does not resolve from this package's own
-`node_modules` (pnpm doesn't hoist deps this package never declared), and this package isn't
-allowed to touch `package.json`/the lockfile, so ES256 compact-JWS verification is done with
-`crypto.subtle` directly instead.
+With offline mode disabled, network, authentication and validation failures are shown as real
+errors; the portal never silently replaces a failed integration with fixture data. The server
+uses `@applyonce/sdk` for session creation, one-time exchange, ES256/JWKS verification and
+partner status updates.
 
 ## The 3-minute demo script (docs/05-API-AND-FLOWS.md §4)
 
-1. Open `http://localhost:3301` → click **Fill manually** → watch the timer run through 6
+1. Open `https://applyonce-bta-demo.vercel.app` (or `http://localhost:3301`) → click **Fill manually** → watch the timer run through 6
    steps × 56 fields (uppercase-forced names, DD/MM/YYYY dates, PIN/mobile pattern checks,
    photo/signature/marksheet size-and-format rejections) → judges feel the pain for ~20 s.
 2. Go back → click **Apply with ApplyOnce** → (on ApplyOnce) consent screen shows verified vs.
@@ -90,24 +83,12 @@ allowed to touch `package.json`/the lockfile, so ES256 compact-JWS verification 
 
 Field-to-registry-key mapping (for the extension recipe `bta-demo`) lives in `FIELDS.md`.
 
-## Storage
+## Storage and deployment
 
-Ponytail: no DB. `src/lib/store.ts` reads/writes a single JSON file at `.data/store.json`
-(created on first write) synchronously — applications + the last 20 webhook events. Delete
-that file to reset the demo.
+`src/lib/store.ts` uses the existing authenticated Redis integration. Temporary state is
+namespaced under `applyonce:demo-portal:*`; callback states expire after 15 minutes, review
+drafts after 30 minutes, webhook records after 30 days and synthetic application records after
+90 days. A shared, lazily connected client is reused by each warm function instance.
 
-## What depends on WP2
-
-Everything above works today with `DEMO_OFFLINE=1`. Once WP2 ships
-`/api/v1/partner/share-sessions(/:id/exchange)`, `/api/v1/jwks`, and
-`/api/v1/partner/applications/:id/status`:
-
-- Unset `DEMO_OFFLINE` (or set `0`) — no code changes required, `src/lib/applyonce.ts` already
-  calls the real endpoints first and only falls back to offline data on a connection error.
-- Double-check the response envelope: this client assumes `{ok, data}` for partner endpoints
-  and a bare `{keys: [...]}` for `/api/v1/jwks` (so it also works with `jose`'s
-  `createRemoteJWKSet` elsewhere) — see `partnerFetch`/`fetchJwks` in `src/lib/applyonce.ts`.
-  If WP2's actual envelope differs, that's the one place to adjust.
-- The webhook event body shape is assumed to be `{type, data}` (or `{event, data}`) with
-  `consent_id`/`application_id` inside `data` — see `firstString(...)` in
-  `src/app/api/applyonce/webhook/route.ts`; adjust if WP2's actual payload differs.
+The root `vercel.ts` selects this workspace when the Vercel project has
+`APPLYONCE_DEPLOY_TARGET=portal`; the primary `applyonce` project continues to build `apps/web`.

@@ -4,6 +4,23 @@ Audit date: 6 September 2026, with final local release follow-up on 7 September 
 
 ## 7 September release follow-up
 
+### Public deployment verification
+
+The submitted ApplyOnce alias and the independent BTA portal were deployed as separate Vercel projects and tested together from a clean Chromium session. The portal's former localhost-only JSON store was replaced with authenticated, TTL-bounded Redis state; ApplyOnce remains the authority for the consent, signed exchange, application and citizen timeline.
+
+| Public check | Result |
+|---|---|
+| `https://applyonce-silk.vercel.app/demo` | Opens without access approval and links to the public BTA portal |
+| `https://applyonce-bta-demo.vercel.app` | Opens without access approval; manual and ApplyOnce paths render |
+| BTA → ApplyOnce handshake | Fresh partner session returns HTTP 303 to a one-time ApplyOnce share URL |
+| Complete SDK journey | Consent, OTP, signed exchange, BTA review reload, edited submission, external reference and status callback passed |
+| Backend persistence | Profile edit survived reload and was restored; BTA review/application survived reload; partner form, feature flag and preferences survived reload |
+| Route/control browser sweep | **12/12 passed** across public, citizen, partner, operations and BTA pages |
+| Automated package tests | **107/107 passed** across crypto, schema, providers, SDK, extension, database, web and worker suites |
+| Production health | ApplyOnce Postgres operational; BTA Redis and upstream ApplyOnce checks operational |
+
+All issuer, SMS, email, OCR and government-provider adapters remain explicitly labelled `mock`. This green result applies to the public synthetic sandbox, not to unapproved government connectivity or a real-data launch.
+
 The final localhost release pass repeated the complete citizen, partner, operations and BTA workflows in both development and optimized production mode. It corrected additional issues found only through broad browser rendering and manual state progression:
 
 | Finding | Correction and proof |

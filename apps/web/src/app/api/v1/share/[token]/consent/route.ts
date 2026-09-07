@@ -7,7 +7,7 @@ import { handler, citizen, body, ok, ApiError } from "@/lib/api";
 import { loadShareSession, newShareToken, hashToken, withQuery, SHARE_TTL_MS } from "@/lib/share";
 import { signSharePayload } from "@/lib/signing";
 import { queueWebhook, flushDeliveries } from "@/lib/webhooks";
-import { deploymentAppUrl } from "@/lib/urls";
+import { demoPortalUrl, deploymentAppUrl } from "@/lib/urls";
 
 const schema = z.object({
   profileId: z.uuid(),
@@ -72,7 +72,7 @@ export const POST = handler(async (req, { params }) => {
     const doc = (id?: string | null) => { const d = id ? docs.find((x) => x.id === id) : undefined; return d ? { documentId: d.id, sha256: d.sha256 ?? "", title: d.title } : null; };
 
     const [consent] = await tx.insert(t.consents).values({ profileId: profile.id, grantedByUserId: user.id, partnerId: partner.id, formId: form.id, purpose: form.purpose, scope: sharedKeys, expiresAt: new Date(now.getTime() + form.retentionDays * 864e5), stepUpMethod: b.stepUpMethod, ipHash }).returning();
-    const [app] = await tx.insert(t.applications).values({ profileId: profile.id, partnerId: partner.id, formId: form.id, title: form.name, orgName: partner.name, kind: form.kind, status: "submitted", submittedAt: now, source: "sdk", deadlineAt: form.deadlineAt, portalUrl: partner.website }).returning();
+    const [app] = await tx.insert(t.applications).values({ profileId: profile.id, partnerId: partner.id, formId: form.id, title: form.name, orgName: partner.name, kind: form.kind, status: "submitted", submittedAt: now, source: "sdk", deadlineAt: form.deadlineAt, portalUrl: partner.slug === "bta" ? (demoPortalUrl() ?? partner.website) : partner.website }).returning();
 
     const shareId = randomUUID();
     const token = newShareToken(ss.id);

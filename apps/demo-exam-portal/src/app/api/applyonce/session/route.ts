@@ -15,7 +15,7 @@ export async function POST() {
 
   try {
     const { share_url, session_id } = await createShareSession(cfg, { returnUrl, state });
-    rememberState(state, session_id);
+    await rememberState(state, session_id);
     const response = NextResponse.redirect(share_url, { status: 303 });
     response.cookies.set("bta_state", state, {httpOnly:true,sameSite:"lax",secure:new URL(cfg.selfUrl).protocol === "https:",maxAge:900,path:"/"});
     return response;

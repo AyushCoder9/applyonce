@@ -3,7 +3,7 @@ import { db, t, and, eq } from "@applyonce/db";
 import { randomToken } from "@applyonce/crypto";
 import { handler, partner, body, ok, idempotent, ApiError } from "@/lib/api";
 import { SESSION_TTL_MS } from "@/lib/share";
-import { deploymentAppUrl } from "@/lib/urls";
+import { demoPortalUrl, deploymentAppUrl } from "@/lib/urls";
 
 const isUuid = (s: string) => /^[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}$/i.test(s);
 
@@ -22,6 +22,8 @@ export const POST = handler(async (req) => {
     const app = deploymentAppUrl();
     const allowedOrigins = [new URL(form.redirectUrl).origin];
     if (env === "sandbox") allowedOrigins.push(new URL(app).origin);
+    const demoPortal = demoPortalUrl();
+    if (env === "sandbox" && p.slug === "bta" && demoPortal) allowedOrigins.push(new URL(demoPortal).origin);
     if (!allowedOrigins.includes(returnUrl.origin) || returnUrl.username || returnUrl.password || !["https:","http:"].includes(returnUrl.protocol)) throw new ApiError(422,"RETURN_URL_NOT_ALLOWED","Return URL must use the registered form redirect origin.");
     const token = randomToken(32);
     const expiresAt = new Date(Date.now() + SESSION_TTL_MS);

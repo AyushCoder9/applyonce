@@ -48,7 +48,7 @@ export default function HomePage() {
           <a href="/apply/manual" className="btn btn-secondary">Fill manually &rarr;</a>
         </div>
         <div className="gov-card" style={{ padding: 20, borderColor: "var(--color-gov-blue)" }}>
-          <h2 style={{ fontSize: 16, margin: "0 0 8px" }}>Have a ApplyOnce account?</h2>
+          <h2 style={{ fontSize: 16, margin: "0 0 8px" }}>Have an ApplyOnce account?</h2>
           <p style={{ marginTop: 0, color: "var(--color-gov-ink-2)" }}>
             Reuse your saved name, address, marks and documents. Review each source and approve the share. This sandbox uses clearly labeled sample provider records.
           </p>

@@ -1,5 +1,5 @@
 /** webhooks queue: webhook.deliver — HMAC POST, DB-tracked retries (5 attempts, exponential via BullMQ opts set by the producer) */
-import { db, eq, systemDek, webhookDeliveries, partnerWebhooks } from "@applyonce/db";
+import { db, eq, systemDek, webhookDeliveries, partnerWebhooks, partners } from "@applyonce/db";
 import { decryptString, signWebhook } from "@applyonce/crypto";
 import type { JobMap } from "@applyonce/jobs";
 
@@ -12,6 +12,9 @@ export async function webhookDeliver(data: JobMap["webhook.deliver"]) {
   if (!delivery) throw new Error(`webhook_delivery ${deliveryId} not found`);
   const hook = await db.query.partnerWebhooks.findFirst({ where: eq(partnerWebhooks.id, delivery.webhookId) });
   if (!hook) throw new Error(`partner_webhook ${delivery.webhookId} not found`);
+  const partner = await db.query.partners.findFirst({ where: eq(partners.id, hook.partnerId) });
+  const configuredDemoPortal = process.env.DEMO_PORTAL_ENABLED === "1" ? process.env.NEXT_PUBLIC_DEMO_PORTAL_URL?.replace(/\/$/, "") : undefined;
+  const destination = partner?.slug === "bta" && configuredDemoPortal ? `${configuredDemoPortal}/api/applyonce/webhook` : hook.url;
 
   const secret = decryptString(systemDek(), hook.secretEnc, `webhook:${hook.partnerId}`);
   const body = JSON.stringify(delivery.payload);
@@ -23,7 +26,7 @@ export async function webhookDeliver(data: JobMap["webhook.deliver"]) {
   const timer = setTimeout(() => controller.abort(), TIMEOUT_MS);
   let res: Response;
   try {
-    res = await fetch(hook.url, {
+    res = await fetch(destination, {
       method: "POST",
       headers: { "content-type": "application/json", "X-ApplyOnce-Timestamp": String(ts), "X-ApplyOnce-Signature": sig, "X-ApplyOnce-Event": delivery.event, "Idempotency-Key": deliveryId },
       body,
@@ -43,5 +46,5 @@ export async function webhookDeliver(data: JobMap["webhook.deliver"]) {
   }
   const text = await res.text().catch(() => "");
   await db.update(webhookDeliveries).set({ attempts, responseStatus: res.status, lastError: text.slice(0, 500) || `HTTP ${res.status}`, status: isFinalAttempt ? "failed" : "pending" }).where(eq(webhookDeliveries.id, deliveryId));
-  throw new Error(`webhook ${hook.url} responded ${res.status}`);
+  throw new Error(`webhook ${destination} responded ${res.status}`);
 }

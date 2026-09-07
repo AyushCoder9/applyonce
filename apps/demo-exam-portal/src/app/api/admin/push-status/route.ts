@@ -13,7 +13,7 @@ export async function POST(request: Request) {
   const status = String(form.get("status") ?? "");
   const note = String(form.get("note") ?? "");
 
-  const app = getApplication(ref);
+  const app = await getApplication(ref);
   if (!app || !app.accessToken || (await cookies()).get("bta_access")?.value !== app.accessToken) return NextResponse.json({ ok: false, error: { code: "not_found", message: `No application ${ref}` } }, { status: 404 });
 
   if (!(APPLICATION_STATUSES as readonly string[]).includes(status) || note.length > 1000) return NextResponse.json({error:"Invalid status or note"},{status:422});
@@ -30,6 +30,6 @@ export async function POST(request: Request) {
     }
   }
 
-  appendHistory(ref, { status, note, at: new Date().toISOString(), actor: "bta" });
+  await appendHistory(ref, { status, note, at: new Date().toISOString(), actor: "bta" });
   return NextResponse.redirect(new URL(`/status/${ref}`, request.url), { status: 303 });
 }

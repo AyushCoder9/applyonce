@@ -1,10 +1,13 @@
+import IORedis from "ioredis";
 import type { ApplyOncePayload } from "@applyonce/schema";
+
 /**
- * Ponytail persistence: a single JSON file under `.data/`, read/written synchronously.
- * No DB, no ORM — just enough to survive `next dev` reloads for the demo.
+ * Durable state for the independently deployed synthetic BTA portal.
+ *
+ * Redis is already provisioned for ApplyOnce. A process-level multiplexed
+ * client keeps serverless connection overhead bounded, and every temporary
+ * record has an explicit TTL. No real citizen data belongs in this demo store.
  */
-import { existsSync, mkdirSync, readFileSync, writeFileSync, renameSync } from "node:fs";
-import path from "node:path";
 
 export type AppSource = "manual" | "applyonce";
 
@@ -24,13 +27,12 @@ export interface StatusEvent {
 
 export interface ApplicationRecord {
   accessToken?: string;
-  ref: string; // BTA26-XXXXXXX — our primary key
+  ref: string;
   source: AppSource;
   status: string;
   createdAt: string;
   submittedAt: string;
   applicantName: string;
-  /** flattened field id -> value, for the status/review views */
   fields: Record<string, unknown>;
   documents: DocumentRef[];
   applyonceApplicationId?: string;
@@ -54,126 +56,149 @@ interface PendingSession {
   createdAt: number;
 }
 
-export interface Draft {payload:ApplyOncePayload;verified:boolean;offline:boolean;createdAt:number;submittedRef?:string}
-
-interface StoreShape {
-  drafts: Record<string,Draft>;
-  applications: Record<string, ApplicationRecord>;
-  webhookEvents: WebhookEventRecord[];
-  /** pending share-session `state` nonces, keyed by state -> {sessionId, createdAt} */
-  pendingStates: Record<string, PendingSession>;
+export interface Draft {
+  payload: ApplyOncePayload;
+  verified: boolean;
+  offline: boolean;
+  createdAt: number;
+  submittedRef?: string;
 }
 
-const DATA_DIR = process.env.DEMO_DATA_DIR ?? path.join(process.cwd(), ".data");
-const STORE_PATH = path.join(DATA_DIR, "store.json");
+const PREFIX = "applyonce:demo-portal";
+const APPLICATION_TTL_SECONDS = 90 * 24 * 60 * 60;
+const DRAFT_TTL_SECONDS = 30 * 60;
+const STATE_TTL_SECONDS = 15 * 60;
+const WEBHOOK_TTL_SECONDS = 30 * 24 * 60 * 60;
 
-const EMPTY: StoreShape = { drafts: {}, applications: {}, webhookEvents: [], pendingStates: {} };
+const globalRedis = globalThis as unknown as { __applyonceDemoPortalRedis?: IORedis };
 
-function ensureFile(): void {
-  if (!existsSync(DATA_DIR)) mkdirSync(DATA_DIR, { recursive: true });
-  if (!existsSync(STORE_PATH)) writeFileSync(STORE_PATH, JSON.stringify(EMPTY, null, 2));
+function client(): IORedis {
+  const url = process.env.REDIS_URL?.trim();
+  if (!url) throw new Error("REDIS_URL is required for the deployed BTA demo portal");
+  return globalRedis.__applyonceDemoPortalRedis ??= new IORedis(url, {
+    lazyConnect: true,
+    maxRetriesPerRequest: 2,
+    connectTimeout: 2_000,
+    commandTimeout: 5_000,
+    enableReadyCheck: true,
+  });
 }
 
-function readStore(): StoreShape {
-  ensureFile();
-  try {
-    const raw = readFileSync(STORE_PATH, "utf8");
-    const parsed = JSON.parse(raw) as Partial<StoreShape>;
-    return { drafts: parsed.drafts ?? {}, applications: parsed.applications ?? {}, webhookEvents: parsed.webhookEvents ?? [], pendingStates: parsed.pendingStates ?? {} };
-  } catch {
-    throw new Error("The demo data file could not be read. Restore it from backup; no data was overwritten.");
-  }
+export async function storeHealth(): Promise<{ ok: true; ms: number }> {
+  const started = performance.now();
+  const response = await client().ping();
+  if (response !== "PONG") throw new Error("Redis did not acknowledge the health probe");
+  return { ok: true, ms: Math.round(performance.now() - started) };
 }
 
-function writeStore(store: StoreShape): void {
-  ensureFile();
-  writeFileSync(STORE_PATH + ".tmp", JSON.stringify(store, null, 2));
-  renameSync(STORE_PATH + ".tmp", STORE_PATH);
+const key = (kind: string, id: string) => `${PREFIX}:${kind}:${id}`;
+const applicationIndex = key("index", "applications");
+const webhookIndex = key("index", "webhooks");
+
+async function getJson<T>(redisKey: string): Promise<T | undefined> {
+  const raw = await client().get(redisKey);
+  return raw ? JSON.parse(raw) as T : undefined;
 }
 
-// ---------- applications ----------
-
-export function saveApplication(record: ApplicationRecord): void {
-  const store = readStore();
-  store.applications[record.ref] = record;
-  writeStore(store);
+export async function saveApplication(record: ApplicationRecord): Promise<void> {
+  await client().multi()
+    .set(key("application", record.ref), JSON.stringify(record), "EX", APPLICATION_TTL_SECONDS)
+    .sadd(applicationIndex, record.ref)
+    .expire(applicationIndex, APPLICATION_TTL_SECONDS)
+    .exec();
 }
 
-export function getApplication(ref: string): ApplicationRecord | undefined {
-  return readStore().applications[ref];
+export function getApplication(ref: string): Promise<ApplicationRecord | undefined> {
+  return getJson<ApplicationRecord>(key("application", ref));
 }
 
-export function applicationExists(ref: string): boolean {
-  return ref in readStore().applications;
+export async function applicationExists(ref: string): Promise<boolean> {
+  return Boolean(await client().exists(key("application", ref)));
 }
 
-export function findApplicationByApplyOnceId(applyonceApplicationId: string): ApplicationRecord | undefined {
-  const store = readStore();
-  return Object.values(store.applications).find((a) => a.applyonceApplicationId === applyonceApplicationId);
+async function listApplications(): Promise<ApplicationRecord[]> {
+  const refs = await client().smembers(applicationIndex);
+  if (!refs.length) return [];
+  const records = await client().mget(refs.map((ref) => key("application", ref)));
+  return records.flatMap((raw) => raw ? [JSON.parse(raw) as ApplicationRecord] : []);
 }
 
-export function findApplicationByConsentId(consentId: string): ApplicationRecord | undefined {
-  const store = readStore();
-  return Object.values(store.applications).find((a) => a.applyonceConsentId === consentId);
+export async function findApplicationByApplyOnceId(applyonceApplicationId: string): Promise<ApplicationRecord | undefined> {
+  return (await listApplications()).find((app) => app.applyonceApplicationId === applyonceApplicationId);
 }
 
-export function appendHistory(ref: string, event: StatusEvent): ApplicationRecord | undefined {
-  const store = readStore();
-  const app = store.applications[ref];
+export async function findApplicationByConsentId(consentId: string): Promise<ApplicationRecord | undefined> {
+  return (await listApplications()).find((app) => app.applyonceConsentId === consentId);
+}
+
+export async function appendHistory(ref: string, event: StatusEvent): Promise<ApplicationRecord | undefined> {
+  const app = await getApplication(ref);
   if (!app) return undefined;
   app.history.push(event);
   app.status = event.status;
-  writeStore(store);
+  await saveApplication(app);
   return app;
 }
 
-export function markConsentRevoked(predicate: (a: ApplicationRecord) => boolean): ApplicationRecord[] {
-  const store = readStore();
+export async function markConsentRevoked(predicate: (app: ApplicationRecord) => boolean): Promise<ApplicationRecord[]> {
   const touched: ApplicationRecord[] = [];
-  for (const app of Object.values(store.applications)) {
-    if (predicate(app) && !app.consentRevoked) {
-      app.consentRevoked = true;
-      app.history.push({ status: app.status, note: "Consent revoked by citizen on ApplyOnce", at: new Date().toISOString(), actor: "applyonce" });
-      touched.push(app);
-    }
+  for (const app of await listApplications()) {
+    if (!predicate(app) || app.consentRevoked) continue;
+    app.consentRevoked = true;
+    app.history.push({ status: app.status, note: "Consent revoked by citizen on ApplyOnce", at: new Date().toISOString(), actor: "applyonce" });
+    await saveApplication(app);
+    touched.push(app);
   }
-  if (touched.length) writeStore(store);
   return touched;
 }
 
-// ---------- webhook log ----------
-
-export function appendWebhookEvent(event: WebhookEventRecord): void {
-  const store = readStore();
-  store.webhookEvents.unshift(event); // newest first
-  store.webhookEvents = store.webhookEvents.slice(0, 20);
-  writeStore(store);
+export async function appendWebhookEvent(event: WebhookEventRecord): Promise<void> {
+  const eventKey = key("webhook", event.id);
+  const oldIds = await client().zrange(webhookIndex, "0", "-21");
+  const transaction = client().multi()
+    .set(eventKey, JSON.stringify(event), "EX", WEBHOOK_TTL_SECONDS)
+    .zadd(webhookIndex, String(Date.parse(event.receivedAt)), event.id)
+    .expire(webhookIndex, WEBHOOK_TTL_SECONDS);
+  if (oldIds.length) {
+    transaction.zrem(webhookIndex, ...oldIds);
+    for (const id of oldIds) transaction.del(key("webhook", id));
+  }
+  await transaction.exec();
 }
 
-export function listWebhookEvents(): WebhookEventRecord[] {
-  return readStore().webhookEvents;
+export async function listWebhookEvents(): Promise<WebhookEventRecord[]> {
+  const ids = await client().zrevrange(webhookIndex, "0", "19");
+  if (!ids.length) return [];
+  const records = await client().mget(ids.map((id) => key("webhook", id)));
+  return records.flatMap((raw) => raw ? [JSON.parse(raw) as WebhookEventRecord] : []);
 }
 
-// ---------- share-session state nonces (light CSRF guard + session_id lookup for /apply/return) ----------
-
-export function rememberState(state: string, sessionId: string): void {
-  const store = readStore();
-  store.pendingStates[state] = { sessionId, createdAt: Date.now() };
-  // prune anything older than 30 min so this never grows unbounded
-  for (const [k, v] of Object.entries(store.pendingStates)) if (Date.now() - v.createdAt > 30 * 60 * 1000) delete store.pendingStates[k];
-  writeStore(store);
+export async function rememberState(state: string, sessionId: string): Promise<void> {
+  const pending: PendingSession = { sessionId, createdAt: Date.now() };
+  await client().set(key("state", state), JSON.stringify(pending), "EX", STATE_TTL_SECONDS);
 }
 
-/** Returns and removes the session_id that was pending under this `state`, or null if unknown/expired/reused. */
-export function consumeState(state: string | null | undefined): string | null {
+export async function consumeState(state: string | null | undefined): Promise<string | null> {
   if (!state) return null;
-  const store = readStore();
-  const pending = store.pendingStates[state];
-  delete store.pendingStates[state];
-  writeStore(store);
-  return pending && Date.now() - pending.createdAt < 15 * 60 * 1000 ? pending.sessionId : null;
+  const raw = await client().getdel(key("state", state));
+  if (!raw) return null;
+  const pending = JSON.parse(raw) as PendingSession;
+  return Date.now() - pending.createdAt < STATE_TTL_SECONDS * 1_000 ? pending.sessionId : null;
 }
 
-export function saveDraft(token:string,draft:Draft) {const store=readStore();store.drafts[token]=draft;for(const [key,value] of Object.entries(store.drafts)) if(Date.now()-value.createdAt>30*60*1000) delete store.drafts[key];writeStore(store);}
-export function getDraft(token:string):Draft|undefined {const draft=readStore().drafts[token];return draft && Date.now()-draft.createdAt<30*60*1000 ? draft : undefined;}
-export function completeDraft(token:string,ref:string) {const store=readStore();if(store.drafts[token]) store.drafts[token].submittedRef=ref;writeStore(store);}
+export async function saveDraft(token: string, draft: Draft): Promise<void> {
+  const remainingSeconds = Math.floor((draft.createdAt + DRAFT_TTL_SECONDS * 1_000 - Date.now()) / 1_000);
+  if (remainingSeconds <= 0) return;
+  await client().set(key("draft", token), JSON.stringify(draft), "EX", remainingSeconds);
+}
+
+export function getDraft(token: string): Promise<Draft | undefined> {
+  return getJson<Draft>(key("draft", token));
+}
+
+export async function completeDraft(token: string, ref: string): Promise<void> {
+  const draft = await getDraft(token);
+  if (!draft) return;
+  draft.submittedRef = ref;
+  await saveDraft(token, draft);
+}

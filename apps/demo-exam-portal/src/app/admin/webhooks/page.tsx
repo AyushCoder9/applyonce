@@ -3,8 +3,8 @@ import { listWebhookEvents } from "@/lib/store";
 export const metadata = { title: "Webhook log — BTA Admin" };
 export const dynamic = "force-dynamic";
 
-export default function WebhooksAdminPage() {
-  const events = listWebhookEvents();
+export default async function WebhooksAdminPage() {
+  const events = await listWebhookEvents();
 
   return (
     <div>

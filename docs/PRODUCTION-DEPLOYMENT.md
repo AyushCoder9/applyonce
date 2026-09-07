@@ -12,9 +12,12 @@ Vercel CDN (global)
   -> Neon Lakebase Postgres: AWS us-east-1, database applyonce_v2
   -> private Vercel Blob: iad1
   -> Redis: currently bom1 (diagnostic/rate-limit dependency; queue optional while inline jobs are enabled)
+  -> independent BTA demo portal: Vercel Functions bom1 -> authenticated Redis bom1 -> ApplyOnce partner API iad1
 ```
 
 The sandbox is labelled synthetic. `iad1` is an interim latency correction because the existing database and documents are in the US. A preview measured the database health query at 9 ms warm and 168 ms after a cold connection, compared with roughly 2.5 seconds from `bom1`.
+
+The submitted alias remains `https://applyonce-silk.vercel.app`. The external institution journey is deployed separately at `https://applyonce-bta-demo.vercel.app`, and `/demo` links to it. The BTA portal keeps only synthetic, TTL-bounded state in Redis; the authoritative consent, application, receipt and citizen timeline stay in ApplyOnce Postgres.
 
 ### Real-data production profile
 

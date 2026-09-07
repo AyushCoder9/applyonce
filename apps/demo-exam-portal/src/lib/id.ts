@@ -1,4 +1,4 @@
-/** BTA-style application reference numbers. Fake, in-memory/JSON only — no real registry. */
+/** BTA-style application reference numbers for the synthetic partner registry. */
 import { randomInt } from "node:crypto";
 
 const ALPHABET = "23456789ABCDEFGHJKLMNPQRSTUVWXYZ"; // no 0/O/1/I to avoid transcription errors, gov-forms style
@@ -10,10 +10,10 @@ function randomRef(len: number): string {
 }
 
 /** BTA26-XXXXXXX (7 chars after the year prefix) */
-export function generateApplicationNumber(existing: (ref: string) => boolean): string {
+export async function generateApplicationNumber(existing: (ref: string) => Promise<boolean>): Promise<string> {
   for (let attempt = 0; attempt < 50; attempt++) {
     const ref = `BTA26-${randomRef(7)}`;
-    if (!existing(ref)) return ref;
+    if (!await existing(ref)) return ref;
   }
   // astronomically unlikely, but never loop forever
   return `BTA26-${randomRef(7)}${Date.now().toString(36).slice(-2).toUpperCase()}`;

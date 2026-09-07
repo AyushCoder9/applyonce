@@ -2,7 +2,9 @@
 
 ApplyOnce turns a citizen's reusable facts and documents into a purpose-bound application. Each answer keeps its source; the citizen reviews exactly what an institution requests, confirms consent, and tracks the resulting application.
 
-This is the audited successor to **ApplyOnce**, built as a TypeScript monorepo. It is a working local sandbox. The seeded institutions and issuer records are examples; live government, health and financial provider onboarding remains external work.
+This repository contains the production-shaped ApplyOnce sandbox, built as a TypeScript monorepo. The deployed reviewer journey uses persistent backend state and synthetic citizen/institution records; live government, health and financial provider onboarding remains external work.
+
+Live reviewer surfaces: [ApplyOnce](https://applyonce-silk.vercel.app) and the independent [Bharat Test Agency portal](https://applyonce-bta-demo.vercel.app).
 
 ## What you can demonstrate
 
@@ -65,7 +67,7 @@ The audit modifies demo facts, creates applications/uploads and schedules then c
 | Path | Responsibility |
 |---|---|
 | `apps/web` | Next.js citizen, partner, admin and public surfaces; APIs |
-| `apps/demo-exam-portal` | Separate BTA app with signed SDK exchange and browser-bound review drafts |
+| `apps/demo-exam-portal` | Separate BTA app with signed SDK exchange and Redis-backed review/application state |
 | `apps/worker` | BullMQ provider, document, webhook, reminder and data jobs |
 | `apps/extension` | MV3 autofill service worker, popup and recipes |
 | `packages/schema` | Canonical facts, EN/HI labels, validation and readiness |

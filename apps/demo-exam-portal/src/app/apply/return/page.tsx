@@ -23,7 +23,7 @@ function ErrorCard({ title, children }: { title: string; children: React.ReactNo
 export default async function ApplyReturnPage({ searchParams }: { searchParams: Promise<{ draft?: string; error?: string }> }) {
   const { draft: token, error } = await searchParams;
   const jar = await cookies();
-  const draft = token && jar.get("bta_draft")?.value === token ? getDraft(token) : undefined;
+  const draft = token && jar.get("bta_draft")?.value === token ? await getDraft(token) : undefined;
   if (!draft) return <ErrorCard title="Start a new application">{error === "denied" ? "You declined the share. No profile was shared with BTA." : "Your review session has expired or is unavailable. Start again from the portal."}</ErrorCard>;
   if (draft.submittedRef) redirect(`/status/${draft.submittedRef}`);
   const { payload, verified, offline } = draft;

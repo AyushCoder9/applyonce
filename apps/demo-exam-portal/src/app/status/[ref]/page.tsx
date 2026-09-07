@@ -33,7 +33,7 @@ function AdminButton({ applicationRef, status, note, label, variant }: { applica
 
 export default async function StatusPage({ params }: { params: Promise<{ ref: string }> }) {
   const { ref } = await params;
-  const app = getApplication(ref);
+  const app = await getApplication(ref);
   if (!app || !app.accessToken || (await cookies()).get("bta_access")?.value !== app.accessToken) notFound();
 
   const badge = STATUS_BADGE[app.status] ?? { bg: "#eceef0", fg: "#4a4a4a", label: app.status };

@@ -19,10 +19,10 @@ export async function POST(request: Request) {
   const form = await request.formData();
   const draftToken = String(form.get("draft_token") ?? "");
   const jar = await cookies();
-  const draft = jar.get("bta_draft")?.value === draftToken ? getDraft(draftToken) : undefined;
+  const draft = jar.get("bta_draft")?.value === draftToken ? await getDraft(draftToken) : undefined;
   if (!draft) return NextResponse.json({ok:false,error:{code:"INVALID_REVIEW_SESSION",message:"Start again from the portal."}},{status:403});
   if (draft.submittedRef) {
-    const existing = getApplication(draft.submittedRef);
+    const existing = await getApplication(draft.submittedRef);
     if (!existing?.accessToken) return NextResponse.json({ok:false,error:{code:"APPLICATION_NOT_FOUND"}},{status:410});
     const response = NextResponse.redirect(new URL(`/status/${draft.submittedRef}`,request.url),{status:303});
     response.cookies.set("bta_access",existing.accessToken,{httpOnly:true,sameSite:"lax",secure:new URL(request.url).protocol === "https:",path:"/",maxAge:86400});
@@ -61,7 +61,7 @@ export async function POST(request: Request) {
     return NextResponse.json({ ok: false, error: { code: "validation_failed", fields: errors } }, { status: 400 });
   }
 
-  const ref = generateApplicationNumber(applicationExists);
+  const ref = await generateApplicationNumber(applicationExists);
   const now = new Date().toISOString();
   const record: ApplicationRecord = {
     ref,
@@ -78,8 +78,8 @@ export async function POST(request: Request) {
     applyonceFormId,
     history: [{ status: "submitted", note: "Application received via Apply with ApplyOnce", at: now, actor: "citizen" }],
   };
-  saveApplication(record);
-  completeDraft(draftToken,ref);
+  await saveApplication(record);
+  await completeDraft(draftToken,ref);
 
   const cfg = loadApplyOnceConfig();
   const idempotencyKey = generateIdempotencyKey();
@@ -88,11 +88,11 @@ export async function POST(request: Request) {
     const afterPush = new Date().toISOString();
     record.history.push({ status: "under_review", note: "Received by BTA", at: afterPush, actor: "bta" });
     record.status = "under_review";
-    saveApplication(record);
+    await saveApplication(record);
   } catch (err) {
     // Application is still recorded locally even if the push to ApplyOnce failed.
     record.history.push({ status: record.status, note: `Could not notify ApplyOnce tracker: ${(err as Error).message}`, at: new Date().toISOString(), actor: "system" });
-    saveApplication(record);
+    await saveApplication(record);
   }
 
   const response=NextResponse.redirect(new URL(`/status/${ref}`,request.url),{status:303});

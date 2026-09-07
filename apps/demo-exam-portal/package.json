@@ -11,6 +11,7 @@
   },
   "dependencies": {
     "@applyonce/sdk": "workspace:*",
+    "ioredis": "catalog:",
     "@applyonce/schema": "workspace:*",
     "next": "catalog:",
     "react": "catalog:",

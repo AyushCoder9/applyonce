@@ -17,6 +17,7 @@ export default defineManifest({
   host_permissions: [
     "http://localhost:3300/*",
     "http://localhost:3301/*",
+    "https://applyonce-bta-demo.vercel.app/*",
     "https://*.applyonce.in/*",
     "https://*.nta.ac.in/*",
     "https://scholarships.gov.in/*",

@@ -4,7 +4,9 @@
   "status": "verified",
   "match": [
     "http://localhost:3301/apply/manual*",
-    "http://localhost:3301/status/*"
+    "http://localhost:3301/status/*",
+    "https://applyonce-bta-demo.vercel.app/apply/manual*",
+    "https://applyonce-bta-demo.vercel.app/status/*"
   ],
   "fingerprint": "#candidate_name",
   "fields": [

@@ -46,7 +46,7 @@ export async function POST(request: Request) {
     return NextResponse.redirect(url, { status: 303 });
   }
 
-  const ref = generateApplicationNumber(applicationExists);
+  const ref = await generateApplicationNumber(applicationExists);
   const now = new Date().toISOString();
   const record: ApplicationRecord = {
     ref,
@@ -60,7 +60,7 @@ export async function POST(request: Request) {
     documents,
     history: [{ status: "submitted", note: "Application submitted manually on BTA portal", at: now, actor: "citizen" }],
   };
-  saveApplication(record);
+  await saveApplication(record);
 
   const res = NextResponse.redirect(new URL(`/status/${ref}`, request.url), { status: 303 });
   res.cookies.set("bta_access", record.accessToken!, { httpOnly: true, sameSite: "lax", secure:new URL(request.url).protocol === "https:",path: "/", maxAge:86400 });

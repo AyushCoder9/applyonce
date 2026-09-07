@@ -16,7 +16,7 @@ export async function POST(request: Request) {
 
   const verified = verifyWebhookSignature(cfg, rawBody, signature, timestamp);
   if (!verified) {
-    appendWebhookEvent({ id: randomUUID(), type: "unknown", receivedAt: new Date().toISOString(), verified: false, payload: null, note: "Rejected: invalid signature or stale timestamp" });
+    await appendWebhookEvent({ id: randomUUID(), type: "unknown", receivedAt: new Date().toISOString(), verified: false, payload: null, note: "Rejected: invalid signature or stale timestamp" });
     return NextResponse.json({ ok: false, error: { code: "invalid_signature", message: "HMAC verification failed" } }, { status: 401 });
   }
 
@@ -24,12 +24,12 @@ export async function POST(request: Request) {
   const type = body?.type ?? body?.event ?? "unknown";
   const data = body?.data ?? (body as Record<string, unknown> | null) ?? {};
 
-  appendWebhookEvent({ id: randomUUID(), type, receivedAt: new Date().toISOString(), verified: true, payload: body });
+  await appendWebhookEvent({ id: randomUUID(), type, receivedAt: new Date().toISOString(), verified: true, payload: body });
 
   if (type === "consent.revoked") {
     const consentId = firstString(data, ["consent_id", "consentId"]);
     const applicationId = firstString(data, ["application_id", "applicationId"]);
-    markConsentRevoked((a) => (consentId != null && a.applyonceConsentId === consentId) || (applicationId != null && a.applyonceApplicationId === applicationId));
+    await markConsentRevoked((a) => (consentId != null && a.applyonceConsentId === consentId) || (applicationId != null && a.applyonceApplicationId === applicationId));
   }
 
   return NextResponse.json({ ok: true });

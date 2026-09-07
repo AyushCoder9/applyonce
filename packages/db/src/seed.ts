@@ -87,7 +87,7 @@ async function main() {
     await db.insert(t.profiles).values({ ownerUserId: "usr_admin", kind: "self", displayName: "ApplyOnce Ops" });
 
   const demoUrl = process.env.NEXT_PUBLIC_DEMO_PORTAL_URL ?? "http://localhost:3301";
-  const bta = await seedPartner({ slug: "bta", name: "Bharat Test Agency", kind: "exam_board", website: "https://bta.example", apiKey: process.env.BTA_APPLYONCE_API_KEY ?? "pk_sandbox_bta_demo_key_0001", webhookSecret: process.env.BTA_WEBHOOK_SECRET ?? "whsec_bta_demo_0001", webhookUrl: `${demoUrl}/api/applyonce/webhook`, ownerUserId: "usr_bta_admin" });
+  const bta = await seedPartner({ slug: "bta", name: "Bharat Test Agency", kind: "exam_board", website: demoUrl, apiKey: process.env.BTA_APPLYONCE_API_KEY ?? "pk_sandbox_bta_demo_key_0001", webhookSecret: process.env.BTA_WEBHOOK_SECRET ?? "whsec_bta_demo_0001", webhookUrl: `${demoUrl}/api/applyonce/webhook`, ownerUserId: "usr_bta_admin" });
   const nova = await seedPartner({ slug: "nova-university", name: "Nova University", kind: "university", website: "https://nova.example", apiKey: "pk_sandbox_nova_demo_key_0002", ownerUserId: "usr_bta_admin" });
   const bank = await seedPartner({ slug: "axis-style-bank", name: "Axis-style Bank (sandbox)", kind: "bank", website: "https://bank.example", apiKey: "pk_sandbox_bank_demo_key_0003", ownerUserId: "usr_bta_admin" });
 
