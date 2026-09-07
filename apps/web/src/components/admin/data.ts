@@ -34,11 +34,14 @@ const within = <T>(promise: Promise<T>, ms: number, label: string) => Promise.ra
   new Promise<never>((_, reject) => setTimeout(() => reject(new Error(`${label} timeout`)), ms)),
 ]);
 
-export async function pingDb() { const t0 = Date.now(); try { await within(db.execute(dsql`select 1`), 2000, "database"); return { ok: true, ms: Date.now() - t0 }; } catch (e) { return { ok: false, ms: Date.now() - t0, error: (e as Error).message }; } }
+export const queueRequired = () => process.env.APPLYONCE_INLINE_JOBS !== "1";
+
+export async function pingDb() { const t0 = Date.now(); try { await within(db.execute(dsql`select 1`), 1200, "database"); return { ok: true, ms: Date.now() - t0 }; } catch (e) { return { ok: false, ms: Date.now() - t0, error: (e as Error).message }; } }
 export async function pingRedis() {
   const t0 = Date.now();
-  try { const { redis } = await import("@applyonce/jobs"); const r = await within(redis().ping(), 2000, "redis"); return { ok: r === "PONG", ms: Date.now() - t0 }; }
-  catch (e) { return { ok: false, ms: Date.now() - t0, error: (e as Error).message }; }
+  const required = queueRequired();
+  try { const { redis } = await import("@applyonce/jobs"); const r = await within(redis().ping(), 750, "redis"); return { ok: r === "PONG", required, ms: Date.now() - t0 }; }
+  catch (e) { return { ok: false, required, ms: Date.now() - t0, error: (e as Error).message }; }
 }
 
 export async function workerHealth() {

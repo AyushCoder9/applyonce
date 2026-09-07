@@ -11,7 +11,7 @@ Vercel CDN (global)
   -> Next.js / Vercel Functions: iad1
   -> Neon Lakebase Postgres: AWS us-east-1, database applyonce_v2
   -> private Vercel Blob: iad1
-  -> Redis: currently bom1
+  -> Redis: currently bom1 (diagnostic/rate-limit dependency; queue optional while inline jobs are enabled)
 ```
 
 The sandbox is labelled synthetic. `iad1` is an interim latency correction because the existing database and documents are in the US. A preview measured the database health query at 9 ms warm and 168 ms after a cold connection, compared with roughly 2.5 seconds from `bom1`.
@@ -35,7 +35,7 @@ Aurora PostgreSQL is selected over Aurora DSQL because the existing Drizzle sche
 | Cached public page | 100 ms | 400 ms | No database call on a cache hit |
 | Authenticated read | 250 ms | 800 ms | At most two sequential database stages after session resolution |
 | Authenticated write | 400 ms | 1,000 ms | One transaction, idempotent retries |
-| Health endpoint | 250 ms | 1,500 ms | Two-second hard dependency timeout |
+| Health endpoint | 250 ms | 1,500 ms | 1.2 s database and 750 ms queue timeouts |
 | External provider | provider-specific | provider-specific | Async workflow; never block page rendering |
 
 Run `pnpm perf:smoke -- <url>` to collect p50 and p95 samples. `APPLYONCE_P95_BUDGET_MS` changes the health budget for controlled tests.

@@ -6,7 +6,7 @@ export const dynamic = "force-dynamic";
 export async function GET() {
   const startedAt = Date.now();
   const [database, redis, worker] = await Promise.all([pingDb(), pingRedis(), workerHealth()]);
-  const ok = database.ok && redis.ok && worker.ok;
+  const ok = database.ok && worker.ok && (redis.ok || !redis.required);
   const providers = Object.fromEntries(providerModes().map(({ name, mode }) => [name, mode]));
   const response = NextResponse.json({
     ok,
