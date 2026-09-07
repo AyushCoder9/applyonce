@@ -52,6 +52,10 @@ test("public demo exposes refreshable live backend proof", async ({ page }) => {
   await expect(page.locator('[data-service="BTA signed handoff"]')).toContainText("Redis-backed");
   await page.getByRole("button", { name: "Refresh live backend proof" }).click();
   await expect(page.getByTestId("demo-proof-status")).toHaveText("Operational", { timeout: 15_000 });
+  await page.goto(`${BASE}/status`);
+  await expect(page.getByText("Core services operational", { exact: true })).toBeVisible();
+  await expect(page.getByText("BTA application state", { exact: true })).toBeVisible();
+  await expect(page.locator("body")).not.toContainText("redis timeout");
 });
 
 test("all citizen workspace pages render with labelled controls", async ({ page }) => {

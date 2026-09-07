@@ -20,6 +20,7 @@ The submitted ApplyOnce alias and the independent BTA portal were deployed as se
 | Production health | ApplyOnce Postgres operational; BTA Redis and upstream ApplyOnce checks operational |
 | Public backend proof | Demo page refreshes sanitized ApplyOnce/Postgres/BTA/Redis status and deployed commit |
 | Consent evidence | Authenticated JSON download verifies with ES256/JWKS, matches the exchanged payload hash and contains no citizen values |
+| Public status latency | Removed the unused main-app Redis timeout; status now probes the actual Redis-backed BTA service with a 2-second failure bound |
 
 All issuer, SMS, email, OCR and government-provider adapters remain explicitly labelled `mock`. This green result applies to the public synthetic sandbox, not to unapproved government connectivity or a real-data launch.
 
