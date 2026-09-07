@@ -1,10 +1,14 @@
-import { execFileSync } from "node:child_process";
-import { readFileSync } from "node:fs";
+import { readFileSync, readdirSync } from "node:fs";
+import { join } from "node:path";
 import { createRequire } from "node:module";
 
 const require = createRequire(import.meta.url);
 const ts = require("typescript");
-const files = execFileSync("rg", ["--files", "apps/web/src", "apps/demo-exam-portal/src", "-g", "*.tsx"], { encoding: "utf8" }).trim().split("\n").filter(Boolean);
+const tsxFiles = (root) => readdirSync(root, { withFileTypes: true }).flatMap((entry) => {
+  const path = join(root, entry.name);
+  return entry.isDirectory() ? tsxFiles(path) : entry.isFile() && path.endsWith(".tsx") ? [path] : [];
+});
+const files = ["apps/web/src", "apps/demo-exam-portal/src"].flatMap(tsxFiles).sort();
 const failures = [];
 
 for (const file of files) {
