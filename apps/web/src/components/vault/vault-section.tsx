@@ -78,7 +78,7 @@ export function VaultSection({ profileId, section, initialFacts, documents, loca
           {revealed && <Button size="sm" variant="ghost" onPress={() => reload(false)}><EyeOff className="size-4" />{tr(locale, "Hide", "छिपाएँ")}</Button>}
         </div>
       )}
-      {total === 0 && missing.length === 0 && <EmptyState title={tr(locale, "Nothing here yet", "अभी यहाँ कुछ नहीं")} blurb={tr(locale, "Connect DigiLocker to fill this section automatically.", "इस भाग को अपने आप भरने के लिए DigiLocker जोड़ें।")} action={<Button className="cta" onPress={() => router.push("/app/verify")}>{tr(locale, "Go to Verify", "सत्यापन पर जाएँ")}</Button>} />}
+      {total === 0 && missing.length === 0 && <EmptyState title={tr(locale, "Nothing here yet", "अभी यहाँ कुछ नहीं")} blurb={tr(locale, "Add details yourself or connect an available source from Verify. Provider data is simulated in this sandbox.", "स्वयं जानकारी जोड़ें या सत्यापन से उपलब्ध स्रोत जोड़ें। इस सैंडबॉक्स में प्रदाता डेटा नकली है।")} action={<Button className="cta" onPress={() => router.push("/app/verify")}>{tr(locale, "Go to Verify", "सत्यापन पर जाएँ")}</Button>} />}
       {subs.map((s) => {
         const rows = singles.filter((d) => subOf(d.key) === s).flatMap(present);
         if (!rows.length) return null;
@@ -115,7 +115,7 @@ export function VaultSection({ profileId, section, initialFacts, documents, loca
         );
       })}
       {facts.some((f) => f.source === "issuer_verified") && (
-        <Tooltip><Tooltip.Trigger className="justify-self-start"><span className="inline-flex items-center gap-1 text-sm text-ink-3"><RotateCw className="size-3.5" />{tr(locale, "Why can’t I edit verified values?", "सत्यापित मान क्यों नहीं बदल सकते?")}</span></Tooltip.Trigger><Tooltip.Content>{tr(locale, "They come straight from the issuer (UIDAI, CBSE…). To change one, re-sync DigiLocker or upload a newer certificate.", "ये सीधे जारीकर्ता (UIDAI, CBSE…) से आते हैं। बदलने के लिए DigiLocker सिंक करें या नया प्रमाण पत्र अपलोड करें।")}</Tooltip.Content></Tooltip>
+        <Tooltip><Tooltip.Trigger className="justify-self-start"><span className="inline-flex items-center gap-1 text-sm text-ink-3"><RotateCw className="size-3.5" />{tr(locale, "Why can’t I edit verified values?", "सत्यापित मान क्यों नहीं बदल सकते?")}</span></Tooltip.Trigger><Tooltip.Content>{tr(locale, "Source-asserted values stay locked to preserve provenance. Refresh the source or upload newer evidence; provider assertions are simulated in this sandbox.", "स्रोत-प्रमाणित मान स्रोत इतिहास बचाने के लिए लॉक रहते हैं। स्रोत ताज़ा करें या नया प्रमाण अपलोड करें; इस सैंडबॉक्स में प्रदाता दावे नकली हैं।")}</Tooltip.Content></Tooltip>
       )}
       <FactSheet open={!!sheet} onClose={() => setSheet(null)} def={sheet?.def ?? null} initial={sheet?.existing?.masked ? null : sheet?.existing?.value ?? null} repeatIndex={sheet?.repeatIndex ?? 0} existing={sheet?.existing ?? null} profileId={profileId} locale={locale} documents={documents}
         onSaved={() => reload(revealed)} onDeleted={() => reload(revealed)} />

@@ -4,7 +4,7 @@ const cliUrl = process.argv.slice(2).find((arg) => arg !== "--");
 const base = (process.env.APPLYONCE_SMOKE_URL ?? cliUrl ?? "http://localhost:3300").replace(/\/$/, "");
 const runs = Number(process.env.APPLYONCE_SMOKE_RUNS ?? 7);
 const p95Budget = Number(process.env.APPLYONCE_P95_BUDGET_MS ?? 1500);
-const routes = ["/", "/demo", "/api/health"];
+const routes = ["/", "/demo", "/status", "/api/health"];
 
 const percentile = (values, p) => {
   const sorted = [...values].sort((a, b) => a - b);

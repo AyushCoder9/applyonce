@@ -19,7 +19,7 @@ export default async function DocumentsPage({ searchParams }: { searchParams: Pr
   const docs: DocItem[] = rows.map((d) => ({ id: d.id, title: d.title, docType: d.docType, issuerName: d.issuerName, origin: d.origin, status: d.status, validUntil: d.validUntil?.toISOString() ?? null, issuedAt: d.issuedAt?.toISOString() ?? null, sha256: d.sha256, needsReview: review.has(d.id), createdAt: d.createdAt.toISOString() }));
   return (
     <div>
-      <PageHeader title={tr(locale, "Documents", "दस्तावेज़")} subtitle={tr(locale, "Issued documents come from DigiLocker and stay verified. Uploads are read by OCR and you confirm every fact.", "जारी दस्तावेज़ DigiLocker से आते हैं और सत्यापित रहते हैं। अपलोड OCR से पढ़े जाते हैं और आप हर तथ्य की पुष्टि करते हैं।")}
+      <PageHeader title={tr(locale, "Documents", "दस्तावेज़")} subtitle={tr(locale, "Review private uploads and source documents here. Issuer documents are synthetic in this sandbox; every extracted fact needs your confirmation.", "निजी अपलोड और स्रोत दस्तावेज़ यहाँ जाँचें। इस सैंडबॉक्स में जारीकर्ता दस्तावेज़ नकली हैं; हर निकाले गए तथ्य की पुष्टि जरूरी है।")}
         actions={!rows.some((d) => d.origin === "digilocker") ? <LinkButton variant="outline" href="/app/verify">{tr(locale, "Connect DigiLocker", "DigiLocker जोड़ें")}</LinkButton> : undefined} />
       <DocumentsView profileId={a.profile.id} docs={docs} locale={locale} openUpload={upload === "1"} />
     </div>

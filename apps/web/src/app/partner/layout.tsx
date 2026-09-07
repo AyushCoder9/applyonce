@@ -16,5 +16,5 @@ export default async function PartnerLayout({ children }: { children: React.Reac
     </form>}
     <Link href="/app" className="text-sm text-brand-600 underline">Back to citizen app</Link>
   </div>;
-  return <SideShell nav={PARTNER_NAV} title={partner.name} subtitle={`Partner console · ${partner.status}`} footer={footer}>{children}</SideShell>;
+  return <SideShell nav={PARTNER_NAV} title={partner.name} subtitle={`Partner console · ${partner.status} · synthetic sandbox`} footer={footer}>{children}</SideShell>;
 }

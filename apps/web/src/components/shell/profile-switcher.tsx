@@ -27,7 +27,7 @@ export function ProfileSwitcher({ profiles, activeId }: { profiles: SwitchablePr
     <Dropdown>
       <Dropdown.Trigger className="flex items-center gap-2 rounded-pill border border-line bg-surface px-2 py-1 text-sm font-medium hover:bg-surface-2" aria-label="Switch profile">
         <Avatar size="sm" color={active.kind === "self" ? "accent" : "warning"}><Avatar.Fallback>{active.displayName.slice(0, 1)}</Avatar.Fallback></Avatar>
-        <span className="max-w-14 truncate sm:max-w-28">{active.displayName}</span>
+        <span className="hidden max-w-14 truncate min-[360px]:inline sm:max-w-28">{active.displayName}</span>
         {active.role === "guardian" && <Chip className="hidden sm:inline-flex" size="sm" color="warning" variant="soft">Guardian</Chip>}
         <ChevronDown className={`size-4 text-ink-3 ${busy || pending ? "animate-pulse" : ""}`} />
       </Dropdown.Trigger>

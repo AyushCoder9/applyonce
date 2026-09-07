@@ -20,7 +20,7 @@ const STEPS = (l: Locale) => [
 const FAMILY_KEYS = ["family.father.name", "family.mother.name", "family.annual_income_total", "category.social", "category.domicile_state", "category.pwd"];
 const ID_SECTIONS = ["identity", "contact", "address"], EDU_SECTIONS = ["education"];
 
-export function OnboardingWizard({ profileId, locale: initialLocale, initialName, initialStep, jobId, error, hasDigilocker, hasPasskey, demoUrl, initialFacts }: { profileId: string; locale: Locale; initialName: string; initialStep: number; jobId: string | null; error: string | null; hasDigilocker: boolean; hasPasskey: boolean; demoUrl: string; initialFacts: Fact[] }) {
+export function OnboardingWizard({ profileId, locale: initialLocale, initialName, initialStep, jobId, error, hasDigilocker, hasPasskey, isSandbox, demoUrl, initialFacts }: { profileId: string; locale: Locale; initialName: string; initialStep: number; jobId: string | null; error: string | null; hasDigilocker: boolean; hasPasskey: boolean; isSandbox: boolean; demoUrl: string; initialFacts: Fact[] }) {
   const router = useRouter();
   const [locale, setLocale] = useState<Locale>(initialLocale);
   const [step, setStep] = useState(initialStep);
@@ -94,7 +94,7 @@ export function OnboardingWizard({ profileId, locale: initialLocale, initialName
         {rows.length === 0 ? <div className="card p-6 text-ink-2">{tr(locale, emptyEn, emptyHi)}</div> : (
           <div className="card px-5 py-1">{rows.map((f, i) => <div key={`${f.key}:${f.repeatIndex}`} className={cx(fresh.has(f.key) && "rise")} style={fresh.has(f.key) ? { animationDelay: `${Math.min(i, 8) * 40}ms` } : undefined}><FactRow fact={f} locale={locale} masked={field(f.key).sensitive} highlight={fresh.has(f.key)} /></div>)}</div>
         )}
-        <p className="text-sm text-ink-3">{tr(locale, "Green = verified by the issuer. You can hide sections later from the vault.", "हरा = जारीकर्ता द्वारा सत्यापित। भाग बाद में वॉल्ट से छिपा सकते हैं।")}</p>
+        <p className="text-sm text-ink-3">{isSandbox ? tr(locale, "Green marks source-asserted sample data in this sandbox. You can review every value in your profile.", "हरा इस सैंडबॉक्स में स्रोत-प्रमाणित नमूना डेटा दिखाता है। हर मान प्रोफ़ाइल में जाँच सकते हैं।") : tr(locale, "Green = verified by the issuer. You can review every value in your profile.", "हरा = जारीकर्ता द्वारा सत्यापित। हर मान प्रोफ़ाइल में जाँच सकते हैं।")}</p>
       </div>
     );
   };
@@ -119,10 +119,10 @@ export function OnboardingWizard({ profileId, locale: initialLocale, initialName
 
   const common = { steps, current: step, locale, brand, saving, estMinutes: Math.max(1, 6 - step), busy };
   if (step === 0) return (
-    <WizardShell {...common} title={tr(locale, "What’s your name?", "आपका नाम?")} subtitle={tr(locale, "Exactly as on your Aadhaar — forms reject even small differences.", "बिल्कुल आधार जैसा — छोटे अंतर पर भी फ़ॉर्म अस्वीकार होते हैं।")} onNext={saveName} canNext={name.trim().length >= 2}>
+    <WizardShell {...common} title={tr(locale, "What’s your name?", "आपका नाम?")} subtitle={tr(locale, "Use the spelling on your primary identity document so applications stay consistent.", "अपने मुख्य पहचान दस्तावेज़ वाली वर्तनी लिखें ताकि आवेदन एक जैसे रहें।")} onNext={saveName} canNext={name.trim().length >= 2}>
       <div className="card grid gap-5 p-6">
         <TextField value={name} onChange={setName} isRequired autoFocus fullWidth maxLength={120} data-testid="name-field">
-          <Label>{tr(locale, "Full name (as on Aadhaar)", "पूरा नाम (आधार अनुसार)")}</Label><Input placeholder="e.g. Aarav Sharma" /><Description>{tr(locale, "We’ll replace this with the UIDAI-verified name when you connect DigiLocker.", "DigiLocker जोड़ने पर इसे UIDAI-सत्यापित नाम से बदल देंगे।")}</Description><FieldError />
+          <Label>{tr(locale, "Full legal name", "पूरा कानूनी नाम")}</Label><Input placeholder="e.g. Aarav Sharma" /><Description>{tr(locale, "Connected sources are compared with this value; ApplyOnce never silently replaces it.", "जुड़े स्रोत इस मान से तुलना किए जाते हैं; ApplyOnce इसे चुपचाप नहीं बदलता।")}</Description><FieldError />
         </TextField>
         <div>
           <div className="mb-2 text-sm font-medium">{tr(locale, "Language", "भाषा")}</div>
@@ -134,17 +134,17 @@ export function OnboardingWizard({ profileId, locale: initialLocale, initialName
     </WizardShell>
   );
   if (step === 1) return (
-    <WizardShell {...common} title={tr(locale, "Connect DigiLocker", "DigiLocker जोड़ें")} subtitle={tr(locale, "Your Aadhaar, PAN and marksheets arrive already verified. Takes about 30 seconds.", "आधार, पैन और मार्कशीट पहले से सत्यापित आते हैं। लगभग 30 सेकंड।")} onBack={() => go(0)}
+    <WizardShell {...common} title={tr(locale, "Connect DigiLocker", "DigiLocker जोड़ें")} subtitle={isSandbox ? tr(locale, "Try the complete consent and document-sync journey with synthetic provider records.", "नकली प्रदाता रिकॉर्ड के साथ पूरी सहमति और दस्तावेज़-सिंक यात्रा आज़माएँ।") : tr(locale, "Review issued documents from an approved DigiLocker connection.", "स्वीकृत DigiLocker कनेक्शन से जारी दस्तावेज़ जाँचें।")} onBack={() => go(0)}
       onNext={hasDigilocker ? () => go(2) : undefined} secondary={!hasDigilocker ? <Button variant="ghost" onPress={() => go(2)} isDisabled={busy}>{tr(locale, "Skip, upload later", "छोड़ें, बाद में अपलोड")}</Button> : undefined}>
       <div className="card grid gap-5 p-6">
         <div className="flex items-start gap-4"><span className="grid size-14 shrink-0 place-items-center rounded-lg bg-verified-50 text-verified-700"><ShieldCheck className="size-8" strokeWidth={1.5} /></span>
-          <ul className="grid gap-1.5 text-ink-2">{[tr(locale, "Issued documents only — nothing is uploaded by hand", "केवल जारी दस्तावेज़ — कुछ भी हाथ से अपलोड नहीं"), tr(locale, "Every value gets a green ‘Verified · UIDAI / CBSE’ stamp", "हर मान को हरा ‘सत्यापित · UIDAI / CBSE’ चिह्न"), tr(locale, "You can disconnect any time from Verify", "सत्यापन से कभी भी डिस्कनेक्ट कर सकते हैं")].map((s) => <li key={s} className="flex items-start gap-2"><Check className="mt-1 size-4 shrink-0 text-verified-700" />{s}</li>)}</ul></div>
+          <ul className="grid gap-1.5 text-ink-2">{[isSandbox ? tr(locale, "Clearly labelled synthetic documents and claims", "स्पष्ट रूप से चिह्नित नकली दस्तावेज़ और दावे") : tr(locale, "Issued documents only — nothing is uploaded by hand", "केवल जारी दस्तावेज़ — कुछ भी हाथ से अपलोड नहीं"), tr(locale, "Every value keeps its source and verification state", "हर मान अपना स्रोत और सत्यापन स्थिति रखता है"), tr(locale, "You can disconnect any time from Verify", "सत्यापन से कभी भी डिस्कनेक्ट कर सकते हैं")].map((s) => <li key={s} className="flex items-start gap-2"><Check className="mt-1 size-4 shrink-0 text-verified-700" />{s}</li>)}</ul></div>
         {hasDigilocker ? <Alert status="success"><Alert.Indicator /><Alert.Content><Alert.Title>{tr(locale, "DigiLocker is connected", "DigiLocker जुड़ा है")}</Alert.Title><Alert.Description>{tr(locale, "Continue to review what we pulled.", "आगे बढ़कर देखें क्या आया।")}</Alert.Description></Alert.Content></Alert>
           : <Button size="lg" className="cta" onPress={connect} isPending={busy} data-testid="connect-digilocker"><ShieldCheck className="size-5" />{tr(locale, "Connect DigiLocker", "DigiLocker जोड़ें")}</Button>}
       </div>
     </WizardShell>
   );
-  if (step === 2) return <WizardShell {...common} title={tr(locale, "Your identity", "आपकी पहचान")} subtitle={tr(locale, "Pulled from Aadhaar and PAN. Sensitive values stay masked.", "आधार और पैन से। संवेदनशील मान छिपे रहते हैं।")} onBack={() => go(1)} onNext={() => go(3)}>{review(ID_SECTIONS, "Nothing pulled yet. Connect DigiLocker or add details in the vault later.", "अभी कुछ नहीं आया। DigiLocker जोड़ें या बाद में वॉल्ट में जोड़ें।")}</WizardShell>;
+  if (step === 2) return <WizardShell {...common} title={tr(locale, "Your identity", "आपकी पहचान")} subtitle={isSandbox ? tr(locale, "Review synthetic identity claims. Sensitive values stay masked.", "नकली पहचान दावे जाँचें। संवेदनशील मान छिपे रहते हैं।") : tr(locale, "Review identity claims from connected sources. Sensitive values stay masked.", "जुड़े स्रोतों से पहचान दावे जाँचें। संवेदनशील मान छिपे रहते हैं।")} onBack={() => go(1)} onNext={() => go(3)}>{review(ID_SECTIONS, "Nothing pulled yet. Connect a source or add details in your profile later.", "अभी कुछ नहीं आया। स्रोत जोड़ें या बाद में प्रोफ़ाइल में जानकारी जोड़ें।")}</WizardShell>;
   if (step === 3) return <WizardShell {...common} title={tr(locale, "Your education", "आपकी शिक्षा")} subtitle={tr(locale, "Board marksheets from CBSE / state boards, degrees from NAD.", "CBSE/राज्य बोर्ड की मार्कशीट, NAD से डिग्री।")} onBack={() => go(2)} onNext={() => go(4)}>{review(EDU_SECTIONS, "No marksheets found yet. You can upload one later — we read it for you.", "अभी कोई मार्कशीट नहीं। बाद में अपलोड करें — हम पढ़ लेंगे।")}</WizardShell>;
   if (step === 4) return (
     <WizardShell {...common} title={tr(locale, "Family & category", "परिवार व श्रेणी")} subtitle={tr(locale, "Optional now, needed by most exam and scholarship forms. Self-declared until you upload a certificate.", "अभी वैकल्पिक, ज़्यादातर परीक्षा व छात्रवृत्ति फ़ॉर्म में ज़रूरी। प्रमाण पत्र अपलोड होने तक स्व-घोषित।")} onBack={() => go(3)} onNext={saveFamily} secondary={<Button variant="ghost" onPress={() => go(5)} isDisabled={busy}>{tr(locale, "Skip", "छोड़ें")}</Button>}>

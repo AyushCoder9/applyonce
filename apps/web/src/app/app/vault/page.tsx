@@ -6,7 +6,7 @@ import { SectionCard, PageHeader, ProgressRing } from "@applyonce/ui";
 import { requireUser, requireProfileAccess, scopeAllows } from "@/lib/session";
 import { localeOf, tr, SECTION_ICON } from "@/components/vault/i18n";
 
-export const metadata = { title: "Vault" };
+export const metadata = { title: "My profile" };
 export default async function VaultPage() {
   const s = await requireUser("/app/vault");
   const locale = localeOf(s.user);
@@ -16,7 +16,7 @@ export default async function VaultPage() {
   const tot = sections.reduce((n, x) => n + x.c.total, 0), filled = sections.reduce((n, x) => n + x.c.filled, 0), ver = sections.reduce((n, x) => n + x.c.verified, 0);
   return (
     <div>
-      <PageHeader title={tr(locale, "Vault", "वॉल्ट")} subtitle={tr(locale, `${a.profile.displayName} · every value carries its source. Verified values come straight from the issuer.`, `${a.profile.displayName} · हर मान अपना स्रोत दिखाता है। सत्यापित मान सीधे जारीकर्ता से आते हैं।`)}
+      <PageHeader title={tr(locale, "My profile", "मेरी प्रोफ़ाइल")} subtitle={tr(locale, `${a.profile.displayName} · every value shows its source, verification strength and sharing history. Provider records are simulated in this public sandbox.`, `${a.profile.displayName} · हर मान अपना स्रोत, सत्यापन स्तर और साझा इतिहास दिखाता है। इस सार्वजनिक सैंडबॉक्स में प्रदाता रिकॉर्ड नकली हैं।`)}
         actions={<ProgressRing value={filled} max={tot} label={tr(locale, `${ver} verified`, `${ver} सत्यापित`)} />} />
       <div className="grid gap-4 sm:grid-cols-2 lg:grid-cols-3" data-testid="section-grid">
         {sections.map(({ m, c, n }) => {

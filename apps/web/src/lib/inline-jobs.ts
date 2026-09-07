@@ -54,7 +54,7 @@ async function digilockerSync({ jobId, userId, profileId, providerRef }: JobMap[
   }
   await db.update(t.providerLinks).set({ lastSyncAt: new Date(), status: "linked" }).where(and(eq(t.providerLinks.userId, userId), eq(t.providerLinks.provider, "digilocker")));
   await progress(jobId, { step: "Done", pct: 100, log }, "succeeded", { resultJson: { documents: docs.length, facts: factCount } });
-  await notify(userId, "verification", `DigiLocker synced: ${docs.length} documents`, `${factCount} facts verified by their issuers.`, "/app/vault");
+  await notify(userId, "verification", `DigiLocker synced: ${docs.length} documents`, `${factCount} source-asserted facts added. Check Status for the provider mode.`, "/app/vault");
 }
 
 async function documentProcess({ documentId, userId, profileId }: JobMap["document.process"]) {
@@ -65,7 +65,7 @@ async function documentProcess({ documentId, userId, profileId }: JobMap["docume
   const proposedFacts = Object.entries(ocr.fields).filter(([k]) => isFactKey(k) && !field(k).system).map(([key, value]) => ({ key, value, confidence: ocr.confidence }));
   await db.insert(t.documentExtractions).values({ documentId, provider: "ocr", rawJson: (ocr.raw ?? ocr.fields) as never, proposedFacts, confidence: ocr.confidence });
   await db.update(t.documents).set({ status: "ready", size: doc.size || bytes.length }).where(eq(t.documents.id, documentId));
-  await notify(userId, "verification", `We found ${proposedFacts.length} facts in ${doc.title}`, "Review them to add to your vault.", `/app/documents/${documentId}`);
+  await notify(userId, "verification", `We found ${proposedFacts.length} facts in ${doc.title}`, "Review them before adding them to your profile.", `/app/documents/${documentId}`);
   void profileId;
 }
 

@@ -16,6 +16,8 @@ Updated 7 September 2026. Repository: AyushCoder9/applyonce. This update continu
 10. Made deterministic evidence guidance instant when the optional model adapter is not configured, removing an unnecessary database/auth/Redis round trip.
 11. Added downloadable, durable ES256 consent evidence. The receipt signs the persisted recipient, application, field-key scope, confirmation and payload hash without including citizen values.
 12. Converted the public status route into an immediate static shell with asynchronous live evidence. It now checks the deployed build, Postgres, Redis-backed BTA state and worker truth without blocking page navigation on network probes.
+13. Hardened CI after that rendering change: Node 24 now matches production, lint and stale-control checks are required, startup waits on both real health endpoints, and performance smoke evidence includes the static status route.
+14. Reframed the citizen data workspace as “My profile,” added a persistent synthetic-sandbox marker to citizen, partner and operations shells, and exposed each mock provider mode directly on its source card. This removes the remaining implication that public demo records came from live government systems.
 
 ## Runtime/configuration
 

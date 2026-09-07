@@ -62,6 +62,11 @@ test("public demo exposes refreshable live backend proof", async ({ page }) => {
 
 test("all citizen workspace pages render with labelled controls", async ({ page }) => {
   await login(page, "9876543210");
+  await page.goto(`${BASE}/app/vault`);
+  await expect(page.getByRole("heading", { name: "My profile" })).toBeVisible();
+  await expect(page.getByText("Synthetic sandbox", { exact: true }).first()).toBeVisible();
+  await page.goto(`${BASE}/app/verify`);
+  await expect(page.getByText("Mock source", { exact: true }).first()).toBeVisible();
   const paths = [
     "/app", "/app/vault", "/app/vault/identity", "/app/vault/contact", "/app/vault/address",
     "/app/vault/family", "/app/vault/category", "/app/vault/education", "/app/vault/employment",
@@ -83,6 +88,8 @@ test("all citizen workspace pages render with labelled controls", async ({ page 
 
 test("all partner pages render with labelled controls", async ({ page }) => {
   await login(page, "9000000001");
+  await page.goto(`${BASE}/partner`);
+  await expect(page.getByText(/Partner console .* synthetic sandbox/)).toBeVisible();
   for (const path of ["/partner", "/partner/forms", "/partner/forms/new", "/partner/applicants", "/partner/developers", "/partner/team", "/partner/settings", "/partner/onboarding"]) {
     await assertRendered(page, `${BASE}${path}`);
   }
@@ -94,6 +101,8 @@ test("all partner pages render with labelled controls", async ({ page }) => {
 
 test("all operations pages render with labelled controls", async ({ page }) => {
   await login(page, "9000000000");
+  await page.goto(`${BASE}/admin`);
+  await expect(page.getByText("Internal admin · synthetic sandbox", { exact: true })).toBeVisible();
   for (const path of ["/admin", "/admin/partners", "/admin/providers", "/admin/queues", "/admin/flags", "/admin/audit", "/admin/requests"]) {
     await assertRendered(page, `${BASE}${path}`);
   }

@@ -42,7 +42,7 @@ export default async function Home() {
     ...mismatches.filter(m=>scopeContains(a.scope,m.factKey)).map((m) => ({ icon: <AlertTriangle className="size-5" />, tone: "danger" as const, href: "/app/verify#mismatches", title: tr(locale, `${label(m.factKey, locale)} doesn’t match the issuer`, `${label(m.factKey, locale)} जारीकर्ता से मेल नहीं खाता`), body: tr(locale,"Review the conflicting sources before sharing.","साझा करने से पहले स्रोतों की जाँच करें।") })),
     ...soon.map((x) => ({ icon: <CalendarClock className="size-5" />, tone: "danger" as const, href: `/app/applications/${x.id}`, title: tr(locale, `${x.title} closes in ${daysUntil(x.deadlineAt)} days`, `${x.title} ${daysUntil(x.deadlineAt)} दिन में बंद`), body: x.orgName })),
     ...expiring.map((f) => ({ icon: <CalendarClock className="size-5" />, tone: "pending" as const, href: "/app/verify#expiry", title: tr(locale, `${label(f.key, locale).replace(/ valid until$| expiry$/i, "")} ${(daysUntil(f.expiresAt) ?? 0) < 0 ? "has expired" : `expires in ${daysUntil(f.expiresAt)} days`}`, `${label(f.key, locale).replace(/ वैधता$| समाप्ति$/, "")} ${(daysUntil(f.expiresAt) ?? 0) < 0 ? "समाप्त हो गया" : `${daysUntil(f.expiresAt)} दिन में समाप्त`}`), body: <SourceChip source={f.source} verifiedBy={f.verifiedBy} expiresAt={f.expiresAt} locale={locale} /> })),
-    ...(toReview.length ? [{ icon: <ScanLine className="size-5" />, tone: "info" as const, href: `/app/documents/${toReview[0]!.documentId}`, title: tr(locale, `${toReview.length} document${toReview.length > 1 ? "s" : ""} with facts to review`, `${toReview.length} दस्तावेज़ में तथ्य समीक्षा हेतु`), body: tr(locale, "We read them — confirm what to add to your vault.", "हमने पढ़ लिया — पुष्टि करें क्या जोड़ना है।") }] : []),
+    ...(toReview.length ? [{ icon: <ScanLine className="size-5" />, tone: "info" as const, href: `/app/documents/${toReview[0]!.documentId}`, title: tr(locale, `${toReview.length} document${toReview.length > 1 ? "s" : ""} with facts to review`, `${toReview.length} दस्तावेज़ में तथ्य समीक्षा हेतु`), body: tr(locale, "We read them — confirm what to add to your profile.", "हमने पढ़ लिया — पुष्टि करें प्रोफ़ाइल में क्या जोड़ना है।") }] : []),
     ...(running.length ? [{ icon: <Sparkles className="size-5" />, tone: "info" as const, href: `/app/verify?job=${running[0]!.id}`, title: tr(locale, "Verification in progress", "सत्यापन चल रहा है"), body: tr(locale, "Watch it live on Verify.", "सत्यापन पर लाइव देखें।") }] : []),
   ];
   const TONE = { danger: "bg-danger-50 text-danger-500", pending: "bg-pending-50 text-pending-700", info: "bg-info-50 text-info-500" };
@@ -52,29 +52,29 @@ export default async function Home() {
       <div>
         <div className="text-sm text-ink-3">{fmtDate(new Date(), locale)}{a.profile.kind === "dependent" ? ` · ${tr(locale, "Viewing as guardian", "अभिभावक के रूप में")}` : ""}</div>
         <h1 className="mt-1 font-display text-3xl font-bold sm:text-4xl">{greet}, {name}.</h1>
-        <p className="mt-1 text-ink-2">{comp.pct >= 100 ? tr(locale, "Your vault is complete. Apply anywhere in one tap.", "आपका वॉल्ट पूरा है। एक टैप में कहीं भी आवेदन करें।") : tr(locale, `${comp.total - comp.filled} core fields to go — most fill themselves from DigiLocker.`, `${comp.total - comp.filled} मुख्य फ़ील्ड बाकी — ज़्यादातर DigiLocker से अपने आप भरेंगे।`)}</p>
+        <p className="mt-1 text-ink-2">{comp.pct >= 100 ? tr(locale, "Your reusable profile is complete. Review and share it with supported forms.", "आपकी पुन: उपयोग योग्य प्रोफ़ाइल पूरी है। समर्थित फ़ॉर्म के साथ समीक्षा करके साझा करें।") : tr(locale, `${comp.total - comp.filled} core fields to go — connected sources can fill many automatically.`, `${comp.total - comp.filled} मुख्य फ़ील्ड बाकी — जुड़े स्रोत कई अपने आप भर सकते हैं।`)}</p>
       </div>
 
       <div className="grid gap-4 lg:grid-cols-[minmax(0,1.2fr)_minmax(0,2fr)]">
         <section className="card flex flex-col gap-4 p-6" data-testid="completion">
           <ProgressRing value={comp.filled} max={comp.total} size="lg" label={tr(locale, `core fields · ${comp.verified} verified`, `मुख्य फ़ील्ड · ${comp.verified} सत्यापित`)} />
           <div className="flex flex-wrap gap-2">
-            <LinkButton variant="outline" size="sm" href="/app/vault">{tr(locale, "Open vault", "वॉल्ट खोलें")}<ArrowRight className="size-4" /></LinkButton>
+            <LinkButton variant="outline" size="sm" href="/app/vault">{tr(locale, "Open profile", "प्रोफ़ाइल खोलें")}<ArrowRight className="size-4" /></LinkButton>
             {comp.verified < comp.filled && <LinkButton variant="ghost" size="sm" href="/app/verify"><BadgeCheck className="size-4" />{tr(locale, "Verify more", "और सत्यापित करें")}</LinkButton>}
           </div>
         </section>
         <section className="grid gap-3 sm:grid-cols-3">
           <Link href="/app/apply" className="card group flex flex-col justify-between gap-4 p-5 transition-shadow hover:shadow-pop" data-testid="qa-apply">
             <span className="grid size-11 place-items-center rounded-md bg-accent-500 text-white"><Send className="size-5" /></span>
-            <span><span className="block font-display text-lg font-bold">{tr(locale, "Apply", "आवेदन")}</span><span className="text-sm text-ink-2">{tr(locale, "Exams, colleges, KYC — one tap.", "परीक्षा, कॉलेज, KYC — एक टैप।")}</span></span>
+            <span><span className="block font-display text-lg font-bold">{tr(locale, "Apply", "आवेदन")}</span><span className="text-sm text-ink-2">{tr(locale, "Supported forms, one reviewed share.", "समर्थित फ़ॉर्म, एक समीक्षा किया हुआ साझा।")}</span></span>
           </Link>
           <Link href="/app/documents?upload=1" className="card group flex flex-col justify-between gap-4 p-5 transition-shadow hover:shadow-pop">
             <span className="grid size-11 place-items-center rounded-md bg-brand-50 text-brand-600"><Upload className="size-5" /></span>
-            <span><span className="block font-display text-lg font-bold">{tr(locale, "Add document", "दस्तावेज़ जोड़ें")}</span><span className="text-sm text-ink-2">{tr(locale, "We read it and fill your vault.", "हम पढ़कर वॉल्ट भरते हैं।")}</span></span>
+            <span><span className="block font-display text-lg font-bold">{tr(locale, "Add document", "दस्तावेज़ जोड़ें")}</span><span className="text-sm text-ink-2">{tr(locale, "Review extracted facts before saving.", "सहेजने से पहले निकाले गए तथ्य जाँचें।")}</span></span>
           </Link>
           <Link href="/app/verify" className="card group flex flex-col justify-between gap-4 p-5 transition-shadow hover:shadow-pop">
             <span className="grid size-11 place-items-center rounded-md bg-verified-50 text-verified-700"><BadgeCheck className="size-5" /></span>
-            <span><span className="block font-display text-lg font-bold">{tr(locale, "Verify", "सत्यापन")}</span><span className="text-sm text-ink-2">{tr(locale, "DigiLocker, PAN, ABHA, bank.", "DigiLocker, PAN, ABHA, बैंक।")}</span></span>
+            <span><span className="block font-display text-lg font-bold">{tr(locale, "Verify", "सत्यापन")}</span><span className="text-sm text-ink-2">{tr(locale, "Mock sources in this demo.", "इस डेमो में नकली स्रोत।")}</span></span>
           </Link>
         </section>
       </div>

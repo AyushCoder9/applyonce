@@ -4,7 +4,7 @@ Updated 6 September 2026. These instructions describe implemented behavior. Prod
 
 ## First run
 
-Use Node 22 and pnpm 9.15.9. Copy `.env.example` to `.env`, install with `pnpm install --frozen-lockfile`, then start `docker compose up -d`. Local services are Postgres on 5434, Redis on 6380 and MinIO on 9002. Run `pnpm db:migrate`, `pnpm db:seed`, then `pnpm dev`.
+Use Node 24 LTS and pnpm 9.15.9. Copy `.env.example` to `.env`, install with `pnpm install --frozen-lockfile`, then start `docker compose up -d`. Local services are Postgres on 5434, Redis on 6380 and MinIO on 9002. Run `pnpm db:migrate`, `pnpm db:seed`, then `pnpm dev`.
 
 Web runs on 3300, BTA on 3301 and the worker consumes the configured Redis queues. Root scripts load `.env`; package commands invoked directly need the same environment, so use `node scripts/run.mjs <command> ...`. Do not copy real secrets into source files. Docker build context excludes environment files and local application data.
 

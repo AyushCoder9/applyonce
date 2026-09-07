@@ -140,7 +140,7 @@ export function ShareFlow({ token, locale, phone, partner, form, session, profil
           <button type="button" onClick={() => setStep("review")} className="inline-flex items-center gap-1 text-sm text-ink-2"><ArrowLeft className="size-4" />{t("Back to the list", "सूची पर वापस")}</button>
           {missingRequired.length > 0 && (
             <section className="card grid gap-4 p-5">
-              <div><h2 className="font-display text-lg font-bold">{t("Fill the missing fields", "छूटे फ़ील्ड भरें")}</h2><p className="text-sm text-ink-2">{t("Saved to your vault as self-declared, so next time they’re already there.", "आपके वॉल्ट में स्व-घोषित के रूप में सहेजे जाएंगे।")}</p></div>
+              <div><h2 className="font-display text-lg font-bold">{t("Fill the missing fields", "छूटे फ़ील्ड भरें")}</h2><p className="text-sm text-ink-2">{t("Saved to your profile as self-declared, so you can review and reuse them next time.", "आपकी प्रोफ़ाइल में स्व-घोषित रूप में सहेजे जाएंगे, ताकि अगली बार जाँचकर दोबारा उपयोग कर सकें।")}</p></div>
               {missingRequired.map((r, i) => <FactEditor key={r.key} def={field(r.key)} value={values[r.key]} onChange={(v) => setValues((s) => ({ ...s, [r.key]: v }))} locale={locale} error={errors[r.key]} autoFocus={i === 0} documents={documents} />)}
             </section>
           )}

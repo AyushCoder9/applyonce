@@ -39,7 +39,7 @@ export function DocumentDetail({ doc, extractions, linkedFacts, current, locale 
     setBusy(true);
     try {
       const r = await api<{ applied: number; mismatches: number }>(`/documents/${doc.id}/extractions/${pending.id}/apply`, { method: "POST", json: { accept: keys } });
-      toast.success(keys.length ? tr(locale, `${r.applied} facts added to your vault`, `${r.applied} तथ्य वॉल्ट में जुड़े`) : tr(locale, "Skipped", "छोड़ा"), { description: r.mismatches ? tr(locale, `${r.mismatches} clashed with verified values — see Verify.`, `${r.mismatches} सत्यापित मानों से टकराए — सत्यापन देखें।`) : undefined });
+      toast.success(keys.length ? tr(locale, `${r.applied} facts added to your profile`, `${r.applied} तथ्य प्रोफ़ाइल में जुड़े`) : tr(locale, "Skipped", "छोड़ा"), { description: r.mismatches ? tr(locale, `${r.mismatches} clashed with verified values — see Verify.`, `${r.mismatches} सत्यापित मानों से टकराए — सत्यापन देखें।`) : undefined });
       router.refresh();
     } catch (e) { toast.danger((e as Error).message); }
     finally { setBusy(false); }
@@ -84,7 +84,7 @@ export function DocumentDetail({ doc, extractions, linkedFacts, current, locale 
               })}
             </ul>
             <div className="mt-4 flex flex-wrap items-center gap-2">
-              <Button className="cta" onPress={() => apply([...accept])} isDisabled={busy || accept.size === 0} isPending={busy} data-testid="apply-extraction">{tr(locale, `Add ${accept.size} to vault`, `${accept.size} वॉल्ट में जोड़ें`)}</Button>
+              <Button className="cta" onPress={() => apply([...accept])} isDisabled={busy || accept.size === 0} isPending={busy} data-testid="apply-extraction">{tr(locale, `Add ${accept.size} to profile`, `${accept.size} प्रोफ़ाइल में जोड़ें`)}</Button>
               <Button variant="ghost" onPress={() => apply([])} isDisabled={busy}><X className="size-4" />{tr(locale, "Skip all", "सब छोड़ें")}</Button>
             </div>
           </section>

@@ -61,7 +61,7 @@ export function DocumentsView({ profileId, docs, locale = "en", openUpload = fal
       )}
       {list.length === 0 ? (
         tab === "issued"
-          ? <EmptyState icon={<ShieldCheck className="size-7" />} title={tr(locale, "No issued documents yet", "अभी कोई जारी दस्तावेज़ नहीं")} blurb={tr(locale, "Connect DigiLocker and your Aadhaar, PAN and marksheets appear here, verified by their issuers.", "DigiLocker जोड़ें — आधार, पैन और मार्कशीट यहाँ जारीकर्ता-सत्यापित दिखेंगे।")} action={<LinkButton variant="outline" href="/app/verify">{tr(locale, "Connect DigiLocker", "DigiLocker जोड़ें")}</LinkButton>} />
+          ? <EmptyState icon={<ShieldCheck className="size-7" />} title={tr(locale, "No source documents yet", "अभी कोई स्रोत दस्तावेज़ नहीं")} blurb={tr(locale, "Connect an available source to review its documents here. The public sandbox uses synthetic provider records.", "उपलब्ध स्रोत जोड़कर उसके दस्तावेज़ यहाँ जाँचें। सार्वजनिक सैंडबॉक्स नकली प्रदाता रिकॉर्ड उपयोग करता है।")} action={<LinkButton variant="outline" href="/app/verify">{tr(locale, "View available sources", "उपलब्ध स्रोत देखें")}</LinkButton>} />
           : <EmptyState icon={<Upload className="size-7" />} title={tr(locale, "Nothing uploaded yet", "अभी कुछ अपलोड नहीं")} blurb={tr(locale, "Upload a certificate and we read the facts out of it for you to confirm.", "प्रमाण पत्र अपलोड करें — हम तथ्य पढ़कर आपसे पुष्टि लेंगे।")} action={<Button variant="outline" onPress={() => setShow(true)}>{tr(locale, "Upload a document", "दस्तावेज़ अपलोड करें")}</Button>} />
       ) : (
         <div className="grid min-w-0 grid-cols-1 gap-3 md:grid-cols-2" data-testid="doc-grid">

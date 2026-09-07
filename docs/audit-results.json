@@ -1,94 +1,94 @@
 {
-  "at": "2026-09-06T22:50:35.858Z",
-  "base": "http://localhost:3300",
-  "portal": "http://localhost:3301",
+  "at": "2026-09-07T17:34:53.007Z",
+  "base": "http://localhost:3400",
+  "portal": "http://localhost:3401",
   "passed": 83,
   "total": 83,
   "results": [
     {
       "name": "anonymous APIs require authentication",
       "passed": true,
-      "ms": 315
+      "ms": 128
     },
     {
       "name": "citizen OTP login and profile list",
       "passed": true,
-      "ms": 85
+      "ms": 79
     },
     {
       "name": "guardian scope remains limited",
       "passed": true,
-      "ms": 47
+      "ms": 48
     },
     {
       "name": "cross-origin mutations rejected",
       "passed": true,
-      "ms": 5
+      "ms": 4
     },
     {
       "name": "ordinary citizen cannot call admin",
       "passed": true,
-      "ms": 5
+      "ms": 14
     },
     {
       "name": "passkey step-up cannot be faked with fresh OTP session",
       "passed": true,
-      "ms": 16
+      "ms": 22
     },
     {
       "name": "sensitive document needs step-up",
       "passed": true,
-      "ms": 114
+      "ms": 60
     },
     {
       "name": "OTP step-up and revocable sample preview",
       "passed": true,
-      "ms": 49
+      "ms": 59
     },
     {
       "name": "foreign and wrong-type document references rejected",
       "passed": true,
-      "ms": 33
+      "ms": 41
     },
     {
       "name": "provider cannot import guardian identity into a dependent",
       "passed": true,
-      "ms": 11
+      "ms": 152
     },
     {
       "name": "registered partner redirect origin enforced",
       "passed": true,
-      "ms": 11
+      "ms": 10
     },
     {
       "name": "declining consent invalidates the link",
       "passed": true,
-      "ms": 30
+      "ms": 29
     },
     {
       "name": "BTA start creates browser-bound state and real share session",
       "passed": true,
-      "ms": 96
+      "ms": 117
     },
     {
       "name": "readiness guide works without sharing identity values",
       "passed": true,
-      "ms": 21
+      "ms": 28
     },
     {
       "name": "tampered custom choices are rejected",
       "passed": true,
-      "ms": 14
+      "ms": 13
     },
     {
       "name": "scoped guardian cannot consent to out-of-scope form",
       "passed": true,
-      "ms": 26
+      "ms": 22
     },
     {
       "name": "consent produces an application and signed partner callback",
       "passed": true,
-      "ms": 227
+      "ms": 202
     },
     {
       "name": "BTA submission rejects forged review sessions",
@@ -98,77 +98,77 @@
     {
       "name": "extension token cannot be passed in query or access system facts",
       "passed": true,
-      "ms": 35
+      "ms": 43
     },
     {
       "name": "upload size and MIME validation",
       "passed": true,
-      "ms": 18
+      "ms": 19
     },
     {
       "name": "real file upload completes processing and is downloadable",
       "passed": true,
-      "ms": 1134
+      "ms": 966
     },
     {
       "name": "erasure can be scheduled and explicitly cancelled",
       "passed": true,
-      "ms": 62
+      "ms": 66
     },
     {
       "name": "declaration is stored with its full text and downloadable receipt",
       "passed": true,
-      "ms": 42
+      "ms": 31
     },
     {
       "name": "data export queues successfully",
       "passed": true,
-      "ms": 17
+      "ms": 15
     },
     {
       "name": "partner and administrator login",
       "passed": true,
-      "ms": 59
+      "ms": 51
     },
     {
       "name": "public page /",
       "passed": true,
-      "ms": 16
+      "ms": 4
     },
     {
       "name": "public page /demo",
       "passed": true,
-      "ms": 28
+      "ms": 2
     },
     {
       "name": "public page /for-institutions",
       "passed": true,
-      "ms": 7
+      "ms": 6
     },
     {
       "name": "public page /privacy",
       "passed": true,
-      "ms": 6
+      "ms": 4
     },
     {
       "name": "public page /security",
       "passed": true,
-      "ms": 6
+      "ms": 4
     },
     {
       "name": "public page /terms",
       "passed": true,
-      "ms": 7
+      "ms": 5
     },
     {
       "name": "public page /dpo",
       "passed": true,
-      "ms": 67
+      "ms": 60
     },
     {
       "name": "public page /status",
       "passed": true,
-      "ms": 14
+      "ms": 2
     },
     {
       "name": "public page /auth/login",
@@ -178,112 +178,112 @@
     {
       "name": "citizen page /app",
       "passed": true,
-      "ms": 64
+      "ms": 80
     },
     {
       "name": "citizen page /app/vault",
       "passed": true,
-      "ms": 36
+      "ms": 34
     },
     {
       "name": "citizen page /app/vault/identity",
       "passed": true,
-      "ms": 50
+      "ms": 47
     },
     {
       "name": "citizen page /app/vault/contact",
       "passed": true,
-      "ms": 20
+      "ms": 22
     },
     {
       "name": "citizen page /app/vault/address",
       "passed": true,
-      "ms": 21
+      "ms": 25
     },
     {
       "name": "citizen page /app/vault/family",
       "passed": true,
-      "ms": 26
+      "ms": 25
     },
     {
       "name": "citizen page /app/vault/category",
       "passed": true,
-      "ms": 28
+      "ms": 23
     },
     {
       "name": "citizen page /app/vault/education",
       "passed": true,
-      "ms": 28
+      "ms": 27
     },
     {
       "name": "citizen page /app/vault/employment",
       "passed": true,
-      "ms": 20
+      "ms": 36
     },
     {
       "name": "citizen page /app/vault/bank",
       "passed": true,
-      "ms": 25
+      "ms": 22
     },
     {
       "name": "citizen page /app/vault/health",
       "passed": true,
-      "ms": 24
+      "ms": 22
     },
     {
       "name": "citizen page /app/vault/prefs",
       "passed": true,
-      "ms": 22
+      "ms": 24
     },
     {
       "name": "citizen page /app/apply",
       "passed": true,
-      "ms": 28
+      "ms": 24
     },
     {
       "name": "citizen page /app/apply/bta-jee-2026",
       "passed": true,
-      "ms": 30
+      "ms": 33
     },
     {
       "name": "citizen page /app/apply/nova-btech-2026",
       "passed": true,
-      "ms": 21
+      "ms": 20
     },
     {
       "name": "citizen page /app/apply/savings-account-kyc",
       "passed": true,
-      "ms": 21
+      "ms": 23
     },
     {
       "name": "citizen page /app/applications",
       "passed": true,
-      "ms": 20
+      "ms": 25
     },
     {
       "name": "citizen page /app/documents",
       "passed": true,
-      "ms": 24
+      "ms": 25
     },
     {
       "name": "citizen page /app/verify",
       "passed": true,
-      "ms": 24
+      "ms": 27
     },
     {
       "name": "citizen page /app/sign",
       "passed": true,
-      "ms": 19
+      "ms": 16
     },
     {
       "name": "citizen page /app/connections",
       "passed": true,
-      "ms": 18
+      "ms": 27
     },
     {
       "name": "citizen page /app/family",
       "passed": true,
-      "ms": 17
+      "ms": 23
     },
     {
       "name": "citizen page /app/settings",
@@ -293,12 +293,12 @@
     {
       "name": "citizen page /app/settings/notifications",
       "passed": true,
-      "ms": 20
+      "ms": 19
     },
     {
       "name": "citizen page /app/notifications",
       "passed": true,
-      "ms": 17
+      "ms": 20
     },
     {
       "name": "citizen page /app/extension",
@@ -308,67 +308,67 @@
     {
       "name": "citizen page /app/extension/connect",
       "passed": true,
-      "ms": 15
+      "ms": 17
     },
     {
       "name": "citizen page /app/documents/c11bb13f-2d57-4071-ad2d-df134c024aa6",
       "passed": true,
-      "ms": 24
+      "ms": 22
     },
     {
-      "name": "citizen page /app/applications/580fd49e-fa8e-42e4-b275-25ee690292e3",
-      "passed": true,
-      "ms": 25
-    },
-    {
-      "name": "citizen page /app/connections/244ff679-206e-4025-9300-68cfb5b8b49f",
-      "passed": true,
-      "ms": 26
-    },
-    {
-      "name": "partner page /partner",
-      "passed": true,
-      "ms": 29
-    },
-    {
-      "name": "partner page /partner/forms",
-      "passed": true,
-      "ms": 17
-    },
-    {
-      "name": "partner page /partner/forms/new",
-      "passed": true,
-      "ms": 61
-    },
-    {
-      "name": "partner page /partner/applicants",
-      "passed": true,
-      "ms": 36
-    },
-    {
-      "name": "partner page /partner/developers",
-      "passed": true,
-      "ms": 23
-    },
-    {
-      "name": "partner page /partner/team",
-      "passed": true,
-      "ms": 21
-    },
-    {
-      "name": "partner page /partner/settings",
-      "passed": true,
-      "ms": 21
-    },
-    {
-      "name": "admin page /admin",
+      "name": "citizen page /app/applications/020dabf8-6729-49e4-9e4b-562d2a7a1cec",
       "passed": true,
       "ms": 28
     },
     {
+      "name": "citizen page /app/connections/e0c74143-5e1c-476e-b11f-f07dabbdad5d",
+      "passed": true,
+      "ms": 28
+    },
+    {
+      "name": "partner page /partner",
+      "passed": true,
+      "ms": 40
+    },
+    {
+      "name": "partner page /partner/forms",
+      "passed": true,
+      "ms": 16
+    },
+    {
+      "name": "partner page /partner/forms/new",
+      "passed": true,
+      "ms": 54
+    },
+    {
+      "name": "partner page /partner/applicants",
+      "passed": true,
+      "ms": 55
+    },
+    {
+      "name": "partner page /partner/developers",
+      "passed": true,
+      "ms": 30
+    },
+    {
+      "name": "partner page /partner/team",
+      "passed": true,
+      "ms": 18
+    },
+    {
+      "name": "partner page /partner/settings",
+      "passed": true,
+      "ms": 17
+    },
+    {
+      "name": "admin page /admin",
+      "passed": true,
+      "ms": 33
+    },
+    {
       "name": "admin page /admin/partners",
       "passed": true,
-      "ms": 13
+      "ms": 12
     },
     {
       "name": "admin page /admin/providers",
@@ -378,27 +378,27 @@
     {
       "name": "admin page /admin/queues",
       "passed": true,
-      "ms": 11
+      "ms": 12
     },
     {
       "name": "admin page /admin/flags",
       "passed": true,
-      "ms": 12
+      "ms": 13
     },
     {
       "name": "admin page /admin/audit",
       "passed": true,
-      "ms": 18
+      "ms": 42
     },
     {
       "name": "admin page /admin/requests",
       "passed": true,
-      "ms": 12
+      "ms": 15
     },
     {
       "name": "BTA page /",
       "passed": true,
-      "ms": 9
+      "ms": 8
     },
     {
       "name": "BTA page /apply/manual",
@@ -418,7 +418,7 @@
     {
       "name": "revocation blocks partner status changes",
       "passed": true,
-      "ms": 34
+      "ms": 48
     }
   ]
 }

@@ -50,7 +50,7 @@ export default async function ApplyPage({ searchParams }: { searchParams: Promis
       ))}
       <section className="card flex flex-col items-start gap-3 p-5 sm:flex-row sm:items-center">
         <div className="grid size-11 shrink-0 place-items-center rounded-md bg-accent-50 text-accent-600"><Puzzle className="size-6" /></div>
-        <div className="flex-1"><h3 className="font-display text-lg font-bold">Open a portal with the extension</h3><p className="text-sm text-ink-2">NTA, NSP, state portals — the ApplyOnce extension fills their forms from your vault, field by field.</p></div>
+        <div className="flex-1"><h3 className="font-display text-lg font-bold">Open a portal with the extension</h3><p className="text-sm text-ink-2">On supported sites, the ApplyOnce extension previews selected profile fields for you to review before filling. It never bypasses OTP, CAPTCHA or final submission.</p></div>
         <Link href="/app/extension" className="rounded-pill border border-line px-4 py-2 text-sm font-medium hover:bg-surface-2">Set up</Link>
       </section>
     </>

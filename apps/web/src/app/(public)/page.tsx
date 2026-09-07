@@ -7,8 +7,8 @@ import { AutofillDemo } from "@/components/public/autofill-demo";
 
 export const metadata: Metadata = {
   title: "ApplyOnce — Verify once. Apply anywhere.",
-  description: "Enter your details once, verify them with DigiLocker, CBSE, UIDAI and PAN, then fill any exam, college, scholarship, job or KYC form with one consent tap. Consent receipts and source-aware readiness. Free for citizens.",
-  openGraph: { title: "ApplyOnce — Verify once. Apply anywhere.", description: "Your verified profile for every Indian form. One consent tap, zero re-typing.", type: "website" },
+  description: "Save reusable application details, inspect their sources, review an exact sharing scope and receive a signed consent receipt. Try the working synthetic citizen-to-BTA sandbox.",
+  openGraph: { title: "ApplyOnce — Verify once. Apply anywhere.", description: "One reusable profile, reviewed sharing and a signed receipt for every supported application.", type: "website" },
 };
 export const revalidate = 300;
 
@@ -61,9 +61,9 @@ export default async function Landing() {
       <Section eyebrow="How it works" title="Prepare once. Review every time." blurb="Keep your evidence together and reuse it with a clear consent trail.">
         <ol className="grid gap-4 md:grid-cols-3">
           {[
-            { I: Fingerprint, t: "Connect DigiLocker", d: "Log in with your mobile. Pull Aadhaar, Class 10/12 marksheets, category and income certificates straight from the issuer. Each value gets a verified stamp." },
-            { I: FileCheck2, t: "Review your vault", d: "Ten sections, one screen each. Fix anything, add what's missing, upload a PDF and we read it. Self-declared stays amber until an issuer confirms it." },
-            { I: Send, t: "Apply with one tap", d: "On any portal with 'Apply with ApplyOnce', or with our browser extension, review exactly which fields go where, confirm with your passkey, done." },
+            { I: Fingerprint, t: "Connect a source", d: "Approve a purpose-bound connection, then review every returned claim and document. The public sandbox exercises this flow with clearly marked synthetic records." },
+            { I: FileCheck2, t: "Review your profile", d: "Ten structured sections keep values, evidence and history together. Self-declared data stays distinct from source assertions, and conflicts never overwrite silently." },
+            { I: Send, t: "Review and submit", d: "On an integrated form, inspect the exact fields and documents, fill what is missing, affirm the share and receive a signed receipt after persistence succeeds." },
           ].map((x, i) => <li key={x.t} className="card relative p-6"><span className="absolute right-5 top-4 font-display text-5xl font-bold text-brand-100">{i + 1}</span><div className="grid size-11 place-items-center rounded-md bg-brand-50 text-brand-600"><x.I className="size-5" /></div><h3 className="mt-4 font-display text-xl font-bold">{x.t}</h3><p className="mt-2 text-ink-2">{x.d}</p></li>)}
         </ol>
       </Section>

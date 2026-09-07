@@ -21,7 +21,7 @@ const PROVIDERS = [
   { id: "esign", icon: PenTool, en: "e-Sign", hi: "ई-साइन", blurbEn: "Sign declarations with Aadhaar e-Sign. Create an OTP-confirmed sandbox declaration receipt.", blurbHi: "आधार ई-साइन से घोषणाएँ हस्ताक्षरित करें। सैंडबॉक्स घोषणा रसीद बनाएँ।" },
 ] as const;
 
-export function VerifyHub({ profileId, links, jobs: initialJobs, mismatches, expiring, locale = "en", focusJobId, error }: { profileId: string; links: LinkRow[]; jobs: Job[]; mismatches: Mismatch[]; expiring: Fact[]; locale?: Locale; focusJobId?: string | null; error?: string | null }) {
+export function VerifyHub({ profileId, links, jobs: initialJobs, mismatches, expiring, modes, locale = "en", focusJobId, error }: { profileId: string; links: LinkRow[]; jobs: Job[]; mismatches: Mismatch[]; expiring: Fact[]; modes: Record<string, string>; locale?: Locale; focusJobId?: string | null; error?: string | null }) {
   const router = useRouter();
   const [jobs, setJobs] = useState<Record<string, Job>>(() => Object.fromEntries(initialJobs.map((j) => [j.id, j])));
   const [busy, setBusy] = useState<string | null>(null);
@@ -62,12 +62,13 @@ export function VerifyHub({ profileId, links, jobs: initialJobs, mismatches, exp
         {PROVIDERS.map((p) => {
           const link = linkOf(p.id), job = activeJob(p.id), running = job && (job.status === "queued" || job.status === "running"), I = p.icon;
           const linked = link?.status === "linked";
+          const mode = p.id === "esign" ? "sandbox" : modes[p.id] ?? "unavailable";
           return (
             <article key={p.id} className={cx("card flex flex-col gap-3 p-5", focusJobId && job?.id === focusJobId && "ring-2 ring-brand-500/40")} data-provider={p.id}>
               <div className="flex items-start gap-3">
                 <span className={cx("grid size-11 shrink-0 place-items-center rounded-md", linked ? "bg-verified-50 text-verified-700" : "bg-brand-50 text-brand-600")}><I className="size-6" strokeWidth={1.75} /></span>
                 <div className="min-w-0 flex-1">
-                  <div className="flex flex-wrap items-center gap-2"><h3 className="font-display text-lg font-bold">{locale === "hi" ? p.hi : p.en}</h3>
+                  <div className="flex flex-wrap items-center gap-2"><h3 className="font-display text-lg font-bold">{locale === "hi" ? p.hi : p.en}</h3><Chip size="sm" variant="soft" color={mode === "mock" || mode === "sandbox" ? "warning" : "default"}>{mode === "mock" ? tr(locale, "Mock source", "नकली स्रोत") : mode === "sandbox" ? tr(locale, "Sandbox", "सैंडबॉक्स") : mode.replaceAll("_", " ")}</Chip>
                     {linked ? <Chip size="sm" color="success" variant="soft"><span className="inline-flex items-center gap-1"><Check className="size-3.5" />{tr(locale, "Connected", "जुड़ा")}</span></Chip> : p.id === "esign" ? <Chip size="sm" variant="soft">{tr(locale, "Sandbox", "सैंडबॉक्स")}</Chip> : <Chip size="sm" color="warning" variant="soft">{tr(locale, "Not connected", "नहीं जुड़ा")}</Chip>}</div>
                   <p className="mt-0.5 text-sm text-ink-2">{locale === "hi" ? p.blurbHi : p.blurbEn}</p>
                   {linked && link?.lastSyncAt && <p className="mt-1 text-xs text-ink-3">{tr(locale, "Last sync", "अंतिम सिंक")} {fmtDate(link.lastSyncAt, locale)}</p>}

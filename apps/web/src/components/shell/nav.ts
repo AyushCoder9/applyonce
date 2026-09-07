@@ -1,6 +1,6 @@
 export const CITIZEN_NAV = [
   { href: "/app", label: "Home", hi: "होम", icon: "House" },
-  { href: "/app/vault", label: "Vault", hi: "वॉल्ट", icon: "Vault" },
+  { href: "/app/vault", label: "Profile", hi: "प्रोफ़ाइल", icon: "UserRound" },
   { href: "/app/apply", label: "Apply", hi: "आवेदन", icon: "Send" },
   { href: "/app/applications", label: "Track", hi: "ट्रैक", icon: "ListChecks" },
   { href: "/app/documents", label: "Documents", hi: "दस्तावेज़", icon: "FileText" },
